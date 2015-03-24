@@ -1,0 +1,84 @@
+{
+  "app": {
+    "size": [ 960, 640 ],
+    "background": [ 0.2, 0.2, 0.2 ],
+
+    "fonts": [
+      {
+        "name": "medium",
+        "path": "mplus-1m-medium.ttf",
+        "default": true,
+        "size": 32
+      },
+      {
+        "name": "bold",
+        "path": "mplus-1m-bold.ttf",
+        "size": 32
+      },
+      {
+        "name": "light",
+        "path": "mplus-1m-light.ttf",
+        "size": 32
+      }
+    ]
+  },
+
+  
+  "game_view": {
+    "fov": 30,
+    "near_z": 0.05,
+    "far_z":  1000,
+
+    "eye_point": [ -5, 13, -5 ],
+    "interest_point": [ 3, 0, 2 ],
+
+    "lights": [
+      {
+        "pos": [ 5, 10, 5 ],
+        
+        "constant_attenuation":  0,
+        "linear_attenuation":    0,
+        "quadratic_attenuation": 0.015,
+        
+        "diffuse": [ 0.8, 0.8, 0.8 ],
+        "ambient": [ 0.2, 0.2, 0.2 ],
+        "specular": [ 0.1, 0.1, 0.1 ]
+      }
+    ],
+
+    "move_threshold": 0.8
+  },
+
+  
+  "game": {
+    "cube_size": 1,
+
+    "cube_stage_color": [
+      [ 0.5, 0.5, 0.5 ],
+      [ 0.25, 0.25, 0.25 ]
+    ],
+
+    "cube_line_color": [ 1, 0, 0 ],
+
+    "stage": {
+      "build_speed": 1,
+      "collapse_speed": 1,
+
+      "build_ease": "EaseOutQuad",
+      "build_duration": 1.5,
+      "build_y": [ 10, 15 ],
+      
+      "collapse_ease": "EaseInQuad",
+      "collapse_duration": 1.5,
+      "collapse_y": [ -10, -15 ]
+    },
+
+    "pickable": {
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 10, 15 ],
+
+      "color": [ 1, 1, 1 ]
+    }
+  }
+}
