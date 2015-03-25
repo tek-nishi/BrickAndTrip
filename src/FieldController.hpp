@@ -22,6 +22,9 @@ class FieldController : public ControllerBase {
 
   FieldView view_;
   FieldEntity entity_;
+
+  bool stage_build_;
+  bool stage_collapse_;
   
 
 public:
@@ -30,15 +33,45 @@ public:
     touch_event_(touch_event),
     active_(true),
     view_(params, event_, touch_event),
-    entity_(params, event_)
+    entity_(params, event_),
+    stage_build_(false),
+    stage_collapse_(false)
   {
-    entity_.addCubeStage("startline.json");
-    entity_.prepareStage();
+    entity_.setupStartStage();
 
-    event_.connect("move-pickable-cube", [this](EventParam& param){
-        entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
-                                 boost::any_cast<int>(param["move_direction"]));
-      });
+    event_.connect("move-pickable-cube",
+                   [this](EventParam& param) {
+                     entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
+                                              boost::any_cast<int>(param["move_direction"]));
+                   });
+
+    event_.connect("pickable-moved",
+                   [this](EventParam& param) {
+                     if (!stage_collapse_) {
+                       // 全員スタートラインを踏んだら崩壊開始
+                       if (entity_.isAllPickableCubesStarted()) {
+                         stage_collapse_ = true;
+                         // Finish Lineの手前まで崩す
+                         entity_.collapseStage(entity_.finishLine() - 1);
+                       }
+                     }
+                     else {
+                       // 全員Finishしたら残りを一気に崩壊
+                       if (entity_.isAllPickableCubesFinished()) {
+                       }
+                     }
+
+                     if (!stage_build_) {
+                       stage_build_ = true;
+                       entity_.addNextStage();
+                       entity_.buildStage();
+                     }
+                   });
+
+    event_.connect("fall-pickable",
+                   [this](EventParam& param) {
+                     view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                   });
   }
 
 
@@ -54,6 +87,7 @@ private:
 
   
   void update(const double progressing_seconds) override {
+    entity_.update(progressing_seconds);
   }
 
   void draw() override {

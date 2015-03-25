@@ -25,6 +25,7 @@ class FieldView {
 
   ci::Vec3f eye_point_;
   ci::Vec3f interest_point_;
+  ci::Vec3f target_point_;
 
   std::vector<ci::gl::Light> lights_;
 
@@ -62,6 +63,7 @@ public:
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
     eye_point_(Json::getVec3<float>(params["game_view.eye_point"])),
     interest_point_(Json::getVec3<float>(params["game_view.interest_point"])),
+    target_point_(interest_point_),
     picking_(false),
     move_threshold_(params["game_view.move_threshold"].getValue<float>())
   {
@@ -120,6 +122,8 @@ public:
   void draw(const Field& field) {
     // FIXME:drawの中で、PikableCubeからTouch情報を生成している
     makeTouchCubeInfo(field.pickable_cubes);
+    updateCamera(field.pickable_cubes);
+    updateLight();
     
     ci::gl::pushMatrices();
     ci::gl::setMatrices(camera_);
@@ -141,6 +145,13 @@ public:
     ci::gl::popMatrices();
   }
 
+
+  void cancelPicking(const u_int cube_id) {
+    if (picking_ && (cube_id == picking_cube_id_)) {
+      picking_ = false;
+    }
+  }
+  
 
 private:
   void touchesBegan(std::vector<ngs::Touch>& touches) {
@@ -262,6 +273,38 @@ private:
       
       touch_cubes_.push_back(std::move(touch_cube));
     }
+  }
+
+  // TODO:複数のPickableCubeをいい感じに捉える
+  void updateCamera(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+    ci::Vec3f target_pos = ci::Vec3f::zero();
+    int cube_num = 0;
+    for (const auto& cube : cubes) {
+      if (!cube->isActive() || !cube->isOnStage()) continue;
+
+      target_pos += cube->position();
+      cube_num += 1;
+    }
+
+    if (cube_num > 0) {
+      // FIXME:とりあえず中間点
+      target_point_ = target_pos / cube_num;
+    }
+
+    auto d = (target_point_ - interest_point_) * 0.25f;
+    interest_point_ += d;
+    eye_point_ += d;
+
+    camera_.setCenterOfInterestPoint(interest_point_);
+    camera_.setEyePoint(eye_point_);
+  }
+
+  // TODO:複数のPickableCubeをいい感じに捉える
+  void updateLight() {
+    ci::Vec3f pos = lights_[0].getPosition();
+    // pos.x = interest_point_.x;
+    pos.z = interest_point_.z;
+    lights_[0].setPosition(pos);
   }
 
   

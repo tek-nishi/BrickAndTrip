@@ -24,7 +24,8 @@ class Stage {
 
   float cube_size_;
   int top_z_;
-
+  int active_top_z_;
+  
   float build_speed_;
   float collapse_speed_;
 
@@ -38,7 +39,7 @@ class Stage {
 
   bool finished_build_;
   bool finished_collapse_;
-  
+
   ci::TimelineRef event_timeline_;
   ci::TimelineRef animation_timeline_;
   
@@ -47,6 +48,7 @@ public:
   Stage(const ci::JsonTree& params) :
     cube_size_(params["game.cube_size"].getValue<float>()),
     top_z_(0),
+    active_top_z_(0),
     build_speed_(params["game.stage.build_speed"].getValue<float>()),
     collapse_speed_(params["game.stage.collapse_speed"].getValue<float>()),
     build_ease_(params["game.stage.build_ease"].getValue<std::string>()),
@@ -118,8 +120,10 @@ public:
       event_timeline_->getCurrentTime() + build_speed_ * speed_rate);
   }
 
-  void collapseStage(const float speed_rate = 1.0f) {
-    if (!canCollapse()) {
+  void collapseStage(const int stop_z, const float speed_rate = 1.0f) {
+    int bottom_z = active_top_z_ - active_cubes_.size() - 1;
+    
+    if (!canCollapse() || (bottom_z == stop_z)) {
       finished_collapse_ = true;
       return;
     }
@@ -141,12 +145,12 @@ public:
       },
       animation_timeline_->getCurrentTime() + collapse_duration_);
 
-    event_timeline_->add(std::bind(&Stage::collapseStage, this, speed_rate),
+    event_timeline_->add(std::bind(&Stage::collapseStage, this, stop_z, speed_rate),
                           event_timeline_->getCurrentTime() + collapse_speed_ * speed_rate);
   }
 
   
-  void addCubes(const ci::JsonTree& stage_data,
+  int addCubes(const ci::JsonTree& stage_data,
                 const std::vector<ci::Color>& cube_color,
                 const ci::Color& line_color) {
     const auto& body = stage_data["body"];
@@ -185,6 +189,8 @@ public:
     }
 
     top_z_ += body.getNumChildren();
+    
+    return top_z_; 
   }
 
   
@@ -192,6 +198,7 @@ public:
     auto row = cubes_.front();
     cubes_.pop_front();
     active_cubes_.push_back(std::move(row));
+    active_top_z_ += 1;
   }
 
   
@@ -224,8 +231,8 @@ public:
       return std::pair<bool, int>(false, 0);
     }
 
-    int top_z    = top_z_ - 1;
-    int bottom_z = top_z_ - active_cubes_.size();
+    int top_z    = active_top_z_ - 1;
+    int bottom_z = active_top_z_ - active_cubes_.size();
     
     if ((block_pos.z < bottom_z) || (block_pos.z > top_z)) {
       return std::pair<bool, int>(false, 0);

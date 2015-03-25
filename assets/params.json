@@ -81,7 +81,11 @@
       "color": [ 1, 1, 1 ],
 
       "rotate_ease": "EaseInQuad",
-      "rotate_duration": 0.5
+      "rotate_duration": 0.5,
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
     }
   }
 }

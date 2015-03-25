@@ -23,6 +23,7 @@ class ColoColoParadeApp : public AppNative {
   JsonTree params_;
 
   double elapsed_seconds_;
+  bool fast_forward_;
 
   Vec2f mouse_pos_;
   Vec2f mouse_prev_pos_;
@@ -63,6 +64,8 @@ class ColoColoParadeApp : public AppNative {
     getSignalSupportedOrientations().connect([](){ return InterfaceOrientation::All; });
 #endif
 
+    fast_forward_ = false;
+    
     setupFonts();
     
     controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, touch_event_));
@@ -138,6 +141,33 @@ class ColoColoParadeApp : public AppNative {
 
 
   void keyDown(KeyEvent event) {
+    char chara = event.getChar();
+    int  code  = event.getCode();
+
+    if (chara == 'R') {
+      // Soft Reset
+      // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
+      controller_.reset();
+      controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, touch_event_));
+    }
+
+    if ((code == KeyEvent::KEY_LSHIFT) || (code == KeyEvent::KEY_RSHIFT)) {
+      // 倍速モード
+      // TODO:timelineの倍速
+      // DOUT << "Start fast-forward." << std::endl;
+      fast_forward_ = true;
+    }
+  }
+  
+  void keyUp(KeyEvent event) {
+    char chara = event.getChar();
+    int  code  = event.getCode();
+
+    if ((code == KeyEvent::KEY_LSHIFT) || (code == KeyEvent::KEY_RSHIFT)) {
+      // 倍速モード解除
+      // DOUT << "Finish fast-forward." << std::endl;
+      fast_forward_ = false;
+    }
   }
 
 

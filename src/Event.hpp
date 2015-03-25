@@ -31,7 +31,8 @@ public:
   
   template <typename... Args2>
   void signal(const std::string& msg, Args2&&... args) {
-    signals_[msg](std::forward<Args2>(args)...);
+    // signals_[msg](std::forward<Args2>(args)...);
+    signals_[msg](args...);
   }
 
   
