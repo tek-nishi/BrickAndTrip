@@ -10,13 +10,14 @@
 #include "Stage.hpp"
 #include "Field.hpp"
 #include "PickableCube.hpp"
+#include "EventParam.hpp"
 
 
 namespace ngs {
 
 class FieldEntity {
   const ci::JsonTree& params_;
-  Event<const std::string>& event_;
+  Event<EventParam>& event_;
 
   std::vector<ci::Color> cube_stage_color_;
   ci::Color cube_line_color_;
@@ -30,7 +31,7 @@ class FieldEntity {
 
   
 public:
-  FieldEntity(const ci::JsonTree& params, Event<const std::string>& event) :
+  FieldEntity(const ci::JsonTree& params, Event<EventParam>& event) :
     params_(params),
     event_(event),
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
@@ -77,12 +78,40 @@ public:
     stage_.buildStage(0.25f);
 
     event_timeline_->add([this]() {
-        auto pos = ci::Vec3f(1, 1, 1);
+        auto pos = ci::Vec3f(1, 0, 1);
         auto cube = std::unique_ptr<PickableCube>(new PickableCube(params_, pos));
         pickable_cubes_.push_back(std::move(cube));
         
       }, event_timeline_->getCurrentTime() + 3.0f);
   }
+
+
+  void movePickableCube(const u_int id, const int direction) {
+    // 複数PickableCubeから対象を探す
+    auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
+                           [id](const std::unique_ptr<PickableCube>& obj) {
+                             return *obj == id;
+                           });
+
+    assert(it != std::end(pickable_cubes_));
+    
+    // 移動可能かStageを調べる
+    ci::Vec3i move_vec[] = {
+      {  0, 0,  1 },
+      {  0, 0, -1 },
+      {  1, 0,  0 },
+      { -1, 0,  0 },
+    };
+
+    auto moved_pos = (*it)->blockPosition() + move_vec[direction];
+    auto height = stage_.getStageHeight(moved_pos);
+    if (height.first && height.second == moved_pos.y) {
+      (*it)->startRotationMove(direction, moved_pos);
+      // (*it)->blockPosition(moved_pos);
+    }
+  }
+
+
 
   
   // 現在のFieldの状態を作成

@@ -217,6 +217,31 @@ public:
     return collapse_cubes_.back();
   }
 
+
+  // 「この場所にはCubeが無い」も結果に含めるので、std::pairを利用
+  std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) {
+    if (active_cubes_.empty()) {
+      return std::pair<bool, int>(false, 0);
+    }
+
+    int top_z    = top_z_ - 1;
+    int bottom_z = top_z_ - active_cubes_.size();
+    
+    if ((block_pos.z < bottom_z) || (block_pos.z > top_z)) {
+      return std::pair<bool, int>(false, 0);
+    }
+
+    // TIPS:z値とコンテナの添え字が一致するようになっているので、
+    //      コンテナからz値を検索する必要がない
+    int iz = block_pos.z - bottom_z;
+    for (const auto& cube : active_cubes_[iz]) {
+      if (cube.block_position.x == block_pos.x) {
+        return std::pair<bool, int>(cube.can_ride, cube.block_position.y);
+      }
+    }
+    return std::pair<bool, int>(false, 0);
+  }
+
   
   const std::deque<std::vector<StageCube> >& activeCubes() const {
     return active_cubes_;

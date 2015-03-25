@@ -7,6 +7,7 @@
 #include "ControllerBase.hpp"
 #include "FieldView.hpp"
 #include "FieldEntity.hpp"
+#include "EventParam.hpp"
 
 
 namespace ngs {
@@ -17,7 +18,7 @@ class FieldController : public ControllerBase {
 
   bool active_;
   
-  Event<const std::string> event_;
+  Event<EventParam> event_;
 
   FieldView view_;
   FieldEntity entity_;
@@ -33,13 +34,18 @@ public:
   {
     entity_.addCubeStage("startline.json");
     entity_.prepareStage();
+
+    event_.connect("move-pickable-cube", [this](EventParam& param){
+        entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
+                                 boost::any_cast<int>(param["move_direction"]));
+      });
   }
 
 
 private:
   bool isActive() const override { return active_; }
 
-  Event<const std::string>& event() override { return event_; }
+  Event<EventParam>& event() override { return event_; }
 
   
   void resize() {

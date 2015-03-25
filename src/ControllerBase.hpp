@@ -5,6 +5,7 @@
 //
 
 #include "Event.hpp"
+#include "EventParam.hpp"
 
 
 namespace ngs {
@@ -14,7 +15,7 @@ struct ControllerBase {
 
   virtual bool isActive() const = 0;
 
-  virtual Event<const std::string>& event() = 0;
+  virtual Event<EventParam>& event() = 0;
 
   virtual void resize() = 0;
   

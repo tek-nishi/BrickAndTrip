@@ -7,6 +7,7 @@
 #include "ControllerBase.hpp"
 #include <boost/range/algorithm_ext/erase.hpp>
 #include "FieldController.hpp"
+#include "EventParam.hpp"
 
 
 namespace ngs {
@@ -15,7 +16,7 @@ class RootController : public ControllerBase {
   ci::JsonTree& params_;
   Event<std::vector<ngs::Touch> >& touch_event_;
   
-  Event<const std::string> event_;
+  Event<EventParam> event_;
   
   using ControllerPtr = std::unique_ptr<ControllerBase>;
   std::vector<ControllerPtr> children_;
@@ -35,7 +36,7 @@ public:
 private:
   bool isActive() const override { return true; }
 
-  Event<const std::string>& event() override { return event_; }
+  Event<EventParam>& event() override { return event_; }
 
   void resize() {
     for (auto& child : children_) {

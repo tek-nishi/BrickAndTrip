@@ -78,7 +78,10 @@
       "entry_duration": 1.5,
       "entry_y": [ 10, 15 ],
 
-      "color": [ 1, 1, 1 ]
+      "color": [ 1, 1, 1 ],
+
+      "rotate_ease": "EaseInQuad",
+      "rotate_duration": 0.5
     }
   }
 }

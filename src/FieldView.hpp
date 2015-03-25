@@ -9,13 +9,14 @@
 #include "cinder/gl/gl.h"
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
+#include "EventParam.hpp"
 
 
 namespace ngs {
 
 class FieldView {
   const ci::JsonTree& params_;
-  Event<const std::string>& event_;
+  Event<EventParam>& event_;
 
   float fov_;
   float near_z_;
@@ -49,18 +50,9 @@ class FieldView {
 
   float move_threshold_;
   
-  enum {
-    MOVE_NONE = -1,
-
-    MOVE_UP,
-    MOVE_DOWN,
-    MOVE_LEFT,
-    MOVE_RIGHT
-  };
-
   
 public:
-  FieldView(const ci::JsonTree& params, Event<const std::string>& event,
+  FieldView(const ci::JsonTree& params, Event<EventParam>& event,
             Event<std::vector<ngs::Touch> >& touch_event) :
     params_(params),
     event_(event),
@@ -199,25 +191,34 @@ private:
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
           auto picking_ofs = ray.calcPosition(cross_z) - picking_pos_;
 
-          int move_direction = MOVE_NONE;
+          int move_direction = PickableCube::MOVE_NONE;
           float move_threshold = cube.size * move_threshold_;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
             // 縦移動
             if (picking_ofs.z < -move_threshold) {
-              move_direction = MOVE_DOWN;
+              move_direction = PickableCube::MOVE_DOWN;
             }
             else if (picking_ofs.z > move_threshold) {
-              move_direction = MOVE_UP;
+              move_direction = PickableCube::MOVE_UP;
             }
           }
           else {
             // 横移動
             if (picking_ofs.x < -move_threshold) {
-              move_direction = MOVE_RIGHT;
+              move_direction = PickableCube::MOVE_RIGHT;
             }
             else if (picking_ofs.x > move_threshold) {
-              move_direction = MOVE_LEFT;
+              move_direction = PickableCube::MOVE_LEFT;
             }
+          }
+
+          if (move_direction != PickableCube::MOVE_NONE) {
+            EventParam params = {
+              { "cube_id", picking_cube_id_ },
+              { "move_direction", move_direction },
+            };
+
+            event_.signal("move-pickable-cube", params);
           }
           
           picking_ = false;
