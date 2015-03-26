@@ -86,7 +86,7 @@ class ColoColoParadeApp : public AppNative {
     // TIPS: ci::gl::colorで色を決める
     //       ci::gl::Materialを使わない
     glEnable(GL_COLOR_MATERIAL);
-#if !(CINDER_COCOA_TOUCH)
+#if !defined(CINDER_COCOA_TOUCH)
     // OpenGL ESは未対応
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 #endif

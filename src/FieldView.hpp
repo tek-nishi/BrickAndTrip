@@ -324,13 +324,13 @@ private:
         }
 #endif
 
-        ci::gl::pushMatrices();
+        ci::gl::pushModelView();
         ci::gl::translate(cube.position);
         ci::gl::rotate(cube.rotation);
       
         ci::gl::drawCube(ci::Vec3f::zero(), cube.size());
       
-        ci::gl::popMatrices();
+        ci::gl::popModelView();
       }
     }
   }
@@ -346,13 +346,13 @@ private:
         ci::gl::color(cube->color());
       }      
       
-      ci::gl::pushMatrices();
+      ci::gl::pushModelView();
       ci::gl::translate(cube->position());
       ci::gl::rotate(cube->rotation());
       
       ci::gl::drawCube(ci::Vec3f::zero(), cube->size());
       
-      ci::gl::popMatrices();
+      ci::gl::popModelView();
     }
   }
 
