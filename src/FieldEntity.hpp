@@ -123,6 +123,8 @@ public:
 
   // Stageの全Buildを始める
   void startStageBuild() {
+    stage_.openStartLine();
+    
     std::ostringstream path;
     // stage_num が 0 -> stage01.json 
     path << "stage" << std::setw(2) << std::setfill('0') << (stage_num_ + 1) << ".json";

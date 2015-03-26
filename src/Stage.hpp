@@ -39,6 +39,10 @@ class Stage {
   float       collapse_duration_;
   ci::Vec2f   collapse_y_;
 
+  std::string open_ease_;
+  float       open_duration_;
+  float       open_delay_;
+  
   bool finished_build_;
   bool finished_collapse_;
 
@@ -60,6 +64,9 @@ public:
     collapse_ease_(params["game.stage.collapse_ease"].getValue<std::string>()),
     collapse_duration_(params["game.stage.collapse_duration"].getValue<float>()),
     collapse_y_(Json::getVec2<float>(params["game.stage.collapse_y"])),
+    open_ease_(params["game.stage.open_ease"].getValue<std::string>()),
+    open_duration_(params["game.stage.open_duration"].getValue<float>()),
+    open_delay_(params["game.stage.open_delay"].getValue<float>()),
     finished_build_(false),
     finished_collapse_(false),
     event_timeline_(ci::Timeline::create()),
@@ -93,7 +100,7 @@ public:
         buildOneLine();
         event_.signal("build-one-line", EventParam());
 
-        // 落下演出
+        // 生成演出
         auto& cubes = topLine();
         for (auto& cube : cubes) {
           cube.can_ride = false;
@@ -156,9 +163,36 @@ public:
 
   // BuildとCollapseが完了しているか判定
   bool isFinishedBuildAndCollapse() {
-    return finished_collapse_ && finished_build_;
+    if (!finished_build_ || !finished_collapse_) return false;
+
+    // Build演出の完了も調べる
+    for (const auto& cube : topLine()) {
+      if (!cube.position.isComplete()) return false;
+    }
+    
+    return true;
   }
-  
+
+  // StartLineを下げる
+  void openStartLine() {
+    size_t iz = active_cubes_.size() - 1;
+
+    for (auto& cube : active_cubes_[iz]) {
+      ci::Vec3f end_value(cube.position() + ci::Vec3f(0, -cube_size_, 0));
+      auto option = animation_timeline_->apply(&cube.position, end_value,
+                                               open_duration_, getEaseFunc(open_ease_));
+
+      option.delay(open_delay_);
+    }
+
+    animation_timeline_->add([this, iz]() {
+        // コンテナへの参照が無効になっている場合があるので、関数経由で取得
+        for (auto& cube : active_cubes_[iz]) {
+          cube.block_position.y -= 1;
+        }        
+      },
+      animation_timeline_->getCurrentTime() + open_delay_ + open_duration_);
+  }
   
   int addCubes(const ci::JsonTree& stage_data,
                 const std::vector<ci::Color>& cube_color,

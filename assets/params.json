@@ -70,7 +70,11 @@
       
       "collapse_ease": "EaseInQuad",
       "collapse_duration": 1.5,
-      "collapse_y": [ -10, -15 ]
+      "collapse_y": [ -10, -15 ],
+
+      "open_ease" : "EaseOutQuad",
+      "open_duration": 0.5,
+      "open_delay": 4
     },
 
     "pickable": {
