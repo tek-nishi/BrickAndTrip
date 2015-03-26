@@ -39,37 +39,38 @@ public:
   {
     entity_.setupStartStage();
 
-    event_.connect("move-pickable-cube",
-                   [this](EventParam& param) {
+    event_.connect("move-pickable",
+                   [this](const Connection&, EventParam& param) {
                      entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
                                               boost::any_cast<int>(param["move_direction"]));
                    });
 
-    event_.connect("pickable-moved",
-                   [this](EventParam& param) {
-                     if (!stage_collapse_) {
-                       // 全員スタートラインを踏んだら崩壊開始
-                       if (entity_.isAllPickableCubesStarted()) {
-                         stage_collapse_ = true;
-                         // Finish Lineの手前まで崩す
-                         entity_.collapseStage(entity_.finishLine() - 1);
-                       }
-                     }
-                     else {
-                       // 全員Finishしたら残りを一気に崩壊
-                       if (entity_.isAllPickableCubesFinished()) {
-                       }
-                     }
+    event_.connect("all-pickable-started",
+                   [this](const Connection& connection, EventParam& param) {
+                     DOUT << "all-pickable-started" << std::endl;
+                     entity_.startStageCollapse();
+                   });
 
-                     if (!stage_build_) {
-                       stage_build_ = true;
-                       entity_.addNextStage();
-                       entity_.buildStage();
-                     }
+    event_.connect("pickable-moved",
+                   [this](const Connection& connection, EventParam& param) {
+                     entity_.startStageBuild();
+                     connection.disconnect();
+                   });
+
+    event_.connect("all-pickable-finished",
+                   [this](const Connection& connection, EventParam& param) {
+                     DOUT << "all-pickable-finished" << std::endl;
+                     entity_.completeBuildAndCollapseStage();
+                   });
+
+    event_.connect("stage-cleared",
+                   [this](const Connection&, EventParam& param) {
+                     DOUT << "stage-cleared" << std::endl;
+                     entity_.startStageBuild();
                    });
 
     event_.connect("fall-pickable",
-                   [this](EventParam& param) {
+                   [this](const Connection&, EventParam& param) {
                      view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
                    });
   }

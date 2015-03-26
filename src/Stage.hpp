@@ -13,6 +13,8 @@
 namespace ngs {
 
 class Stage {
+  Event<EventParam>& event_;
+  
   // ステージ全体
   std::deque<std::vector<StageCube> > cubes_;
 
@@ -45,7 +47,8 @@ class Stage {
   
 
 public:
-  Stage(const ci::JsonTree& params) :
+  Stage(const ci::JsonTree& params, Event<EventParam>& event) :
+    event_(event),
     cube_size_(params["game.cube_size"].getValue<float>()),
     top_z_(0),
     active_top_z_(0),
@@ -77,13 +80,6 @@ public:
   }
 
   
-  bool canBuild() const {
-    return !cubes_.empty();
-  }
-
-  bool canCollapse() const {
-    return !active_cubes_.empty();
-  }
 
 
   void buildStage(const float speed_rate = 1.0f) {
@@ -91,9 +87,11 @@ public:
       finished_build_ = true;
       return;
     }
+    finished_build_ = false;
     
     event_timeline_->add([this, speed_rate]() {
         buildOneLine();
+        event_.signal("build-one-line", EventParam());
 
         // 落下演出
         auto& cubes = topLine();
@@ -127,9 +125,11 @@ public:
       finished_collapse_ = true;
       return;
     }
+    finished_collapse_ = false;
 
     // 落下開始
     collapseStartOneLine();
+    event_.signal("collapse-one-line", EventParam());
     auto& cubes = collapseLine();
     for (auto& cube : cubes) {
       cube.can_ride = false;
@@ -149,6 +149,16 @@ public:
                           event_timeline_->getCurrentTime() + collapse_speed_ * speed_rate);
   }
 
+  // 生成 & 崩壊を止める
+  void stopBuildAndCollapse() {
+    event_timeline_->clear();
+  }
+
+  // BuildとCollapseが完了しているか判定
+  bool isFinishedBuildAndCollapse() {
+    return finished_collapse_ && finished_build_;
+  }
+  
   
   int addCubes(const ci::JsonTree& stage_data,
                 const std::vector<ci::Color>& cube_color,
@@ -194,37 +204,6 @@ public:
   }
 
   
-  void buildOneLine() {
-    auto row = cubes_.front();
-    cubes_.pop_front();
-    active_cubes_.push_back(std::move(row));
-    active_top_z_ += 1;
-  }
-
-  
-  void collapseStartOneLine() {
-    collapse_cubes_.push_back(active_cubes_.front());
-    active_cubes_.pop_front();
-  }
-
-  void collapseFinishOneLine() {
-    collapse_cubes_.pop_front();
-  }
-
-
-  std::vector<StageCube>& topLine() {
-    return active_cubes_.back();
-  }
-  
-  std::vector<StageCube>& bottomLine() {
-    return active_cubes_.front();
-  }
-
-  std::vector<StageCube>& collapseLine() {
-    return collapse_cubes_.back();
-  }
-
-
   // 「この場所にはCubeが無い」も結果に含めるので、std::pairを利用
   std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) {
     if (active_cubes_.empty()) {
@@ -263,6 +242,43 @@ private:
   // TIPS:コピー不可
   Stage(const Stage&) = delete;
   Stage& operator=(const Stage&) = delete;
+
+
+  bool canBuild() const {
+    return !cubes_.empty();
+  }
+
+  bool canCollapse() const {
+    return !active_cubes_.empty();
+  }
+  
+  void buildOneLine() {
+    auto row = cubes_.front();
+    cubes_.pop_front();
+    active_cubes_.push_back(std::move(row));
+    active_top_z_ += 1;
+  }
+
+  void collapseStartOneLine() {
+    collapse_cubes_.push_back(active_cubes_.front());
+    active_cubes_.pop_front();
+  }
+
+  void collapseFinishOneLine() {
+    collapse_cubes_.pop_front();
+  }
+
+  std::vector<StageCube>& topLine() {
+    return active_cubes_.back();
+  }
+  
+  std::vector<StageCube>& bottomLine() {
+    return active_cubes_.front();
+  }
+
+  std::vector<StageCube>& collapseLine() {
+    return collapse_cubes_.back();
+  }
   
 };
 

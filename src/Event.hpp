@@ -25,7 +25,7 @@ public:
 
   template<typename F>
   Connection connect(const std::string& msg, F callback) {
-    return signals_[msg].connect(callback);
+    return signals_[msg].connect_extended(callback);
   }  
 
   

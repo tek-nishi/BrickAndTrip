@@ -91,9 +91,12 @@ public:
       ++id;
     }
 
-    connections_ += touch_event.connect("touches-began", std::bind(&FieldView::touchesBegan, this, std::placeholders::_1));
-    connections_ += touch_event.connect("touches-moved", std::bind(&FieldView::touchesMoved, this, std::placeholders::_1));
-    connections_ += touch_event.connect("touches-ended", std::bind(&FieldView::touchesEnded, this, std::placeholders::_1));
+    connections_ += touch_event.connect("touches-began",
+                                        std::bind(&FieldView::touchesBegan, this, std::placeholders::_1, std::placeholders::_2));
+    connections_ += touch_event.connect("touches-moved",
+                                        std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
+    connections_ += touch_event.connect("touches-ended",
+                                        std::bind(&FieldView::touchesEnded, this, std::placeholders::_1, std::placeholders::_2));
   }
 
   
@@ -154,7 +157,7 @@ public:
   
 
 private:
-  void touchesBegan(std::vector<ngs::Touch>& touches) {
+  void touchesBegan(const Connection&, std::vector<ngs::Touch>& touches) {
     if (picking_) return;
 
     for (const auto& touch : touches) {
@@ -178,7 +181,7 @@ private:
     }
   }
   
-  void touchesMoved(std::vector<ngs::Touch>& touches) {
+  void touchesMoved(const Connection&, std::vector<ngs::Touch>& touches) {
     if (!picking_) return;
 
     for (const auto& touch : touches) {
@@ -188,7 +191,7 @@ private:
     }
   }
 
-  void touchesEnded(std::vector<ngs::Touch>& touches) {
+  void touchesEnded(const Connection&, std::vector<ngs::Touch>& touches) {
     if (!picking_) return;
     for (const auto& touch : touches) {
       if (touch.id != picking_touch_id_) continue;
@@ -229,7 +232,7 @@ private:
               { "move_direction", move_direction },
             };
 
-            event_.signal("move-pickable-cube", params);
+            event_.signal("move-pickable", params);
           }
           
           picking_ = false;
