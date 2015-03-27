@@ -23,6 +23,13 @@
     ]
   },
 
+  "ui_view": { 
+    "fov": 20,
+    "near_z": 0.05,
+    "far_z":  500,
+    
+    "eye_point": [ 0, 0, 20 ]
+  },
   
   "game_view": {
     "fov": 30,

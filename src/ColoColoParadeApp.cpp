@@ -6,6 +6,8 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/Json.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Camera.h"
+#include "Autolayout.hpp"
 #include "JsonUtil.hpp"
 #include "Touch.hpp"
 #include "Event.hpp"
@@ -25,14 +27,11 @@ class ColoColoParadeApp : public AppNative {
   double elapsed_seconds_;
   bool fast_forward_;
 
-  Vec2f mouse_pos_;
-  Vec2f mouse_prev_pos_;
-
-  Event<std::vector<ngs::Touch> > touch_event_;
-
   FontHolder fonts_;
 
-  Color background_;
+  Vec2f mouse_pos_;
+  Vec2f mouse_prev_pos_;
+  Event<std::vector<ngs::Touch> > touch_event_;
   
   std::unique_ptr<ControllerBase> controller_;
 
@@ -43,8 +42,6 @@ class ColoColoParadeApp : public AppNative {
 
     auto size = Json::getVec2<int>(params_["app.size"]);
     settings->setWindowSize(size);
-
-    background_ = Json::getColor<float>(params_["app.background"]);
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
     
@@ -186,9 +183,7 @@ class ColoColoParadeApp : public AppNative {
   }
   
 	void draw() {
-    gl::clear(background_);
-
-    controller_->draw();
+    controller_->draw(fonts_);
   }
 
 

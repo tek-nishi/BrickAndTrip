@@ -14,6 +14,7 @@
 #include "UIWidget.hpp"
 #include "Event.hpp"
 #include "ConnectionHolder.hpp"
+#include "FontHolder.hpp"
 
 
 namespace ngs {
@@ -22,13 +23,10 @@ class UIView {
   bool disp_;
   bool active_;
 
+  ci::Camera& camera_;
+  
   ConnectionHolder connections_;
 
-  float fov_;
-  float near_z_;
-  float far_z_;
-  ci::CameraPersp camera_;
-  
   std::vector<std::unique_ptr<UIWidget> > widgets_;
 
   Event<const std::string> events_;
@@ -41,10 +39,13 @@ class UIView {
   
   
 public:
-  explicit UIView(const ci::JsonTree& params, Autolayout& autolayout,
+  explicit UIView(const ci::JsonTree& params,
+                  ci::Camera& camera,
+                  Autolayout& autolayout,
                   Event<std::vector<Touch> >& touch_event) :
     disp_(true),
     active_(true),
+    camera_(camera),
     touching_(false)
   {
     for (const auto p : params) {
@@ -82,13 +83,13 @@ public:
   Event<const std::string>& event() { return events_; }
 
   
-  void draw(TextureFont& font) {
+  void draw(FontHolder& fonts) {
     if (!disp_) return;
     
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;
       
-      widget->draw(font);
+      widget->draw(fonts);
     }
   }
 

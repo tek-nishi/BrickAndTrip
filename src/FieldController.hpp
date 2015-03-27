@@ -94,7 +94,7 @@ private:
   Event<EventParam>& event() override { return event_; }
 
   
-  void resize() {
+  void resize() override {
     view_.resize();
   }
 
@@ -103,7 +103,7 @@ private:
     entity_.update(progressing_seconds);
   }
 
-  void draw() override {
+  void draw(FontHolder& fonts) override {
     const auto field = entity_.fieldData();
     view_.draw(field);
   }

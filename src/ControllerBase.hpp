@@ -6,6 +6,7 @@
 
 #include "Event.hpp"
 #include "EventParam.hpp"
+#include "FontHolder.hpp"
 
 
 namespace ngs {
@@ -20,7 +21,7 @@ struct ControllerBase {
   virtual void resize() = 0;
   
   virtual void update(const double progressing_seconds) = 0;
-  virtual void draw() = 0;
+  virtual void draw(FontHolder& fonts) = 0;
 };
 
 }

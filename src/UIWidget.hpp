@@ -10,6 +10,7 @@
 #include "JsonUtil.hpp"
 #include "CubeTextDrawer.hpp"
 #include "EasingUtil.hpp"
+#include "FontHolder.hpp"
 #include <set>
 
 
@@ -123,8 +124,8 @@ public:
   }
 
 
-  void draw(TextureFont& font) {
-    CubeTextDrawer::draw(text_, font,
+  void draw(FontHolder& fonts) {
+    CubeTextDrawer::draw(text_, fonts.getFont(""),
                          pos_() + layout_->getPos(), scale_(),
                          text_color_(), base_color_(),
                          rotate_);
