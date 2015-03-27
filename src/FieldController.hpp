@@ -42,7 +42,8 @@ public:
     event_.connect("move-pickable",
                    [this](const Connection&, EventParam& param) {
                      entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
-                                              boost::any_cast<int>(param["move_direction"]));
+                                              boost::any_cast<int>(param["move_direction"]),
+                                              boost::any_cast<int>(param["move_speed"]));
                    });
 
     event_.connect("all-pickable-started",

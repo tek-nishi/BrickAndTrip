@@ -46,7 +46,8 @@
       }
     ],
 
-    "move_threshold": 0.8
+    "move_threshold": 0.8,
+    "move_speed_rate": 0.25
   },
 
   
@@ -89,6 +90,7 @@
 
       "rotate_ease": "EaseInQuad",
       "rotate_duration": 0.5,
+      "rotate_speed_rate": [ 1, 0.8, 0.6, 0.4, 0.2 ],
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,

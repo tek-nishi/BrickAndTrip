@@ -45,11 +45,13 @@ class FieldView {
 
   bool  picking_;
   u_int picking_touch_id_;
+  double picking_touch_timestamp_;
   u_int picking_cube_id_;
   ci::Vec3f picking_plane_;
   ci::Vec3f picking_pos_;
 
   float move_threshold_;
+  float move_speed_rate_;
   
   
 public:
@@ -65,7 +67,8 @@ public:
     interest_point_(Json::getVec3<float>(params["game_view.interest_point"])),
     target_point_(interest_point_),
     picking_(false),
-    move_threshold_(params["game_view.move_threshold"].getValue<float>())
+    move_threshold_(params["game_view.move_threshold"].getValue<float>()),
+    move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>())
   {
     camera_.setEyePoint(eye_point_);
     camera_.setCenterOfInterestPoint(interest_point_);
@@ -93,8 +96,8 @@ public:
 
     connections_ += touch_event.connect("touches-began",
                                         std::bind(&FieldView::touchesBegan, this, std::placeholders::_1, std::placeholders::_2));
-    connections_ += touch_event.connect("touches-moved",
-                                        std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
+    // connections_ += touch_event.connect("touches-moved",
+    //                                     std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
     connections_ += touch_event.connect("touches-ended",
                                         std::bind(&FieldView::touchesEnded, this, std::placeholders::_1, std::placeholders::_2));
   }
@@ -164,9 +167,10 @@ private:
       auto ray = generateRay(touch.pos);
       for (auto& cube : touch_cubes_) {
         if (isPickedCube(cube.bbox, ray)) {
-          picking_          = true;
+          picking_ = true;
           picking_touch_id_ = touch.id;
-          picking_cube_id_  = cube.id;
+          picking_touch_timestamp_ = touch.timestamp;
+          picking_cube_id_ = cube.id;
 
           // cubeの上平面との交点
           float cross_z;
@@ -204,32 +208,39 @@ private:
           auto origin = ci::Vec3f(0, (cube.position.y + 0.5f) * cube.size, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
           auto picking_ofs = ray.calcPosition(cross_z) - picking_pos_;
+          auto delta_time = touch.timestamp - picking_touch_timestamp_;
 
           int move_direction = PickableCube::MOVE_NONE;
           float move_threshold = cube.size * move_threshold_;
+          int move_speed = 1;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
             // 縦移動
             if (picking_ofs.z < -move_threshold) {
               move_direction = PickableCube::MOVE_DOWN;
+              move_speed     = calcMoveSpeed(delta_time, -picking_ofs.z, move_threshold);
             }
             else if (picking_ofs.z > move_threshold) {
               move_direction = PickableCube::MOVE_UP;
+              move_speed     = calcMoveSpeed(delta_time, picking_ofs.z, move_threshold);
             }
           }
           else {
             // 横移動
             if (picking_ofs.x < -move_threshold) {
               move_direction = PickableCube::MOVE_RIGHT;
+              move_speed     = calcMoveSpeed(delta_time, -picking_ofs.x, move_threshold);
             }
             else if (picking_ofs.x > move_threshold) {
               move_direction = PickableCube::MOVE_LEFT;
+              move_speed     = calcMoveSpeed(delta_time, picking_ofs.x, move_threshold);
             }
           }
 
           if (move_direction != PickableCube::MOVE_NONE) {
             EventParam params = {
-              { "cube_id", picking_cube_id_ },
+              { "cube_id",        picking_cube_id_ },
               { "move_direction", move_direction },
+              { "move_speed",     move_speed },
             };
 
             event_.signal("move-pickable", params);
@@ -242,6 +253,12 @@ private:
     }
   }
 
+  int calcMoveSpeed(const double delta_time, const float delta_position, const float move_threshold) {
+    if (delta_position < move_threshold) {
+      return 1;
+    }
+    return std::max(int(move_speed_rate_ * delta_position / delta_time), 1);
+  }
 
   ci::Ray generateRay(const ci::Vec2f& pos) {
     float u = pos.x / (float) ci::app::getWindowWidth();
@@ -340,7 +357,7 @@ private:
       if (!cube->isActive()) continue;
 
       if (picking_ && (picking_cube_id_ == cube->id())) {
-        ci::gl::color(1, 0, 0);
+        ci::gl::color(0, 0, 1);
       }
       else {
         ci::gl::color(cube->color());

@@ -75,6 +75,8 @@ public:
 
   void update(const double progressing_seconds) {
     bool did_fall = decideEachPickableCubeFalling();
+    
+    decideEachPickableCubeMoving();
 
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
     if (did_fall && !isPickableCubeOnStage()) {
@@ -154,7 +156,7 @@ public:
   }
 
   
-  void movePickableCube(const u_int id, const int direction) {
+  void movePickableCube(const u_int id, const int direction, const int speed) {
     // 複数PickableCubeから対象を探す
     auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
                            [id](const std::unique_ptr<PickableCube>& obj) {
@@ -162,19 +164,21 @@ public:
                            });
 
     assert(it != std::end(pickable_cubes_));
-    
+
+    auto& cube = *it;
+
     // 移動可能かStageを調べる
-    ci::Vec3i move_vec[] = {
+    static ci::Vec3i move_vec[] = {
       {  0, 0,  1 },
       {  0, 0, -1 },
       {  1, 0,  0 },
       { -1, 0,  0 },
     };
 
-    auto moved_pos = (*it)->blockPosition() + move_vec[direction];
-    auto height = stage_.getStageHeight(moved_pos);
-    if (height.first && height.second == moved_pos.y) {
-      (*it)->startRotationMove(direction, moved_pos);
+    const auto& move_vector = move_vec[direction];
+    auto moved_pos = cube->blockPosition() + move_vector;
+    if (canPickableCubeMove(moved_pos)) {
+      cube->reserveRotationMove(direction, move_vector, speed);
     }
   }
 
@@ -199,11 +203,31 @@ private:
   }
 
 
+  // 全てのPickableCubeの移動開始
+  void decideEachPickableCubeMoving() {
+    for (auto& cube : pickable_cubes_) {
+      if (cube->willRotationMove()) {
+        if (canPickableCubeMove(cube->blockPosition() + cube->moveVector())) {
+          cube->startRotationMove();
+        }
+        else {
+          cube->cancelRotationMove();
+        }
+      }
+    }
+  }
+
+  bool canPickableCubeMove(const ci::Vec3i& block_pos) {
+    auto height = stage_.getStageHeight(block_pos);
+    return height.first && (height.second == block_pos.y);
+  }
+
+  
   // 全PickableCubeの落下判定
   bool decideEachPickableCubeFalling() {
     bool did_fall = false;
     for (auto& cube : pickable_cubes_) {
-      if (!cube->isOnStage()) continue;
+      if (!cube->isOnStage() || !cube->canPick()) continue;
       
       auto height = stage_.getStageHeight(cube->blockPosition());
       if (!height.first) {
@@ -220,6 +244,7 @@ private:
     return did_fall;
   }
 
+  
   // １つでもPickableCubeがStage上にいるか判定
   bool isPickableCubeOnStage() {
     bool on_stage = false;
