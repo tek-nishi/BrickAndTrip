@@ -8,13 +8,14 @@
 #include <boost/range/algorithm_ext/erase.hpp>
 #include "FieldController.hpp"
 #include "EventParam.hpp"
+#include "UIView.hpp"
 
 
 namespace ngs {
 
 class RootController : public ControllerBase {
   ci::JsonTree& params_;
-  Event<std::vector<ngs::Touch> >& touch_event_;
+  Event<std::vector<Touch> >& touch_event_;
   
   Event<EventParam> event_;
   
@@ -23,12 +24,12 @@ class RootController : public ControllerBase {
 
 
 public:
-  RootController(ci::JsonTree& params, Event<std::vector<ngs::Touch> >& touch_event) :
+  RootController(ci::JsonTree& params, Event<std::vector<Touch> >& touch_event) :
     params_(params),
     touch_event_(touch_event)
   {
     // TODO:最初のControllerを追加
-    auto controller = std::unique_ptr<ControllerBase>(new FieldController(params, touch_event_));
+    auto controller = std::unique_ptr<ControllerBase>(new FieldController(params, touch_event_, event_));
     children_.push_back(std::move(controller));
   }
 

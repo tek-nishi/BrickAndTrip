@@ -56,7 +56,7 @@ class FieldView {
   
 public:
   FieldView(const ci::JsonTree& params, Event<EventParam>& event,
-            Event<std::vector<ngs::Touch> >& touch_event) :
+            Event<std::vector<Touch> >& touch_event) :
     params_(params),
     event_(event),
     fov_(params["game_view.fov"].getValue<float>()),
@@ -160,7 +160,7 @@ public:
   
 
 private:
-  void touchesBegan(const Connection&, std::vector<ngs::Touch>& touches) {
+  void touchesBegan(const Connection&, std::vector<Touch>& touches) {
     if (picking_) return;
 
     for (const auto& touch : touches) {
@@ -185,7 +185,7 @@ private:
     }
   }
   
-  void touchesMoved(const Connection&, std::vector<ngs::Touch>& touches) {
+  void touchesMoved(const Connection&, std::vector<Touch>& touches) {
     if (!picking_) return;
 
     for (const auto& touch : touches) {
@@ -195,7 +195,7 @@ private:
     }
   }
 
-  void touchesEnded(const Connection&, std::vector<ngs::Touch>& touches) {
+  void touchesEnded(const Connection&, std::vector<Touch>& touches) {
     if (!picking_) return;
     for (const auto& touch : touches) {
       if (touch.id != picking_touch_id_) continue;
