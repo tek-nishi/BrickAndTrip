@@ -70,6 +70,12 @@ public:
                      entity_.startStageBuild();
                    });
 
+    event_.connect("build-finish-line",
+                   [this](const Connection&, EventParam& param) {
+                     DOUT << "build-finish-line" << std::endl;
+                     entity_.entryPickableCubes();
+                   });
+
     event_.connect("fall-pickable",
                    [this](const Connection&, EventParam& param) {
                      view_.cancelPicking(boost::any_cast<u_int>(param["id"]));

@@ -6,6 +6,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <boost/range/algorithm_ext/erase.hpp>
 #include "cinder/Json.h"
 #include "cinder/Timeline.h"
 #include "cinder/Rand.h"
@@ -29,12 +30,16 @@ class FieldEntity {
 
   // VS2013には暗黙のmoveコンストラクタが無いのでstd::unique_ptrで保持
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
-  std::vector<std::unique_ptr<PickableCube> > pickable_cubes_;
+  using PickableCubePtr = std::unique_ptr<PickableCube>;
+  std::vector<PickableCubePtr> pickable_cubes_;
 
   int start_line_z_;
   int finish_line_z_;
   int next_start_line_z_;
 
+  int entry_packable_num_;
+
+  
   enum {
     NONE,
     START,
@@ -74,6 +79,11 @@ public:
 
 
   void update(const double progressing_seconds) {
+    boost::remove_erase_if(pickable_cubes_,
+                           [](const PickableCubePtr& cube) {
+                             return !cube->isActive();
+                           });
+
     bool did_fall = decideEachPickableCubeFalling();
     
     decideEachPickableCubeMoving();
@@ -109,18 +119,17 @@ public:
 
   // 最初のStageとStartLine、PickableCubeを準備
   void setupStartStage() {
-    int top_z = addCubeStage("startline.json");
-    // start_line_z_ = top_z - 1;
-    next_start_line_z_ = top_z - 1;
+    auto stage_info = addCubeStage("startline.json");
+    next_start_line_z_ = stage_info.first - 1;
+    entry_packable_num_ = stage_info.second;
     
     stage_.buildStage(0.25f);
 
-    event_timeline_->add([this]() {
-        auto entry_pos = Json::getVec3<int>(params_["game.pickable.entry_start"]);
-        auto cube = std::unique_ptr<PickableCube>(new PickableCube(params_, event_, entry_pos));
-        pickable_cubes_.push_back(std::move(cube));
-        
-      }, event_timeline_->getCurrentTime() + params_["game.pickable.entry_delay"].getValue<float>());
+    int   entry_z = 0 + params_["game.pickable.entry_z"].getValue<int>();
+    float delay   = params_["game.pickable.entry_start_delay"].getValue<float>();
+    for (int i = 0; i < entry_packable_num_; ++i) {
+      entryPickableCube(entry_z, delay);
+    }
   }
 
   // Stageの全Buildを始める
@@ -130,13 +139,15 @@ public:
     std::ostringstream path;
     // stage_num が 0 -> stage01.json 
     path << "stage" << std::setw(2) << std::setfill('0') << (stage_num_ + 1) << ".json";
-    int top_z = addCubeStage(path.str());
-    finish_line_z_ = top_z - 1;
+    auto stage_info = addCubeStage(path.str());
+    finish_line_z_ = stage_info.first - 1;
+    entry_packable_num_ = stage_info.second;
+    stage_.setFinishLine(finish_line_z_);
     stage_num_ += 1;
 
     start_line_z_ = next_start_line_z_;
-    top_z = addCubeStage("finishline.json");
-    next_start_line_z_ = top_z - 1;
+    stage_info = addCubeStage("finishline.json");
+    next_start_line_z_ = stage_info.first - 1;
 
     mode_ = START;
 
@@ -159,7 +170,7 @@ public:
   void movePickableCube(const u_int id, const int direction, const int speed) {
     // 複数PickableCubeから対象を探す
     auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
-                           [id](const std::unique_ptr<PickableCube>& obj) {
+                           [id](const PickableCubePtr& obj) {
                              return *obj == id;
                            });
 
@@ -177,11 +188,22 @@ public:
 
     const auto& move_vector = move_vec[direction];
     auto moved_pos = cube->blockPosition() + move_vector;
-    if (canPickableCubeMove(moved_pos)) {
+    if (canPickableCubeMove(cube, moved_pos)) {
       cube->reserveRotationMove(direction, move_vector, speed);
     }
   }
 
+  void entryPickableCubes() {
+    if (entry_packable_num_ == 0) return;
+
+    // Finish lineの次が(z = 0)として生成
+    int entry_z = finish_line_z_ + 1 + params_["game.pickable.entry_z"].getValue<int>();
+    float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
+    for (int i = 0; i < entry_packable_num_; ++i) {
+      entryPickableCube(entry_z, delay);
+    }
+  }
+  
   
   // 現在のFieldの状態を作成
   Field fieldData() {
@@ -196,10 +218,29 @@ public:
 
   
 private:
-  int addCubeStage(const std::string& path) {
+  void entryPickableCube(const int entry_z, const float delay) {
+    event_timeline_->add([this, entry_z]() {
+        while (1) {
+          // Stageは(x >= 0)を保証しているので手抜きできる
+          auto entry_pos = ci::Vec3i(ci::randInt(1, 8), 0, entry_z);
+          if (isPickableCube(entry_pos)) continue;
+        
+          auto cube = PickableCubePtr(new PickableCube(params_, event_, entry_pos));
+          pickable_cubes_.push_back(std::move(cube));
+          return;
+        }
+        
+      }, event_timeline_->getCurrentTime() + delay);
+  }
+  
+  std::pair<int, int> addCubeStage(const std::string& path) {
     auto stage = ci::JsonTree(ci::app::loadAsset(path));
-    return stage_.addCubes(stage,
-                           cube_stage_color_, cube_line_color_);
+    int top_z = stage_.addCubes(stage,
+                                cube_stage_color_, cube_line_color_);
+
+    int entry_num = Json::getValue(stage, "pickable", 0);
+
+    return std::make_pair(top_z, entry_num);
   }
 
 
@@ -207,7 +248,7 @@ private:
   void decideEachPickableCubeMoving() {
     for (auto& cube : pickable_cubes_) {
       if (cube->willRotationMove()) {
-        if (canPickableCubeMove(cube->blockPosition() + cube->moveVector())) {
+        if (canPickableCubeMove(cube, cube->blockPosition() + cube->moveVector())) {
           cube->startRotationMove();
         }
         else {
@@ -217,11 +258,30 @@ private:
     }
   }
 
-  bool canPickableCubeMove(const ci::Vec3i& block_pos) {
+  bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) {
+    // 移動先に他のPickableCubeがいたら移動できない
+    for (auto& other_cube : pickable_cubes_) {
+      if (*cube == *other_cube) continue;
+
+      if (block_pos == other_cube->blockPosition()) return false;
+    }
+
+    // 移動先の高さが同じじゃないと移動できない
     auto height = stage_.getStageHeight(block_pos);
     return height.first && (height.second == block_pos.y);
   }
 
+  bool isPickableCube(const ci::Vec3i& block_pos) {
+    for (auto& cube : pickable_cubes_) {
+      const auto& pos = cube->blockPosition();
+      
+      if ((pos.x == block_pos.x) && (pos.z == block_pos.z)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   
   // 全PickableCubeの落下判定
   bool decideEachPickableCubeFalling() {

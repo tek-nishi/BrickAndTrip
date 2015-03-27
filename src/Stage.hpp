@@ -27,6 +27,7 @@ class Stage {
   float cube_size_;
   int top_z_;
   int active_top_z_;
+  int finish_line_z_;
   
   float build_speed_;
   float collapse_speed_;
@@ -45,7 +46,7 @@ class Stage {
   
   bool finished_build_;
   bool finished_collapse_;
-
+  
   ci::TimelineRef event_timeline_;
   ci::TimelineRef animation_timeline_;
   
@@ -56,6 +57,7 @@ public:
     cube_size_(params["game.cube_size"].getValue<float>()),
     top_z_(0),
     active_top_z_(0),
+    finish_line_z_(-1),
     build_speed_(params["game.stage.build_speed"].getValue<float>()),
     collapse_speed_(params["game.stage.collapse_speed"].getValue<float>()),
     build_ease_(params["game.stage.build_ease"].getValue<std::string>()),
@@ -99,6 +101,11 @@ public:
     event_timeline_->add([this, speed_rate]() {
         buildOneLine();
         event_.signal("build-one-line", EventParam());
+
+        // active_top_z_には次のzが入っている
+        if ((active_top_z_ - 1) == finish_line_z_) {
+          event_.signal("build-finish-line", EventParam());
+        }
 
         // 生成演出
         auto& cubes = topLine();
@@ -193,6 +200,11 @@ public:
       },
       animation_timeline_->getCurrentTime() + open_delay_ + open_duration_);
   }
+
+  void setFinishLine(const int z) {
+    finish_line_z_ = z;
+  }
+  
   
   int addCubes(const ci::JsonTree& stage_data,
                 const std::vector<ci::Color>& cube_color,
@@ -241,14 +253,14 @@ public:
   // 「この場所にはCubeが無い」も結果に含めるので、std::pairを利用
   std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) {
     if (active_cubes_.empty()) {
-      return std::pair<bool, int>(false, 0);
+      return std::make_pair(false, 0);
     }
 
     int top_z    = active_top_z_ - 1;
     int bottom_z = active_top_z_ - active_cubes_.size();
     
     if ((block_pos.z < bottom_z) || (block_pos.z > top_z)) {
-      return std::pair<bool, int>(false, 0);
+      return std::make_pair(false, 0);
     }
 
     // TIPS:z値とコンテナの添え字が一致するようになっているので、
@@ -256,10 +268,10 @@ public:
     int iz = block_pos.z - bottom_z;
     for (const auto& cube : active_cubes_[iz]) {
       if (cube.block_position.x == block_pos.x) {
-        return std::pair<bool, int>(cube.can_ride, cube.block_position.y);
+        return std::make_pair(cube.can_ride, cube.block_position.y);
       }
     }
-    return std::pair<bool, int>(false, 0);
+    return std::make_pair(false, 0);
   }
 
   

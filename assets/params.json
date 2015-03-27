@@ -79,8 +79,9 @@
     },
 
     "pickable": {
-      "entry_start": [ 2, 0, 1 ],
-      "entry_delay": 2,
+      "entry_z": 1,
+      "entry_start_delay": 2,
+      "entry_next_delay": 3,
       
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,

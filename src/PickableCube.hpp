@@ -228,10 +228,14 @@ public:
 
 
   // std::findを利用するための定義
-  bool operator== (const u_int rhs_id) const {
+  bool operator==(const u_int rhs_id) const {
     return id_ == rhs_id;
   }
 
+  bool operator==(const PickableCube& rhs) const {
+    return id_ == rhs.id_;
+  }
+  
   
 private:
   // TIPS:コピー不可
