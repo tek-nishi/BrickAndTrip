@@ -5,7 +5,7 @@
 //
 
 #include "cinder/Json.h"
-#include "AutoLayout.hpp"
+#include "Autolayout.hpp"
 #include "CubeTextDrawer.hpp"
 #include "JsonUtil.hpp"
 #include "Touch.hpp"

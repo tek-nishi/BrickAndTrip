@@ -21,6 +21,8 @@ class GameoverController : public ControllerBase {
 
   ConnectionHolder connections_;
 
+  ci::TimelineRef event_timeline_;
+
 
 public:
   GameoverController(ci::JsonTree& params,
@@ -29,14 +31,30 @@ public:
     params_(params),
     event_(event),
     view_(std::move(view)),
-    active_(true)
+    active_(true),
+    event_timeline_(ci::Timeline::create())
   {
+    DOUT << "GameoverController()" << std::endl;
     
+    view_->startWidgetTween("tween-in");
+    
+    auto current_time = ci::app::timeline().getCurrentTime();
+    event_timeline_->setStartTime(current_time);
+    ci::app::timeline().apply(event_timeline_);
+  }
+
+  ~GameoverController() {
+    DOUT << "~GameoverController()" << std::endl;
+
+    // 再生途中のものもあるので、手動で取り除く
+    event_timeline_->removeSelf();
   }
 
 
 private:
-  bool isActive() const override { return active_; }
+  bool isActive() const override {
+    return active_;
+  }
 
   Event<EventParam>& event() override { return event_; }
 

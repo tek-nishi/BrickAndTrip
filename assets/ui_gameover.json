@@ -1,31 +1,142 @@
 [
   {
-    "name": "gameover",
+    "name": "game",
     "disp": true,
 
-    "text": "ＧＡＭＥ　ＯＶＥＲ",
+    "text": "ＧＡＭＥ",
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, -0.5, 0 ],
+    "pos": [ 0, -1, 0 ],
     "origin": "top-center",
     "layout": "top-center",
     "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ]
+    "text_color": [ 1, 1, 1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "delay": 0.5,
+            "start": [ -10, 0, 0 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 1.5,
+            "delay": 0.25,
+            "interval": 0.1,
+            "start": -990,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "delay": 0.5,
+            "start": [ 10, 0, 0 ]
+          }
+        ]
+      }
+    }
+  },
+  
+  {
+    "name": "over",
+    "disp": true,
+
+    "text": "ＯＶＥＲ",
+    "size": 1,
+    "spacing": 0.1,
+    "chara_split": 1,
+    "pos": [ 0, -2.3, 0 ],
+    "origin": "top-center",
+    "layout": "top-center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "delay": 0.5,
+            "start": [ 10, 0, 0 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 1.5,
+            "delay": 0.25,
+            "interval": 0.1,
+            "start": -990,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "delay": 0.5,
+            "start": [ -10, 0, 0 ]
+          }
+        ]
+      }
+    }
   },
 
   {
     "name": "gameover",
     "disp": true,
 
-    "text": "✔︎",
+    "text": "✔",
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, -1, 0 ],
-    "origin": "center",
+    "pos": [ 0, -2, 0 ],
+    "origin": "top-center",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0, 0, 1 ]
+    "text_color": [ 0, 0, 1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "delay": 0.5,
+            "start": [ 0, -5, 0 ]
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "delay": 0.5,
+            "start": [ -10, 0, 0 ]
+          }
+        ]
+      }
+    }
   }
 ]

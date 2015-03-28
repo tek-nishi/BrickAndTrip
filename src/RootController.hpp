@@ -55,6 +55,11 @@ public:
     // TODO:最初のControllerを追加
     addController<FieldController>(params, touch_event_, event_);
     addController<TitleController>(params, event_, view_creator_.create("ui_title.json"));
+
+    event_.connect("fall-all-pickable",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<GameoverController>(params_, event_, view_creator_.create("ui_gameover.json"));
+                   });
   }
 
 
@@ -92,10 +97,13 @@ private:
   }
   
   void update(const double progressing_seconds) override {
-    // 更新しつつ、無効なControllerを削除
+    for (auto& controller : children_) {
+      controller->update(progressing_seconds);
+    }
+    
+    // 無効なControllerを削除
     boost::remove_erase_if(children_,
-                           [progressing_seconds](ControllerPtr& child) {
-                             child->update(progressing_seconds);
+                           [](ControllerPtr& child) {
                              return !child->isActive();
                            });
   }

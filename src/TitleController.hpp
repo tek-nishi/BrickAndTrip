@@ -20,6 +20,8 @@ class TitleController : public ControllerBase {
   bool active_;
 
   ConnectionHolder connections_;
+
+  ci::TimelineRef event_timeline_;
   
 
 public:
@@ -29,15 +31,36 @@ public:
     params_(params),
     event_(event),
     view_(std::move(view)),
-    active_(true)
+    active_(true),
+    event_timeline_(ci::Timeline::create())
   {
+    DOUT << "TitleController()" << std::endl;
+    
     view_->startWidgetTween("tween-in");
 
     connections_ += event.connect("pickable-moved",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->startWidgetTween("tween-out");
+
+                                    // 時間差でControllerを破棄
+                                    event_timeline_->add([this]() {
+                                        active_ = false;
+                                      },
+                                      event_timeline_->getCurrentTime() + 1.5f);
+                                    
                                     connection.disconnect();
                                   });
+
+    auto current_time = ci::app::timeline().getCurrentTime();
+    event_timeline_->setStartTime(current_time);
+    ci::app::timeline().apply(event_timeline_);
+  }
+
+  ~TitleController() {
+    DOUT << "~TitleController()" << std::endl;
+
+    // 再生途中のものもあるので、手動で取り除く
+    event_timeline_->removeSelf();
   }
 
 
