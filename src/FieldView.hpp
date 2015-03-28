@@ -130,8 +130,11 @@ public:
     makeTouchCubeInfo(field.pickable_cubes);
     updateCamera(field.pickable_cubes);
     updateLight();
+
+    ci::gl::enable(GL_LIGHTING);
+    ci::gl::enableDepthRead();
+    ci::gl::enableDepthWrite();
     
-    ci::gl::pushMatrices();
     ci::gl::setMatrices(camera_);
 
     for (auto& light : lights_) {
@@ -147,8 +150,6 @@ public:
     for (auto& light : lights_) {
       light.disable();
     }
-
-    ci::gl::popMatrices();
   }
 
 

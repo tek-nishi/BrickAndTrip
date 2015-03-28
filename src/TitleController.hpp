@@ -30,7 +30,15 @@ public:
     event_(event),
     view_(std::move(view)),
     active_(true)
-  { }
+  {
+    view_->startWidgetTween("tween-in");
+
+    connections_ += event.connect("pickable-moved",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->startWidgetTween("tween-out");
+                                    connection.disconnect();
+                                  });
+  }
 
 
 private:

@@ -3,7 +3,7 @@
     "name": "logo",
     "disp": true,
 
-    "text": "コロパレ",
+    "text": "コロコロ",
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
@@ -11,6 +11,72 @@
     "origin": "top-center",
     "layout": "top-center",
     "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ]
+    "text_color": [ 1, 1, 1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "loop": false,
+            "start": [ -10, 0, 0 ]
+          }
+        ]
+      },
+
+      "tween-out": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 2,
+            "loop": false,
+            "end": [ -10, 0, 0 ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "logo",
+    "disp": true,
+
+    "text": "パレード",
+    "size": 1,
+    "spacing": 0.1,
+    "chara_split": 1,
+    "pos": [ 0, -1.7, 0 ],
+    "origin": "top-center",
+    "layout": "top-center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 1.5,
+            "loop": false,
+            "start": [ 10, 0, 0 ]
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "duration": 2,
+            "loop": false,
+            "end": [ 10, 0, 0 ]
+          }
+        ]
+      }
+    }
   }  
 ]

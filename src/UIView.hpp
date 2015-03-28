@@ -24,6 +24,7 @@ class UIView {
   bool active_;
 
   ci::Camera& camera_;
+  std::vector<ci::gl::Light>& lights_;
   
   ConnectionHolder connections_;
 
@@ -41,11 +42,13 @@ class UIView {
 public:
   explicit UIView(const ci::JsonTree& params,
                   ci::Camera& camera,
+                  std::vector<ci::gl::Light>& lights,
                   Autolayout& autolayout,
                   Event<std::vector<Touch> >& touch_event) :
     disp_(true),
     active_(true),
     camera_(camera),
+    lights_(lights),
     touching_(false)
   {
     for (const auto p : params) {
@@ -85,11 +88,24 @@ public:
   
   void draw(FontHolder& fonts) {
     if (!disp_) return;
+
+    ci::gl::enableDepthRead(false);
+    ci::gl::enableDepthWrite(false);
+
+    ci::gl::setMatrices(camera_);
+
+    for (auto& light : lights_) {
+      light.enable();
+    }
     
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;
       
       widget->draw(fonts);
+    }
+
+    for (auto& light : lights_) {
+      light.disable();
     }
   }
 
@@ -111,6 +127,12 @@ public:
   }
 
   
+private:
+  // TIPS:コピー不可
+  UIView(const UIView&) = delete;
+  UIView& operator=(const UIView&) = delete;
+
+
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
     if (!active_ || touching_) return;
 
@@ -174,13 +196,6 @@ public:
 
     touching_ = false;
   }
-
-  
-private:
-  // TIPS:コピー不可
-  UIView(const UIView&) = delete;
-  UIView& operator=(const UIView&) = delete;
-
   
 };
 
