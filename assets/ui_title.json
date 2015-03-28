@@ -1,6 +1,6 @@
 [
   {
-    "name": "logo",
+    "name": "logo-up",
     "disp": true,
 
     "text": "コロコロ",
@@ -20,8 +20,15 @@
             "target": "pos",
             "type": "EaseOutExpo",
             "duration": 1.5,
-            "loop": false,
             "start": [ -10, 0, 0 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 1.5,
+            "interval": 0.1,
+            "start": -990,
+            "end": 0
           }
         ]
       },
@@ -32,15 +39,15 @@
             "target": "pos",
             "type": "EaseOutExpo",
             "duration": 2,
-            "loop": false,
             "end": [ -10, 0, 0 ]
           }
         ]
       }
     }
   },
+  
   {
-    "name": "logo",
+    "name": "logo-down",
     "disp": true,
 
     "text": "パレード",
@@ -60,8 +67,15 @@
             "target": "pos",
             "type": "EaseOutExpo",
             "duration": 1.5,
-            "loop": false,
             "start": [ 10, 0, 0 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 1.5,
+            "interval": 0.1,
+            "start": 990,
+            "end": 0
           }
         ]
       },
@@ -72,8 +86,56 @@
             "target": "pos",
             "type": "EaseOutExpo",
             "duration": 2,
-            "loop": false,
             "end": [ 10, 0, 0 ]
+          }
+        ]
+      }
+    }
+  },
+  
+  {
+    "name": "copyright",
+    "disp": true,
+
+    "text": "©　２０１５　ｎｅｗ　ｇａｍｅ　ｓｔｙｌｅ",
+    "size": 0.25,
+    "spacing": 0.02,
+    "chara_split": 1,
+    "pos": [ 0, 0.2, 0 ],
+    "origin": "bottom-center",
+    "layout": "bottom-center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "delay": 0.5,
+            "duration": 1.0,
+            "start": [ 0, -1, 0 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 1.0,
+            "interval": 0.06,
+            "start": 990,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "pos",
+            "type": "EaseOutExpo",
+            "delay": 0.1,
+            "duration": 1,
+            "end": [ 0, -1, 0 ]
           }
         ]
       }

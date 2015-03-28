@@ -8,17 +8,17 @@
         "name": "medium",
         "path": "mplus-1m-medium.ttf",
         "default": true,
-        "size": 32
+        "size": 48
       },
       {
         "name": "bold",
         "path": "mplus-1m-bold.ttf",
-        "size": 32
+        "size": 48
       },
       {
         "name": "light",
         "path": "mplus-1m-light.ttf",
-        "size": 32
+        "size": 48
       }
     ]
   },

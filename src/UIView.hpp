@@ -89,8 +89,10 @@ public:
   void draw(FontHolder& fonts) {
     if (!disp_) return;
 
-    ci::gl::enableDepthRead(false);
-    ci::gl::enableDepthWrite(false);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    
+    ci::gl::enableDepthRead();
+    ci::gl::enableDepthWrite();
 
     ci::gl::setMatrices(camera_);
 

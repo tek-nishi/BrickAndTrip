@@ -62,16 +62,16 @@ void drawCubeAndText(TextTexture& texture_info,
                      const ci::Vec3f& pos, const ci::Vec3f& size,
                      const ci::Color& color, const ci::Color& text_color) {
   ci::gl::enable(GL_LIGHTING);
-  // ci::gl::enableDepthRead();
-  // ci::gl::enableDepthWrite();
+  ci::gl::enableDepthRead();
+  ci::gl::enableDepthWrite();
 
   ci::gl::color(color);
     
   ci::gl::drawCube(pos, size);
 
   ci::gl::disable(GL_LIGHTING);
-  // ci::gl::enableDepthRead(false);
-  // ci::gl::enableDepthWrite(false);
+  ci::gl::enableDepthRead(false);
+  ci::gl::enableDepthWrite(false);
 
   ci::gl::color(text_color);
 
