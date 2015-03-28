@@ -89,6 +89,7 @@ public:
   void draw(FontHolder& fonts) {
     if (!disp_) return;
 
+    // TODO:Depth Bufferをクリアしたくない
     glClear(GL_DEPTH_BUFFER_BIT);
     
     ci::gl::enableDepthRead();

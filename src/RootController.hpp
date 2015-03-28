@@ -10,6 +10,7 @@
 #include "FieldController.hpp"
 #include "EventParam.hpp"
 #include "TitleController.hpp"
+#include "GameoverController.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 
