@@ -49,7 +49,7 @@ public:
     ui_lights_(createLights(params["ui_view.lights"])),
     autolayout_(ui_camera_),
     touch_event_(touch_event),
-    view_creator_(ui_camera_, ui_lights_, autolayout_, touch_event),
+    view_creator_(ui_camera_, ui_lights_, autolayout_, event_, touch_event),
     background_(Json::getColor<float>(params["app.background"]))
   {
     // TODO:最初のControllerを追加

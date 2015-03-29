@@ -13,6 +13,7 @@
 #include <vector>
 #include "UIWidget.hpp"
 #include "Event.hpp"
+#include "EventParam.hpp"
 #include "ConnectionHolder.hpp"
 #include "FontHolder.hpp"
 
@@ -25,12 +26,11 @@ class UIView {
 
   ci::Camera& camera_;
   std::vector<ci::gl::Light>& lights_;
-  
+
+  Event<EventParam>& event_;
   ConnectionHolder connections_;
 
   std::vector<std::unique_ptr<UIWidget> > widgets_;
-
-  Event<const std::string> events_;
 
   // 入力処理用
   bool  touching_;
@@ -44,11 +44,13 @@ public:
                   ci::Camera& camera,
                   std::vector<ci::gl::Light>& lights,
                   Autolayout& autolayout,
+                  Event<EventParam>& event,
                   Event<std::vector<Touch> >& touch_event) :
     disp_(true),
     active_(true),
     camera_(camera),
     lights_(lights),
+    event_(event),
     touching_(false)
   {
     for (const auto p : params) {
@@ -83,8 +85,6 @@ public:
     }
   }
   
-  Event<const std::string>& event() { return events_; }
-
   
   void draw(FontHolder& fonts) {
     if (!disp_) return;
@@ -194,7 +194,10 @@ private:
       touching_widget_->startTween(touch_in ? "tween-touch-end" : "tween-touch-out");
     }
     if (touch_in) {
-      events_.signal(touching_widget_->eventMessage(), touching_widget_->getName());
+      EventParam params = {
+        { "widget", touching_widget_->getName() },
+      };
+      event_.signal(touching_widget_->eventMessage(), params);
     }
 
     touching_ = false;

@@ -35,6 +35,10 @@ public:
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "TitleController()" << std::endl;
+
+    auto current_time = ci::app::timeline().getCurrentTime();
+    event_timeline_->setStartTime(current_time);
+    ci::app::timeline().apply(event_timeline_);
     
     view_->startWidgetTween("tween-in");
 
@@ -50,10 +54,6 @@ public:
                                     
                                     connection.disconnect();
                                   });
-
-    auto current_time = ci::app::timeline().getCurrentTime();
-    event_timeline_->setStartTime(current_time);
-    ci::app::timeline().apply(event_timeline_);
   }
 
   ~TitleController() {

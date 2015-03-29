@@ -36,11 +36,28 @@ public:
   {
     DOUT << "GameoverController()" << std::endl;
     
-    view_->startWidgetTween("tween-in");
-    
     auto current_time = ci::app::timeline().getCurrentTime();
     event_timeline_->setStartTime(current_time);
     ci::app::timeline().apply(event_timeline_);
+
+    view_->startWidgetTween("tween-in");
+
+    connections_ += event.connect("gameover-agree",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    // 時間差tween
+                                    event_timeline_->add([this]() {
+                                        view_->startWidgetTween("tween-out");
+                                      },
+                                      event_timeline_->getCurrentTime() + 0.5f);
+                                    
+                                    // 時間差でControllerを破棄
+                                    event_timeline_->add([this]() {
+                                        active_ = false;
+                                      },
+                                      event_timeline_->getCurrentTime() + 1.0f);
+                                    
+                                    connection.disconnect();
+                                  });
   }
 
   ~GameoverController() {
