@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <boost/range/algorithm_ext/erase.hpp>
+#include <boost/optional.hpp>
 #include "cinder/Json.h"
 #include "cinder/Timeline.h"
 #include "cinder/Rand.h"
@@ -96,6 +97,7 @@ public:
 
     switch (mode_) {
     case START:
+      // 全PickableCubeのstart判定
       if (isAllPickableCubesStarted()) {
         mode_ = FINISH;
         event_.signal("all-pickable-started", EventParam());
@@ -103,6 +105,7 @@ public:
       break;
 
     case FINISH:
+      // 全PickableCubeのfinish判定
       if (isAllPickableCubesFinished()) {
         mode_ = CLEAR;
         event_.signal("all-pickable-finished", EventParam());
@@ -110,6 +113,7 @@ public:
       break;
 
     case CLEAR:
+      // finish後、stageの生成と崩壊の完了判定
       if (stage_.isFinishedBuildAndCollapse()) {
         mode_ = NONE;
         event_.signal("stage-cleared", EventParam());
@@ -117,6 +121,7 @@ public:
       break;
 
     case CLEANUP:
+      // gameover後、stage崩壊の完了判定
       if (stage_.isFinishedCollapse()) {
         mode_ = NONE;
         event_.signal("stage-all-collapsed", EventParam());
@@ -173,6 +178,11 @@ public:
     stage_.stopBuildAndCollapse();
     stage_.buildStage(0.1);
     stage_.collapseStage(finish_line_z_ - 1, 0.1);
+
+    // sleep中のPickableCubeを起こす
+    for (auto& cube : pickable_cubes_) {
+      cube->awaken();
+    }
   }
 
   // GameOver時などで生成&崩壊を止める
@@ -189,7 +199,6 @@ public:
     stage_.collapseStage(next_start_line_z_, 0.1);
     mode_ = CLEANUP;
   }
-
   
   void restart() {
     stage_.restart();
@@ -199,14 +208,8 @@ public:
 
   
   void movePickableCube(const u_int id, const int direction, const int speed) {
-    // 複数PickableCubeから対象を探す
-    auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
-                           [id](const PickableCubePtr& obj) {
-                             return *obj == id;
-                           });
-
-    assert(it != std::end(pickable_cubes_));
-
+    auto it = findPickableCube(id);
+    assert(it);
     auto& cube = *it;
 
     // 移動可能かStageを調べる
@@ -224,6 +227,7 @@ public:
     }
   }
 
+  // finish-line上のPickableCubeを生成
   void entryPickableCubes() {
     if (entry_packable_num_ == 0) return;
 
@@ -231,7 +235,7 @@ public:
     int entry_z = finish_line_z_ + 1 + params_["game.pickable.entry_z"].getValue<int>();
     float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay);
+      entryPickableCube(entry_z, delay, true);
     }
   }
   
@@ -249,14 +253,29 @@ public:
 
   
 private:
-  void entryPickableCube(const int entry_z, const float delay) {
-    event_timeline_->add([this, entry_z]() {
+  // TODO:参照の無効値をあらわすためにboost::optionalを利用
+  boost::optional<PickableCubePtr&> findPickableCube(const uint id) {
+    auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
+                           [id](const PickableCubePtr& obj) {
+                             return *obj == id;
+                           });
+
+    if (it == std::end(pickable_cubes_)) return boost::optional<PickableCubePtr&>();
+    
+    return boost::optional<PickableCubePtr&>(*it);
+  }
+
+
+  void entryPickableCube(const int entry_z, const float delay, const bool sleep = false) {
+    event_timeline_->add([this, entry_z, sleep]() {
         while (1) {
           // Stageは(x >= 0)を保証しているので手抜きできる
           auto entry_pos = ci::Vec3i(ci::randInt(1, 8), 0, entry_z);
           if (isPickableCube(entry_pos)) continue;
-        
-          auto cube = PickableCubePtr(new PickableCube(params_, event_, entry_pos));
+
+          
+          auto cube = PickableCubePtr(new PickableCube(params_, event_, entry_pos,
+                                                       (mode_ == CLEAR) ? false : sleep));
           pickable_cubes_.push_back(std::move(cube));
           return;
         }

@@ -42,7 +42,6 @@ public:
     stage_build_(false),
     stage_collapse_(false)
   {
-    // entity_.setupStartStage();
     setup();
 
     connections_ += event_.connect("move-pickable",
@@ -52,17 +51,15 @@ public:
                                                               boost::any_cast<int>(param["move_speed"]));
                                    });
 
+    connections_ += event_.connect("pickable-on-stage",
+                                   [this](const Connection& connection, EventParam& param) {
+                                   });
+    
     connections_ += event_.connect("all-pickable-started",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "all-pickable-started" << std::endl;
                                      entity_.startStageCollapse();
                                    });
-
-    // connections_ += event_.connect("pickable-moved",
-    //                                [this](const Connection& connection, EventParam& param) {
-    //                                  entity_.startStageBuild();
-    //                                  connection.disconnect();
-    //                                });
 
     connections_ += event_.connect("all-pickable-finished",
                                    [this](const Connection& connection, EventParam& param) {
@@ -84,12 +81,14 @@ public:
 
     connections_ += event_.connect("fall-pickable",
                                    [this](const Connection&, EventParam& param) {
+                                     DOUT << "fall-pickable" << std::endl;
                                      view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
                                    });
 
 
     connections_ += event_.connect("fall-all-pickable",
                                    [this](const Connection& connection, EventParam& param) {
+                                     DOUT << "fall-all-pickable" << std::endl;
                                      view_.calcelAllPickings();
                                      entity_.stopBuildAndCollapse();
                                    });

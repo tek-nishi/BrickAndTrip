@@ -284,7 +284,7 @@ private:
     touch_cubes_.clear();
     
     for (const auto& cube : cubes) {
-      if (!cube->isActive() || !cube->canPick()) continue;
+      if (!cube->isActive() || !cube->canPick() || cube->isSleep()) continue;
 
       const auto& pos = cube->position();
       const auto size = cube->size();
@@ -305,7 +305,7 @@ private:
     ci::Vec3f target_pos = ci::Vec3f::zero();
     int cube_num = 0;
     for (const auto& cube : cubes) {
-      if (!cube->isActive() || !cube->isOnStage()) continue;
+      if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
 
       target_pos += cube->position();
       cube_num += 1;

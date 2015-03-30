@@ -45,6 +45,9 @@ private:
   bool picking_;
   bool on_stage_;
 
+  // ステージ上で待機(finishlineの先にいるやつ)
+  bool sleep_;
+
   int       move_direction_;
   ci::Vec3i move_vector_;
   int       move_speed_;
@@ -61,7 +64,7 @@ private:
 
 public:
   PickableCube(const ci::JsonTree& params, Event<EventParam>& event,
-               const ci::Vec3i& entry_pos) :
+               const ci::Vec3i& entry_pos, const bool sleep = false) :
     event_(event),
     active_(true),
     id_(getUniqueNumber()),
@@ -73,6 +76,7 @@ public:
     can_pick_(false),
     picking_(false),
     on_stage_(false),
+    sleep_(sleep),
     move_direction_(MOVE_NONE),
     move_vector_(ci::Vec3i::zero()),
     move_speed_(0),
@@ -106,6 +110,12 @@ public:
     options.finishFn([this]() {
         can_pick_ = true;
         on_stage_ = true;
+        
+        EventParam params = {
+          { "id", id_ },
+          { "block_pos", block_position_ },
+        };
+        event_.signal("pickable-on-stage", params);
       });
   }
 
@@ -122,7 +132,7 @@ public:
   }
   
   bool willRotationMove() {
-    return (move_speed_ > 0) && can_pick_ && on_stage_;
+    return (move_speed_ > 0) && can_pick_ && on_stage_ && !sleep_;
   }
 
   void cancelRotationMove() {
@@ -207,6 +217,9 @@ public:
   bool canPick() const { return can_pick_; }
   bool isOnStage() const { return on_stage_; }
 
+  bool isSleep() const { return sleep_; }
+  void awaken(const bool sleeing = false) { sleep_ = sleeing; }
+  
   int moveSpeed() const { return move_speed_; }
   
   const ci::Vec3f& position() const { return position_(); }
