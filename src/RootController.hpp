@@ -5,12 +5,14 @@
 //
 
 #include "ControllerBase.hpp"
+#include <list>
 #include <boost/range/algorithm_ext/erase.hpp>
 #include "FontHolder.hpp"
 #include "FieldController.hpp"
 #include "EventParam.hpp"
 #include "TitleController.hpp"
 #include "GameoverController.hpp"
+#include "StageclearController.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 
@@ -36,7 +38,8 @@ class RootController : public ControllerBase {
   ci::Color background_;
   
   using ControllerPtr = std::unique_ptr<ControllerBase>;
-  std::vector<ControllerPtr> children_;
+  // TIPS:イテレート中にpush_backされるのでstd::listを使っている
+  std::list<ControllerPtr> children_;
 
 
 public:
@@ -59,6 +62,11 @@ public:
     event_.connect("fall-all-pickable",
                    [this](const Connection& connection, EventParam& param) {
                      addController<GameoverController>(params_, event_, view_creator_.create("ui_gameover.json"));
+                   });
+
+    event_.connect("all-pickable-finished",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<StageclearController>(params_, event_, view_creator_.create("ui_stageclear.json"));
                    });
   }
 
@@ -124,6 +132,7 @@ private:
   }
 
 
+  // 汎用的なパラメーターからCameraを生成する
   static ci::CameraPersp createCamera(const ci::JsonTree& params) {
     ci::CameraPersp camera(ci::app::getWindowWidth(), ci::app::getWindowHeight(),
                            params["fov"].getValue<float>(),
@@ -135,6 +144,7 @@ private:
     return std::move(camera);
   }
 
+  // 汎用的なパラメーターからLightを生成する
   static std::vector<ci::gl::Light> createLights(const ci::JsonTree& params) {
     int id = 0;
     std::vector<ci::gl::Light> lights;

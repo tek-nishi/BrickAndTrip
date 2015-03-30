@@ -254,7 +254,7 @@ public:
   
 private:
   // TODO:参照の無効値をあらわすためにboost::optionalを利用
-  boost::optional<PickableCubePtr&> findPickableCube(const uint id) {
+  boost::optional<PickableCubePtr&> findPickableCube(const u_int id) {
     auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
                            [id](const PickableCubePtr& obj) {
                              return *obj == id;
@@ -343,11 +343,13 @@ private:
       if (!height.first) {
         cube->fallFromStage();
 
-        EventParam params = {
-          { "id", cube->id() },
-        };
-        event_.signal("fall-pickable", params);
-        did_fall = true;
+        if (!cube->isSleep()) {
+          EventParam params = {
+            { "id", cube->id() },
+          };
+          event_.signal("fall-pickable", params);
+          did_fall = true;
+        }
       }
     }
     
@@ -359,6 +361,9 @@ private:
   bool isPickableCubeOnStage() {
     bool on_stage = false;
     for (auto& cube : pickable_cubes_) {
+      // sleep中なのは勘定しない
+      if (cube->isSleep()) continue;
+      
       if (cube->isOnStage()) {
         on_stage = true;
         break;
@@ -396,6 +401,8 @@ private:
 
     bool finished = true;
     for (const auto& cube : pickable_cubes_) {
+      if (cube->isSleep()) continue;
+      
       if (!cube->canPick()) {
         finished = false;
         break;
