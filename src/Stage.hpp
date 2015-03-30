@@ -180,6 +180,25 @@ public:
     return true;
   }
 
+  
+  bool isFinishedCollapse() {
+    return active_cubes_.empty();
+  }
+
+  void restart() {
+    stopBuildAndCollapse();
+
+    top_z_         = 0;
+    active_top_z_  = 0;
+    finish_line_z_ = -1;
+    
+    finished_build_    = false;
+    finished_collapse_ = false;
+
+    cubes_.clear();
+  }
+  
+
   // StartLineを下げる
   void openStartLine() {
     size_t iz = active_cubes_.size() - 1;

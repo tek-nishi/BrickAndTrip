@@ -42,7 +42,8 @@ public:
     stage_build_(false),
     stage_collapse_(false)
   {
-    entity_.setupStartStage();
+    // entity_.setupStartStage();
+    setup();
 
     connections_ += event_.connect("move-pickable",
                                    [this](const Connection&, EventParam& param) {
@@ -57,11 +58,11 @@ public:
                                      entity_.startStageCollapse();
                                    });
 
-    connections_ += event_.connect("pickable-moved",
-                                   [this](const Connection& connection, EventParam& param) {
-                                     entity_.startStageBuild();
-                                     connection.disconnect();
-                                   });
+    // connections_ += event_.connect("pickable-moved",
+    //                                [this](const Connection& connection, EventParam& param) {
+    //                                  entity_.startStageBuild();
+    //                                  connection.disconnect();
+    //                                });
 
     connections_ += event_.connect("all-pickable-finished",
                                    [this](const Connection& connection, EventParam& param) {
@@ -84,6 +85,26 @@ public:
     connections_ += event_.connect("fall-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                                   });
+
+
+    connections_ += event_.connect("fall-all-pickable",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     view_.calcelAllPickings();
+                                     entity_.stopBuildAndCollapse();
+                                   });
+    
+    connections_ += event_.connect("gameover-agree",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "gameover-agree" << std::endl;
+                                     entity_.cleanupField();
+                                   });
+
+    connections_ += event_.connect("stage-all-collapsed",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "stage-all-collapsed" << std::endl;
+                                     entity_.restart();
+                                     setup();
                                    });
   }
 
@@ -108,6 +129,17 @@ private:
     view_.draw(field);
   }
 
+  
+  void setup() {
+    entity_.setupStartStage();
+    
+    connections_ += event_.connect("pickable-moved",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     entity_.startStageBuild();
+                                     connection.disconnect();
+                                   });
+  }
+  
 };
 
 }

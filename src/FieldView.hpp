@@ -158,6 +158,10 @@ public:
       picking_ = false;
     }
   }
+
+  void calcelAllPickings() {
+  }
+  
   
 
 private:

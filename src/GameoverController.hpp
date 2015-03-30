@@ -52,6 +52,7 @@ public:
                                     
                                     // 時間差でControllerを破棄
                                     event_timeline_->add([this]() {
+                                        
                                         active_ = false;
                                       },
                                       event_timeline_->getCurrentTime() + 1.0f);

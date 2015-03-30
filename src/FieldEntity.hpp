@@ -45,6 +45,7 @@ class FieldEntity {
     START,
     FINISH,
     CLEAR,
+    CLEANUP,
   };
   int mode_;
 
@@ -113,6 +114,14 @@ public:
         mode_ = NONE;
         event_.signal("stage-cleared", EventParam());
       }
+      break;
+
+    case CLEANUP:
+      if (stage_.isFinishedCollapse()) {
+        mode_ = NONE;
+        event_.signal("stage-all-collapsed", EventParam());
+      }
+      break;
     }
   }
 
@@ -164,6 +173,28 @@ public:
     stage_.stopBuildAndCollapse();
     stage_.buildStage(0.1);
     stage_.collapseStage(finish_line_z_ - 1, 0.1);
+  }
+
+  // GameOver時などで生成&崩壊を止める
+  void stopBuildAndCollapse() {
+    stage_.stopBuildAndCollapse();
+    mode_ = NONE;
+  }
+  
+  // リスタート前のClean-up
+  void cleanupField() {
+    event_timeline_->clear();
+    
+    stage_.stopBuildAndCollapse();
+    stage_.collapseStage(next_start_line_z_, 0.1);
+    mode_ = CLEANUP;
+  }
+
+  
+  void restart() {
+    stage_.restart();
+    stage_num_ = 0;
+    mode_ = NONE;
   }
 
   
