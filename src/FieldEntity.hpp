@@ -15,6 +15,7 @@
 #include "Field.hpp"
 #include "PickableCube.hpp"
 #include "EventParam.hpp"
+#include "Records.hpp"
 
 
 namespace ngs {
@@ -28,18 +29,19 @@ class FieldEntity {
 
   int stage_num_;
   Stage stage_;
-
+  
   // VS2013には暗黙のmoveコンストラクタが無いのでstd::unique_ptrで保持
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
   using PickableCubePtr = std::unique_ptr<PickableCube>;
   std::vector<PickableCubePtr> pickable_cubes_;
+
+  Records records_;
 
   int start_line_z_;
   int finish_line_z_;
   int next_start_line_z_;
 
   int entry_packable_num_;
-
   
   enum {
     NONE,
@@ -81,6 +83,8 @@ public:
 
 
   void update(const double progressing_seconds) {
+    records_.current_game.play_time += progressing_seconds;
+    
     boost::remove_erase_if(pickable_cubes_,
                            [](const PickableCubePtr& cube) {
                              return !cube->isActive();
@@ -157,13 +161,16 @@ public:
     finish_line_z_ = stage_info.first - 1;
     entry_packable_num_ = stage_info.second;
     stage_.setFinishLine(finish_line_z_);
-    stage_num_ += 1;
 
     start_line_z_ = next_start_line_z_;
     stage_info = addCubeStage("finishline.json");
     next_start_line_z_ = stage_info.first - 1;
 
     mode_ = START;
+
+    records_.prepareCurrentGameRecord(stage_num_, event_timeline_->getCurrentTime());
+
+    stage_num_ += 1;
 
     stage_.buildStage();
   }
@@ -179,10 +186,18 @@ public:
     stage_.buildStage(0.1);
     stage_.collapseStage(finish_line_z_ - 1, 0.1);
 
+    records_.storeStageRecord(event_timeline_->getCurrentTime());
+    
     // sleep中のPickableCubeを起こす
     for (auto& cube : pickable_cubes_) {
       cube->awaken();
     }
+  }
+
+  // GameOver時の処理
+  void gameover() {
+    records_.storeRecord(event_timeline_->getCurrentTime());
+    stopBuildAndCollapse();
   }
 
   // GameOver時などで生成&崩壊を止める
@@ -227,6 +242,10 @@ public:
     }
   }
 
+  void movedPickableCube() {
+    records_.current_game.tumble_num += 1;
+  }
+
   // finish-line上のPickableCubeを生成
   void entryPickableCubes() {
     if (entry_packable_num_ == 0) return;
@@ -250,6 +269,8 @@ public:
 
     return std::move(field);
   }
+
+  const Records& records() const {return records_; }
 
   
 private:

@@ -51,6 +51,11 @@ public:
                                                               boost::any_cast<int>(param["move_speed"]));
                                    });
 
+    connections_ += event_.connect("pickable-moved",
+                                   [this](const Connection&, EventParam& param) {
+                                     entity_.movedPickableCube();
+                                   });
+    
     connections_ += event_.connect("pickable-on-stage",
                                    [this](const Connection& connection, EventParam& param) {
                                    });
@@ -90,7 +95,7 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "fall-all-pickable" << std::endl;
                                      view_.calcelAllPickings();
-                                     entity_.stopBuildAndCollapse();
+                                     entity_.gameover();
                                    });
     
     connections_ += event_.connect("gameover-agree",
