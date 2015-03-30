@@ -180,7 +180,7 @@ public:
     return true;
   }
 
-  // 崩壊完了(演出はまだ続いている)
+  // 崩壊完了()
   bool isFinishedCollapse() {
     return active_cubes_.empty();
   }

@@ -187,6 +187,14 @@ public:
     stage_.collapseStage(finish_line_z_ - 1, 0.1);
 
     records_.storeStageRecord(event_timeline_->getCurrentTime());
+
+    {
+      EventParam params = {
+        { "clear_time", records_.current_game.play_time },
+        { "tumble_num", records_.current_game.tumble_num },
+      };
+      event_.signal("begin-stageclear", params);
+    }
     
     // sleep中のPickableCubeを起こす
     for (auto& cube : pickable_cubes_) {
@@ -198,6 +206,14 @@ public:
   void gameover() {
     records_.storeRecord(event_timeline_->getCurrentTime());
     stopBuildAndCollapse();
+
+    {
+      EventParam params = {
+        { "clear_time", records_.current_game.play_time },
+        { "tumble_num", records_.current_game.tumble_num },
+      };
+      event_.signal("begin-gameover", params);
+    }
   }
 
   // GameOver時などで生成&崩壊を止める
@@ -269,8 +285,6 @@ public:
 
     return std::move(field);
   }
-
-  const Records& records() const {return records_; }
 
   
 private:

@@ -66,7 +66,7 @@ public:
   }
   
   bool isFirstCleard() const {
-    return current_stage_ < stage_records_.size();
+    return current_stage_ == stage_records_.size();
   }
 
   int cleardStageNum() {

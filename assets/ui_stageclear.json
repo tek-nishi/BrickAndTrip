@@ -52,7 +52,7 @@
 
     "disp": true,
 
-    "text": "００：００：００．００",
+    "text": "00:00.0",
     "size": 0.4,
     "spacing": 0.04,
     "chara_split": 1,
@@ -84,7 +84,7 @@
 
     "disp": true,
 
-    "text": "０００００",
+    "text": "00000",
     "size": 0.4,
     "spacing": 0.04,
     "chara_split": 1,

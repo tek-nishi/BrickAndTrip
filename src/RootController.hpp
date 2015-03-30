@@ -55,18 +55,25 @@ public:
     view_creator_(ui_camera_, ui_lights_, autolayout_, event_, touch_event),
     background_(Json::getColor<float>(params["app.background"]))
   {
-    // TODO:最初のControllerを追加
     addController<FieldController>(params, touch_event_, event_);
     addController<TitleController>(params, event_, view_creator_.create("ui_title.json"));
 
-    event_.connect("fall-all-pickable",
+    event_.connect("begin-gameover",
                    [this](const Connection& connection, EventParam& param) {
                      addController<GameoverController>(params_, event_, view_creator_.create("ui_gameover.json"));
                    });
 
-    event_.connect("all-pickable-finished",
+    event_.connect("begin-stageclear",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<StageclearController>(params_, event_, view_creator_.create("ui_stageclear.json"));
+                     addController<StageclearController>(params_, event_, param, view_creator_.create("ui_stageclear.json"));
+                   });
+
+    event_.connect("begin-records",
+                   [this](const Connection& connection, EventParam& param) {
+                   });
+
+    event_.connect("begin-credits",
+                   [this](const Connection& connection, EventParam& param) {
                    });
   }
 

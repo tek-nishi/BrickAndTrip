@@ -4,6 +4,7 @@
 // Stage clear
 //
 
+#include <sstream>
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
@@ -27,6 +28,7 @@ class StageclearController : public ControllerBase {
 public:
   StageclearController(ci::JsonTree& params,
                        Event<EventParam>& event,
+                       const EventParam& result,
                        std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
@@ -40,6 +42,33 @@ public:
     event_timeline_->setStartTime(current_time);
     ci::app::timeline().apply(event_timeline_);
 
+    {
+      // constなのでatを使っている
+      auto clear_time = boost::any_cast<double>(result.at("clear_time"));
+      // 表示の最大時間は59:59.9
+      clear_time = std::min(clear_time, 59 * 60 + 59 + 0.9);
+      int minutes = int(clear_time) / 60;
+      int seconds = int(clear_time) % 60;
+      int milli_seconds = int(clear_time * 10.0) % 10;
+      
+      std::ostringstream str;
+      str << std::setw(2) << std::setfill('0') << minutes << ":" << seconds
+          << "." << std::setw(1) << milli_seconds;
+
+      auto& widget = view_->getWidget("time-result");
+      widget.getCubeText().setText(str.str());
+    }
+
+    {
+      auto tumble_num = boost::any_cast<int>(result.at("tumble_num"));
+
+      std::ostringstream str;
+      str << std::setw(5) << std::setfill('0') << tumble_num;
+
+      auto& widget = view_->getWidget("tumble-result");
+      widget.getCubeText().setText(str.str());
+    }
+    
     view_->startWidgetTween("tween-in");
 
     connections_ += event.connect("stageclear-agree",
