@@ -61,7 +61,9 @@ class FieldView {
 
   
 public:
-  FieldView(const ci::JsonTree& params, Event<EventParam>& event,
+  FieldView(const ci::JsonTree& params,
+            ci::TimelineRef timeline,
+            Event<EventParam>& event,
             Event<std::vector<Touch> >& touch_event) :
     params_(params),
     event_(event),

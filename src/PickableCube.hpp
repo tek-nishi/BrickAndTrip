@@ -63,7 +63,9 @@ private:
   
 
 public:
-  PickableCube(const ci::JsonTree& params, Event<EventParam>& event,
+  PickableCube(const ci::JsonTree& params,
+               ci::TimelineRef timeline,
+               Event<EventParam>& event,
                const ci::Vec3i& entry_pos, const bool sleep = false) :
     event_(event),
     active_(true),
@@ -94,9 +96,9 @@ public:
       rotate_speed_rate_.push_back(param.getValue<float>());
     }
     
-    auto current_time = ci::app::timeline().getCurrentTime();
+    auto current_time = timeline->getCurrentTime();
     animation_timeline_->setStartTime(current_time);
-    ci::app::timeline().apply(animation_timeline_);
+    timeline->apply(animation_timeline_);
 
     // 登場演出
     auto entry_y = Json::getVec2<float>(params["game.pickable.entry_y"]);

@@ -44,7 +44,9 @@ class UIWidget {
 
   
 public:
-  UIWidget(const ci::JsonTree& params, Autolayout& autolayout) :
+  UIWidget(const ci::JsonTree& params,
+           ci::TimelineRef timeline,
+           Autolayout& autolayout) :
     params_(params),
     name_(params["name"].getValue<std::string>()),
     text_(params["text"].getValue<std::string>(),
@@ -78,8 +80,8 @@ public:
     // touchEventがなければactiveは常にfalse
     active_ = touch_event_ ? Json::getValue(params, "active", active_) : false;
 
-    timeline_->setStartTime(ci::app::timeline().getCurrentTime());
-    ci::app::timeline().apply(timeline_);
+    timeline_->setStartTime(timeline->getCurrentTime());
+    timeline->apply(timeline_);
   }
 
   ~UIWidget() {

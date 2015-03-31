@@ -27,6 +27,7 @@ class StageclearController : public ControllerBase {
 
 public:
   StageclearController(ci::JsonTree& params,
+                       ci::TimelineRef timeline,
                        Event<EventParam>& event,
                        const EventParam& result,
                        std::unique_ptr<UIView>&& view) :
@@ -38,9 +39,9 @@ public:
   {
     DOUT << "StageclearController()" << std::endl;
     
-    auto current_time = ci::app::timeline().getCurrentTime();
+    auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
-    ci::app::timeline().apply(event_timeline_);
+    timeline->apply(event_timeline_);
 
     {
       // constなのでatを使っている

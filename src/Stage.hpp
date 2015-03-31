@@ -52,7 +52,9 @@ class Stage {
   
 
 public:
-  Stage(const ci::JsonTree& params, Event<EventParam>& event) :
+  Stage(const ci::JsonTree& params,
+        ci::TimelineRef timeline,
+        Event<EventParam>& event) :
     event_(event),
     cube_size_(params["game.cube_size"].getValue<float>()),
     top_z_(0),
@@ -74,12 +76,12 @@ public:
     event_timeline_(ci::Timeline::create()),
     animation_timeline_(ci::Timeline::create())
   {
-    auto current_time = ci::app::timeline().getCurrentTime();
+    auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     animation_timeline_->setStartTime(current_time);
 
-    ci::app::timeline().apply(event_timeline_);
-    ci::app::timeline().apply(animation_timeline_);
+    timeline->apply(event_timeline_);
+    timeline->apply(animation_timeline_);
   }
 
   ~Stage() {

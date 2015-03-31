@@ -32,14 +32,15 @@ class FieldController : public ControllerBase {
 
 public:
   FieldController(ci::JsonTree& params,
+                  ci::TimelineRef timeline,
                   Event<std::vector<Touch> >& touch_event,
                   Event<EventParam>& event) :
     params_(params),
     touch_event_(touch_event),
     event_(event),
     active_(true),
-    view_(params, event_, touch_event),
-    entity_(params, event_),
+    view_(params, timeline, event_, touch_event),
+    entity_(params, timeline, event_),
     stage_cleard_(false),
     stageclear_agree_(false)
   {

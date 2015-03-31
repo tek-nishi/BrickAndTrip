@@ -21,6 +21,7 @@ namespace ngs {
 
 class RootController : public ControllerBase {
   ci::JsonTree& params_;
+  ci::TimelineRef timeline_;
   Event<std::vector<Touch> >& touch_event_;
   
   Event<EventParam> event_;
@@ -43,8 +44,11 @@ class RootController : public ControllerBase {
 
 
 public:
-  RootController(ci::JsonTree& params, Event<std::vector<Touch> >& touch_event) :
+  RootController(ci::JsonTree& params,
+                 ci::TimelineRef timeline,
+                 Event<std::vector<Touch> >& touch_event) :
     params_(params),
+    timeline_(timeline),
     ui_camera_(createCamera(params["ui_view"])),
     fov_(ui_camera_.getFov()),
     near_z_(ui_camera_.getNearClip()),
@@ -52,20 +56,20 @@ public:
     ui_lights_(createLights(params["ui_view.lights"])),
     autolayout_(ui_camera_),
     touch_event_(touch_event),
-    view_creator_(ui_camera_, ui_lights_, autolayout_, event_, touch_event),
+    view_creator_(timeline, ui_camera_, ui_lights_, autolayout_, event_, touch_event),
     background_(Json::getColor<float>(params["app.background"]))
   {
-    addController<FieldController>(params, touch_event_, event_);
-    addController<TitleController>(params, event_, view_creator_.create("ui_title.json"));
+    addController<FieldController>(params, timeline_, touch_event_, event_);
+    addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
 
     event_.connect("begin-gameover",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<GameoverController>(params_, event_, view_creator_.create("ui_gameover.json"));
+                     addController<GameoverController>(params_, timeline_, event_, view_creator_.create("ui_gameover.json"));
                    });
 
     event_.connect("begin-stageclear",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<StageclearController>(params_, event_, param, view_creator_.create("ui_stageclear.json"));
+                     addController<StageclearController>(params_, timeline_, event_, param, view_creator_.create("ui_stageclear.json"));
                    });
 
     event_.connect("begin-records",

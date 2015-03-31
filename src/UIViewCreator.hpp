@@ -10,6 +10,7 @@
 namespace ngs {
 
 class UIViewCreator {
+  ci::TimelineRef timeline_;
   
   ci::Camera& camera_;
   std::vector<ci::gl::Light>& lights_;
@@ -21,10 +22,13 @@ class UIViewCreator {
 
 
 public:
-  UIViewCreator(ci::Camera& camera, std::vector<ci::gl::Light>& lights,
+  UIViewCreator(ci::TimelineRef timeline,
+                ci::Camera& camera,
+                std::vector<ci::gl::Light>& lights,
                 Autolayout& autolayout,
                 Event<EventParam>& event,
                 Event<std::vector<Touch> >& touch_event) :
+    timeline_(timeline),
     camera_(camera),
     lights_(lights),
     autolayout_(autolayout),
@@ -35,6 +39,7 @@ public:
 
   std::unique_ptr<UIView> create(const std::string& path) {
     return std::unique_ptr<UIView>(new UIView(ci::JsonTree(ci::app::loadAsset(path)),
+                                              timeline_,
                                               camera_, lights_, autolayout_, event_, touch_event_));
   }
 

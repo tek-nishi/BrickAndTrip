@@ -22,6 +22,7 @@ namespace ngs {
 
 class FieldEntity {
   const ci::JsonTree& params_;
+  ci::TimelineRef timeline_;
   Event<EventParam>& event_;
 
   std::vector<ci::Color> cube_stage_color_;
@@ -58,12 +59,15 @@ class FieldEntity {
 
   
 public:
-  FieldEntity(const ci::JsonTree& params, Event<EventParam>& event) :
+  FieldEntity(const ci::JsonTree& params,
+              ci::TimelineRef timeline,
+              Event<EventParam>& event) :
     params_(params),
+    timeline_(timeline),
     event_(event),
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_num_(0),
-    stage_(params, event_),
+    stage_(params, timeline, event_),
     mode_(NONE),
     in_game_(false),
     event_timeline_(ci::Timeline::create())
@@ -73,9 +77,9 @@ public:
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
 
-    auto current_time = ci::app::timeline().getCurrentTime();
+    auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
-    ci::app::timeline().apply(event_timeline_);
+    timeline->apply(event_timeline_);
   }
 
   ~FieldEntity() {
@@ -316,7 +320,7 @@ private:
           if (isPickableCube(entry_pos)) continue;
 
           
-          auto cube = PickableCubePtr(new PickableCube(params_, event_, entry_pos,
+          auto cube = PickableCubePtr(new PickableCube(params_, timeline_, event_, entry_pos,
                                                        (mode_ == CLEAR) ? false : sleep));
           pickable_cubes_.push_back(std::move(cube));
           return;

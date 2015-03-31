@@ -41,6 +41,7 @@ class UIView {
   
 public:
   explicit UIView(const ci::JsonTree& params,
+                  ci::TimelineRef timeline,
                   ci::Camera& camera,
                   std::vector<ci::gl::Light>& lights,
                   Autolayout& autolayout,
@@ -54,7 +55,7 @@ public:
     touching_(false)
   {
     for (const auto p : params) {
-      auto widget = std::unique_ptr<UIWidget>(new UIWidget(p, autolayout));
+      auto widget = std::unique_ptr<UIWidget>(new UIWidget(p, timeline, autolayout));
       widgets_.push_back(std::move(widget));
     }
 

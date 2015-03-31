@@ -24,8 +24,11 @@ namespace ngs {
 class ColoColoParadeApp : public AppNative {
   JsonTree params_;
 
+  TimelineRef timeline_;
+
   double elapsed_seconds_;
   bool fast_forward_;
+  bool pause_;
 
   FontHolder fonts_;
 
@@ -61,11 +64,13 @@ class ColoColoParadeApp : public AppNative {
     getSignalSupportedOrientations().connect([](){ return InterfaceOrientation::All; });
 #endif
 
+    timeline_ = Timeline::create();
     fast_forward_ = false;
+    pause_ = false;
     
     setupFonts();
     
-    controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, touch_event_));
+    controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
 
     // 以下OpenGL設定
     gl::enableDepthRead();
@@ -145,7 +150,7 @@ class ColoColoParadeApp : public AppNative {
       // Soft Reset
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
       controller_.reset();
-      controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, touch_event_));
+      controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
     }
 
     if ((code == KeyEvent::KEY_LSHIFT) || (code == KeyEvent::KEY_RSHIFT)) {
@@ -153,6 +158,10 @@ class ColoColoParadeApp : public AppNative {
       // TODO:timelineの倍速
       // DOUT << "Start fast-forward." << std::endl;
       fast_forward_ = true;
+    }
+    else if (code == KeyEvent::KEY_ESCAPE) {
+      // 強制PAUSE
+      pause_ = !pause_;
     }
   }
   
@@ -177,6 +186,10 @@ class ColoColoParadeApp : public AppNative {
     double elapsed_seconds     = getElapsedSeconds();
     double progressing_seconds = elapsed_seconds - elapsed_seconds_;
 
+    if (pause_) progressing_seconds = 0.0;
+    if (fast_forward_) progressing_seconds *= 2.0;
+    
+    timeline_->step(progressing_seconds);
     controller_->update(progressing_seconds);
     
     elapsed_seconds_ = elapsed_seconds;
@@ -215,7 +228,7 @@ class ColoColoParadeApp : public AppNative {
         mouse_pos_, mouse_prev_pos_ }
     };
 
-    return std::move(t);
+    return t;
   }
   
   static std::vector<ngs::Touch> createTouchInfo(const TouchEvent& event) {
@@ -232,7 +245,7 @@ class ColoColoParadeApp : public AppNative {
       touches.push_back(std::move(t));
     }
     
-    return std::move(touches);
+    return touches;
   }
   
 };

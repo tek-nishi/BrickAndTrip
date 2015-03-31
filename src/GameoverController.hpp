@@ -26,6 +26,7 @@ class GameoverController : public ControllerBase {
 
 public:
   GameoverController(ci::JsonTree& params,
+                     ci::TimelineRef timeline,
                      Event<EventParam>& event,
                      std::unique_ptr<UIView>&& view) :
     params_(params),
@@ -36,9 +37,9 @@ public:
   {
     DOUT << "GameoverController()" << std::endl;
     
-    auto current_time = ci::app::timeline().getCurrentTime();
+    auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
-    ci::app::timeline().apply(event_timeline_);
+    timeline->apply(event_timeline_);
 
     view_->startWidgetTween("tween-in");
 
