@@ -28,6 +28,8 @@ class FieldEntity {
   std::vector<ci::Color> cube_stage_color_;
   ci::Color cube_line_color_;
 
+  float finish_rate_;
+
   int stage_num_;
   Stage stage_;
   
@@ -68,6 +70,7 @@ public:
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_num_(0),
     stage_(params, timeline, event_),
+    finish_rate_(params["game.finish_rate"].getValue<float>()),
     mode_(NONE),
     in_game_(false),
     event_timeline_(ci::Timeline::create())
@@ -148,7 +151,7 @@ public:
     next_start_line_z_ = stage_info.first - 1;
     entry_packable_num_ = stage_info.second;
     
-    stage_.buildStage(0.25f);
+    stage_.buildStage();
 
     int   entry_z = 0 + params_["game.pickable.entry_z"].getValue<int>();
     float delay   = params_["game.pickable.entry_start_delay"].getValue<float>();
@@ -191,8 +194,8 @@ public:
   // FinishLineまで一気に崩壊 && FinishLineを一気に生成
   void completeBuildAndCollapseStage() {
     stage_.stopBuildAndCollapse();
-    stage_.buildStage(0.1);
-    stage_.collapseStage(finish_line_z_ - 1, 0.1);
+    stage_.buildStage(finish_rate_);
+    stage_.collapseStage(finish_line_z_ - 1, finish_rate_);
 
     records_.storeStageRecord(event_timeline_->getCurrentTime());
 
@@ -237,7 +240,7 @@ public:
     event_timeline_->clear();
     
     stage_.stopBuildAndCollapse();
-    stage_.collapseStage(next_start_line_z_, 0.1);
+    stage_.collapseStage(next_start_line_z_, finish_rate_);
     mode_ = CLEANUP;
   }
   

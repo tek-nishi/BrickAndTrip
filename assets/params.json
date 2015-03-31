@@ -82,6 +82,8 @@
 
     "cube_line_color": [ 1, 0, 0 ],
 
+    "finish_rate": 0.1,
+
     "stage": {
       "build_speed": 1,
       "collapse_speed": 1,

@@ -230,6 +230,9 @@ public:
   int addCubes(const ci::JsonTree& stage_data,
                 const std::vector<ci::Color>& cube_color,
                 const ci::Color& line_color) {
+    build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
+    collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
+    
     const auto& body = stage_data["body"];
     int last_iz = body.getNumChildren() - 1;
     int iz = 0;
