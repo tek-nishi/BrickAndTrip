@@ -71,6 +71,14 @@ public:
     
     view_->startWidgetTween("tween-in");
 
+    event_timeline_->add([this]() {
+        event_.signal("stageclear-agree", EventParam());
+        active_ = false;
+      },
+      event_timeline_->getCurrentTime() + 3.0f);
+
+    
+#if 0
     connections_ += event.connect("stageclear-agree",
                                   [this](const Connection& connection, EventParam& param) {
                                     // 時間差tween
@@ -88,6 +96,7 @@ public:
                                     
                                     connection.disconnect();
                                   });
+#endif
   }
 
   ~StageclearController() {

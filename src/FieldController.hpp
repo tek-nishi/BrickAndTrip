@@ -25,8 +25,9 @@ class FieldController : public ControllerBase {
   FieldView view_;
   FieldEntity entity_;
 
-  bool stage_build_;
-  bool stage_collapse_;
+  bool stage_cleard_;
+  bool stageclear_agree_;
+
   
 
 public:
@@ -39,8 +40,8 @@ public:
     active_(true),
     view_(params, event_, touch_event),
     entity_(params, event_),
-    stage_build_(false),
-    stage_collapse_(false)
+    stage_cleard_(false),
+    stageclear_agree_(false)
   {
     setup();
 
@@ -72,11 +73,31 @@ public:
                                      entity_.completeBuildAndCollapseStage();
                                    });
 
+    // stage-clearedとstageclear-agreeの両方が発行されたら次のステージへ
     connections_ += event_.connect("stage-cleared",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "stage-cleared" << std::endl;
-                                     entity_.startStageBuild();
+                                     stage_cleard_ = true;
+
+                                     if (stage_cleard_ && stageclear_agree_) {
+                                       entity_.startStageBuild();
+                                       stage_cleard_     = false;
+                                       stageclear_agree_ = false;
+                                     }
                                    });
+    
+    connections_ += event_.connect("stageclear-agree",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "stageclear-agree" << std::endl;
+                                     stageclear_agree_ = true;                                     
+
+                                     if (stage_cleard_ && stageclear_agree_) {
+                                       entity_.startStageBuild();
+                                       stage_cleard_     = false;
+                                       stageclear_agree_ = false;
+                                     }
+                                   });
+
 
     connections_ += event_.connect("build-finish-line",
                                    [this](const Connection&, EventParam& param) {
