@@ -25,6 +25,7 @@ class FieldController : public ControllerBase {
   FieldView view_;
   FieldEntity entity_;
 
+  bool stage_miss_;
   bool stage_cleard_;
   bool stageclear_agree_;
 
@@ -41,6 +42,7 @@ public:
     active_(true),
     view_(params, timeline, event_, touch_event),
     entity_(params, timeline, event_),
+    stage_miss_(false),
     stage_cleard_(false),
     stageclear_agree_(false)
   {
@@ -107,9 +109,12 @@ public:
     connections_ += event_.connect("fall-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-pickable" << std::endl;
-                                     // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
-                                     view_.enableTouchInput(false);
-                                     entity_.gameover();
+                                     if (!stage_miss_) {
+                                       stage_miss_ = true;
+                                       // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                                       view_.enableTouchInput(false);
+                                       entity_.gameover();
+                                     }
                                    });
 
 #if 0
@@ -158,7 +163,10 @@ private:
 
   
   void setup() {
+    view_.enableTouchInput();
     entity_.setupStartStage();
+
+    stage_miss_ = false;
     
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection& connection, EventParam& param) {
@@ -168,7 +176,9 @@ private:
   }
 
   void startStage() {
+    view_.enableTouchInput();
     entity_.startStageBuild();
+
     stage_cleard_     = false;
     stageclear_agree_ = false;
   }
