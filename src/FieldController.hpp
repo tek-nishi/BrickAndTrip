@@ -81,9 +81,7 @@ public:
                                      stage_cleard_ = true;
 
                                      if (stage_cleard_ && stageclear_agree_) {
-                                       entity_.startStageBuild();
-                                       stage_cleard_     = false;
-                                       stageclear_agree_ = false;
+                                       startStage();
                                      }
                                    });
     
@@ -94,9 +92,7 @@ public:
                                      view_.enableTouchInput();
 
                                      if (stage_cleard_ && stageclear_agree_) {
-                                       entity_.startStageBuild();
-                                       stage_cleard_     = false;
-                                       stageclear_agree_ = false;
+                                       startStage();
                                      }
                                    });
 
@@ -110,16 +106,19 @@ public:
     connections_ += event_.connect("fall-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-pickable" << std::endl;
-                                     view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                                     // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                                     view_.enableTouchInput(false);
+                                     entity_.gameover();
                                    });
 
-
+#if 0
     connections_ += event_.connect("fall-all-pickable",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "fall-all-pickable" << std::endl;
                                      view_.calcelAllPickings();
                                      entity_.gameover();
                                    });
+#endif
     
     connections_ += event_.connect("gameover-agree",
                                    [this](const Connection&, EventParam& param) {
@@ -165,6 +164,12 @@ private:
                                      entity_.startStageBuild();
                                      connection.disconnect();
                                    });
+  }
+
+  void startStage() {
+    entity_.startStageBuild();
+    stage_cleard_     = false;
+    stageclear_agree_ = false;
   }
   
 };

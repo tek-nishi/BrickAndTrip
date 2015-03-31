@@ -51,6 +51,7 @@ class FieldEntity {
     CLEANUP,
   };
   int mode_;
+  bool in_game_;
 
   
   ci::TimelineRef event_timeline_;
@@ -64,6 +65,7 @@ public:
     stage_num_(0),
     stage_(params, event_),
     mode_(NONE),
+    in_game_(false),
     event_timeline_(ci::Timeline::create())
   {
     const auto& colors = params["game.cube_stage_color"];
@@ -90,14 +92,15 @@ public:
                              return !cube->isActive();
                            });
 
-    bool did_fall = decideEachPickableCubeFalling();
-    
+    decideEachPickableCubeFalling(in_game_);
     decideEachPickableCubeMoving();
 
+#if 0
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
     if (did_fall && !isPickableCubeOnStage()) {
       event_.signal("fall-all-pickable", EventParam());
     }
+#endif
 
     switch (mode_) {
     case START:
@@ -166,7 +169,8 @@ public:
     stage_info = addCubeStage("finishline.json");
     next_start_line_z_ = stage_info.first - 1;
 
-    mode_ = START;
+    mode_    = START;
+    in_game_ = true;
 
     records_.prepareCurrentGameRecord(stage_num_, event_timeline_->getCurrentTime());
 
@@ -206,6 +210,7 @@ public:
   void gameover() {
     records_.storeRecord(event_timeline_->getCurrentTime());
     stopBuildAndCollapse();
+    in_game_ = false;
 
     {
       EventParam params = {
@@ -219,7 +224,8 @@ public:
   // GameOver時などで生成&崩壊を止める
   void stopBuildAndCollapse() {
     stage_.stopBuildAndCollapse();
-    mode_ = NONE;
+    mode_    = NONE;
+    in_game_ = false;
   }
   
   // リスタート前のClean-up
@@ -234,7 +240,8 @@ public:
   void restart() {
     stage_.restart();
     stage_num_ = 0;
-    mode_ = NONE;
+    mode_      = NONE;
+    in_game_   = false;
   }
 
   
@@ -369,8 +376,7 @@ private:
   
   
   // 全PickableCubeの落下判定
-  bool decideEachPickableCubeFalling() {
-    bool did_fall = false;
+  void decideEachPickableCubeFalling(const bool signal_event) {
     for (auto& cube : pickable_cubes_) {
       if (!cube->isOnStage() || !cube->canPick()) continue;
       
@@ -379,16 +385,15 @@ private:
         cube->fallFromStage();
 
         if (!cube->isSleep()) {
-          EventParam params = {
-            { "id", cube->id() },
-          };
-          event_.signal("fall-pickable", params);
-          did_fall = true;
+          if (signal_event) {
+            EventParam params = {
+              { "id", cube->id() },
+            };
+            event_.signal("fall-pickable", params);
+          }
         }
       }
     }
-    
-    return did_fall;
   }
 
   
