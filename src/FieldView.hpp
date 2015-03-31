@@ -7,6 +7,7 @@
 #include "cinder/Camera.h"
 #include "cinder/gl/Light.h"
 #include "cinder/gl/gl.h"
+#include <boost/range/algorithm_ext/erase.hpp>
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
 #include "EventParam.hpp"
@@ -43,16 +44,21 @@ class FieldView {
 
   std::vector<TouchCube> touch_cubes_;
 
-  bool  picking_;
-  u_int picking_touch_id_;
-  double picking_touch_timestamp_;
-  u_int picking_cube_id_;
-  ci::Vec3f picking_plane_;
-  ci::Vec3f picking_pos_;
+  struct Pick {
+    u_int touch_id;
+    double timestamp;
+    u_int cube_id;
+
+    ci::Vec3f picking_plane;
+    ci::Vec3f picking_pos;
+  };
+  std::vector<Pick> pickings_;
 
   float move_threshold_;
   float move_speed_rate_;
   
+  bool touch_input_;
+
   
 public:
   FieldView(const ci::JsonTree& params, Event<EventParam>& event,
@@ -66,9 +72,9 @@ public:
     eye_point_(Json::getVec3<float>(params["game_view.eye_point"])),
     interest_point_(Json::getVec3<float>(params["game_view.interest_point"])),
     target_point_(interest_point_),
-    picking_(false),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
-    move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>())
+    move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
+    touch_input_(true)
   {
     camera_.setEyePoint(eye_point_);
     camera_.setCenterOfInterestPoint(interest_point_);
@@ -154,42 +160,56 @@ public:
 
 
   void cancelPicking(const u_int cube_id) {
-    if (picking_ && (cube_id == picking_cube_id_)) {
-      picking_ = false;
-    }
+    boost::remove_erase_if(pickings_,
+                           [cube_id](const Pick& pick) {
+                             return pick.cube_id == cube_id;
+                           });
   }
 
   void calcelAllPickings() {
+    pickings_.clear();
   }
+
   
+  // Touch入力の有効・無効
+  void enableTouchInput(const bool input = true) {
+    if (input != touch_input_) calcelAllPickings();
+    touch_input_ = input;
+  }
   
 
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
-    if (picking_) return;
+    if (!touch_input_) return;
 
     for (const auto& touch : touches) {
+      // if (isPicking(touch)) continue;
+      
       auto ray = generateRay(touch.pos);
       for (auto& cube : touch_cubes_) {
+        if (isTouching(cube.id)) continue;
+        
         if (isPickedCube(cube.bbox, ray)) {
-          picking_ = true;
-          picking_touch_id_ = touch.id;
-          picking_touch_timestamp_ = touch.timestamp;
-          picking_cube_id_ = cube.id;
-
           // cubeの上平面との交点
           float cross_z;
           auto origin = ci::Vec3f(0, (cube.position.y + 0.5f) * cube.size, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          picking_pos_   = ray.calcPosition(cross_z);
-          picking_plane_ = origin;
           
-          return;
+          Pick pick = {
+            touch.id,
+            touch.timestamp,
+            cube.id,
+            origin,
+            ray.calcPosition(cross_z)
+          };
+          pickings_.push_back(std::move(pick));
+          break;
         }
       } 
     }
   }
   
+#if 0
   void touchesMoved(const Connection&, std::vector<Touch>& touches) {
     if (!picking_) return;
 
@@ -199,21 +219,26 @@ private:
       return;
     }
   }
+#endif
 
   void touchesEnded(const Connection&, std::vector<Touch>& touches) {
-    if (!picking_) return;
+    if (!touch_input_) return;
+    
     for (const auto& touch : touches) {
-      if (touch.id != picking_touch_id_) continue;
+      if (!isPicking(touch)) continue;
 
+      const auto& pick = getPick(touch);
       for (auto& cube : touch_cubes_) {
-        if (cube.id == picking_cube_id_) {
+        // if (!isTouching(cube.id)) continue;
+
+        if (cube.id == pick.cube_id) {
           // cubeの上平面との交点
           auto ray = generateRay(touch.pos);
           float cross_z;
           auto origin = ci::Vec3f(0, (cube.position.y + 0.5f) * cube.size, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          auto picking_ofs = ray.calcPosition(cross_z) - picking_pos_;
-          auto delta_time = touch.timestamp - picking_touch_timestamp_;
+          auto picking_ofs = ray.calcPosition(cross_z) - pick.picking_pos;
+          auto delta_time = touch.timestamp - pick.timestamp;
 
           int move_direction = PickableCube::MOVE_NONE;
           float move_threshold = cube.size * move_threshold_;
@@ -243,20 +268,58 @@ private:
 
           if (move_direction != PickableCube::MOVE_NONE) {
             EventParam params = {
-              { "cube_id",        picking_cube_id_ },
+              { "cube_id",        pick.cube_id },
               { "move_direction", move_direction },
               { "move_speed",     move_speed },
             };
 
             event_.signal("move-pickable", params);
           }
-          
-          picking_ = false;
-          return;
+
+          removePick(touch);
+          break;
         }
       }
     }
   }
+
+  
+  bool isPicking(const Touch& touch) {
+    for (const auto& pick : pickings_) {
+      if (touch.id == pick.touch_id) return true;
+    }
+    return false;
+  }
+
+  bool isTouching(const u_int cube_id) {
+    for (const auto& pick : pickings_) {
+      if (cube_id == pick.cube_id) return true;
+    }
+    return false;
+  }
+
+  const Pick& getPick(const Touch& touch) {
+    for (const auto& pick : pickings_) {
+      if (touch.id == pick.touch_id) return pick;
+    }
+    assert(0);
+    return Pick();
+  }
+
+  void removePick(const Touch& touch) {
+    boost::remove_erase_if(pickings_,
+                           [touch](const Pick& pick) {
+                             return pick.touch_id == touch.id;
+                           });
+  }
+
+  bool isCubeExists(const u_int id) {
+    for (const auto& cube : touch_cubes_) {
+      if (cube.id == id) return true;
+    }
+    return false;
+  }
+  
 
   int calcMoveSpeed(const double delta_time, const float delta_position, const float move_threshold) {
     if (delta_position < move_threshold) {
@@ -298,6 +361,12 @@ private:
       
       touch_cubes_.push_back(std::move(touch_cube));
     }
+
+    // Pick中なのに含まれないCubeを削除
+    boost::remove_erase_if(pickings_,
+                           [this](const Pick& pick) {
+                             return !isCubeExists(pick.cube_id);
+                           });
   }
 
   // TODO:複数のPickableCubeをいい感じに捉える
@@ -361,11 +430,14 @@ private:
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
-      if (picking_ && (picking_cube_id_ == cube->id())) {
+      if (isTouching(cube->id())) {
         ci::gl::color(0, 0, 1);
       }
       else {
-        ci::gl::color(cube->color());
+        float color = 1.0f;
+        if (cube->isSleep()) color = 0.5f;
+        
+        ci::gl::color(cube->color() * color);
       }      
       
       ci::gl::pushModelView();

@@ -71,6 +71,7 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "all-pickable-finished" << std::endl;
                                      entity_.completeBuildAndCollapseStage();
+                                     view_.enableTouchInput(false);
                                    });
 
     // stage-clearedとstageclear-agreeの両方が発行されたら次のステージへ
@@ -90,6 +91,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "stageclear-agree" << std::endl;
                                      stageclear_agree_ = true;                                     
+                                     view_.enableTouchInput();
 
                                      if (stage_cleard_ && stageclear_agree_) {
                                        entity_.startStageBuild();
