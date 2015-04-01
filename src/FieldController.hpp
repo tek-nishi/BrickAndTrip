@@ -48,8 +48,6 @@ public:
     stageclear_agree_(false)
   {
     setup();
-
-    entity_.record("records.json");
     
     connections_ += event_.connect("move-pickable",
                                    [this](const Connection&, EventParam& param) {

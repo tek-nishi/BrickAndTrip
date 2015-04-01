@@ -21,7 +21,7 @@
         "size": 48
       }
     ],
-
+    
     "fast_speed": 3,
     "slow_speed": 0.25
   },
@@ -122,6 +122,8 @@
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
       "fall_y": -10
-    }
+    },
+
+    "records": "records.json"
   }
 }

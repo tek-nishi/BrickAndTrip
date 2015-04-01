@@ -95,8 +95,8 @@ public:
     current_game.play_time = current_time - current_game_start_time_;
 
     // TIPS:GameOverでも記録が伸びる親切設計
-    total_play_time_  += current_game.current_stage.clear_time;
-    total_tumble_num_ += current_game.current_stage.tumble_num;
+    total_play_time_  += current_game.play_time;
+    total_tumble_num_ += current_game.tumble_num;
   }
   
 
@@ -105,7 +105,34 @@ public:
   }
 
 
+  void load(const std::string& path) {
+    // TODO:iOSのpath指定
+    auto full_path = ci::app::getAppPath() / path;
+    if (!ci::fs::is_regular_file(full_path)) return;
+
+    DOUT << "record loaded." << std::endl;
+    
+    ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
+
+    total_play_num_   = record["records.total_play_num"].getValue<int>();
+    total_play_time_  = record["records.total_play_time"].getValue<double>();
+    total_tumble_num_ = record["records.total_tumble_num"].getValue<int>();
+
+    if (record.hasChild("records.stage")) {
+      const auto& stage = record["records.stage"];
+      for (const auto& sr : stage) {
+        StageRecord s = {
+          sr["clear_time"].getValue<double>(),
+          sr["tumble_num"].getValue<int>(),
+          sr["score"].getValue<int>(),
+        };
+        stage_records_.push_back(std::move(s));
+      }
+    }
+  }
+  
   void write(const std::string& path) {
+    // TODO:iOSのpath指定
     ci::JsonTree record = ci::JsonTree::makeObject("records");
 
     record.addChild(ci::JsonTree("total_play_num", total_play_num_))
@@ -127,6 +154,8 @@ public:
     }
     
     record.write(ci::app::getAppPath() / path, ci::JsonTree::WriteOptions().createDocument(true));
+
+    DOUT << "record writed." << std::endl;
   }
   
 };

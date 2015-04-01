@@ -6,6 +6,7 @@
 
 #include <codecvt>
 #include <sstream>
+#include <sys/stat.h>
 
 
 namespace ngs {
@@ -57,6 +58,14 @@ std::string toFormatedString(const double progress_time) {
       << milli_seconds;
 
   return str.str();
+}
+
+// パスの有効判定
+bool isValidPath(const std::string& path) {
+	struct stat info;
+	int result = stat(path.c_str(), &info);
+	return (result == 0);
+	// TODO: ディレクトリかどうかも判定
 }
 
 }

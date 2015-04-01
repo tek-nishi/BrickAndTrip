@@ -85,6 +85,8 @@ public:
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
 
+    loadRecord(params["game.records"].getValue<std::string>());
+
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
@@ -217,6 +219,7 @@ public:
 
     enableRecordPlay(false);
     records_.storeStageRecord(event_timeline_->getCurrentTime());
+    writeRecord(params_["game.records"].getValue<std::string>());
 
     {
       EventParam params = {
@@ -234,9 +237,10 @@ public:
 
   // GameOver時の処理
   void gameover() {
+    stopBuildAndCollapse();
     enableRecordPlay(false);
     records_.storeRecord(event_timeline_->getCurrentTime());
-    stopBuildAndCollapse();
+    writeRecord(params_["game.records"].getValue<std::string>());
 
     {
       EventParam params = {
@@ -315,7 +319,11 @@ public:
     record_play_ = enable;
   }
 
-  void record(const std::string& path) {
+  void loadRecord(const std::string& path) {
+    records_.load(path);
+  }
+  
+  void writeRecord(const std::string& path) {
     records_.write(path);
   }
   
