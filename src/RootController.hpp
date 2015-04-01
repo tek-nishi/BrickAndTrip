@@ -13,6 +13,7 @@
 #include "TitleController.hpp"
 #include "GameoverController.hpp"
 #include "StageclearController.hpp"
+#include "PauseController.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 
@@ -70,6 +71,11 @@ public:
     event_.connect("begin-stageclear",
                    [this](const Connection& connection, EventParam& param) {
                      addController<StageclearController>(params_, timeline_, event_, param, view_creator_.create("ui_stageclear.json"));
+                   });
+
+    event_.connect("begin-pause",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<PauseController>(params_, timeline_, event_, view_creator_.create("ui_pause.json"));
                    });
 
     event_.connect("begin-records",

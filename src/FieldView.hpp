@@ -177,8 +177,6 @@ public:
   void enableTouchInput(const bool input = true) {
     if (input != touch_input_) calcelAllPickings();
     touch_input_ = input;
-
-    DOUT << "enableTouchInput:" << touch_input_ << std::endl;
   }
   
 
