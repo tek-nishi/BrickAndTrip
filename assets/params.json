@@ -20,7 +20,10 @@
         "path": "mplus-1m-light.ttf",
         "size": 48
       }
-    ]
+    ],
+
+    "fast_speed": 3,
+    "slow_speed": 0.25
   },
 
   "ui_view": { 

@@ -24,10 +24,15 @@ namespace ngs {
 class ColoColoParadeApp : public AppNative {
   JsonTree params_;
 
+  double fast_speed_;
+  double slow_speed_;
+  
   TimelineRef timeline_;
 
   double elapsed_seconds_;
-  bool fast_forward_;
+
+  double forward_speed_;
+  bool forward_speed_change_;
   bool pause_;
 
   FontHolder fonts_;
@@ -49,6 +54,9 @@ class ColoColoParadeApp : public AppNative {
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
     
     settings->enableMultiTouch();
+
+    fast_speed_ = params_["app.fast_speed"].getValue<double>();
+    slow_speed_ = params_["app.slow_speed"].getValue<double>();
   }
   
 	void setup() {
@@ -65,7 +73,8 @@ class ColoColoParadeApp : public AppNative {
 #endif
 
     timeline_ = Timeline::create();
-    fast_forward_ = false;
+    forward_speed_        = 1.0;
+    forward_speed_change_ = false;
     pause_ = false;
     
     setupFonts();
@@ -152,12 +161,16 @@ class ColoColoParadeApp : public AppNative {
       controller_.reset();
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
     }
-
-    if ((code == KeyEvent::KEY_LSHIFT) || (code == KeyEvent::KEY_RSHIFT)) {
+    
+    if (code == KeyEvent::KEY_LSHIFT) {
       // 倍速モード
-      // TODO:timelineの倍速
-      // DOUT << "Start fast-forward." << std::endl;
-      fast_forward_ = true;
+      forward_speed_change_ = true;
+      forward_speed_        = fast_speed_;
+    }
+    else if (code == KeyEvent::KEY_RSHIFT) {
+      // 低速モード
+      forward_speed_change_ = true;
+      forward_speed_        = slow_speed_;
     }
     else if (code == KeyEvent::KEY_ESCAPE) {
       // 強制PAUSE
@@ -170,9 +183,8 @@ class ColoColoParadeApp : public AppNative {
     int  code  = event.getCode();
 
     if ((code == KeyEvent::KEY_LSHIFT) || (code == KeyEvent::KEY_RSHIFT)) {
-      // 倍速モード解除
-      // DOUT << "Finish fast-forward." << std::endl;
-      fast_forward_ = false;
+      // 低・倍速モード解除
+      forward_speed_change_ = false;
     }
   }
 
@@ -187,7 +199,9 @@ class ColoColoParadeApp : public AppNative {
     double progressing_seconds = elapsed_seconds - elapsed_seconds_;
 
     if (pause_) progressing_seconds = 0.0;
-    if (fast_forward_) progressing_seconds *= 2.0;
+    if (forward_speed_change_) {
+      progressing_seconds *= forward_speed_;
+    }
     
     timeline_->step(progressing_seconds);
     controller_->update(progressing_seconds);
