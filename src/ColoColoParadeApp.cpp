@@ -151,6 +151,7 @@ class ColoColoParadeApp : public AppNative {
   }
 
 
+#ifdef DEBUG
   void keyDown(KeyEvent event) {
     char chara = event.getChar();
     int  code  = event.getCode();
@@ -187,6 +188,7 @@ class ColoColoParadeApp : public AppNative {
       forward_speed_change_ = false;
     }
   }
+#endif
 
 
   void resize() {
@@ -198,10 +200,12 @@ class ColoColoParadeApp : public AppNative {
     double elapsed_seconds     = getElapsedSeconds();
     double progressing_seconds = elapsed_seconds - elapsed_seconds_;
 
+#ifdef DEBUG
     if (pause_) progressing_seconds = 0.0;
     if (forward_speed_change_) {
       progressing_seconds *= forward_speed_;
     }
+#endif
     
     timeline_->step(progressing_seconds);
     controller_->update(progressing_seconds);
