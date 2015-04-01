@@ -135,6 +135,13 @@ public:
                                      entity_.gameover();
                                    });
 #endif
+
+    connections_ += event_.connect("startline-opened",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "startline-opened" << std::endl;
+                                     entity_.enableRecordPlay();
+                                   });
+
     
     connections_ += event_.connect("gameover-agree",
                                    [this](const Connection&, EventParam& param) {

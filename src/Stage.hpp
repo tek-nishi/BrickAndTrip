@@ -217,7 +217,8 @@ public:
         // コンテナへの参照が無効になっている場合があるので、関数経由で取得
         for (auto& cube : active_cubes_[iz]) {
           cube.block_position.y -= 1;
-        }        
+        }
+        event_.signal("startline-opened", EventParam());
       },
       event_timeline_->getCurrentTime() + open_delay_ + open_duration_);
   }

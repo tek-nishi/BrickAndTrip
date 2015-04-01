@@ -39,6 +39,7 @@ class FieldEntity {
   std::vector<PickableCubePtr> pickable_cubes_;
 
   Records records_;
+  bool record_play_;
 
   bool first_started_pickable_;
   bool first_fallen_pickable_;
@@ -72,6 +73,7 @@ public:
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_num_(0),
     stage_(params, timeline, event_),
+    record_play_(false),
     first_started_pickable_(false),
     first_fallen_pickable_(false),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
@@ -95,7 +97,9 @@ public:
 
 
   void update(const double progressing_seconds) {
-    records_.current_game.play_time += progressing_seconds;
+    if (record_play_) {
+      records_.current_game.play_time += progressing_seconds;
+    }
     
     boost::remove_erase_if(pickable_cubes_,
                            [](const PickableCubePtr& cube) {
@@ -193,6 +197,7 @@ public:
     first_fallen_pickable_  = false;
 
     records_.prepareCurrentGameRecord(stage_num_, event_timeline_->getCurrentTime());
+    enableRecordPlay(false);
 
     stage_num_ += 1;
 
@@ -210,6 +215,7 @@ public:
     stage_.buildStage(finish_rate_);
     stage_.collapseStage(finish_line_z_ - 1, finish_rate_);
 
+    enableRecordPlay(false);
     records_.storeStageRecord(event_timeline_->getCurrentTime());
 
     {
@@ -228,6 +234,7 @@ public:
 
   // GameOver時の処理
   void gameover() {
+    enableRecordPlay(false);
     records_.storeRecord(event_timeline_->getCurrentTime());
     stopBuildAndCollapse();
 
@@ -286,6 +293,8 @@ public:
   }
 
   void movedPickableCube() {
+    if (!record_play_) return;
+    
     records_.current_game.tumble_num += 1;
   }
 
@@ -299,6 +308,11 @@ public:
     for (int i = 0; i < entry_packable_num_; ++i) {
       entryPickableCube(entry_z, delay, true);
     }
+  }
+
+  // プレイ中の情報を記録に取る
+  void enableRecordPlay(const bool enable = true) {
+    record_play_ = enable;
   }
   
   
