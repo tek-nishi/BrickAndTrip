@@ -213,13 +213,13 @@ public:
       option.delay(open_delay_);
     }
 
-    animation_timeline_->add([this, iz]() {
+    event_timeline_->add([this, iz]() {
         // コンテナへの参照が無効になっている場合があるので、関数経由で取得
         for (auto& cube : active_cubes_[iz]) {
           cube.block_position.y -= 1;
         }        
       },
-      animation_timeline_->getCurrentTime() + open_delay_ + open_duration_);
+      event_timeline_->getCurrentTime() + open_delay_ + open_duration_);
   }
 
   void setFinishLine(const int z) {

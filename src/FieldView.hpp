@@ -229,18 +229,20 @@ private:
     for (const auto& touch : touches) {
       if (!isPicking(touch)) continue;
 
-      const auto& pick = getPick(touch);
+      auto pick = getPick(touch);
+      assert(pick);
+      
       for (auto& cube : touch_cubes_) {
         // if (!isTouching(cube.id)) continue;
 
-        if (cube.id == pick.cube_id) {
+        if (cube.id == pick->cube_id) {
           // cubeの上平面との交点
           auto ray = generateRay(touch.pos);
           float cross_z;
           auto origin = ci::Vec3f(0, (cube.position.y + 0.5f) * cube.size, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          auto picking_ofs = ray.calcPosition(cross_z) - pick.picking_pos;
-          auto delta_time = touch.timestamp - pick.timestamp;
+          auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
+          auto delta_time = touch.timestamp - pick->timestamp;
 
           int move_direction = PickableCube::MOVE_NONE;
           float move_threshold = cube.size * move_threshold_;
@@ -270,7 +272,7 @@ private:
 
           if (move_direction != PickableCube::MOVE_NONE) {
             EventParam params = {
-              { "cube_id",        pick.cube_id },
+              { "cube_id",        pick->cube_id },
               { "move_direction", move_direction },
               { "move_speed",     move_speed },
             };
@@ -300,12 +302,11 @@ private:
     return false;
   }
 
-  const Pick& getPick(const Touch& touch) {
+  boost::optional<const Pick&> getPick(const Touch& touch) {
     for (const auto& pick : pickings_) {
-      if (touch.id == pick.touch_id) return pick;
+      if (touch.id == pick.touch_id) return boost::optional<const Pick&>(pick);
     }
-    assert(0);
-    return Pick();
+    return boost::optional<const Pick&>();
   }
 
   void removePick(const Touch& touch) {
