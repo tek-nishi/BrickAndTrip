@@ -25,7 +25,6 @@ class FieldController : public ControllerBase {
   FieldView view_;
   FieldEntity entity_;
 
-  bool stage_miss_;
   bool stage_cleard_;
   bool stageclear_agree_;
 
@@ -42,7 +41,6 @@ public:
     active_(true),
     view_(params, timeline, event_, touch_event),
     entity_(params, timeline, event_),
-    stage_miss_(false),
     stage_cleard_(false),
     stageclear_agree_(false)
   {
@@ -63,11 +61,17 @@ public:
     connections_ += event_.connect("pickable-on-stage",
                                    [this](const Connection& connection, EventParam& param) {
                                    });
+
+    // pickablecubeの1つがstartlineを越えたらcollapse開始
+    connections_ += event_.connect("first-pickable-started",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     DOUT << "first-pickable-started" << std::endl;
+                                     entity_.startStageCollapse();
+                                   });
     
     connections_ += event_.connect("all-pickable-started",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "all-pickable-started" << std::endl;
-                                     entity_.startStageCollapse();
                                    });
 
     connections_ += event_.connect("all-pickable-finished",
@@ -84,7 +88,7 @@ public:
                                      stage_cleard_ = true;
 
                                      if (stage_cleard_ && stageclear_agree_) {
-                                       startStage();
+                                       startNextStage();
                                      }
                                    });
     
@@ -95,7 +99,7 @@ public:
                                      view_.enableTouchInput();
 
                                      if (stage_cleard_ && stageclear_agree_) {
-                                       startStage();
+                                       startNextStage();
                                      }
                                    });
 
@@ -109,12 +113,15 @@ public:
     connections_ += event_.connect("fall-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-pickable" << std::endl;
-                                     if (!stage_miss_) {
-                                       stage_miss_ = true;
-                                       // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
-                                       view_.enableTouchInput(false);
-                                       entity_.gameover();
-                                     }
+                                     // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                                   });
+
+    // pickablecubeの1つがfallでgameover
+    connections_ += event_.connect("first-fallen-pickable",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "first-fallen-pickable" << std::endl;
+                                     view_.enableTouchInput(false);
+                                     entity_.gameover();
                                    });
 
 #if 0
@@ -166,8 +173,6 @@ private:
     view_.enableTouchInput();
     entity_.setupStartStage();
 
-    stage_miss_ = false;
-    
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.startStageBuild();
@@ -175,7 +180,7 @@ private:
                                    });
   }
 
-  void startStage() {
+  void startNextStage() {
     view_.enableTouchInput();
     entity_.startStageBuild();
 

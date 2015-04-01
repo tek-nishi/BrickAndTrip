@@ -40,6 +40,9 @@ class FieldEntity {
 
   Records records_;
 
+  bool first_started_pickable_;
+  bool first_fallen_pickable_;
+  
   int start_line_z_;
   int finish_line_z_;
   int next_start_line_z_;
@@ -69,6 +72,8 @@ public:
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_num_(0),
     stage_(params, timeline, event_),
+    first_started_pickable_(false),
+    first_fallen_pickable_(false),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
     mode_(NONE),
     event_timeline_(ci::Timeline::create())
@@ -109,10 +114,11 @@ public:
 
     switch (mode_) {
     case START:
-      // 全PickableCubeのstart判定
-      if (isAllPickableCubesStarted()) {
+      // PickableCubeのstart判定
+      if (isPickableCubeStarted()) {
         mode_ = FINISH;
-        event_.signal("all-pickable-started", EventParam());
+        first_started_pickable_ = true;
+        event_.signal("first-pickable-started", EventParam());
       }
       break;
 
@@ -175,6 +181,8 @@ public:
     next_start_line_z_ = stage_info.first - 1;
 
     mode_ = START;
+    first_started_pickable_ = false;
+    first_fallen_pickable_  = false;
 
     records_.prepareCurrentGameRecord(stage_num_, event_timeline_->getCurrentTime());
 
@@ -376,7 +384,7 @@ private:
   }
   
   
-  // 全PickableCubeの落下判定
+  // PickableCubeの落下判定
   void decideEachPickableCubeFalling() {
     for (auto& cube : pickable_cubes_) {
       if (!cube->isOnStage() || !cube->canPick()) continue;
@@ -390,6 +398,11 @@ private:
             { "id", cube->id() },
           };
           event_.signal("fall-pickable", params);
+
+          if (!first_fallen_pickable_) {
+            first_fallen_pickable_ = true;
+            event_.signal("first-fallen-pickable", EventParam());
+          }
         }
       }
     }
@@ -411,7 +424,22 @@ private:
     
     return on_stage;
   }
+
   
+  bool isPickableCubeStarted() {
+    if (first_started_pickable_ || pickable_cubes_.empty()) return false;
+
+    for (const auto& cube : pickable_cubes_) {
+      if (!cube->canPick() || cube->isSleep()) continue;
+
+      if (cube->blockPosition().z >= start_line_z_) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+#if 0
   // すべてのPickableCubeがStartしたか判定
   bool isAllPickableCubesStarted() {
     if (pickable_cubes_.empty()) return false;
@@ -433,6 +461,7 @@ private:
     
     return started;
   }
+#endif
 
   // すべてのPickableCubeがFinishしたか判定
   bool isAllPickableCubesFinished() {
