@@ -18,6 +18,9 @@ class FieldController : public ControllerBase {
   Event<std::vector<Touch> >& touch_event_;
   Event<EventParam>& event_;
 
+  ci::TimelineRef timeline_;
+  bool paused_;
+
   ConnectionHolder connections_;
   
   bool active_;
@@ -27,20 +30,20 @@ class FieldController : public ControllerBase {
 
   bool stage_cleard_;
   bool stageclear_agree_;
-
   
 
 public:
   FieldController(ci::JsonTree& params,
-                  ci::TimelineRef timeline,
                   Event<std::vector<Touch> >& touch_event,
                   Event<EventParam>& event) :
     params_(params),
     touch_event_(touch_event),
     event_(event),
+    timeline_(ci::Timeline::create()),
+    paused_(false),
     active_(true),
-    view_(params, timeline, event_, touch_event),
-    entity_(params, timeline, event_),
+    view_(params, timeline_, event_, touch_event),
+    entity_(params, timeline_, event_),
     stage_cleard_(false),
     stageclear_agree_(false)
   {
@@ -145,6 +148,31 @@ public:
                                      entity_.restart();
                                      setup();
                                    });
+
+    connections_ += event_.connect("pause-start",
+                                   [this](const Connection&, EventParam& param) {
+                                     view_.enableTouchInput(false);
+                                     paused_ = true;
+                                   });
+
+    connections_ += event_.connect("game-continue",
+                                   [this](const Connection&, EventParam& param) {
+                                     view_.enableTouchInput();
+                                     paused_ = false;
+                                   });
+    
+    connections_ += event_.connect("game-abort",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     DOUT << "game-abort" << std::endl;
+                                     view_.enableTouchInput();
+                                     paused_ = false;
+                                     entity_.cleanupField();
+                                   });
+  }
+
+  ~FieldController() {
+    // 再生途中のものもあるので、手動で取り除く
+    timeline_->removeSelf();;
   }
 
 
@@ -160,6 +188,9 @@ private:
 
   
   void update(const double progressing_seconds) override {
+    if (paused_) return;
+    
+    timeline_->step(progressing_seconds);
     entity_.update(progressing_seconds);
   }
 
@@ -176,6 +207,11 @@ private:
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.startStageBuild();
+                                     timeline_->add([this]() {
+                                         event_.signal("begin-progress", EventParam());
+                                       },
+                                       timeline_->getCurrentTime() + 1.0f);
+                                       
                                      connection.disconnect();
                                    });
   }

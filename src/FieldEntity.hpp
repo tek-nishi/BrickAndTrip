@@ -241,6 +241,9 @@ public:
   // リスタート前のClean-up
   void cleanupField() {
     event_timeline_->clear();
+
+    first_started_pickable_ = true;
+    first_fallen_pickable_  = true;
     
     stage_.stopBuildAndCollapse();
     stage_.collapseStage(next_start_line_z_, finish_rate_);

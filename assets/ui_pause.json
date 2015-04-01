@@ -118,7 +118,7 @@
     "disp": true,
 
     "active": true,
-    "event_message": "game-abort",
+    "event_message": "pause-abort",
 
     "text": "⌫",
     "size": 1,
