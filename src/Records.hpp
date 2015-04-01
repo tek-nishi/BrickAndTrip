@@ -5,6 +5,7 @@
 // 
 
 #include <vector>
+#include "FileUtil.hpp"
 
 
 namespace ngs {
@@ -106,11 +107,11 @@ public:
 
 
   void load(const std::string& path) {
-    // TODO:iOSのpath指定
-    auto full_path = ci::app::getAppPath() / path;
+    auto full_path = getDocumentPath() / path;
     if (!ci::fs::is_regular_file(full_path)) return;
 
     DOUT << "record loaded." << std::endl;
+    DOUT << full_path << std::endl;
     
     ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
 
@@ -132,7 +133,6 @@ public:
   }
   
   void write(const std::string& path) {
-    // TODO:iOSのpath指定
     ci::JsonTree record = ci::JsonTree::makeObject("records");
 
     record.addChild(ci::JsonTree("total_play_num", total_play_num_))
@@ -152,10 +152,10 @@ public:
       
       record.addChild(stage);
     }
-    
-    record.write(ci::app::getAppPath() / path, ci::JsonTree::WriteOptions().createDocument(true));
 
-    DOUT << "record writed." << std::endl;
+    auto full_path = getDocumentPath() / path;
+    DOUT << "record writed. " << full_path << std::endl;
+    record.write(full_path, ci::JsonTree::WriteOptions().createDocument(true));
   }
   
 };
