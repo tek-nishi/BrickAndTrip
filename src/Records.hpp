@@ -104,6 +104,31 @@ public:
     total_play_num_ += 1;
   }
 
+
+  void write(const std::string& path) {
+    ci::JsonTree record = ci::JsonTree::makeObject("records");
+
+    record.addChild(ci::JsonTree("total_play_num", total_play_num_))
+      .addChild(ci::JsonTree("total_play_time", total_play_time_))
+      .addChild(ci::JsonTree("total_tumble_num", total_tumble_num_));
+
+    if (!stage_records_.empty()) {
+      ci::JsonTree stage = ci::JsonTree::makeArray("stage");
+      for (const auto& s : stage_records_) {
+        ci::JsonTree sr;
+        sr.addChild(ci::JsonTree("clear_time", s.clear_time))
+          .addChild(ci::JsonTree("tumble_num", s.tumble_num))
+          .addChild(ci::JsonTree("score", s.score));
+
+        stage.pushBack(sr);
+      }
+      
+      record.addChild(stage);
+    }
+    
+    record.write(ci::app::getAppPath() / path, ci::JsonTree::WriteOptions().createDocument(true));
+  }
+  
 };
 
 }

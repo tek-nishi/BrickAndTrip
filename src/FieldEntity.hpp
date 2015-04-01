@@ -314,6 +314,10 @@ public:
   void enableRecordPlay(const bool enable = true) {
     record_play_ = enable;
   }
+
+  void record(const std::string& path) {
+    records_.write(path);
+  }
   
   
   // 現在のFieldの状態を作成

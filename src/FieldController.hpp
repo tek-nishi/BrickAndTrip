@@ -49,6 +49,8 @@ public:
   {
     setup();
 
+    entity_.record("records.json");
+    
     connections_ += event_.connect("move-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
