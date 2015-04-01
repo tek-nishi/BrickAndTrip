@@ -161,6 +161,8 @@ class ColoColoParadeApp : public AppNative {
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
       controller_.reset();
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
+      // すぐさまresizeを呼んでCameraの調整
+      resize();
     }
     
     if (code == KeyEvent::KEY_LSHIFT) {
