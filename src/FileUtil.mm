@@ -1,4 +1,7 @@
-﻿
+﻿//
+// File関連の雑多な処理(iOS)
+//
+
 #import <UIKit/UIKit.h>
 #include <string>
 #include "FileUtil.hpp"

@@ -7,6 +7,7 @@
 #include "cinder/Json.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
+#include "AntiAliasingType.hpp"
 #include "Autolayout.hpp"
 #include "JsonUtil.hpp"
 #include "Touch.hpp"
@@ -272,4 +273,4 @@ class ColoColoParadeApp : public AppNative {
 
 }
 
-CINDER_APP_NATIVE( ngs::ColoColoParadeApp, RendererGl )
+CINDER_APP_NATIVE( ngs::ColoColoParadeApp, RendererGl(ngs::getAntiAliasingType()) )
