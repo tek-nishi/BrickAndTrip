@@ -80,7 +80,7 @@
   },
 
   {
-    "name": "time",
+    "name": "play-time",
     "disp": true,
 
     "text": "00:00.0",

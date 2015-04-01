@@ -5,6 +5,7 @@
 //
 
 #include <codecvt>
+#include <sstream>
 
 
 namespace ngs {
@@ -37,6 +38,25 @@ u_int getUniqueNumber() {
 template <typename T>
 std::size_t elemsof(const T& t) {
   return std::distance(std::begin(t), std::end(t));
+}
+
+
+// 時間→書式指定時間
+std::string toFormatedString(const double progress_time) {
+  // 表示の最大時間は59:59.9
+  double output_time = std::min(progress_time, 59 * 60 + 59 + 0.9);
+  int minutes = int(output_time) / 60;
+  int seconds = int(output_time) % 60;
+  int milli_seconds = int(output_time * 10.0) % 10;
+      
+  std::ostringstream str;
+  str << std::setw(2) << std::setfill('0') << minutes
+      << ":"
+      << std::setw(2) << seconds
+      << "."
+      << milli_seconds;
+
+  return str.str();
 }
 
 }

@@ -82,6 +82,14 @@ public:
                                        },
                                        event_timeline_->getCurrentTime() + 1.0f);
                                    });
+
+
+    connections_ += event_.connect("update-record",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     auto play_time = boost::any_cast<double>(param["play-time"]);
+                                     auto& widget = view_->getWidget("play-time");
+                                     widget.getCubeText().setText(toFormatedString(play_time));
+                                   });
   }
 
   ~ProgressController() {

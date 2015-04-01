@@ -4,7 +4,6 @@
 // Stage clear
 //
 
-#include <sstream>
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
@@ -46,18 +45,8 @@ public:
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-      // 表示の最大時間は59:59.9
-      clear_time = std::min(clear_time, 59 * 60 + 59 + 0.9);
-      int minutes = int(clear_time) / 60;
-      int seconds = int(clear_time) % 60;
-      int milli_seconds = int(clear_time * 10.0) % 10;
-      
-      std::ostringstream str;
-      str << std::setw(2) << std::setfill('0') << minutes << ":" << seconds
-          << "." << std::setw(1) << milli_seconds;
-
       auto& widget = view_->getWidget("time-result");
-      widget.getCubeText().setText(str.str());
+      widget.getCubeText().setText(toFormatedString(clear_time));
     }
 
     {

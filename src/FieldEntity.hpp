@@ -146,6 +146,14 @@ public:
       }
       break;
     }
+
+    {
+      EventParam params = {
+        { "play-time", records_.current_game.play_time },
+        { "tumble-num", records_.current_game.tumble_num },
+      };
+      event_.signal("update-record", params);
+    }
   }
 
 
