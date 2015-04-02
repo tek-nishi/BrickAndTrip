@@ -117,7 +117,12 @@
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
-      "fall_y": -10
+      "fall_y": -10,
+
+      "idle_ease": "EasePingPongOutQuad",
+      "idle_duration": 0.5,
+      "idle_angle": 15,
+      "idle_delay": [ 2, 5 ]
     },
 
     "records": "records.json"

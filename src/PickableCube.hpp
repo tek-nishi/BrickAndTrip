@@ -20,7 +20,9 @@ public:
     MOVE_UP,
     MOVE_DOWN,
     MOVE_LEFT,
-    MOVE_RIGHT
+    MOVE_RIGHT,
+
+    MOVE_MAX
   };
 
   
@@ -56,10 +58,16 @@ private:
   float rotate_duration_;
   std::vector<float> rotate_speed_rate_;
   ci::Anim<ci::Quatf> move_rotation_;
+  ci::Quatf move_start_rotation_;
 
   std::string fall_ease_;
   float fall_duration_;
   float fall_y_;
+
+  std::string idle_ease_;
+  float idle_duration_;
+  float idle_angle_;
+  ci::Vec2f idle_delay_;
   
 
 public:
@@ -84,9 +92,14 @@ public:
     move_speed_(0),
     rotate_ease_(params["game.pickable.rotate_ease"].getValue<std::string>()),
     rotate_duration_(params["game.pickable.rotate_duration"].getValue<float>()),
+    move_start_rotation_(rotation_()),
     fall_ease_(params["game.pickable.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.pickable.fall_duration"].getValue<float>()),
-    fall_y_(params["game.pickable.fall_y"].getValue<float>())
+    fall_y_(params["game.pickable.fall_y"].getValue<float>()),
+    idle_ease_(params["game.pickable.idle_ease"].getValue<std::string>()),
+    idle_duration_(params["game.pickable.idle_duration"].getValue<float>()),
+    idle_angle_(ci::toRadians(params["game.pickable.idle_angle"].getValue<float>())),
+    idle_delay_(Json::getVec2<float>(params["game.pickable.idle_delay"]))
   {
     position_ = ci::Vec3f(block_position_) * cube_size_;
     // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
@@ -118,6 +131,8 @@ public:
           { "block_pos", block_position_ },
         };
         event_.signal("pickable-on-stage", params);
+
+        startIdleMotion();
       });
   }
 
@@ -145,6 +160,11 @@ public:
   
   
   void startRotationMove() {
+    // idle演出中に操作されてもよいように
+    position_ = ci::Vec3f(block_position_) * cube_size_;
+    position_().y += cube_size_;
+    rotation_ = move_start_rotation_;
+
     can_pick_ = false;
     block_position_ += move_vector_;
 
@@ -184,8 +204,9 @@ public:
     options.finishFn([this]() {
         // 移動後に正確な位置を設定
         // FIXME:回転も正規化
-        position_ = ci::Vec3f(block_position_) * cube_size_;
-        position_().y += cube_size_;
+        // position_ = ci::Vec3f(block_position_) * cube_size_;
+        // position_().y += cube_size_;
+        move_start_rotation_ = rotation_;
 
         EventParam params = {
           { "id", id_ },
@@ -195,6 +216,51 @@ public:
         can_pick_ = true;
         move_speed_ -= 1;
       });
+  }
+
+  void startIdleMotion() {
+    ci::Quatf rotation_table[] = {
+      { ci::Vec3f(1, 0, 0),  idle_angle_ },
+      { ci::Vec3f(1, 0, 0), -idle_angle_ },
+      { ci::Vec3f(0, 0, 1), -idle_angle_ },
+      { ci::Vec3f(0, 0, 1),  idle_angle_ },
+    };
+
+    int move_direction = ci::randInt(MOVE_MAX);
+    auto options = animation_timeline_->apply(&move_rotation_,
+                                              ci::Quatf::identity(), rotation_table[move_direction],
+                                              idle_duration_,
+                                              getEaseFunc(idle_ease_));
+
+    options.delay(ci::randFloat(idle_delay_.x, idle_delay_.y));
+
+    ci::Vec3f pivot_table[] = {
+      ci::Vec3f(              0, -cube_size_ / 2,  cube_size_ / 2),
+      ci::Vec3f(              0, -cube_size_ / 2, -cube_size_ / 2),
+      ci::Vec3f( cube_size_ / 2, -cube_size_ / 2,               0),
+      ci::Vec3f(-cube_size_ / 2, -cube_size_ / 2,               0)
+    };
+    
+    auto pivot_rotation = pivot_table[move_direction];
+    auto rotation = rotation_();
+    auto position = position_();
+    options.updateFn([this, pivot_rotation, rotation, position]() {
+        rotation_ = rotation * move_rotation_();
+
+        // 立方体がエッジの部分で回転するよう平行移動を追加
+        ci::Matrix44f mat = move_rotation_().toMatrix44();
+        auto pivot_pos = mat.transformVec(pivot_rotation);
+        position_ = position - pivot_pos + pivot_rotation;
+      });
+
+    options.finishFn([this]() {
+        // 移動後に正確な位置を設定
+        // FIXME:回転も正規化
+        position_ = ci::Vec3f(block_position_) * cube_size_;
+        position_().y += cube_size_;
+
+        startIdleMotion();
+      });    
   }
 
   void fallFromStage() {
