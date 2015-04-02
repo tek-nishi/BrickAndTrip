@@ -17,6 +17,7 @@
 #include "PauseController.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
+// #include "TestPickController.hpp"
 
 
 namespace ngs {
@@ -61,6 +62,7 @@ public:
     view_creator_(timeline, ui_camera_, ui_lights_, autolayout_, event_, touch_event),
     background_(Json::getColor<float>(params["app.background"]))
   {
+    // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_);
     addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
 

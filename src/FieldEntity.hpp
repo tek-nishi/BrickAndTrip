@@ -278,12 +278,18 @@ public:
     mode_      = NONE;
   }
 
-  
+
   void movePickableCube(const u_int id, const int direction, const int speed) {
     auto it = findPickableCube(id);
     assert(it);
     auto& cube = *it;
 
+    if ((direction == PickableCube::MOVE_NONE) || !speed) {
+      cube->cancelRotationMove();
+      return;
+    }
+
+    
     // 移動可能かStageを調べる
     static ci::Vec3i move_vec[] = {
       {  0, 0,  1 },

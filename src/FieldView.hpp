@@ -244,9 +244,9 @@ private:
           auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
           auto delta_time = touch.timestamp - pick->timestamp;
 
-          int move_direction = PickableCube::MOVE_NONE;
           float move_threshold = cube.size * move_threshold_;
-          int move_speed = 1;
+          int move_direction = PickableCube::MOVE_NONE;
+          int move_speed     = 0;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
             // 縦移動
             if (picking_ofs.z < -move_threshold) {
@@ -270,15 +270,12 @@ private:
             }
           }
 
-          if (move_direction != PickableCube::MOVE_NONE) {
-            EventParam params = {
-              { "cube_id",        pick->cube_id },
-              { "move_direction", move_direction },
-              { "move_speed",     move_speed },
-            };
-
-            event_.signal("move-pickable", params);
-          }
+          EventParam params = {
+            { "cube_id",        pick->cube_id },
+            { "move_direction", move_direction },
+            { "move_speed",     move_speed },
+          };
+          event_.signal("move-pickable", params);
 
           removePick(touch);
           break;
@@ -350,7 +347,7 @@ private:
     touch_cubes_.clear();
     
     for (const auto& cube : cubes) {
-      if (!cube->isActive() || !cube->canPick() || cube->isSleep()) continue;
+      if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
 
       const auto& pos = cube->position();
       const auto size = cube->size();
@@ -450,6 +447,14 @@ private:
       ci::gl::drawCube(ci::Vec3f::zero(), cube->size());
       
       ci::gl::popModelView();
+
+#if 0
+      ci::AxisAlignedBox3f bbox(cube->position() - cube->size() / 2,
+                                cube->position() + cube->size() / 2);
+
+      ci::gl::color(0, 1, 0);
+      ci::gl::drawStrokedCube(bbox);
+#endif
     }
   }
 
