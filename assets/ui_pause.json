@@ -21,7 +21,8 @@
     "active": true,
     "event_message": "pause-cancel",
 
-    "text": "↪",
+    "text": "Ú",
+    "font": "icon",
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
@@ -120,7 +121,8 @@
     "active": true,
     "event_message": "pause-abort",
 
-    "text": "⌫",
+    "text": "à",
+    "font": "icon",
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,

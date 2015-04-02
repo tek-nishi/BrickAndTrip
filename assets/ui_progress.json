@@ -6,7 +6,8 @@
     "active": true,
     "event_message": "pause-start",
 
-    "text": "‖",
+    "text": "Ý",
+    "font": "icon",
     "size": 0.5,
     "spacing": 0.1,
     "chara_split": 1,

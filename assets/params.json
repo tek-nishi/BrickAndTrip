@@ -11,13 +11,8 @@
         "size": 48
       },
       {
-        "name": "bold",
-        "path": "mplus-1m-bold.ttf",
-        "size": 48
-      },
-      {
-        "name": "light",
-        "path": "mplus-1m-light.ttf",
+        "name": "icon",
+        "path": "WebSymbolsLiga-Regular.otf",
         "size": 48
       }
     ],
