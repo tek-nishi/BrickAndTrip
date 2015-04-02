@@ -11,6 +11,7 @@
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
 #include "EventParam.hpp"
+// #include "CameraEditor.hpp"
 
 
 namespace ngs {
@@ -24,11 +25,18 @@ class FieldView {
   float far_z_;
   ci::CameraPersp camera_;
 
-  ci::Vec3f eye_point_;
   ci::Vec3f interest_point_;
+  ci::Vec3f eye_point_;
   ci::Vec3f target_point_;
+  ci::Vec3f new_target_point_;
+  float camera_speed_;
 
-  std::vector<ci::gl::Light> lights_;
+  struct Light {
+    ci::gl::Light l;
+    ci::Vec3f pos;
+  };
+  
+  std::vector<Light> lights_;
 
   ConnectionHolder connections_;
 
@@ -59,6 +67,11 @@ class FieldView {
   
   bool touch_input_;
 
+  ci::TimelineRef event_timeline_;
+  
+  // CameraEditor camera_editor_;
+
+
   
 public:
   FieldView(const ci::JsonTree& params,
@@ -71,36 +84,60 @@ public:
     near_z_(params["game_view.near_z"].getValue<float>()),
     far_z_(params["game_view.far_z"].getValue<float>()),
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
-    eye_point_(Json::getVec3<float>(params["game_view.eye_point"])),
     interest_point_(Json::getVec3<float>(params["game_view.interest_point"])),
-    target_point_(interest_point_),
+    eye_point_(interest_point_),
+    target_point_(Json::getVec3<float>(params["game_view.target_point"])),
+    new_target_point_(target_point_),
+    camera_speed_(params["game_view.camera_speed"].getValue<float>()),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
-    touch_input_(true)
+    touch_input_(true),
+    event_timeline_(ci::Timeline::create())
+    // camera_editor_(camera_, interest_point_, eye_point_)
   {
-    camera_.setEyePoint(eye_point_);
+    float eye_rx = params["game_view.eye_rx"].getValue<float>();
+    float eye_ry = params["game_view.eye_ry"].getValue<float>();
+    float eye_distance = params["game_view.eye_distance"].getValue<float>();
+    
+    eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
+      * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
+      * ci::Vec3f(0, 0, eye_distance) + interest_point_;
+    
     camera_.setCenterOfInterestPoint(interest_point_);
+    camera_.setEyePoint(eye_point_);
 
+    // camera_editor_.setParams(eye_rx, eye_ry, eye_distance);
+    
+    
     int id = 0;
     for (const auto& param : params["game_view.lights"]) {
-      auto light = ci::gl::Light(ci::gl::Light::POINT, id);
+      Light light = {
+        { ci::gl::Light::POINT, id },
+        Json::getVec3<float>(param["pos"])
+      };
+      
+      // auto light = ci::gl::Light(ci::gl::Light::POINT, id);
 
-      light.setPosition(Json::getVec3<float>(param["pos"]));
+      light.l.setPosition(light.pos);
 
       float constant_attenuation  = param["constant_attenuation"].getValue<float>();
       float linear_attenuation    = param["linear_attenuation"].getValue<float>();
       float quadratic_attenuation = param["quadratic_attenuation"].getValue<float>();
-      light.setAttenuation(constant_attenuation,
-                           linear_attenuation,
-                           quadratic_attenuation);
+      light.l.setAttenuation(constant_attenuation,
+                             linear_attenuation,
+                             quadratic_attenuation);
 
-      light.setDiffuse(Json::getColor<float>(param["diffuse"]));
-      light.setAmbient(Json::getColor<float>(param["ambient"]));
+      light.l.setDiffuse(Json::getColor<float>(param["diffuse"]));
+      light.l.setAmbient(Json::getColor<float>(param["ambient"]));
 
       lights_.push_back(std::move(light));
       
       ++id;
     }
+
+    auto current_time = timeline->getCurrentTime();
+    event_timeline_->setStartTime(current_time);
+    timeline->apply(event_timeline_);
 
     connections_ += touch_event.connect("touches-began",
                                         std::bind(&FieldView::touchesBegan, this, std::placeholders::_1, std::placeholders::_2));
@@ -108,6 +145,11 @@ public:
     //                                     std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
     connections_ += touch_event.connect("touches-ended",
                                         std::bind(&FieldView::touchesEnded, this, std::placeholders::_1, std::placeholders::_2));
+  }
+  
+  ~FieldView() {
+    // 再生途中のものもあるので、手動で取り除く
+    event_timeline_->removeSelf();
   }
 
   
@@ -132,11 +174,22 @@ public:
     }
   }
 
+
+  // 時間経過での計算が必要なもの
+  void update(const double progressing_seconds) {
+    auto d = new_target_point_ - target_point_;
+    target_point_ += d * 0.1f;
+    
+    camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
+    camera_.setEyePoint(eye_point_ + target_point_);
+  }
+
+  
   // Fieldの表示
   void draw(const Field& field) {
     // FIXME:drawの中で、PikableCubeからTouch情報を生成している
     makeTouchCubeInfo(field.pickable_cubes);
-    updateCamera(field.pickable_cubes);
+    updateCameraTarget(field.pickable_cubes);
     updateLight();
 
     ci::gl::enable(GL_LIGHTING);
@@ -146,7 +199,7 @@ public:
     ci::gl::setMatrices(camera_);
 
     for (auto& light : lights_) {
-      light.enable();
+      light.l.enable();
     }
 
 
@@ -156,8 +209,16 @@ public:
 
     
     for (auto& light : lights_) {
-      light.disable();
+      light.l.disable();
     }
+
+#if 0
+    ci::gl::disable(GL_LIGHTING);
+    ci::gl::disableDepthRead();
+    ci::gl::disableDepthWrite();
+    
+    camera_editor_.draw();
+#endif
   }
 
 
@@ -178,8 +239,8 @@ public:
     if (input != touch_input_) calcelAllPickings();
     touch_input_ = input;
   }
-  
 
+  
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
     if (!touch_input_) return;
@@ -333,7 +394,7 @@ private:
     float v = pos.y / (float) ci::app::getWindowHeight();
     // because OpenGL and Cinder use a coordinate system
     // where (0, 0) is in the LOWERleft corner, we have to flip the v-coordinate
-    return std::move(camera_.generateRay(u, 1.0f - v, camera_.getAspectRatio()));
+    return camera_.generateRay(u, 1.0f - v, camera_.getAspectRatio());
   }
 
   bool isPickedCube(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) {
@@ -370,7 +431,7 @@ private:
   }
 
   // TODO:複数のPickableCubeをいい感じに捉える
-  void updateCamera(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+  void updateCameraTarget(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
     ci::Vec3f target_pos = ci::Vec3f::zero();
     int cube_num = 0;
     for (const auto& cube : cubes) {
@@ -382,23 +443,17 @@ private:
 
     if (cube_num > 0) {
       // FIXME:とりあえず中間点
-      target_point_ = target_pos / cube_num;
+      new_target_point_ = target_pos / cube_num;
     }
-
-    auto d = (target_point_ - interest_point_) * 0.25f;
-    interest_point_ += d;
-    eye_point_ += d;
-
-    camera_.setCenterOfInterestPoint(interest_point_);
-    camera_.setEyePoint(eye_point_);
   }
 
-  // TODO:複数のPickableCubeをいい感じに捉える
   void updateLight() {
-    ci::Vec3f pos = lights_[0].getPosition();
-    // pos.x = interest_point_.x;
-    pos.z = interest_point_.z;
-    lights_[0].setPosition(pos);
+    for (auto& light : lights_) {
+      ci::Vec3f pos = light.pos;
+      // 注視点のzだけ拝借
+      pos.z += target_point_.z;
+      light.l.setPosition(pos);
+    }
   }
 
   

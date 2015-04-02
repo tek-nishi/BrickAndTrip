@@ -200,7 +200,7 @@ private:
     float v = pos.y / (float) ci::app::getWindowHeight();
     // because OpenGL and Cinder use a coordinate system
     // where (0, 0) is in the LOWERleft corner, we have to flip the v-coordinate
-    return std::move(camera_.generateRay(u, 1.0f - v, camera_.getAspectRatio()));
+    return camera_.generateRay(u, 1.0f - v, camera_.getAspectRatio());
   }
 
 };

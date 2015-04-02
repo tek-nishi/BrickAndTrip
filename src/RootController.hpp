@@ -166,7 +166,7 @@ private:
 
     camera.setEyePoint(Json::getVec3<float>(params["eye_point"]));
 
-    return std::move(camera);
+    return camera;
   }
 
   // 汎用的なパラメーターからLightを生成する
@@ -193,7 +193,7 @@ private:
       ++id;
     }
     
-    return std::move(lights);
+    return lights;
   }
   
   

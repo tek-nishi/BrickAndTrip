@@ -45,22 +45,39 @@
   
   "game_view": {
     "fov": 30,
-    "near_z": 0.05,
-    "far_z":  1000,
+    "near_z": 0.1,
+    "far_z":  500,
 
-    "eye_point": [ -5, 13, -5 ],
-    "interest_point": [ 3, 0, 2 ],
+    "eye_point": [ -7, 12, -8 ],
+    "interest_point": [ 0.5, 0.5, 0.5 ],
+    "target_point": [ 3, 1, 1 ],
+    "eye_distance": 15,
+    "eye_ry": -140,
+    "eye_rx": -40,
+
+    "camera_speed": 1,
 
     "lights": [
       {
-        "pos": [ 5, 10, 5 ],
+        "pos": [ 3, 10, 1 ],
         
         "constant_attenuation":  0,
         "linear_attenuation":    0,
         "quadratic_attenuation": 0.015,
         
         "diffuse": [ 0.8, 0.8, 0.8 ],
-        "ambient": [ 0.2, 0.2, 0.2 ],
+        "ambient": [ 0.1, 0.1, 0.1 ],
+        "specular": [ 0.1, 0.1, 0.1 ]
+      },
+      {
+        "pos": [ -2, -5, -2 ],
+        
+        "constant_attenuation":  0,
+        "linear_attenuation":    0,
+        "quadratic_attenuation": 0.015,
+        
+        "diffuse": [ 0.1, 0.1, 0.2 ],
+        "ambient": [ 0, 0, 0 ],
         "specular": [ 0.1, 0.1, 0.1 ]
       }
     ],

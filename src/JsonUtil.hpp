@@ -20,7 +20,7 @@ std::vector<T> getArray(const ci::JsonTree& json) {
     array[i] = json[i].getValue<T>();
   }
 
-  return std::move(array);
+  return array;
 }
 
 

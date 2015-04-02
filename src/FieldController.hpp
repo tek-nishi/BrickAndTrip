@@ -199,6 +199,7 @@ private:
     
     timeline_->step(progressing_seconds);
     entity_.update(progressing_seconds);
+    view_.update(progressing_seconds);
   }
 
   void draw(FontHolder& fonts) override {

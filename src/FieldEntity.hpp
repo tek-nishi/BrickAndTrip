@@ -345,7 +345,7 @@ public:
       pickable_cubes_,
     };
 
-    return std::move(field);
+    return field;
   }
 
   
