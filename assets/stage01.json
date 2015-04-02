@@ -26,6 +26,7 @@
 
   "build_speed": 1,
   "collapse_speed": 1,
+  "auto_collapse": 10,
   
   "pickable": 1
 }

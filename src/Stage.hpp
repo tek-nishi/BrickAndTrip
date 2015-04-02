@@ -31,6 +31,7 @@ class Stage {
   
   float build_speed_;
   float collapse_speed_;
+  float auto_collapse_;
 
   std::string build_ease_;
   float       build_duration_;
@@ -43,7 +44,8 @@ class Stage {
   std::string open_ease_;
   float       open_duration_;
   float       open_delay_;
-  
+
+  bool started_collapse_;
   bool finished_build_;
   bool finished_collapse_;
   
@@ -62,6 +64,7 @@ public:
     finish_line_z_(-1),
     build_speed_(params["game.stage.build_speed"].getValue<float>()),
     collapse_speed_(params["game.stage.collapse_speed"].getValue<float>()),
+    auto_collapse_(params["game.stage.auto_collapse"].getValue<float>()),
     build_ease_(params["game.stage.build_ease"].getValue<std::string>()),
     build_duration_(params["game.stage.build_duration"].getValue<float>()),
     build_y_(Json::getVec2<float>(params["game.stage.build_y"])),
@@ -71,6 +74,7 @@ public:
     open_ease_(params["game.stage.open_ease"].getValue<std::string>()),
     open_duration_(params["game.stage.open_duration"].getValue<float>()),
     open_delay_(params["game.stage.open_delay"].getValue<float>()),
+    started_collapse_(false),
     finished_build_(false),
     finished_collapse_(false),
     event_timeline_(ci::Timeline::create()),
@@ -141,6 +145,7 @@ public:
       finished_collapse_ = true;
       return;
     }
+    started_collapse_  = true;
     finished_collapse_ = false;
 
     // 落下開始
@@ -193,7 +198,8 @@ public:
     top_z_         = 0;
     active_top_z_  = 0;
     finish_line_z_ = -1;
-    
+
+    started_collapse_  = false;
     finished_build_    = false;
     finished_collapse_ = false;
 
@@ -223,6 +229,21 @@ public:
       event_timeline_->getCurrentTime() + open_delay_ + open_duration_);
   }
 
+  // stageの自動崩壊を仕掛ける
+  void setupAutoCollapse(const int stop_z, const float speed_rate = 1.0f) {
+    started_collapse_ = false;
+
+    event_timeline_->add([this, stop_z, speed_rate]() {
+        if (!started_collapse_) {
+          DOUT << "auto collapse" << std::endl;
+          collapseStage(stop_z, speed_rate);
+        }
+      },
+      event_timeline_->getCurrentTime() + auto_collapse_);
+  }
+
+  bool isStartedCollapse() const { return started_collapse_; }
+
   void setFinishLine(const int z) {
     finish_line_z_ = z;
   }
@@ -233,6 +254,7 @@ public:
                 const ci::Color& line_color) {
     build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
+    auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
     
     const auto& body = stage_data["body"];
     int last_iz = body.getNumChildren() - 1;

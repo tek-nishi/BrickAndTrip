@@ -25,5 +25,6 @@
   ],
 
   "build_speed": 0.8,
-  "collapse_speed": 0.8
+  "collapse_speed": 0.8,
+  "auto_collapse": 8
 }

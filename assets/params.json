@@ -90,6 +90,7 @@
     "stage": {
       "build_speed": 1,
       "collapse_speed": 1,
+      "auto_collapse": 5,
 
       "build_ease": "EaseOutQuad",
       "build_duration": 1.5,

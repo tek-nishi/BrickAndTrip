@@ -204,11 +204,14 @@ public:
     stage_num_ += 1;
 
     stage_.buildStage();
+    stage_.setupAutoCollapse(finish_line_z_ - 1);
   }
 
   // StageのFinishLineまでの崩壊を始める
   void startStageCollapse() {
-    stage_.collapseStage(finish_line_z_ - 1);
+    if (!stage_.isStartedCollapse()) {
+      stage_.collapseStage(finish_line_z_ - 1);
+    }
   }
   
   // FinishLineまで一気に崩壊 && FinishLineを一気に生成
