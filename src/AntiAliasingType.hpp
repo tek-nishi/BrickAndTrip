@@ -45,7 +45,8 @@ int getAntiAliasingType() {
     return (std::stoi(result[1]) >= 4) ? RendererGl::AA_MSAA_4 : RendererGl::AA_NONE;
   }
 
-  return RendererGl::AA_NONE;
+  // 新機種はAAありで
+  return RendererGl::AA_MSAA_4;
 }
 
 #else
