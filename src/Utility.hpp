@@ -43,14 +43,18 @@ std::size_t elemsof(const T& t) {
 
 
 // 時間→書式指定時間
-std::string toFormatedString(const double progress_time) {
-  // 表示の最大時間は59:59.9
-  double output_time = std::min(progress_time, 59 * 60 + 59 + 0.9);
+std::string toFormatedString(const double progress_time, const bool has_hours = false) {
+  // 表示の最大時間は99:59:59.9
+  double max_time = 59 * 60 + 59 + 0.9;
+  if (has_hours) max_time += 99.0 * (60 * 60);
+  double output_time = std::min(progress_time, max_time);
+  int hours   = int(output_time) / (60 * 60);
   int minutes = int(output_time) / 60;
   int seconds = int(output_time) % 60;
   int milli_seconds = int(output_time * 10.0) % 10;
       
   std::ostringstream str;
+  if (has_hours) str << std::setw(2) << std::setfill('0') << hours << ":";
   str << std::setw(2) << std::setfill('0') << minutes
       << ":"
       << std::setw(2) << seconds
@@ -59,6 +63,14 @@ std::string toFormatedString(const double progress_time) {
 
   return str.str();
 }
+
+std::string toFormatedString(const int value, const int digits) {
+  std::ostringstream str;
+  str << std::setw(digits) << std::setfill('0') << value;
+
+  return str.str();
+}
+
 
 // パスの有効判定
 bool isValidPath(const std::string& path) {

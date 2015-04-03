@@ -28,6 +28,7 @@ public:
   RecordsController(ci::JsonTree& params,
                     ci::TimelineRef timeline,
                     Event<EventParam>& event,
+                    const EventParam& records,
                     std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
@@ -55,6 +56,27 @@ public:
                                     
                                     connection.disconnect();
                                   });
+
+    {
+      // constなのでatを使っている
+      auto total_play = boost::any_cast<int>(records.at("total_play"));
+      view_->getWidget("total_play").getCubeText().setText(toFormatedString(total_play, 4));
+    }
+
+    {
+      auto total_time = boost::any_cast<double>(records.at("total_time"));
+      view_->getWidget("total_time").getCubeText().setText(toFormatedString(total_time, true));
+    }
+    
+    {
+      auto total_tumble = boost::any_cast<int>(records.at("total_tumble"));
+      view_->getWidget("total_tumble").getCubeText().setText(toFormatedString(total_tumble, 5));
+    }
+    
+    {
+      auto total_clear = boost::any_cast<int>(records.at("total_clear"));
+      view_->getWidget("total_clear").getCubeText().setText(toFormatedString(total_clear, 4));
+    }
   }
 
   ~RecordsController() {

@@ -162,6 +162,12 @@ public:
     DOUT << "record writed. " << full_path << std::endl;
     record.write(full_path, ci::JsonTree::WriteOptions().createDocument(true));
   }
+
+
+  int getTotalPlayNum() const { return total_play_num_; }
+  double getTotalPlayTime() const { return total_play_time_; }
+  int getTotalTumbleNum() const { return total_tumble_num_; }
+  int getTotalClearNum() const { return total_clear_num_; }
   
 };
 

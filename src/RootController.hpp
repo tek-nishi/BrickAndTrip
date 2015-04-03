@@ -16,6 +16,7 @@
 #include "ProgressController.hpp"
 #include "PauseController.hpp"
 #include "RecordsController.hpp"
+#include "Records.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "Sound.hpp"
@@ -44,6 +45,8 @@ class RootController : public ControllerBase {
   Sound sound_;
   
   ci::Color background_;
+
+  Records records_;
   
   using ControllerPtr = std::unique_ptr<ControllerBase>;
   // TIPS:イテレート中にpush_backされるのでstd::listを使っている
@@ -89,7 +92,14 @@ public:
 
     event_.connect("begin-records",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<RecordsController>(params_, timeline_, event_, view_creator_.create("ui_records.json"));
+                     EventParam records = {
+                       { "total_play",   records_.getTotalPlayNum() },
+                       { "total_time",   records_.getTotalPlayTime() },
+                       { "total_tumble", records_.getTotalTumbleNum() },
+                       { "total_clear",  records_.getTotalClearNum() },
+                     };
+                     
+                     addController<RecordsController>(params_, timeline_, event_, records, view_creator_.create("ui_records.json"));
                    });
 
     event_.connect("begin-credits",
@@ -132,10 +142,11 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      sound_.play("agree");
                    });
+    
+    records_.load(params["game.records"].getValue<std::string>());
       
-
     // addController<TestPickController>(params, touch_event_, event_);
-    addController<FieldController>(params, touch_event_, event_);
+    addController<FieldController>(params, touch_event_, event_, records_);
     addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
   }
 
@@ -239,7 +250,6 @@ private:
     
     return lights;
   }
-  
   
 };
 

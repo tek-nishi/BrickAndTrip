@@ -24,6 +24,7 @@ class FieldEntity {
   const ci::JsonTree& params_;
   ci::TimelineRef timeline_;
   Event<EventParam>& event_;
+  Records& records_;
 
   std::vector<ci::Color> cube_stage_color_;
   ci::Color cube_line_color_;
@@ -39,7 +40,6 @@ class FieldEntity {
   using PickableCubePtr = std::unique_ptr<PickableCube>;
   std::vector<PickableCubePtr> pickable_cubes_;
 
-  Records records_;
   bool record_play_;
 
   bool first_started_pickable_;
@@ -68,10 +68,12 @@ class FieldEntity {
 public:
   FieldEntity(const ci::JsonTree& params,
               ci::TimelineRef timeline,
-              Event<EventParam>& event) :
+              Event<EventParam>& event,
+              Records& records) :
     params_(params),
     timeline_(timeline),
     event_(event),
+    records_(records),
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_num_(0),
     stage_(params, timeline, event_),
@@ -88,8 +90,6 @@ public:
     for (const auto& color : colors) {
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
-
-    loadRecord(params["game.records"].getValue<std::string>());
 
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
@@ -239,7 +239,8 @@ public:
     if (all_cleard_) {
       records_.cleardAllStage();
     }
-    writeRecord(params_["game.records"].getValue<std::string>());
+    
+    records_.write(params_["game.records"].getValue<std::string>());
 
     {
       // 次のステージ or 全ステージクリア
@@ -263,7 +264,7 @@ public:
     stopBuildAndCollapse();
     enableRecordPlay(false);
     records_.storeRecord(event_timeline_->getCurrentTime());
-    writeRecord(params_["game.records"].getValue<std::string>());
+    records_.write(params_["game.records"].getValue<std::string>());
 
     {
       EventParam params = {
@@ -346,15 +347,6 @@ public:
   void enableRecordPlay(const bool enable = true) {
     record_play_ = enable;
   }
-
-  void loadRecord(const std::string& path) {
-    records_.load(path);
-  }
-  
-  void writeRecord(const std::string& path) {
-    records_.write(path);
-  }
-  
   
   // 現在のFieldの状態を作成
   Field fieldData() {

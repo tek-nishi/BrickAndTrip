@@ -61,7 +61,7 @@
     "name": "total_time",
     "disp": true,
 
-    "text": "0:00:00.0",
+    "text": "00:00:00.0",
     "size": 0.3,
     "spacing": 0.003,
     "chara_split": 1,
