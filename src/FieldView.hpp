@@ -80,24 +80,25 @@ public:
             Event<std::vector<Touch> >& touch_event) :
     params_(params),
     event_(event),
-    fov_(params["game_view.fov"].getValue<float>()),
-    near_z_(params["game_view.near_z"].getValue<float>()),
-    far_z_(params["game_view.far_z"].getValue<float>()),
+    fov_(params["game_view.camera.fov"].getValue<float>()),
+    near_z_(params["game_view.camera.near_z"].getValue<float>()),
+    far_z_(params["game_view.camera.far_z"].getValue<float>()),
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
-    interest_point_(Json::getVec3<float>(params["game_view.interest_point"])),
+    interest_point_(Json::getVec3<float>(params["game_view.camera.interest_point"])),
     eye_point_(interest_point_),
-    target_point_(Json::getVec3<float>(params["game_view.target_point"])),
+    target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
     new_target_point_(target_point_),
-    camera_speed_(params["game_view.camera_speed"].getValue<float>()),
+    camera_speed_(params["game_view.camera.speed"].getValue<float>()),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
     event_timeline_(ci::Timeline::create())
     // camera_editor_(camera_, interest_point_, eye_point_)
   {
-    float eye_rx = params["game_view.eye_rx"].getValue<float>();
-    float eye_ry = params["game_view.eye_ry"].getValue<float>();
-    float eye_distance = params["game_view.eye_distance"].getValue<float>();
+    // 注視点からの距離、角度でcamera位置を決めている
+    float eye_rx = params["game_view.camera.eye_rx"].getValue<float>();
+    float eye_ry = params["game_view.camera.eye_ry"].getValue<float>();
+    float eye_distance = params["game_view.camera.eye_distance"].getValue<float>();
     
     eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
       * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
@@ -115,9 +116,6 @@ public:
         { ci::gl::Light::POINT, id },
         Json::getVec3<float>(param["pos"])
       };
-      
-      // auto light = ci::gl::Light(ci::gl::Light::POINT, id);
-
       light.l.setPosition(light.pos);
 
       float constant_attenuation  = param["constant_attenuation"].getValue<float>();
@@ -430,7 +428,6 @@ private:
                            });
   }
 
-  // TODO:複数のPickableCubeをいい感じに捉える
   void updateCameraTarget(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
     ci::Vec3f target_pos = ci::Vec3f::zero();
     int cube_num = 0;

@@ -52,7 +52,7 @@ public:
                  Event<std::vector<Touch> >& touch_event) :
     params_(params),
     timeline_(timeline),
-    ui_camera_(createCamera(params["ui_view"])),
+    ui_camera_(createCamera(params["ui_view.camera"])),
     fov_(ui_camera_.getFov()),
     near_z_(ui_camera_.getNearClip()),
     far_z_(ui_camera_.getFarClip()),

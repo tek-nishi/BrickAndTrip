@@ -175,6 +175,13 @@ public:
                                      paused_ = false;
                                      entity_.cleanupField();
                                    });
+
+#ifdef DEBUG
+    connections_ += event_.connect("force-collapse",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     entity_.startStageCollapse();
+                                   });
+#endif
   }
 
   ~FieldController() {

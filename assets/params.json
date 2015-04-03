@@ -21,12 +21,14 @@
     "slow_speed": 0.25
   },
 
-  "ui_view": { 
-    "fov": 20,
-    "near_z": 0.05,
-    "far_z":  500,
+  "ui_view": {
+    "camera": {
+      "fov": 20,
+      "near_z": 0.05,
+      "far_z":  500,
     
-    "eye_point": [ 0, 0, 20 ],
+      "eye_point": [ 0, 0, 20 ]
+    },
 
     "lights": [
       {
@@ -44,18 +46,20 @@
   },
   
   "game_view": {
-    "fov": 30,
-    "near_z": 0.1,
-    "far_z":  500,
+    "camera": {
+      "fov": 30,
+      "near_z": 0.1,
+      "far_z":  500,
 
-    "eye_point": [ -7, 12, -8 ],
-    "interest_point": [ 0.5, 0.5, 0.5 ],
-    "target_point": [ 3, 1, 1 ],
-    "eye_distance": 15,
-    "eye_ry": -140,
-    "eye_rx": -40,
+      "eye_point": [ -7, 12, -8 ],
+      "interest_point": [ 0.5, 0.5, 0.5 ],
+      "target_point": [ 3, 1, 1 ],
+      "eye_distance": 15,
+      "eye_ry": -140,
+      "eye_rx": -40,
 
-    "camera_speed": 1,
+      "speed": 1
+    },
 
     "lights": [
       {

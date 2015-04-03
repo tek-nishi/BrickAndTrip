@@ -266,6 +266,9 @@ public:
   void fallFromStage() {
     can_pick_ = false;
     on_stage_ = false;
+
+    // idle中の動作を中断
+    move_rotation_.stop();
     
     ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_ * cube_size_, 0));
     auto options = animation_timeline_->apply(&position_,

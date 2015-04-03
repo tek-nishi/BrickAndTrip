@@ -157,6 +157,11 @@ class ColoColoParadeApp : public AppNative {
     char chara = event.getChar();
     int  code  = event.getCode();
 
+    if (chara == 'd') {
+      controller_->event().signal("force-collapse", EventParam());
+    }
+
+    
     if (chara == 'R') {
       // Soft Reset
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
@@ -166,12 +171,12 @@ class ColoColoParadeApp : public AppNative {
       resize();
     }
     
-    if (code == KeyEvent::KEY_LSHIFT) {
+    if (code == KeyEvent::KEY_LCTRL) {
       // 倍速モード
       forward_speed_change_ = true;
       forward_speed_        = fast_speed_;
     }
-    else if (code == KeyEvent::KEY_RSHIFT) {
+    else if (code == KeyEvent::KEY_LALT) {
       // 低速モード
       forward_speed_change_ = true;
       forward_speed_        = slow_speed_;
@@ -186,7 +191,7 @@ class ColoColoParadeApp : public AppNative {
     char chara = event.getChar();
     int  code  = event.getCode();
 
-    if ((code == KeyEvent::KEY_LSHIFT) || (code == KeyEvent::KEY_RSHIFT)) {
+    if ((code == KeyEvent::KEY_LCTRL) || (code == KeyEvent::KEY_LALT)) {
       // 低・倍速モード解除
       forward_speed_change_ = false;
     }
