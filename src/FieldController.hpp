@@ -181,6 +181,11 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.startStageCollapse();
                                    });
+    
+    connections_ += event_.connect("stop-build-and-collapse",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     entity_.stopBuildAndCollapse();
+                                   });
 #endif
   }
 
