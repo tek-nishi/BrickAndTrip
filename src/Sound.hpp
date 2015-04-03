@@ -54,10 +54,14 @@ class Sound {
 
   // 停止用
   std::map<std::string, ci::audio::SamplePlayerNodeRef> category_node_;
+
+  bool silent_;
   
   
 public:
-  Sound(const ci::JsonTree& params) {
+  Sound(const ci::JsonTree& params) :
+    silent_(false)
+  {
     auto* ctx = ci::audio::Context::master();
     ctx->enable();
 
@@ -119,6 +123,8 @@ public:
   
 
   void play(const std::string& name, const float gain = 1.0f) {
+    if (silent_) return;
+    
     auto* ctx = ci::audio::Context::master();
 
     // TIPS:文字列による分岐をstd::mapとラムダ式で実装
@@ -183,6 +189,14 @@ public:
     for (auto& it : category_node_) {
       it.second->stop();
     }
+  }
+
+  
+  void setSilent(const bool value) {
+    silent_ = value;
+
+    // 無音モードになった瞬間から音を止める
+    if (value) stopAll();
   }
 
 };

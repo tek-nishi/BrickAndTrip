@@ -75,8 +75,14 @@ public:
                                   [this](const Connection& connection, EventParam& param) {
                                     setSoundIcon(records_.toggleSound());
                                     records_.write(params_["game.records"].getValue<std::string>());
+
+                                    EventParam p = {
+                                      { "silent", !records_.isSound() },
+                                    };
+                                    event_.signal("sound-silent", p);
                                   });
 
+    
     setSoundIcon(records_.isSound());
     
     event_.signal("sound-title-start", EventParam());

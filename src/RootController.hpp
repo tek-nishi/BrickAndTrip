@@ -142,8 +142,15 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      sound_.play("agree");
                    });
+
+    event_.connect("sound-silent",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.setSilent(boost::any_cast<bool>(param["silent"]));
+                   });
+
     
     records_.load(params["game.records"].getValue<std::string>());
+    sound_.setSilent(!records_.isSound());
       
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
