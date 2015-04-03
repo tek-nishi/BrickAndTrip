@@ -32,6 +32,7 @@ private:
   int    total_play_num_;
   double total_play_time_;
   int    total_tumble_num_;
+  int    total_clear_num_;
 
   int current_stage_;
   double current_game_start_time_;
@@ -44,6 +45,7 @@ public:
     total_play_num_(0),
     total_play_time_(0.0),
     total_tumble_num_(0),
+    total_clear_num_(0),
     current_stage_(0)
   {
     current_game.play_time  = 0.0;
@@ -98,14 +100,15 @@ public:
     // TIPS:GameOverでも記録が伸びる親切設計
     total_play_time_  += current_game.play_time;
     total_tumble_num_ += current_game.tumble_num;
+    total_play_num_   += 1;
   }
+
+  // クリア回数
+  void cleardAllStage() {
+    total_clear_num_ += 1;
+  }
+
   
-
-  void countupPlayNum() {
-    total_play_num_ += 1;
-  }
-
-
   void load(const std::string& path) {
     auto full_path = getDocumentPath() / path;
     if (!ci::fs::is_regular_file(full_path)) return;
@@ -118,6 +121,7 @@ public:
     total_play_num_   = record["records.total_play_num"].getValue<int>();
     total_play_time_  = record["records.total_play_time"].getValue<double>();
     total_tumble_num_ = record["records.total_tumble_num"].getValue<int>();
+    total_clear_num_  = record["records.total_clear_num"].getValue<int>();
 
     if (record.hasChild("records.stage")) {
       const auto& stage = record["records.stage"];
@@ -137,7 +141,8 @@ public:
 
     record.addChild(ci::JsonTree("total_play_num", total_play_num_))
       .addChild(ci::JsonTree("total_play_time", total_play_time_))
-      .addChild(ci::JsonTree("total_tumble_num", total_tumble_num_));
+      .addChild(ci::JsonTree("total_tumble_num", total_tumble_num_))
+      .addChild(ci::JsonTree("total_clear_num", total_clear_num_));
 
     if (!stage_records_.empty()) {
       ci::JsonTree stage = ci::JsonTree::makeArray("stage");

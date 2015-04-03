@@ -30,6 +30,7 @@ class FieldEntity {
 
   float finish_rate_;
 
+  int total_stage_num_;
   int stage_num_;
   Stage stage_;
   
@@ -77,6 +78,7 @@ public:
     first_started_pickable_(false),
     first_fallen_pickable_(false),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
+    total_stage_num_(params["game.total_stage_num"].getValue<int>()),
     mode_(NONE),
     event_timeline_(ci::Timeline::create())
   {
@@ -221,14 +223,22 @@ public:
     stage_.collapseStage(finish_line_z_ - 1, finish_rate_);
 
     enableRecordPlay(false);
+
     records_.storeStageRecord(event_timeline_->getCurrentTime());
+    bool all_cleard = stage_num_ == total_stage_num_;
+    if (all_cleard) {
+      records_.cleardAllStage();
+    }
     writeRecord(params_["game.records"].getValue<std::string>());
 
     {
+      // 次のステージ or 全ステージクリア
       EventParam params = {
         { "clear_time", records_.current_game.play_time },
         { "tumble_num", records_.current_game.tumble_num },
+        { "all_cleared", all_cleard },
       };
+
       event_.signal("begin-stageclear", params);
     }
     

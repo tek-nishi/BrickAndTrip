@@ -58,6 +58,12 @@ public:
       auto& widget = view_->getWidget("tumble-result");
       widget.getCubeText().setText(str.str());
     }
+
+    // 全ステージクリア用設定
+    if (boost::any_cast<bool>(result.at("all_cleared"))) {
+      view_->getWidget("try").setDisp(false);
+      view_->getWidget("next").setDisp(false);
+    }
     
     view_->startWidgetTween("tween-in");
 
