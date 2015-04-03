@@ -158,7 +158,88 @@
     "origin": "bottom-right",
     "layout": "bottom-right",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-touch-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1.25, 1.25, 1.25 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 0.25, 0.25, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 0.1, 0.1, 0.1 ]
+          }
+        ]
+      },
+
+      "tween-touch-end": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutBack",
+            "duration": 0.5,
+            "start": [ 1.25, 1.25, 1.25 ],
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 0.5,
+            "start": 0,
+            "end": -180
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.5,
+            "start": [ 0.25, 0.25, 1 ],
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.5,
+            "start": [ 1, 1, 1 ],
+            "end": [ 0.1, 0.1, 0.1 ]
+          }
+        ]
+      }
+    }
   },
   
   {

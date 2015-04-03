@@ -20,7 +20,7 @@
 
     "text": "ＰＬＡＹＳ",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0, 2, 0 ],
     "origin": "center-right",
@@ -34,7 +34,7 @@
 
     "text": "0000",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0.15, 2, 0 ],
     "origin": "center-left",
@@ -49,7 +49,7 @@
 
     "text": "ＰＬＡＹＴＩＭＥ",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0, 1.5, 0 ],
     "origin": "center-right",
@@ -63,7 +63,7 @@
 
     "text": "00:00:00.0",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0.15, 1.5, 0 ],
     "origin": "center-left",
@@ -78,7 +78,7 @@
 
     "text": "ＴＵＭＢＬＥＳ",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0, 1, 0 ],
     "origin": "center-right",
@@ -92,7 +92,7 @@
 
     "text": "00000",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0.15, 1, 0 ],
     "origin": "center-left",
@@ -107,7 +107,7 @@
 
     "text": "ＣＬＥＡＲ",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0, 0.5, 0 ],
     "origin": "center-right",
@@ -121,7 +121,7 @@
 
     "text": "0000",
     "size": 0.3,
-    "spacing": 0.003,
+    "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0.15, 0.5, 0 ],
     "origin": "center-left",
