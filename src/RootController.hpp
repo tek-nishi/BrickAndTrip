@@ -15,6 +15,7 @@
 #include "StageclearController.hpp"
 #include "ProgressController.hpp"
 #include "PauseController.hpp"
+#include "RecordsController.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "Sound.hpp"
@@ -88,6 +89,7 @@ public:
 
     event_.connect("begin-records",
                    [this](const Connection& connection, EventParam& param) {
+                     addController<RecordsController>(params_, timeline_, event_, view_creator_.create("ui_records.json"));
                    });
 
     event_.connect("begin-credits",

@@ -156,7 +156,7 @@
       "name": "title",
       "type": "buffer",
       "category": "se",
-      "path": "title.wav",
+      "path": "title.mp4",
       "gain": 1,
       "loop": false
     },
@@ -164,7 +164,7 @@
       "name": "cube-moved",
       "type": "buffer",
       "category": "cube-se",
-      "path": "cube_rotate.wav",
+      "path": "cube_rotate.mp4",
       "gain": 1,
       "loop": false
     },
@@ -172,7 +172,7 @@
       "name": "start",
       "type": "buffer",
       "category": "stage-se",
-      "path": "start.wav",
+      "path": "start.mp4",
       "gain": 1,
       "loop": false
     },
@@ -180,7 +180,7 @@
       "name": "agree",
       "type": "buffer",
       "category": "ui-se",
-      "path": "agree.wav",
+      "path": "agree.mp4",
       "gain": 1,
       "loop": false
     }
