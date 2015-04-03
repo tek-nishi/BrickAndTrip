@@ -137,7 +137,6 @@ public:
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_);
     addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
-
   }
 
 

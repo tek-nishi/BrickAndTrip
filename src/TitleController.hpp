@@ -56,6 +56,18 @@ public:
                                     connection.disconnect();
                                   });
 
+    connections_ += event.connect("records-start",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->startWidgetTween("tween-out");
+
+                                    // 時間差でControllerを破棄
+                                    event_timeline_->add([this]() {
+                                        event_.signal("begin-records", EventParam());
+                                        active_ = false;
+                                      },
+                                      event_timeline_->getCurrentTime() + 1.5f);
+                                  });
+
     event_.signal("sound-title-start", EventParam());
   }
 

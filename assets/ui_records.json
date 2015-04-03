@@ -1,0 +1,151 @@
+[
+  {
+    "name": "records",
+    "disp": true,
+
+    "text": "ＲＥＣＯＲＤＳ",
+    "size": 0.6,
+    "spacing": 0.06,
+    "chara_split": 1,
+    "pos": [ 0, -0.25, 0 ],
+    "origin": "top-center",
+    "layout": "top-center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ]
+  },
+
+  {
+    "name": "play",
+    "disp": true,
+
+    "text": "ＰＬＡＹＳ",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0, 2, 0 ],
+    "origin": "center-right",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+  {
+    "name": "total_play",
+    "disp": true,
+
+    "text": "0000",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0.15, 2, 0 ],
+    "origin": "center-left",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+
+  {
+    "name": "time",
+    "disp": true,
+
+    "text": "ＰＬＡＹＴＩＭＥ",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0, 1.5, 0 ],
+    "origin": "center-right",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+  {
+    "name": "total_time",
+    "disp": true,
+
+    "text": "0:00:00.0",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0.15, 1.5, 0 ],
+    "origin": "center-left",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+
+  {
+    "name": "tumble",
+    "disp": true,
+
+    "text": "ＴＵＭＢＬＥＳ",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0, 1, 0 ],
+    "origin": "center-right",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+  {
+    "name": "total_tumble",
+    "disp": true,
+
+    "text": "00000",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0.15, 1, 0 ],
+    "origin": "center-left",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+
+  {
+    "name": "clear",
+    "disp": true,
+
+    "text": "ＣＬＥＡＲ",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0, 0.5, 0 ],
+    "origin": "center-right",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+  {
+    "name": "total_clear",
+    "disp": true,
+
+    "text": "0000",
+    "size": 0.3,
+    "spacing": 0.003,
+    "chara_split": 1,
+    "pos": [ 0.15, 0.5, 0 ],
+    "origin": "center-left",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+  
+  {
+    "name": "agree",
+    "disp": true,
+    "active": true,
+
+    "text": "õ",
+    "font": "icon",
+    "size": 1,
+    "spacing": 0.1,
+    "chara_split": 1,
+    "pos": [ 0, -2, 0 ],
+    "origin": "top-center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0, 0, 1 ],
+
+    "event_message": "records-agree"
+  }
+]

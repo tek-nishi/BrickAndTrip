@@ -43,7 +43,7 @@ public:
     
     view_->startWidgetTween("tween-in");
 
-    connections_ += event.connect("pickable-moved",
+    connections_ += event.connect("records-agree",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->startWidgetTween("tween-out");
 
