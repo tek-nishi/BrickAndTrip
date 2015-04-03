@@ -108,7 +108,7 @@ public:
 
     event_.connect("begin-title",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<TitleController>(params_, timeline_, event_, view_creator_.create("ui_title.json"));
+                     addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
                    });
 
     
@@ -147,7 +147,7 @@ public:
       
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
-    addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
+    addController<TitleController>(params, timeline_, event_, records_, view_creator_.create("ui_title.json"));
   }
 
 

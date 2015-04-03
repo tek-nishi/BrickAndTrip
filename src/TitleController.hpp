@@ -14,6 +14,7 @@ namespace ngs {
 class TitleController : public ControllerBase {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
+  Records& records_;
 
   std::unique_ptr<UIView> view_;
   
@@ -28,9 +29,11 @@ public:
   TitleController(ci::JsonTree& params,
                   ci::TimelineRef timeline,
                   Event<EventParam>& event,
+                  Records& records,
                   std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
+    records_(records),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -68,6 +71,14 @@ public:
                                       event_timeline_->getCurrentTime() + 1.5f);
                                   });
 
+    connections_ += event.connect("sound-onoff",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    setSoundIcon(records_.toggleSound());
+                                    records_.write(params_["game.records"].getValue<std::string>());
+                                  });
+
+    setSoundIcon(records_.isSound());
+    
     event_.signal("sound-title-start", EventParam());
   }
 
@@ -94,6 +105,12 @@ private:
     view_->draw(fonts);
   }
 
+
+  void setSoundIcon(const bool is_sound) {
+    view_->getWidget("sound").getCubeText().setText(is_sound ? "z"
+                                                             : "x");
+  }
+  
 };
 
 }

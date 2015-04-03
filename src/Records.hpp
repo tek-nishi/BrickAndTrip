@@ -38,6 +38,8 @@ private:
   double current_game_start_time_;
 
   std::vector<StageRecord> stage_records_;
+
+  bool sound_on_;
   
 
 public:
@@ -46,7 +48,8 @@ public:
     total_play_time_(0.0),
     total_tumble_num_(0),
     total_clear_num_(0),
-    current_stage_(0)
+    current_stage_(0),
+    sound_on_(true)
   {
     current_game.play_time  = 0.0;
     current_game.tumble_num = 0;
@@ -122,6 +125,7 @@ public:
     total_play_time_  = record["records.total_play_time"].getValue<double>();
     total_tumble_num_ = record["records.total_tumble_num"].getValue<int>();
     total_clear_num_  = record["records.total_clear_num"].getValue<int>();
+    sound_on_         = record["records.sound_on"].getValue<bool>();
 
     if (record.hasChild("records.stage")) {
       const auto& stage = record["records.stage"];
@@ -142,7 +146,8 @@ public:
     record.addChild(ci::JsonTree("total_play_num", total_play_num_))
       .addChild(ci::JsonTree("total_play_time", total_play_time_))
       .addChild(ci::JsonTree("total_tumble_num", total_tumble_num_))
-      .addChild(ci::JsonTree("total_clear_num", total_clear_num_));
+      .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
+      .addChild(ci::JsonTree("sound_on", sound_on_));
 
     if (!stage_records_.empty()) {
       ci::JsonTree stage = ci::JsonTree::makeArray("stage");
@@ -168,6 +173,14 @@ public:
   double getTotalPlayTime() const { return total_play_time_; }
   int getTotalTumbleNum() const { return total_tumble_num_; }
   int getTotalClearNum() const { return total_clear_num_; }
+
+  
+  bool isSound() const { return sound_on_; }
+  
+  bool toggleSound() {
+    sound_on_ = !sound_on_;
+    return sound_on_;
+  }
   
 };
 
