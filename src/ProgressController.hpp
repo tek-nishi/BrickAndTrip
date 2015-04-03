@@ -73,6 +73,24 @@ public:
                                     active_ = false;
                                   });
 
+    connections_ += event.connect("begin-stageclear",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    bool all_cleard = boost::any_cast<bool>(param.at("all_cleared"));
+                                    if (all_cleard) {
+                                      active_ = false;
+                                    }
+                                    else {
+                                      view_->setDisp(false);
+                                      view_->setActive(false);
+                                    }
+                                  });
+
+    connections_ += event.connect("stageclear-agree",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setDisp(true);
+                                    view_->setActive(true);
+                                  });
+
     connections_ += event_.connect("first-fallen-pickable",
                                   [this](const Connection& connection, EventParam& param) {
                                      view_->setActive(false);

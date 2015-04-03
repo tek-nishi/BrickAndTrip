@@ -106,6 +106,12 @@ public:
                                      }
                                    });
 
+    connections_ += event_.connect("all-stageclear-agree",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "all-stageclear-agree" << std::endl;
+                                     entity_.cleanupField();
+                                   });
+
 
     connections_ += event_.connect("build-finish-line",
                                    [this](const Connection&, EventParam& param) {
@@ -154,6 +160,12 @@ public:
                                      DOUT << "stage-all-collapsed" << std::endl;
                                      entity_.restart();
                                      setup();
+
+                                     // 全クリの時はタイトル起動
+                                     bool all_cleard = boost::any_cast<bool>(param.at("all_cleard"));
+                                     if (all_cleard) {
+                                       event_.signal("begin-title", EventParam());
+                                     }
                                    });
 
     connections_ += event_.connect("pause-start",

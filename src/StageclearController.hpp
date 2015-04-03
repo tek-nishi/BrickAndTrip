@@ -60,15 +60,17 @@ public:
     }
 
     // 全ステージクリア用設定
-    if (boost::any_cast<bool>(result.at("all_cleared"))) {
+    bool all_cleard = boost::any_cast<bool>(result.at("all_cleared"));
+    if (all_cleard) {
       view_->getWidget("try").setDisp(false);
       view_->getWidget("next").setDisp(false);
     }
     
     view_->startWidgetTween("tween-in");
 
-    event_timeline_->add([this]() {
-        event_.signal("stageclear-agree", EventParam());
+    event_timeline_->add([this, all_cleard]() {
+        event_.signal(all_cleard ? "all-stageclear-agree"
+                                 : "stageclear-agree", EventParam());
         active_ = false;
       },
       event_timeline_->getCurrentTime() + 3.0f);

@@ -60,6 +60,7 @@ class FieldEntity {
   };
   int mode_;
 
+  bool all_cleard_;
   
   ci::TimelineRef event_timeline_;
 
@@ -80,6 +81,7 @@ public:
     finish_rate_(params["game.finish_rate"].getValue<float>()),
     total_stage_num_(params["game.total_stage_num"].getValue<int>()),
     mode_(NONE),
+    all_cleard_(false),
     event_timeline_(ci::Timeline::create())
   {
     const auto& colors = params["game.cube_stage_color"];
@@ -150,7 +152,11 @@ public:
       // gameover後、stage崩壊の完了判定
       if (stage_.isFinishedCollapse()) {
         mode_ = NONE;
-        event_.signal("stage-all-collapsed", EventParam());
+
+        EventParam params = {
+          { "all_cleard", all_cleard_ },
+        };
+        event_.signal("stage-all-collapsed", params);
       }
       break;
     }
@@ -178,6 +184,9 @@ public:
     for (int i = 0; i < entry_packable_num_; ++i) {
       entryPickableCube(entry_z, delay);
     }
+    
+    stage_num_  = 0;
+    all_cleard_ = false;
   }
 
   // Stageの全Buildを始める
@@ -225,8 +234,9 @@ public:
     enableRecordPlay(false);
 
     records_.storeStageRecord(event_timeline_->getCurrentTime());
-    bool all_cleard = stage_num_ == total_stage_num_;
-    if (all_cleard) {
+    // 全ステージクリア判定
+    all_cleard_ = stage_num_ == total_stage_num_;
+    if (all_cleard_) {
       records_.cleardAllStage();
     }
     writeRecord(params_["game.records"].getValue<std::string>());
@@ -236,7 +246,7 @@ public:
       EventParam params = {
         { "clear_time", records_.current_game.play_time },
         { "tumble_num", records_.current_game.tumble_num },
-        { "all_cleared", all_cleard },
+        { "all_cleared", all_cleard_ },
       };
 
       event_.signal("begin-stageclear", params);
@@ -284,8 +294,7 @@ public:
   
   void restart() {
     stage_.restart();
-    stage_num_ = 0;
-    mode_      = NONE;
+    mode_ = NONE;
   }
 
 

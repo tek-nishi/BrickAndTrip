@@ -93,6 +93,11 @@ public:
     event_.connect("begin-credits",
                    [this](const Connection& connection, EventParam& param) {
                    });
+
+    event_.connect("begin-title",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<TitleController>(params_, timeline_, event_, view_creator_.create("ui_title.json"));
+                   });
   }
 
 

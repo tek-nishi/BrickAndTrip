@@ -103,7 +103,7 @@
 
     "finish_rate": 0.1,
 
-    "total_stage_num": 1,
+    "total_stage_num": 2,
     "stage": {
       "build_speed": 1,
       "collapse_speed": 1,
