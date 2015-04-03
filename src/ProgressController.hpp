@@ -41,8 +41,6 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
-    view_->startWidgetTween("tween-in");
-
     connections_ += event.connect("pause-start",
                                   [this](const Connection& connection, EventParam& param) {
                                     // 時間差tween
@@ -108,6 +106,8 @@ public:
                                      auto& widget = view_->getWidget("play-time");
                                      widget.getCubeText().setText(toFormatedString(play_time));
                                    });
+
+    view_->startWidgetTween("tween-in");
   }
 
   ~ProgressController() {

@@ -42,6 +42,27 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
+    
+#if 0
+    connections_ += event.connect("stageclear-agree",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    // 時間差tween
+                                    event_timeline_->add([this]() {
+                                        view_->startWidgetTween("tween-out");
+                                      },
+                                      event_timeline_->getCurrentTime() + 0.5f);
+                                    
+                                    // 時間差でControllerを破棄
+                                    event_timeline_->add([this]() {
+                                        
+                                        active_ = false;
+                                      },
+                                      event_timeline_->getCurrentTime() + 1.0f);
+                                    
+                                    connection.disconnect();
+                                  });
+#endif
+
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
@@ -74,27 +95,6 @@ public:
         active_ = false;
       },
       event_timeline_->getCurrentTime() + 3.0f);
-
-    
-#if 0
-    connections_ += event.connect("stageclear-agree",
-                                  [this](const Connection& connection, EventParam& param) {
-                                    // 時間差tween
-                                    event_timeline_->add([this]() {
-                                        view_->startWidgetTween("tween-out");
-                                      },
-                                      event_timeline_->getCurrentTime() + 0.5f);
-                                    
-                                    // 時間差でControllerを破棄
-                                    event_timeline_->add([this]() {
-                                        
-                                        active_ = false;
-                                      },
-                                      event_timeline_->getCurrentTime() + 1.0f);
-                                    
-                                    connection.disconnect();
-                                  });
-#endif
   }
 
   ~StageclearController() {

@@ -17,6 +17,7 @@
 #include "PauseController.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
+#include "Sound.hpp"
 // #include "TestPickController.hpp"
 
 
@@ -39,6 +40,8 @@ class RootController : public ControllerBase {
   Autolayout autolayout_;
   UIViewCreator view_creator_;
 
+  Sound sound_;
+  
   ci::Color background_;
   
   using ControllerPtr = std::unique_ptr<ControllerBase>;
@@ -60,12 +63,9 @@ public:
     autolayout_(ui_camera_),
     touch_event_(touch_event),
     view_creator_(timeline, ui_camera_, ui_lights_, autolayout_, event_, touch_event),
+    sound_(params["sounds"]),
     background_(Json::getColor<float>(params["app.background"]))
   {
-    // addController<TestPickController>(params, touch_event_, event_);
-    addController<FieldController>(params, touch_event_, event_);
-    addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
-
     event_.connect("begin-progress",
                    [this](const Connection& connection, EventParam& param) {
                      addController<ProgressController>(params_, timeline_, event_, view_creator_.create("ui_progress.json"));
@@ -98,6 +98,44 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      addController<TitleController>(params_, timeline_, event_, view_creator_.create("ui_title.json"));
                    });
+
+    
+    event_.connect("sound-title-start",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.play("title");
+                   });
+
+    event_.connect("pickable-moved",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.play("cube-moved");
+                   });
+    
+    event_.connect("startline-will-open",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.play("start");
+                   });
+
+    
+    event_.connect("pause-start",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.play("agree");
+                   });
+  
+    event_.connect("pause-cancel",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.play("agree");
+                   });
+
+    event_.connect("pause-abort",
+                   [this](const Connection& connection, EventParam& param) {
+                     sound_.play("agree");
+                   });
+      
+
+    // addController<TestPickController>(params, touch_event_, event_);
+    addController<FieldController>(params, touch_event_, event_);
+    addController<TitleController>(params, timeline_, event_, view_creator_.create("ui_title.json"));
+
   }
 
 

@@ -219,6 +219,10 @@ public:
       option.delay(open_delay_);
     }
 
+    event_timeline_->add([this]() {
+        event_.signal("startline-will-open", EventParam());
+      }, event_timeline_->getCurrentTime() + open_delay_);
+    
     event_timeline_->add([this, iz]() {
         // コンテナへの参照が無効になっている場合があるので、関数経由で取得
         for (auto& cube : active_cubes_[iz]) {

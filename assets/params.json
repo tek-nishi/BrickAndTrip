@@ -148,5 +148,41 @@
     },
 
     "records": "records.json"
-  }
+  },
+
+  
+  "sounds": [
+    {
+      "name": "title",
+      "type": "buffer",
+      "category": "se",
+      "path": "title.wav",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "cube-moved",
+      "type": "buffer",
+      "category": "cube-se",
+      "path": "cube_rotate.wav",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "start",
+      "type": "buffer",
+      "category": "stage-se",
+      "path": "start.wav",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "agree",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "agree.wav",
+      "gain": 1,
+      "loop": false
+    }
+  ]
 }

@@ -41,8 +41,6 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
-    view_->startWidgetTween("tween-in");
-
     connections_ += event.connect("gameover-agree",
                                   [this](const Connection& connection, EventParam& param) {
                                     // 時間差tween
@@ -60,6 +58,8 @@ public:
                                     
                                     connection.disconnect();
                                   });
+
+    view_->startWidgetTween("tween-in");
   }
 
   ~GameoverController() {

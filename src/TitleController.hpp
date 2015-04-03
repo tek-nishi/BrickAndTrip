@@ -55,6 +55,8 @@ public:
                                     
                                     connection.disconnect();
                                   });
+
+    event_.signal("sound-title-start", EventParam());
   }
 
   ~TitleController() {

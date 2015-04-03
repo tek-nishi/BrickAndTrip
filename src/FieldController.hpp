@@ -47,8 +47,6 @@ public:
     stage_cleard_(false),
     stageclear_agree_(false)
   {
-    setup();
-    
     connections_ += event_.connect("move-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
@@ -199,6 +197,8 @@ public:
                                      entity_.stopBuildAndCollapse();
                                    });
 #endif
+
+    setup();
   }
 
   ~FieldController() {
@@ -233,9 +233,6 @@ private:
 
   
   void setup() {
-    view_.enableTouchInput();
-    entity_.setupStartStage();
-
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.startStageBuild();
@@ -246,6 +243,9 @@ private:
                                        
                                      connection.disconnect();
                                    });
+
+    view_.enableTouchInput();
+    entity_.setupStartStage();
   }
 
   void startNextStage() {
