@@ -246,6 +246,7 @@ private:
                                    });
 
     view_.enableTouchInput();
+    view_.resetCamera();
     entity_.setupStartStage();
   }
 

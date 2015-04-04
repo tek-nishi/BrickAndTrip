@@ -239,6 +239,11 @@ public:
   }
 
   
+  void resetCamera() {
+    new_target_point_ = Json::getVec3<float>(params_["game_view.camera.target_point"]);
+  }
+  
+  
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
     if (!touch_input_) return;
