@@ -109,6 +109,12 @@ public:
   
   CubeText& getCubeText() { return text_; }
 
+  void setText(const std::string& text) {
+    text_.setText(text);
+    layout_->resizeWidget(text_.textSize());
+  }
+  
+
   bool isDisp() const { return disp_; }
   void setDisp(const bool value) { disp_ = value; }
   

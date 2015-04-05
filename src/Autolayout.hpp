@@ -65,6 +65,7 @@ public:
     ci::Vec3f pos_;
     ci::Vec3f size_;
 
+    ci::Vec3f layout_pos_;
     ci::Vec3f layouted_pos_;
 
     
@@ -74,6 +75,7 @@ public:
       layout_(layout),
       pos_(pos),
       size_(size),
+      layout_pos_(pos_),
       layouted_pos_(pos_)
     { }
 
@@ -130,6 +132,8 @@ public:
         pos.y += world_rect.second.y;
         break;
       }
+
+      layout_pos_ = pos;
         
       switch (origin_) {
       case Type::TOP_LEFT:
@@ -173,6 +177,55 @@ public:
         break;
       }
 
+      layouted_pos_ = pos;
+    }
+
+    void resizeWidget(const ci::Vec3f& size) {
+      size_ = size;
+      auto pos = layout_pos_;
+
+      switch (origin_) {
+      case Type::TOP_LEFT:
+        pos.y -= size_.y;
+        break;
+
+      case Type::TOP_CENTER:
+        pos.x -= size_.x / 2.0f;
+        pos.y -= size_.y;
+        break;
+        
+      case Type::TOP_RIGHT:
+        pos.x -= size_.x;
+        pos.y -= size_.y;
+        break;
+
+      case Type::CENTER_LEFT:
+        pos.y -= size_.y / 2.0f;
+        break;
+
+      case Type::CENTER:
+        pos.x -= size_.x / 2.0f;
+        pos.y -= size_.y / 2.0f;
+        break;
+
+      case Type::CENTER_RIGHT:
+        pos.x -= size_.x;
+        pos.y -= size_.y / 2.0f;
+        break;
+
+      case Type::BOTTOM_LEFT:
+        // do nothing.
+        break;
+
+      case Type::BOTTOM_CENTER:
+        pos.x -= size_.x / 2.0f;
+        break;
+          
+      case Type::BOTTOM_RIGHT:
+        pos.x -= size_.x;
+        break;
+      }
+      
       layouted_pos_ = pos;
     }
   };

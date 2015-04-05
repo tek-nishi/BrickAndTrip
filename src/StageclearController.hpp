@@ -66,8 +66,7 @@ public:
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-      auto& widget = view_->getWidget("time-result");
-      widget.getCubeText().setText(toFormatedString(clear_time));
+      view_->getWidget("time-result").getCubeText().setText(toFormatedString(clear_time));
     }
 
     {
@@ -76,8 +75,19 @@ public:
       std::ostringstream str;
       str << std::setw(5) << std::setfill('0') << tumble_num;
 
-      auto& widget = view_->getWidget("tumble-result");
-      widget.getCubeText().setText(str.str());
+      view_->getWidget("tumble-result").getCubeText().setText(str.str());
+    }
+    
+    {
+      auto item_num = boost::any_cast<int>(result.at("item_num"));
+      auto& widget = view_->getWidget("item-result");
+      if (!item_num) {
+        widget.setDisp(false);
+      }
+      else {
+        std::string text(item_num, ' ');
+        widget.setText(text);
+      }
     }
 
     // 全ステージクリア用設定
