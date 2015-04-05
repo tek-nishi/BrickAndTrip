@@ -4,6 +4,9 @@
 // ステージ上に出現するCube
 //
 
+#include <set>
+#include "TweenUtil.hpp"
+
 
 namespace ngs {
 
@@ -102,7 +105,12 @@ public:
 
   void pickup() {
     on_stage_ = false;
-    active_   = false;
+    startTween("pickup_tween");
+
+    animation_timeline_->add([this]() {
+        active_ = false;
+      },
+      animation_timeline_->getCurrentTime() + params_["game.item.pickup_duration"].getValue<float>());
   }
 
   
@@ -128,7 +136,30 @@ public:
 
   
 private:
+  void startTween(const std::string& name) {
+    auto tween_params = params_["game.item." + name];
 
+    std::set<std::string> applyed_targets;
+    for (const auto& params : tween_params) {
+      std::map<std::string,
+               std::function<void (const ci::JsonTree&, const bool)> > tween_setup = {
+        { "position",
+          [this](const ci::JsonTree& params, const bool is_first) {
+            setVec3Tween(*animation_timeline_, position_, params, cube_size_, is_first);
+          }
+        },
+      };
+
+      const auto& target = params["target"].getValue<std::string>();
+      tween_setup[target](params, isFirstApply(target, applyed_targets));
+    }
+  }
+
+
+  static bool isFirstApply(const std::string& type, std::set<std::string>& apply) {
+    auto result = apply.insert(type);
+    return result.second;
+  }
   
 };
 

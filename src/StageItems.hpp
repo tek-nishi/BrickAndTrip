@@ -76,7 +76,6 @@ public:
   void entryItemCube(const int current_z) {
     for (const auto& entry : entry_items_) {
       if (entry.z == current_z) {
-        DOUT << "entry:" << current_z << std::endl;
         auto cube = ItemCubePtr(new ItemCube(params_, timeline_, event_, entry));
         items_.push_back(std::move(cube));
       }
@@ -103,6 +102,12 @@ public:
                            });
     assert(it != std::end(items_));
     (*it)->pickup();
+
+    // 演出上、signalは時間差で
+    event_timeline_->add([this]() {
+        event_.signal("pickuped-item", EventParam());
+      },
+      event_timeline_->getCurrentTime() + params_["game.item.pickup_delay"].getValue<float>());
   }
   
 
