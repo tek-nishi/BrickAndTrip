@@ -106,7 +106,14 @@ public:
     
     event_timeline_->add([this, speed_rate]() {
         buildOneLine();
-        event_.signal("build-one-line", EventParam());
+
+        {
+          // active_top_z_には次のzが入っている
+          EventParam params = {
+            { "active_top_z", active_top_z_ - 1 }
+          };
+          event_.signal("build-one-line", params);
+        }
 
         // active_top_z_には次のzが入っている
         if ((active_top_z_ - 1) == finish_line_z_) {
@@ -252,6 +259,8 @@ public:
     finish_line_z_ = z;
   }
   
+
+  int getTopZ() const { return top_z_; }
   
   int addCubes(const ci::JsonTree& stage_data,
                 const std::vector<ci::Color>& cube_color,
@@ -269,25 +278,27 @@ public:
       int z = iz + top_z_;
       for (const auto& p : row) {
         int y = p.getValue<int>();
-        ci::Vec3i block_pos(x, y, z);
-        ci::Vec3f pos = ci::Vec3f(x, y, z) * cube_size_;
-
-        auto color = cube_color[(x + z) & 1];
-        if (iz == last_iz) {
-          color *= line_color;
-        }
         
-        StageCube cube = {
-          pos,
-          ci::Quatf::identity(),
-          cube_size_,
-          block_pos,
-          color,
-          true, true
-        };
+        if (y >= 0) {
+          ci::Vec3i block_pos(x, y, z);
+          ci::Vec3f pos = ci::Vec3f(x, y, z) * cube_size_;
 
-        cube_row.push_back(std::move(cube));
+          auto color = cube_color[(x + z) & 1];
+          if (iz == last_iz) {
+            color *= line_color;
+          }
+        
+          StageCube cube = {
+            pos,
+            ci::Quatf::identity(),
+            cube_size_,
+            block_pos,
+            color,
+            true, true
+          };
 
+          cube_row.push_back(std::move(cube));
+        }
         x += 1;
       }
       cubes_.push_back(std::move(cube_row));
@@ -302,7 +313,7 @@ public:
 
   
   // 「この場所にはCubeが無い」も結果に含めるので、std::pairを利用
-  std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) {
+  std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) const {
     if (active_cubes_.empty()) {
       return std::make_pair(false, 0);
     }

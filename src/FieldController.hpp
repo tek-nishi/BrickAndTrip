@@ -112,6 +112,20 @@ public:
                                    });
 
 
+    connections_ += event_.connect("build-one-line",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "build-one-line" << std::endl;
+                                     int active_top_z = boost::any_cast<int>(param["active_top_z"]);
+                                     entity_.entryItemCubes(active_top_z);
+                                   });
+
+#if 0
+    connections_ += event_.connect("collapse-one-line",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "collapse-one-line" << std::endl;
+                                   });
+#endif
+
     connections_ += event_.connect("build-finish-line",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "build-finish-line" << std::endl;

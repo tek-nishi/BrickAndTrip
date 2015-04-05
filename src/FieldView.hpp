@@ -204,6 +204,7 @@ public:
     drawStageCubes(field.active_cubes);
     drawStageCubes(field.collapse_cubes);
     drawPickableCubes(field.pickable_cubes);
+    drawItemCubes(field.item_cubes);
 
     
     for (auto& light : lights_) {
@@ -512,6 +513,22 @@ private:
       ci::gl::color(0, 1, 0);
       ci::gl::drawStrokedCube(bbox);
 #endif
+    }
+  }
+
+  void drawItemCubes(const std::vector<std::unique_ptr<ItemCube> >& cubes) {
+    for (const auto& cube : cubes) {
+      if (!cube->isActive()) continue;
+
+      ci::gl::color(cube->color());
+      
+      ci::gl::pushModelView();
+      ci::gl::translate(cube->position());
+      ci::gl::rotate(cube->rotation());
+      
+      ci::gl::drawCube(ci::Vec3f::zero(), cube->size() * 0.5f);
+      
+      ci::gl::popModelView();
     }
   }
 

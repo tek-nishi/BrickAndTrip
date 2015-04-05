@@ -147,6 +147,19 @@
       "idle_delay": [ 2, 5 ]
     },
 
+    "item": {
+      "size": 0.5,
+      "color": [ 1, 1, 0.5 ],
+
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 10, 15 ],
+      
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
+    },
+
     "records": "records.json"
   },
 

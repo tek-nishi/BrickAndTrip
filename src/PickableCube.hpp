@@ -101,6 +101,10 @@ public:
     idle_angle_(ci::toRadians(params["game.pickable.idle_angle"].getValue<float>())),
     idle_delay_(Json::getVec2<float>(params["game.pickable.idle_delay"]))
   {
+    auto current_time = timeline->getCurrentTime();
+    animation_timeline_->setStartTime(current_time);
+    timeline->apply(animation_timeline_);
+
     position_ = ci::Vec3f(block_position_) * cube_size_;
     // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
     position_().y += cube_size_;
@@ -108,10 +112,6 @@ public:
     for (const auto& param : params["game.pickable.rotate_speed_rate"]) {
       rotate_speed_rate_.push_back(param.getValue<float>());
     }
-    
-    auto current_time = timeline->getCurrentTime();
-    animation_timeline_->setStartTime(current_time);
-    timeline->apply(animation_timeline_);
 
     // 登場演出
     auto entry_y = Json::getVec2<float>(params["game.pickable.entry_y"]);
@@ -297,14 +297,6 @@ public:
   const ci::Quatf& rotation() const { return rotation_(); }
 
   const ci::Vec3i& blockPosition() const { return block_position_; }
-#if 0
-  void blockPosition(const ci::Vec3i& pos) {
-    block_position_ = pos;
-    
-    position_ = ci::Vec3f(pos) * cube_size_;
-    position_().y += cube_size_;
-  }
-#endif
   
   float cubeSize() const { return cube_size_; }
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }

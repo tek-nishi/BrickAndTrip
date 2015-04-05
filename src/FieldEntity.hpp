@@ -14,6 +14,7 @@
 #include "Stage.hpp"
 #include "Field.hpp"
 #include "PickableCube.hpp"
+#include "StageItems.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
 
@@ -21,7 +22,7 @@
 namespace ngs {
 
 class FieldEntity {
-  const ci::JsonTree& params_;
+  ci::JsonTree& params_;
   ci::TimelineRef timeline_;
   Event<EventParam>& event_;
   Records& records_;
@@ -34,6 +35,8 @@ class FieldEntity {
   int total_stage_num_;
   int stage_num_;
   Stage stage_;
+
+  StageItems items_;
   
   // VS2013には暗黙のmoveコンストラクタが無いのでstd::unique_ptrで保持
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
@@ -66,7 +69,7 @@ class FieldEntity {
 
   
 public:
-  FieldEntity(const ci::JsonTree& params,
+  FieldEntity(ci::JsonTree& params,
               ci::TimelineRef timeline,
               Event<EventParam>& event,
               Records& records) :
@@ -77,6 +80,7 @@ public:
     cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_num_(0),
     stage_(params, timeline, event_),
+    items_(params, timeline, event_),
     record_play_(false),
     first_started_pickable_(false),
     first_fallen_pickable_(false),
@@ -114,6 +118,8 @@ public:
 
     decideEachPickableCubeFalling();
     decideEachPickableCubeMoving();
+
+    items_.update(stage_);
 
 #if 0
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
@@ -192,6 +198,7 @@ public:
   // Stageの全Buildを始める
   void startStageBuild() {
     stage_.openStartLine();
+    items_.clear();
     
     std::ostringstream path;
     // stage_num が 0 -> stage01.json 
@@ -343,6 +350,12 @@ public:
     }
   }
 
+
+  void entryItemCubes(const int active_z) {
+    items_.entryItemCube(active_z);
+  }
+
+  
   // プレイ中の情報を記録に取る
   void enableRecordPlay(const bool enable = true) {
     record_play_ = enable;
@@ -354,6 +367,7 @@ public:
       stage_.activeCubes(),
       stage_.collapseCubes(),
       pickable_cubes_,
+      items_.items()
     };
 
     return field;
@@ -393,10 +407,14 @@ private:
   
   std::pair<int, int> addCubeStage(const std::string& path) {
     auto stage = ci::JsonTree(ci::app::loadAsset(path));
+    int current_z = stage_.getTopZ();
+
     int top_z = stage_.addCubes(stage,
                                 cube_stage_color_, cube_line_color_);
 
     int entry_num = Json::getValue(stage, "pickable", 0);
+
+    items_.addItemCubes(stage, current_z);
 
     return std::make_pair(top_z, entry_num);
   }
