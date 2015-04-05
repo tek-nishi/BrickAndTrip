@@ -43,8 +43,6 @@ public:
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
-    
-    view_->startWidgetTween("tween-in");
 
     connections_ += event.connect("pickable-moved",
                                   [this](const Connection& connection, EventParam& param) {
@@ -98,7 +96,13 @@ public:
                                       event_timeline_->getCurrentTime() + 1.5f);
                                   });
 
+    if (records.getTotalPlayNum() == 0) {
+      auto& widget = view_->getWidget("records");
+      widget.setDisp(false);
+      widget.setActive(false);
+    }
     
+    view_->startWidgetTween("tween-in");
     
     event_.signal("field-input-start", EventParam());
     event_.signal("sound-title-start", EventParam());

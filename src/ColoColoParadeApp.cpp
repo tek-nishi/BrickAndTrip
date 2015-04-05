@@ -209,7 +209,10 @@ class ColoColoParadeApp : public AppNative {
   
 	void update() {
     double elapsed_seconds     = getElapsedSeconds();
-    double progressing_seconds = elapsed_seconds - elapsed_seconds_;
+
+    // 経過時間が大きな値になりすぎないよう調整
+    double progressing_seconds = std::min(elapsed_seconds - elapsed_seconds_,
+                                          1.0 / 15);
 
 #ifdef DEBUG
     if (pause_) progressing_seconds = 0.0;

@@ -204,8 +204,8 @@ public:
     options.finishFn([this]() {
         // 移動後に正確な位置を設定
         // FIXME:回転も正規化
-        // position_ = ci::Vec3f(block_position_) * cube_size_;
-        // position_().y += cube_size_;
+        position_ = ci::Vec3f(block_position_) * cube_size_;
+        position_().y += cube_size_;
         move_start_rotation_ = rotation_;
 
         EventParam params = {
