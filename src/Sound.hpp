@@ -55,12 +55,14 @@ class Sound {
   // 停止用
   std::map<std::string, ci::audio::SamplePlayerNodeRef> category_node_;
 
-  bool silent_;
+  bool buffer_silent_;
+  bool file_silent_;
   
   
 public:
   Sound(const ci::JsonTree& params) :
-    silent_(false)
+    buffer_silent_(false),
+    file_silent_(false)
   {
     auto* ctx = ci::audio::Context::master();
     ctx->enable();
@@ -123,15 +125,15 @@ public:
   
 
   void play(const std::string& name, const float gain = 1.0f) {
-    if (silent_) return;
-    
-    auto* ctx = ci::audio::Context::master();
-
     // TIPS:文字列による分岐をstd::mapとラムダ式で実装
     std::map<std::string,
-             std::function<ci::audio::NodeRef (const std::string&, const Object&, const float)> > assign = {
+             std::function<void (const std::string&, const Object&, const float)> > assign = {
       { "file",
         [this](const std::string& name, const Object& object, const float gain) {
+          if (file_silent_) return;
+
+          auto* ctx = ci::audio::Context::master();
+          
           auto& source = source_.at(name);
           auto& node = file_node_.at(object.category);
 
@@ -145,14 +147,16 @@ public:
 
           node.node->enable();
           
-          node.node >> node.gain;
-          
-          return node.gain;
+          node.node >> node.gain >> ctx->getOutput();
         }
       },
 
       { "buffer",
         [this](const std::string& name, const Object& object, const float gain) {
+          if (buffer_silent_) return;
+
+          auto* ctx = ci::audio::Context::master();
+
           auto& buffer = buffer_.at(name);
           auto& node = buffer_node_.at(object.category);
 
@@ -166,16 +170,14 @@ public:
 
           node.node->enable();
 
-          node.node >> node.gain;
-
-          return node.gain;
+          node.node >> node.gain >> ctx->getOutput();
         }
       }
     };
 
     const auto& object = objects_[name];
-    auto node = assign[object.type](name, object, gain);
-    node >> ctx->getOutput();
+    assign[object.type](name, object, gain);
+    // node >> ctx->getOutput();
   }
 
   void stop(const std::string& category) {
@@ -192,11 +194,26 @@ public:
   }
 
   
-  void setSilent(const bool value) {
-    silent_ = value;
+  void setBufferSilent(const bool value) {
+    buffer_silent_ = value;
 
     // 無音モードになった瞬間から音を止める
-    if (value) stopAll();
+    if (value) {
+      for (auto& it : buffer_node_) {
+        it.second.node->stop();
+      }
+    }
+  }
+
+  void setFileSilent(const bool value) {
+    file_silent_ = value;
+
+    // 無音モードになった瞬間から音を止める
+    if (value) {
+      for (auto& it : file_node_) {
+        it.second.node->stop();
+      }
+    }
   }
 
 };

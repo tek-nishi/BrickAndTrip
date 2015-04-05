@@ -46,12 +46,24 @@ public:
 
     connections_ += event.connect("se-change",
                                   [this](const Connection& connection, EventParam& param) {
-                                    setSoundIcon("se-setting", records_.toggleSeOn());
+                                    bool active = records_.toggleSeOn();
+                                    setSoundIcon("se-setting", active);
+                                    
+                                    EventParam p = {
+                                      { "silent", !active },
+                                    };
+                                    event_.signal("se-silent", p);
                                   });
 
     connections_ += event.connect("bgm-change",
                                   [this](const Connection& connection, EventParam& param) {
-                                    setSoundIcon("bgm-setting", records_.toggleBgmOn());
+                                    bool active = records_.toggleBgmOn();
+                                    setSoundIcon("bgm-setting", active);
+                                    
+                                    EventParam p = {
+                                      { "silent", !active },
+                                    };
+                                    event_.signal("bgm-silent", p);
                                   });
 
     connections_ += event.connect("settings-agree",
