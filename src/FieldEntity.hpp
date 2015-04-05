@@ -171,6 +171,7 @@ public:
       EventParam params = {
         { "play-time", records_.current_game.play_time },
         { "tumble-num", records_.current_game.tumble_num },
+        { "item-num", records_.current_game.item_num },
       };
       event_.signal("update-record", params);
     }
@@ -193,6 +194,8 @@ public:
     
     stage_num_  = 0;
     all_cleard_ = false;
+
+    records_.prepareGameRecord();
   }
 
   // Stageの全Buildを始める
@@ -254,6 +257,8 @@ public:
       EventParam params = {
         { "clear_time", records_.current_game.play_time },
         { "tumble_num", records_.current_game.tumble_num },
+        { "item_num", records_.current_game.item_num },
+        { "play_time", records_.getCurrentGamePlayTime() },
         { "all_cleared", all_cleard_ },
       };
 
@@ -355,6 +360,9 @@ public:
     items_.entryItemCube(active_z);
   }
 
+  void pickupedItemCube() {
+    records_.current_game.item_num += 1;
+  }
   
   // プレイ中の情報を記録に取る
   void enableRecordPlay(const bool enable = true) {

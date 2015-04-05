@@ -201,6 +201,12 @@ public:
                                      entity_.cleanupField();
                                    });
 
+    connections_ += event_.connect("pickuped-item",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     DOUT << "pickuped-item" << std::endl;
+                                     entity_.pickupedItemCube();
+                                   });
+    
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",
                                    [this](const Connection& connection, EventParam& param) {
