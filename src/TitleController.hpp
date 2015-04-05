@@ -62,6 +62,7 @@ public:
     connections_ += event.connect("records-start",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->startWidgetTween("tween-out");
+                                    event_.signal("field-input-stop", EventParam());
 
                                     // 時間差でControllerを破棄
                                     event_timeline_->add([this]() {
@@ -74,6 +75,7 @@ public:
     connections_ += event.connect("settings-start",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->startWidgetTween("tween-out");
+                                    event_.signal("field-input-stop", EventParam());
 
                                     // 時間差でControllerを破棄
                                     event_timeline_->add([this]() {
@@ -82,20 +84,23 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + 1.5f);
                                   });
-
-#if 0
-    connections_ += event.connect("sound-onoff",
-                                  [this](const Connection& connection, EventParam& param) {
-                                    setSoundIcon(records_.toggleSound());
-                                    records_.write(params_["game.records"].getValue<std::string>());
-
-                                    EventParam p = {
-                                      { "silent", !records_.isSound() },
-                                    };
-                                    event_.signal("sound-silent", p);
-                                  });
-#endif
     
+    connections_ += event.connect("credits-start",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->startWidgetTween("tween-out");
+                                    event_.signal("field-input-stop", EventParam());
+
+                                    // 時間差でControllerを破棄
+                                    event_timeline_->add([this]() {
+                                        event_.signal("begin-credits", EventParam());
+                                        active_ = false;
+                                      },
+                                      event_timeline_->getCurrentTime() + 1.5f);
+                                  });
+
+    
+    
+    event_.signal("field-input-start", EventParam());
     event_.signal("sound-title-start", EventParam());
   }
 

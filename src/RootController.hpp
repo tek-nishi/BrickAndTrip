@@ -17,6 +17,7 @@
 #include "PauseController.hpp"
 #include "RecordsController.hpp"
 #include "SettingsController.hpp"
+#include "CreditsController.hpp"
 #include "Records.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
@@ -106,6 +107,7 @@ public:
 
     event_.connect("begin-credits",
                    [this](const Connection& connection, EventParam& param) {
+                     addController<CreditsController>(params_, timeline_, event_, view_creator_.create("ui_credits.json"));
                    });
 
     event_.connect("begin-title",

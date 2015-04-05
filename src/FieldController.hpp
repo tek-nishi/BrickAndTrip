@@ -206,6 +206,18 @@ public:
                                      DOUT << "pickuped-item" << std::endl;
                                      entity_.pickupedItemCube();
                                    });
+
+    
+    connections_ += event_.connect("field-input-stop",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     view_.enableTouchInput(false);
+                                   });
+
+    connections_ += event_.connect("field-input-start",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     view_.enableTouchInput();
+                                   });
+
     
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",

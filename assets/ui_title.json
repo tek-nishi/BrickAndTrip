@@ -141,6 +141,25 @@
       }
     }
   },
+
+  {
+    "name": "credits",
+    "disp": true,
+    
+    "active": true,
+    "event_message": "credits-start",
+
+    "text": "=",
+    "font": "icon",
+    "size": 0.5,
+    "spacing": 0.05,
+    "chara_split": 1,
+    "pos": [ -0.5, 2.0, 0 ],
+    "origin": "bottom-right",
+    "layout": "bottom-right",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
   
   {
     "name": "records",
