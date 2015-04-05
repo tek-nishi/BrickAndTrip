@@ -100,7 +100,9 @@
   {
     "name": "agree",
     "disp": true,
+
     "active": true,
+    "event_message": "gameover-agree",
 
     "text": "õ",
     "font": "icon",
@@ -112,8 +114,6 @@
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
     "text_color": [ 0, 0, 1 ],
-
-    "event_message": "gameover-agree",
     
     "tween": {
       "tween-in": {

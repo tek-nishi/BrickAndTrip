@@ -102,6 +102,35 @@
   },
 
   {
+    "name": "item",
+    "disp": true,
+
+    "text": "ＩＴＥＭＳ",
+    "size": 0.3,
+    "spacing": 0.03,
+    "chara_split": 1,
+    "pos": [ 0, 0.5, 0 ],
+    "origin": "center-right",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+  {
+    "name": "total_item",
+    "disp": true,
+
+    "text": "00000",
+    "size": 0.3,
+    "spacing": 0.03,
+    "chara_split": 1,
+    "pos": [ 0.15, 0.5, 0 ],
+    "origin": "center-left",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ]
+  },
+
+  {
     "name": "clear",
     "disp": true,
 
@@ -109,7 +138,7 @@
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
-    "pos": [ 0, 0.5, 0 ],
+    "pos": [ 0, 0, 0 ],
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
@@ -123,7 +152,7 @@
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
-    "pos": [ 0.15, 0.5, 0 ],
+    "pos": [ 0.15, 0, 0 ],
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],

@@ -41,8 +41,6 @@ public:
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
-    
-    view_->startWidgetTween("tween-in");
 
     connections_ += event.connect("records-agree",
                                   [this](const Connection& connection, EventParam& param) {
@@ -50,6 +48,7 @@ public:
 
                                     // 時間差でControllerを破棄
                                     event_timeline_->add([this]() {
+                                        event_.signal("begin-title", EventParam());
                                         active_ = false;
                                       },
                                       event_timeline_->getCurrentTime() + 1.5f);
@@ -74,9 +73,16 @@ public:
     }
     
     {
+      auto total_item = boost::any_cast<int>(records.at("total_item"));
+      view_->getWidget("total_item").getCubeText().setText(toFormatedString(total_item, 5));
+    }
+    
+    {
       auto total_clear = boost::any_cast<int>(records.at("total_clear"));
       view_->getWidget("total_clear").getCubeText().setText(toFormatedString(total_clear, 4));
     }
+    
+    view_->startWidgetTween("tween-in");
   }
 
   ~RecordsController() {

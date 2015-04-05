@@ -243,13 +243,13 @@
   },
   
   {
-    "name": "sound",
+    "name": "settings",
     "disp": true,
     
     "active": true,
-    "event_message": "sound-onoff",
+    "event_message": "settings-start",
 
-    "text": "z",
+    "text": "^",
     "font": "icon",
     "size": 0.5,
     "spacing": 0.05,

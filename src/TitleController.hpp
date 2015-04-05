@@ -70,7 +70,20 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + 1.5f);
                                   });
+    
+    connections_ += event.connect("settings-start",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->startWidgetTween("tween-out");
 
+                                    // 時間差でControllerを破棄
+                                    event_timeline_->add([this]() {
+                                        event_.signal("begin-settings", EventParam());
+                                        active_ = false;
+                                      },
+                                      event_timeline_->getCurrentTime() + 1.5f);
+                                  });
+
+#if 0
     connections_ += event.connect("sound-onoff",
                                   [this](const Connection& connection, EventParam& param) {
                                     setSoundIcon(records_.toggleSound());
@@ -81,9 +94,7 @@ public:
                                     };
                                     event_.signal("sound-silent", p);
                                   });
-
-    
-    setSoundIcon(records_.isSound());
+#endif
     
     event_.signal("sound-title-start", EventParam());
   }
@@ -109,12 +120,6 @@ private:
   
   void draw(FontHolder& fonts) override {
     view_->draw(fonts);
-  }
-
-
-  void setSoundIcon(const bool is_sound) {
-    view_->getWidget("sound").getCubeText().setText(is_sound ? "z"
-                                                             : "x");
   }
   
 };

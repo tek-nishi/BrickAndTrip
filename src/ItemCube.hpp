@@ -136,6 +136,11 @@ public:
 
   
 private:
+  // TIPS:コピー不可
+  ItemCube(const ItemCube&) = delete;
+  ItemCube& operator=(const ItemCube&) = delete;
+
+
   void startTween(const std::string& name) {
     auto tween_params = params_["game.item." + name];
 

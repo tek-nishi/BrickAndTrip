@@ -16,6 +16,7 @@
 #include "ProgressController.hpp"
 #include "PauseController.hpp"
 #include "RecordsController.hpp"
+#include "SettingsController.hpp"
 #include "Records.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
@@ -96,6 +97,7 @@ public:
                        { "total_play",   records_.getTotalPlayNum() },
                        { "total_time",   records_.getTotalPlayTime() },
                        { "total_tumble", records_.getTotalTumbleNum() },
+                       { "total_item",   records_.getTotalItemNum() },
                        { "total_clear",  records_.getTotalClearNum() },
                      };
                      
@@ -109,6 +111,11 @@ public:
     event_.connect("begin-title",
                    [this](const Connection& connection, EventParam& param) {
                      addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+                   });
+
+    event_.connect("begin-settings",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<SettingsController>(params_, timeline_, event_, records_, view_creator_.create("ui_settings.json"));
                    });
 
     
@@ -150,11 +157,12 @@ public:
 
     
     records_.load(params["game.records"].getValue<std::string>());
-    sound_.setSilent(!records_.isSound());
+    // sound_.setSilent(!records_.isSound());
       
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
     addController<TitleController>(params, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+    // addController<SettingsController>(params, timeline_, event_, records_, view_creator_.create("ui_settings.json"));
   }
 
 
