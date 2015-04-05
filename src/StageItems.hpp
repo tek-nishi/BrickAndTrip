@@ -60,14 +60,17 @@ public:
     entry_items_.clear();
   }
   
-  void addItemCubes(const ci::JsonTree& params, const int start_z) {
-    if (!params.hasChild("items")) return;
+  int addItemCubes(const ci::JsonTree& params, const int start_z) {
+    if (!params.hasChild("items")) return 0;
 
     ci::Vec3i start_pos(0, 0, start_z);
-    
+
+    int entry_num = 0;
     for (const auto& entry : params["items"]) {
       entry_items_.push_back(Json::getVec3<int>(entry) + start_pos);
     }
+
+    return entry_num;
   }
 
   void entryItemCube(const int current_z) {
@@ -80,6 +83,28 @@ public:
     }
   }
 
+
+  std::pair<bool, u_int> canGetItemCube(const ci::Vec3i& block_pos) {
+    if (items_.empty()) return std::make_pair(false, 0);
+    
+    for (const auto& cube : items_) {
+      if (cube->isOnStage()
+          && (block_pos == cube->blockPosition())) {
+        return std::make_pair(true, cube->id());
+      }
+    }
+    return std::make_pair(false, 0);
+  }
+
+  void pickupItemCube(const u_int id) {
+    auto it = std::find_if(std::begin(items_), std::end(items_),
+                           [id](const ItemCubePtr& obj) {
+                             return *obj == id;
+                           });
+    assert(it != std::end(items_));
+    (*it)->pickup();
+  }
+  
 
   const std::vector<ItemCubePtr>& items() const { return items_; }
   

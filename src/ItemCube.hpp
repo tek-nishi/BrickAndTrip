@@ -12,6 +12,8 @@ class ItemCube {
   Event<EventParam>& event_;
 
   bool active_;
+
+  u_int id_;
   
   float cube_size_;
   ci::Color color_;
@@ -38,6 +40,7 @@ public:
     params_(params),
     event_(event),
     active_(true),
+    id_(getUniqueNumber()),
     cube_size_(params["game.cube_size"].getValue<float>()),
     color_(Json::getColor<float>(params["game.item.color"])),
     block_position_(entry_pos),
@@ -97,6 +100,11 @@ public:
       });
   }
 
+  void pickup() {
+    on_stage_ = false;
+    active_   = false;
+  }
+
   
   const ci::Vec3f& position() const { return position_(); }
   const ci::Quatf& rotation() const { return rotation_(); }
@@ -107,9 +115,16 @@ public:
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
   const ci::Color& color() const { return color_; }
 
+  u_int id() const { return id_; }
 
   bool isActive() const { return active_; }
   bool isOnStage() const { return on_stage_; }
+
+  
+  // std::findを利用するための定義
+  bool operator==(const u_int rhs_id) const {
+    return id_ == rhs_id;
+  }
 
   
 private:

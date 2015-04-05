@@ -426,11 +426,20 @@ private:
       if (cube->willRotationMove()) {
         if (canPickableCubeMove(cube, cube->blockPosition() + cube->moveVector())) {
           cube->startRotationMove();
+          // 回転開始時にitem pickup判定
+          pickupStageItems(cube);
         }
         else {
           cube->cancelRotationMove();
         }
       }
+    }
+  }
+
+  void pickupStageItems(const PickableCubePtr& cube) {
+    auto result = items_.canGetItemCube(cube->blockPosition());
+    if (result.first) {
+      items_.pickupItemCube(result.second);
     }
   }
 
