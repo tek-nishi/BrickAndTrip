@@ -286,7 +286,10 @@ public:
     
     // sleep中のPickableCubeを起こす
     for (auto& cube : pickable_cubes_) {
-      cube->awaken();
+      if (cube->isSleep()) {
+        cube->awaken();
+        cube->endSleepingColor();
+      }
     }
   }
 

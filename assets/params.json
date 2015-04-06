@@ -160,6 +160,16 @@
       "picking_end": {
         "ease": "EaseOutQuad",
         "duration": 0.5
+      },
+
+      "sleeping_color": [ 0, 0, 0.2 ],
+      "sleeping_start": {
+        "ease": "EaseNone",
+        "duration": 0.1
+      },
+      "sleeping_end": {
+        "ease": "EaseOutQuad",
+        "duration": 0.5
       }
     },
 
@@ -175,7 +185,6 @@
         {
           "target": "position",
           "type": "EaseInOutQuad",
-          "start": [ 0, 0, 0 ],
           "end": [ 0, 0.5, 0 ],
           "duration": 1,
           "delay": 0.5,
@@ -185,8 +194,7 @@
         {
           "target": "color",
           "type": "EaseInOutQuad",
-          "start": [ 60, 0.5, 1 ],
-          "end": [ 60, 0, 1 ],
+          "end": [ 60, 1, 1 ],
           "duration": 0.5,
           "delay": 0.5,
           "loop": true,

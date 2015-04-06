@@ -27,6 +27,7 @@ public:
 
   
 private:
+  ci::JsonTree& params_;
   Event<EventParam>& event_;
   
   bool active_;
@@ -73,18 +74,19 @@ private:
 
   ci::Color picking_color_;
 
+  // FIXME:paramから直接読んでもいいんじゃね??
   std::string picking_start_ease_;
   float picking_start_duration_;
   std::string picking_end_ease_;
   float picking_end_duration_;
-
   
 
 public:
-  PickableCube(const ci::JsonTree& params,
+  PickableCube(ci::JsonTree& params,
                ci::TimelineRef timeline,
                Event<EventParam>& event,
                const ci::Vec3i& entry_pos, const bool sleep = false) :
+    params_(params),
     event_(event),
     active_(true),
     id_(getUniqueNumber()),
@@ -149,6 +151,9 @@ public:
 
         startIdleMotion();
       });
+
+    // sleep開始演出
+    if (sleep) startSleepingColor();
   }
 
   ~PickableCube() {
@@ -313,6 +318,21 @@ public:
                                getEaseFunc(picking_end_ease_));
   }
 
+  void startSleepingColor() {
+    animation_timeline_->apply(&color_,
+                               ci::hsvToRGB(Json::getHsvColor(params_["game.pickable.sleeping_color"])),
+                               params_["game.pickable.sleeping_start.duration"].getValue<float>(),
+                               getEaseFunc(params_["game.pickable.sleeping_start.ease"].getValue<std::string>()));
+  }
+  
+  void endSleepingColor() {
+    animation_timeline_->apply(&color_,
+                               orig_color_,
+                               params_["game.pickable.sleeping_end.duration"].getValue<float>(),
+                               getEaseFunc(params_["game.pickable.sleeping_end.ease"].getValue<std::string>()));
+  }
+
+  
   
   u_int id() const { return id_; }
   
