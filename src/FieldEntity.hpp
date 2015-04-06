@@ -68,6 +68,7 @@ class FieldEntity {
   int mode_;
 
   bool all_cleard_;
+  bool game_aborted_;
   
   ci::TimelineRef event_timeline_;
 
@@ -101,6 +102,7 @@ public:
     total_stage_num_(params["game.total_stage_num"].getValue<int>()),
     mode_(NONE),
     all_cleard_(false),
+    game_aborted_(false),
     event_timeline_(ci::Timeline::create())
   {
     const auto& colors = params["game.cube_stage_color"];
@@ -178,7 +180,8 @@ public:
         mode_ = NONE;
 
         EventParam params = {
-          { "all_cleard", all_cleard_ },
+          { "all_cleard",   all_cleard_ },
+          { "game_aborted", game_aborted_ },
         };
         event_.signal("stage-all-collapsed", params);
       }
@@ -210,8 +213,9 @@ public:
       entryPickableCube(entry_z, delay);
     }
     
-    stage_num_  = 0;
-    all_cleard_ = false;
+    stage_num_    = 0;
+    all_cleard_   = false;
+    game_aborted_ = false;
 
     records_.prepareGameRecord();
   }
@@ -313,6 +317,12 @@ public:
   void stopBuildAndCollapse() {
     stage_.stopBuildAndCollapse();
     mode_ = NONE;
+  }
+
+  // 中断
+  void abortGame() {
+    game_aborted_ = true;
+    cleanupField();
   }
   
   // リスタート前のClean-up

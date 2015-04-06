@@ -184,9 +184,10 @@ public:
                                      entity_.restart();
                                      setup();
 
-                                     // 全クリの時はタイトル起動
+                                     // 中断、全クリの時はタイトル起動
                                      bool all_cleard = boost::any_cast<bool>(param.at("all_cleard"));
-                                     if (all_cleard) {
+                                     bool aborted = boost::any_cast<bool>(param.at("game_aborted"));
+                                     if (all_cleard || aborted) {
                                        event_.signal("begin-title", EventParam());
                                      }
                                    });
@@ -209,7 +210,7 @@ public:
                                      DOUT << "game-abort" << std::endl;
                                      view_.enableTouchInput();
                                      paused_ = false;
-                                     entity_.cleanupField();
+                                     entity_.abortGame();
                                    });
 
     connections_ += event_.connect("pickuped-item",
