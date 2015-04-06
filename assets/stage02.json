@@ -28,5 +28,7 @@
   "collapse_speed": 0.8,
   "auto_collapse": 9,
 
+  "color": [ 116, 0.22, 0.8 ],
+
   "pickable": 1
 }

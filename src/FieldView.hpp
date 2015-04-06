@@ -62,6 +62,8 @@ class FieldView {
   };
   std::vector<Pick> pickings_;
 
+  ci::Color picking_color_;
+
   float move_threshold_;
   float move_speed_rate_;
   
@@ -89,6 +91,7 @@ public:
     target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
     new_target_point_(target_point_),
     camera_speed_(params["game_view.camera.speed"].getValue<float>()),
+    picking_color_(ci::hsvToRGB(Json::getHsvColor(params["game_view.picking_color"]))),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
@@ -125,8 +128,8 @@ public:
                              linear_attenuation,
                              quadratic_attenuation);
 
-      light.l.setDiffuse(Json::getColor<float>(param["diffuse"]));
-      light.l.setAmbient(Json::getColor<float>(param["ambient"]));
+      light.l.setDiffuse(ci::hsvToRGB(Json::getHsvColor(param["diffuse"])));
+      light.l.setAmbient(ci::hsvToRGB(Json::getHsvColor(param["ambient"])));
 
       lights_.push_back(std::move(light));
       
@@ -467,12 +470,6 @@ private:
         
         ci::gl::color(cube.color);
 
-#if 0
-        if (!cube.can_ride) {
-          ci::gl::color(1, 0, 0);
-        }
-#endif
-
         ci::gl::pushModelView();
         ci::gl::translate(cube.position);
         ci::gl::rotate(cube.rotation);
@@ -489,7 +486,7 @@ private:
       if (!cube->isActive()) continue;
 
       if (isTouching(cube->id())) {
-        ci::gl::color(0, 0, 1);
+        ci::gl::color(picking_color_);
       }
       else {
         float color = 1.0f;

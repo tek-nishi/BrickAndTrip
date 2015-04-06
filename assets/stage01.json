@@ -27,6 +27,8 @@
   "build_speed": 1,
   "collapse_speed": 1,
   "auto_collapse": 10,
+
+  "color": [ 0, 0, 0.5 ],
   
   "pickable": 1,
 

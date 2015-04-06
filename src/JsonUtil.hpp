@@ -49,6 +49,10 @@ ci::ColorT<T> getColor(const ci::JsonTree& json) {
   return ci::ColorT<T>(json[0].getValue<T>(), json[1].getValue<T>(), json[2].getValue<T>());
 }
 
+ci::Vec3f getHsvColor(const ci::JsonTree& json) {
+  return ci::Vec3f(json[0].getValue<float>() / 360.0f, json[1].getValue<float>(), json[2].getValue<float>());
+}
+
 template<typename T>
 ci::ColorAT<T> getColorA(const ci::JsonTree& json) {
   return ci::ColorAT<T>(json[0].getValue<T>(), json[1].getValue<T>(), json[2].getValue<T>(), json[3].getValue<T>());

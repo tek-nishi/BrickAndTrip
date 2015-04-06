@@ -9,6 +9,8 @@
   ],
 
   "build_speed": 0.2,
+
+  "color": [ 0, 0, 0.5 ],
   
   "pickable": 1
 }

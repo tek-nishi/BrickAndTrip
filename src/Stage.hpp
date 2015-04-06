@@ -268,6 +268,8 @@ public:
     build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
     auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
+
+    const auto stage_color = ci::hsvToRGB(Json::getHsvColor(stage_data["color"]));
     
     const auto& body = stage_data["body"];
     int last_iz = body.getNumChildren() - 1;
@@ -276,6 +278,10 @@ public:
       std::vector<StageCube> cube_row;
       int x = 0;
       int z = iz + top_z_;
+
+      const auto& base_color = (iz == last_iz) ? line_color
+                                               : stage_color;
+      
       for (const auto& p : row) {
         int y = p.getValue<int>();
         
@@ -283,17 +289,12 @@ public:
           ci::Vec3i block_pos(x, y, z);
           ci::Vec3f pos = ci::Vec3f(x, y, z) * cube_size_;
 
-          auto color = cube_color[(x + z) & 1];
-          if (iz == last_iz) {
-            color *= line_color;
-          }
-        
           StageCube cube = {
             pos,
             ci::Quatf::identity(),
             cube_size_,
             block_pos,
-            color,
+            base_color * cube_color[(x + z) & 1],
             true, true
           };
 
