@@ -34,7 +34,8 @@ private:
   u_int id_;
   
   float cube_size_;
-  ci::Color color_;
+  ci::Color orig_color_;
+  ci::Anim<ci::Color> color_;
 
   ci::Vec3i block_position_;
   ci::Vec3i prev_block_position_;
@@ -69,6 +70,14 @@ private:
   float idle_duration_;
   float idle_angle_;
   ci::Vec2f idle_delay_;
+
+  ci::Color picking_color_;
+
+  std::string picking_start_ease_;
+  float picking_start_duration_;
+  std::string picking_end_ease_;
+  float picking_end_duration_;
+
   
 
 public:
@@ -80,7 +89,8 @@ public:
     active_(true),
     id_(getUniqueNumber()),
     cube_size_(params["game.cube_size"].getValue<float>()),
-    color_(Json::getColor<float>(params["game.pickable.color"])),
+    orig_color_(ci::hsvToRGB(Json::getHsvColor(params["game.pickable.color"]))),
+    color_(orig_color_),
     block_position_(entry_pos),
     prev_block_position_(block_position_),
     rotation_(ci::Quatf::identity()),
@@ -100,7 +110,12 @@ public:
     idle_ease_(params["game.pickable.idle_ease"].getValue<std::string>()),
     idle_duration_(params["game.pickable.idle_duration"].getValue<float>()),
     idle_angle_(ci::toRadians(params["game.pickable.idle_angle"].getValue<float>())),
-    idle_delay_(Json::getVec2<float>(params["game.pickable.idle_delay"]))
+    idle_delay_(Json::getVec2<float>(params["game.pickable.idle_delay"])),
+    picking_color_(ci::hsvToRGB(Json::getHsvColor(params["game.pickable.picking_color"]))),
+    picking_start_ease_(params["game.pickable.picking_start.ease"].getValue<std::string>()),
+    picking_start_duration_(params["game.pickable.picking_start.duration"].getValue<float>()),
+    picking_end_ease_(params["game.pickable.picking_end.ease"].getValue<std::string>()),
+    picking_end_duration_(params["game.pickable.picking_end.duration"].getValue<float>())
   {
     auto current_time = timeline->getCurrentTime();
     animation_timeline_->setStartTime(current_time);
@@ -283,6 +298,21 @@ public:
       });
   }
 
+
+  void startPickingColor() {
+    animation_timeline_->apply(&color_,
+                               picking_color_,
+                               picking_start_duration_,
+                               getEaseFunc(picking_start_ease_));
+  }
+
+  void endPickingColor() {
+    animation_timeline_->apply(&color_,
+                               orig_color_,
+                               picking_end_duration_,
+                               getEaseFunc(picking_end_ease_));
+  }
+
   
   u_int id() const { return id_; }
   
@@ -303,6 +333,7 @@ public:
   
   float cubeSize() const { return cube_size_; }
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
+
   const ci::Color& color() const { return color_; }
 
 

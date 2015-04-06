@@ -86,7 +86,9 @@
       }
     ],
 
-    "picking_color": [ 240, 1, 1 ],
+    "stagecolor": [ 0, 0, 0.5 ],
+    "stagecolor_ease": "EaseOutQuad",
+    "stagecolor_duration": 2,
     
     "move_threshold": 0.8,
     "move_speed_rate": 0.25
@@ -101,7 +103,8 @@
       [ 0.6, 0.6, 0.6 ]
     ],
 
-    "cube_line_color": [ 0.7, 0, 0 ],
+    "cube_line_color": [ 359, 1, 0.7 ],
+    "stage_color": [ 0, 0, 0.6 ],
 
     "finish_rate": 0.1,
 
@@ -134,7 +137,7 @@
       "entry_duration": 1.5,
       "entry_y": [ 15, 18 ],
 
-      "color": [ 1, 1, 1 ],
+      "color": [ 0, 0, 1 ],
 
       "rotate_ease": "EaseInQuad",
       "rotate_duration": 0.5,
@@ -147,7 +150,17 @@
       "idle_ease": "EasePingPongOutQuad",
       "idle_duration": 0.5,
       "idle_angle": 15,
-      "idle_delay": [ 2, 5 ]
+      "idle_delay": [ 2, 5 ],
+
+      "picking_color": [ 240, 1, 1 ],
+      "picking_start": {
+        "ease": "EaseOutExpo",
+        "duration": 0.2
+      },
+      "picking_end": {
+        "ease": "EaseOutQuad",
+        "duration": 0.5
+      }
     },
 
     "item": {

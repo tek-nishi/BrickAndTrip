@@ -29,6 +29,7 @@ class FieldEntity {
 
   std::vector<ci::Color> cube_stage_color_;
   ci::Color cube_line_color_;
+  ci::Color stage_color_;
 
   float finish_rate_;
 
@@ -67,6 +68,13 @@ class FieldEntity {
   
   ci::TimelineRef event_timeline_;
 
+
+  struct StageInfo {
+    int top_z;
+    int entry_num;
+    ci::Color stage_color;
+  };
+  
   
 public:
   FieldEntity(ci::JsonTree& params,
@@ -77,7 +85,8 @@ public:
     timeline_(timeline),
     event_(event),
     records_(records),
-    cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
+    cube_line_color_(ci::hsvToRGB(Json::getHsvColor(params["game.cube_line_color"]))),
+    stage_color_(ci::hsvToRGB(Json::getHsvColor(params["game.stage_color"]))),
     stage_num_(0),
     stage_(params, timeline, event_),
     items_(params, timeline, event_),
@@ -134,7 +143,11 @@ public:
       if (isPickableCubeStarted()) {
         mode_ = FINISH;
         first_started_pickable_ = true;
-        event_.signal("first-pickable-started", EventParam());
+
+        EventParam params = {
+          { "stage_color", stage_color_ },
+        };
+        event_.signal("first-pickable-started", params);
       }
       break;
 
@@ -182,8 +195,8 @@ public:
   // 最初のStageとStartLine、PickableCubeを準備
   void setupStartStage() {
     auto stage_info = addCubeStage("startline.json");
-    next_start_line_z_ = stage_info.first - 1;
-    entry_packable_num_ = stage_info.second;
+    next_start_line_z_ = stage_info.top_z - 1;
+    entry_packable_num_ = stage_info.entry_num;
     
     stage_.buildStage();
 
@@ -208,13 +221,14 @@ public:
     // stage_num が 0 -> stage01.json 
     path << "stage" << std::setw(2) << std::setfill('0') << (stage_num_ + 1) << ".json";
     auto stage_info = addCubeStage(path.str());
-    finish_line_z_ = stage_info.first - 1;
-    entry_packable_num_ = stage_info.second;
+    finish_line_z_ = stage_info.top_z - 1;
+    entry_packable_num_ = stage_info.entry_num;
     stage_.setFinishLine(finish_line_z_);
+    stage_color_ = stage_info.stage_color;
 
     start_line_z_ = next_start_line_z_;
     stage_info = addCubeStage("finishline.json");
-    next_start_line_z_ = stage_info.first - 1;
+    next_start_line_z_ = stage_info.top_z - 1;
 
     mode_ = START;
     first_started_pickable_ = false;
@@ -312,11 +326,21 @@ public:
   }
 
 
+  void pickPickableCube(const u_int id) {
+    auto it = findPickableCube(id);
+    assert(it);
+    auto& cube = *it;
+
+    cube->startPickingColor();
+  }
+
   void movePickableCube(const u_int id, const int direction, const int speed) {
     auto it = findPickableCube(id);
     assert(it);
     auto& cube = *it;
 
+    cube->endPickingColor();
+    
     if ((direction == PickableCube::MOVE_NONE) || !speed) {
       cube->cancelRotationMove();
       return;
@@ -335,6 +359,12 @@ public:
     auto moved_pos = cube->blockPosition() + move_vector;
     if (canPickableCubeMove(cube, moved_pos)) {
       cube->reserveRotationMove(direction, move_vector, speed);
+    }
+  }
+
+  void cancelPickPickableCubes() {
+    for (auto& cube : pickable_cubes_) {
+      cube->endPickingColor();
     }
   }
 
@@ -414,7 +444,7 @@ private:
       }, event_timeline_->getCurrentTime() + delay);
   }
   
-  std::pair<int, int> addCubeStage(const std::string& path) {
+  StageInfo addCubeStage(const std::string& path) {
     auto stage = ci::JsonTree(ci::app::loadAsset(path));
     int current_z = stage_.getTopZ();
 
@@ -425,7 +455,13 @@ private:
 
     items_.addItemCubes(stage, current_z);
 
-    return std::make_pair(top_z, entry_num);
+    StageInfo info = {
+      top_z,
+      entry_num,
+      ci::hsvToRGB(Json::getHsvColor(stage["color"])),
+    };
+    
+    return info;
   }
 
 
@@ -484,6 +520,7 @@ private:
       
       auto height = stage_.getStageHeight(cube->blockPosition());
       if (!height.first) {
+        cube->endPickingColor();
         cube->fallFromStage();
 
         if (!cube->isSleep()) {

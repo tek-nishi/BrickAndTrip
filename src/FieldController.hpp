@@ -48,6 +48,11 @@ public:
     stage_cleard_(false),
     stageclear_agree_(false)
   {
+    connections_ += event_.connect("picking-start",
+                                   [this](const Connection&, EventParam& param) {
+                                     entity_.pickPickableCube(boost::any_cast<u_int>(param["cube_id"]));
+                                   });
+    
     connections_ += event_.connect("move-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      entity_.movePickableCube(boost::any_cast<u_int>(param["cube_id"]),
@@ -68,6 +73,8 @@ public:
     connections_ += event_.connect("first-pickable-started",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "first-pickable-started" << std::endl;
+                                     const auto& color = boost::any_cast<const ci::Color&>(param["stage_color"]);
+                                     view_.setStageColor(color);
                                      entity_.startStageCollapse();
                                    });
     
@@ -80,6 +87,7 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "all-pickable-finished" << std::endl;
                                      entity_.completeBuildAndCollapseStage();
+                                     entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
                                    });
 
@@ -142,6 +150,7 @@ public:
     connections_ += event_.connect("first-fallen-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "first-fallen-pickable" << std::endl;
+                                     entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
                                      entity_.gameover();
                                    });
@@ -150,7 +159,8 @@ public:
     connections_ += event_.connect("fall-all-pickable",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "fall-all-pickable" << std::endl;
-                                     view_.calcelAllPickings();
+                                     entity_.cancelPickPickableCubes();
+                                     view_.enableTouchInput(false);
                                      entity_.gameover();
                                    });
 #endif
@@ -183,6 +193,7 @@ public:
 
     connections_ += event_.connect("pause-start",
                                    [this](const Connection&, EventParam& param) {
+                                     entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
                                      paused_ = true;
                                    });
@@ -210,6 +221,7 @@ public:
     
     connections_ += event_.connect("field-input-stop",
                                    [this](const Connection& connection, EventParam& param) {
+                                     entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
                                    });
 

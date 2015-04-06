@@ -62,14 +62,12 @@ class FieldView {
   };
   std::vector<Pick> pickings_;
 
-  ci::Color picking_color_;
-
   float move_threshold_;
   float move_speed_rate_;
   
   bool touch_input_;
 
-  ci::TimelineRef event_timeline_;
+  ci::TimelineRef animation_timeline_;
   
   // CameraEditor camera_editor_;
 
@@ -91,11 +89,10 @@ public:
     target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
     new_target_point_(target_point_),
     camera_speed_(params["game_view.camera.speed"].getValue<float>()),
-    picking_color_(ci::hsvToRGB(Json::getHsvColor(params["game_view.picking_color"]))),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
-    event_timeline_(ci::Timeline::create())
+    animation_timeline_(ci::Timeline::create())
     // camera_editor_(camera_, interest_point_, eye_point_)
   {
     // 注視点からの距離、角度でcamera位置を決めている
@@ -137,8 +134,8 @@ public:
     }
 
     auto current_time = timeline->getCurrentTime();
-    event_timeline_->setStartTime(current_time);
-    timeline->apply(event_timeline_);
+    animation_timeline_->setStartTime(current_time);
+    timeline->apply(animation_timeline_);
 
     connections_ += touch_event.connect("touches-began",
                                         std::bind(&FieldView::touchesBegan, this, std::placeholders::_1, std::placeholders::_2));
@@ -150,7 +147,7 @@ public:
   
   ~FieldView() {
     // 再生途中のものもあるので、手動で取り除く
-    event_timeline_->removeSelf();
+    animation_timeline_->removeSelf();
   }
 
   
@@ -246,6 +243,9 @@ public:
   void resetCamera() {
     new_target_point_ = Json::getVec3<float>(params_["game_view.camera.target_point"]);
   }
+
+  void setStageColor(const ci::Color& color) {
+  }
   
   
 private:
@@ -270,9 +270,15 @@ private:
             touch.timestamp,
             cube.id,
             origin,
-            ray.calcPosition(cross_z)
+            ray.calcPosition(cross_z),
           };
           pickings_.push_back(std::move(pick));
+
+          EventParam params = {
+            { "cube_id", cube.id },
+          };
+          event_.signal("picking-start", params);
+          
           break;
         }
       } 
@@ -367,13 +373,23 @@ private:
     return false;
   }
 
-  boost::optional<const Pick&> getPick(const Touch& touch) {
-    for (const auto& pick : pickings_) {
-      if (touch.id == pick.touch_id) return boost::optional<const Pick&>(pick);
+  boost::optional<Pick&> getPick(const Touch& touch) {
+    for (auto& pick : pickings_) {
+      if (touch.id == pick.touch_id) return boost::optional<Pick&>(pick);
     }
-    return boost::optional<const Pick&>();
+    return boost::optional<Pick&>();
+  }
+  
+  boost::optional<Pick&> getTouching(const u_int cube_id) {
+    for (auto& pick : pickings_) {
+      if (cube_id == pick.cube_id) return boost::optional<Pick&>(pick);
+    }
+    return boost::optional<Pick&>();
   }
 
+
+
+  
   void removePick(const Touch& touch) {
     boost::remove_erase_if(pickings_,
                            [touch](const Pick& pick) {
@@ -485,15 +501,7 @@ private:
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
-      if (isTouching(cube->id())) {
-        ci::gl::color(picking_color_);
-      }
-      else {
-        float color = 1.0f;
-        if (cube->isSleep()) color = 0.5f;
-        
-        ci::gl::color(cube->color() * color);
-      }      
+      ci::gl::color(cube->color());
       
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
