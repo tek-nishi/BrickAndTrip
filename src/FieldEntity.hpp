@@ -17,6 +17,7 @@
 #include "StageItems.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
+#include "Bg.hpp"
 
 
 namespace ngs {
@@ -38,6 +39,8 @@ class FieldEntity {
   Stage stage_;
 
   StageItems items_;
+
+  Bg bg_;
   
   // VS2013には暗黙のmoveコンストラクタが無いのでstd::unique_ptrで保持
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
@@ -88,8 +91,9 @@ public:
     cube_line_color_(ci::hsvToRGB(Json::getHsvColor(params["game.cube_line_color"]))),
     stage_color_(ci::hsvToRGB(Json::getHsvColor(params["game.stage_color"]))),
     stage_num_(0),
-    stage_(params, timeline, event_),
-    items_(params, timeline, event_),
+    stage_(params, timeline, event),
+    items_(params, timeline, event),
+    bg_(params, timeline, event),
     record_play_(false),
     first_started_pickable_(false),
     first_fallen_pickable_(false),

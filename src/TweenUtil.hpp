@@ -83,4 +83,24 @@ void setVec3Tween(ci::Timeline& timeline,
   setTweenOption<ci::Vec3f>(option, param);
 }
 
+void setHsvTween(ci::Timeline& timeline,
+                 ci::Anim<ci::Vec3f>& value, const ci::JsonTree& param, const bool is_first) {
+  auto start = param.hasChild("start") ? Json::getHsvColor(param["start"])
+                                       : value();
+  auto end = param.hasChild("end") ? Json::getHsvColor(param["end"])
+                                   : value();
+
+  auto option = is_first ? timeline.apply(&value,
+                                          start, end,
+                                          param["duration"].getValue<float>(),
+                                          getEaseFunc(param["type"].getValue<std::string>()))
+                         : timeline.appendTo(&value,
+                                             end,
+                                             param["duration"].getValue<float>(),
+                                             getEaseFunc(param["type"].getValue<std::string>()));
+
+  if (is_first) value = start;
+  setTweenOption<ci::Vec3f>(option, param);
+}
+
 }

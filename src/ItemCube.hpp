@@ -19,12 +19,13 @@ class ItemCube {
   u_int id_;
   
   float cube_size_;
-  ci::Color color_;
+  // ci::Color color_;
 
   ci::Vec3i block_position_;
   
   ci::Anim<ci::Vec3f> position_;
   ci::Anim<ci::Quatf> rotation_;
+  ci::Anim<ci::Vec3f> color_;
 
   bool on_stage_;
 
@@ -45,7 +46,7 @@ public:
     active_(true),
     id_(getUniqueNumber()),
     cube_size_(params["game.cube_size"].getValue<float>()),
-    color_(Json::getColor<float>(params["game.item.color"])),
+    color_(Json::getHsvColor(params["game.item.color"])),
     block_position_(entry_pos),
     rotation_(ci::Quatf::identity()),
     on_stage_(false),
@@ -75,6 +76,7 @@ public:
 
     options.finishFn([this]() {
         on_stage_ = true;
+        startTween("idle_tween");
         
         EventParam params = {
           { "block_pos", block_position_ },
@@ -121,7 +123,7 @@ public:
 
   float cubeSize() const { return cube_size_; }
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
-  const ci::Color& color() const { return color_; }
+  ci::Color color() const { return ci::hsvToRGB(color_); }
 
   u_int id() const { return id_; }
 
@@ -151,6 +153,11 @@ private:
         { "position",
           [this](const ci::JsonTree& params, const bool is_first) {
             setVec3Tween(*animation_timeline_, position_, params, cube_size_, is_first);
+          }
+        },
+        { "color",
+          [this](const ci::JsonTree& params, const bool is_first) {
+            setHsvTween(*animation_timeline_, color_, params, is_first);
           }
         },
       };

@@ -165,7 +165,7 @@
 
     "item": {
       "size": 0.5,
-      "color": [ 1, 1, 0.5 ],
+      "color": [ 60, 0.5, 1 ],
 
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,
@@ -174,23 +174,23 @@
       "idle_tween": [
         {
           "target": "position",
-          "type": "EaseOutQuad",
+          "type": "EaseInOutQuad",
           "start": [ 0, 0, 0 ],
-          "end": [ 0, 1, 0 ],
+          "end": [ 0, 0.5, 0 ],
           "duration": 1,
           "delay": 0.5,
           "loop": true,
-          "pingpong": true
+          "ping-pong": true
         },
         {
-          "target": "rotation",
-          "type": "EaseOutQuad",
-          "start": [ 1, 1, 1 ],
-          "end": [ 0.5, 0.5, 0.5 ],
+          "target": "color",
+          "type": "EaseInOutQuad",
+          "start": [ 60, 0.5, 1 ],
+          "end": [ 60, 0, 1 ],
           "duration": 0.5,
           "delay": 0.5,
           "loop": true,
-          "pingpong": true
+          "ping-pong": true
         }
       ],
       
