@@ -6,13 +6,14 @@
 
 #include <vector>
 #include <deque>
+#include <boost/noncopyable.hpp>
 #include "StageCube.hpp"
 #include "EasingUtil.hpp"
 
 
 namespace ngs {
 
-class Stage {
+class Stage : private boost::noncopyable {
   Event<EventParam>& event_;
   
   // ステージ全体
@@ -348,11 +349,6 @@ public:
 
 
 private:
-  // TIPS:コピー不可
-  Stage(const Stage&) = delete;
-  Stage& operator=(const Stage&) = delete;
-
-
   bool canBuild() const {
     return !cubes_.empty();
   }

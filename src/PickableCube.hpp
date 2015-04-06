@@ -4,6 +4,7 @@
 // 操作可能なCube
 //
 
+#include <boost/noncopyable.hpp>
 #include "cinder/Timeline.h"
 #include "cinder/Rand.h"
 #include "EasingUtil.hpp"
@@ -12,7 +13,7 @@
 
 namespace ngs {
 
-class PickableCube {
+class PickableCube : private boost::noncopyable {
 public:
   enum {
     MOVE_NONE = -1,
@@ -368,9 +369,6 @@ public:
   
   
 private:
-  // TIPS:コピー不可
-  PickableCube(const PickableCube&) = delete;
-  PickableCube& operator=(const PickableCube&) = delete;
   
 };
 

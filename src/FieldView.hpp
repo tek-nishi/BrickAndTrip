@@ -8,6 +8,8 @@
 #include "cinder/gl/Light.h"
 #include "cinder/gl/gl.h"
 #include <boost/range/algorithm_ext/erase.hpp>
+#include <boost/noncopyable.hpp>
+#include <numeric>
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
 #include "EventParam.hpp"
@@ -16,7 +18,7 @@
 
 namespace ngs {
 
-class FieldView {
+class FieldView : private boost::noncopyable {
   const ci::JsonTree& params_;
   Event<EventParam>& event_;
 
@@ -29,6 +31,7 @@ class FieldView {
   ci::Vec3f eye_point_;
   ci::Vec3f target_point_;
   ci::Vec3f new_target_point_;
+  float target_radius_;
   float camera_speed_;
 
   struct Light {
@@ -88,6 +91,7 @@ public:
     eye_point_(interest_point_),
     target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
     new_target_point_(target_point_),
+    target_radius_(0.0f),
     camera_speed_(params["game_view.camera.speed"].getValue<float>()),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
@@ -454,19 +458,33 @@ private:
   }
 
   void updateCameraTarget(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
-    ci::Vec3f target_pos = ci::Vec3f::zero();
-    int cube_num = 0;
+    // ci::Vec3f target_pos = ci::Vec3f::zero();
+    // int cube_num = 0;
+    std::vector<ci::Vec3f> cube_pos;
     for (const auto& cube : cubes) {
       if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
 
-      target_pos += cube->position();
-      cube_num += 1;
+      // target_pos += cube->position();
+      cube_pos.push_back(cube->position());
+      // cube_num += 1;
     }
 
-    if (cube_num > 0) {
-      // FIXME:とりあえず中間点
-      new_target_point_ = target_pos / cube_num;
+    if (cube_pos.empty()) return;
+    
+    // FIXME:とりあえず中間点
+    new_target_point_ = std::accumulate(std::begin(cube_pos), std::end(cube_pos), ci::Vec3f::zero()) / cube_pos.size();
+    target_radius_ = 0.0f;
+    for (const auto& pos : cube_pos) {
+      target_radius_ = std::max(new_target_point_.distance(pos), target_radius_);
     }
+    
+    float eye_rx = params_["game_view.camera.eye_rx"].getValue<float>();
+    float eye_ry = params_["game_view.camera.eye_ry"].getValue<float>();
+    float eye_distance = params_["game_view.camera.eye_distance"].getValue<float>() + target_radius_;
+      
+    eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
+      * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
+      * ci::Vec3f(0, 0, eye_distance) + interest_point_;
   }
 
   void updateLight() {
@@ -495,6 +513,15 @@ private:
         ci::gl::popModelView();
       }
     }
+
+#ifdef DEBUG
+    ci::gl::pushModelView();
+    ci::gl::translate(new_target_point_);
+    ci::gl::rotate(ci::Vec3f(90, 0, 0));
+    
+    ci::gl::drawStrokedCircle(ci::Vec2f::zero(), target_radius_);
+    ci::gl::popModelView();
+#endif
   }
 
   void drawPickableCubes(const std::vector<std::unique_ptr<PickableCube> >& cubes) {

@@ -5,12 +5,13 @@
 //
 
 #include <set>
+#include <boost/noncopyable.hpp>
 #include "TweenUtil.hpp"
 
 
 namespace ngs {
 
-class ItemCube {
+class ItemCube : private boost::noncopyable {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 
@@ -138,11 +139,6 @@ public:
 
   
 private:
-  // TIPS:コピー不可
-  ItemCube(const ItemCube&) = delete;
-  ItemCube& operator=(const ItemCube&) = delete;
-
-
   void startTween(const std::string& name) {
     auto tween_params = params_["game.item." + name];
 

@@ -11,6 +11,7 @@
 #include "Touch.hpp"
 #include <map>
 #include <vector>
+#include <boost/noncopyable.hpp>
 #include "UIWidget.hpp"
 #include "Event.hpp"
 #include "EventParam.hpp"
@@ -20,7 +21,7 @@
 
 namespace ngs {
 
-class UIView {
+class UIView : private boost::noncopyable {
   bool disp_;
   bool active_;
 
@@ -132,11 +133,6 @@ public:
 
   
 private:
-  // TIPS:コピー不可
-  UIView(const UIView&) = delete;
-  UIView& operator=(const UIView&) = delete;
-
-
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
     if (!active_ || touching_) return;
 

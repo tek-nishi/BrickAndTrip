@@ -7,11 +7,12 @@
 #include "Event.hpp"
 #include "EventParam.hpp"
 #include "FontHolder.hpp"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-struct ControllerBase {
+struct ControllerBase : private boost::noncopyable {
   virtual ~ControllerBase() {}
 
   virtual bool isActive() const = 0;

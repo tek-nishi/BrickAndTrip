@@ -10,11 +10,12 @@
 #include "cinder/audio/Context.h"
 #include "cinder/audio/SamplePlayerNode.h"
 #include "cinder/audio/NodeEffects.h"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class Sound {
+class Sound : private boost::noncopyable {
   // 各音源情報
   struct Object {
     std::string type;

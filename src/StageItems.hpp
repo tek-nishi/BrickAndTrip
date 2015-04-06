@@ -4,13 +4,14 @@
 // Stage上のItem管理
 //
 
+#include <boost/noncopyable.hpp>
 #include "Stage.hpp"
 #include "ItemCube.hpp"
 
 
 namespace ngs {
 
-class StageItems {
+class StageItems : private boost::noncopyable {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
   
@@ -115,11 +116,6 @@ public:
   
 
 private:
-  // TIPS:コピー不可
-  StageItems(const StageItems&) = delete;
-  StageItems& operator=(const StageItems&) = delete;
-
-
   void decideEachItemCubeFalling(const Stage& stage) {
     for (auto& cube : items_) {
       if (!cube->isOnStage()) continue;

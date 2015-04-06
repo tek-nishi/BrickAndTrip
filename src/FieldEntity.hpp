@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <boost/range/algorithm_ext/erase.hpp>
 #include <boost/optional.hpp>
+#include <boost/noncopyable.hpp>
 #include "cinder/Json.h"
 #include "cinder/Timeline.h"
 #include "cinder/Rand.h"
@@ -22,7 +23,7 @@
 
 namespace ngs {
 
-class FieldEntity {
+class FieldEntity : private boost::noncopyable {
   ci::JsonTree& params_;
   ci::TimelineRef timeline_;
   Event<EventParam>& event_;

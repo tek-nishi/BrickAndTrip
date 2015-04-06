@@ -5,6 +5,7 @@
 //
 
 #include <boost/signals2.hpp>
+#include <boost/noncopyable.hpp>
 #include <map>
 
 
@@ -13,7 +14,7 @@ namespace ngs {
 using Connection = boost::signals2::connection;
 
 template <typename... Args>
-class Event {
+class Event : private boost::noncopyable {
   using SignalType = boost::signals2::signal<void(Args&...)>;
 
   std::map<std::string, SignalType> signals_;
@@ -37,9 +38,6 @@ public:
 
   
 private:
-  // TIPS:コピー不可
-  Event(const Event&) = delete;
-  Event& operator=(const Event&) = delete;
   
 };
 

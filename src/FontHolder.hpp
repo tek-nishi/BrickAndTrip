@@ -6,11 +6,12 @@
 
 #include "TextureFont.hpp"
 #include <map>
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class FontHolder {
+class FontHolder : private boost::noncopyable {
   std::map<std::string, TextureFont> fonts_;
 
   std::string default_font_name_;

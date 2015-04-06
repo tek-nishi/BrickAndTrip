@@ -6,11 +6,12 @@
 
 #include <vector>
 #include "Event.hpp"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class ConnectionHolder {
+class ConnectionHolder : private boost::noncopyable {
   std::vector<Connection> connections_;
 
 
@@ -31,13 +32,6 @@ public:
   void operator += (Connection&& connection) {
     connections_.push_back(connection);
   }
-
-
-private:
-  // コピー禁止
-  // 同じハンドルで何度もdisconnectしてしまうのを防ぐ
-  ConnectionHolder(const ConnectionHolder&) = delete;
-  ConnectionHolder& operator=(const ConnectionHolder&) = delete;
   
 };
 

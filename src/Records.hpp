@@ -5,12 +5,13 @@
 // 
 
 #include <vector>
+#include <boost/noncopyable.hpp>
 #include "FileUtil.hpp"
 
 
 namespace ngs {
 
-class Records {
+class Records : private boost::noncopyable {
 public:
   struct StageRecord {
     double clear_time;
