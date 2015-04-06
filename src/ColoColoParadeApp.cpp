@@ -157,13 +157,11 @@ class ColoColoParadeApp : public AppNative {
     char chara = event.getChar();
     int  code  = event.getCode();
 
-    if (chara == 'd') {
-      controller_->event().signal("force-collapse", EventParam());
+    // paramsに書かれたsignaiを発生
+    auto debug_signal = std::string(1, chara);
+    if (params_["app.debug"].hasChild(debug_signal)) {
+      controller_->event().signal(params_["app.debug." + debug_signal].getValue<std::string>(), EventParam());
     }
-    else if (chara == 's') {
-      controller_->event().signal("stop-build-and-collapse", EventParam());
-    }
-
     
     if (chara == 'R') {
       // Soft Reset
