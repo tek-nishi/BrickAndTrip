@@ -110,13 +110,13 @@ public:
     if (record_play_) {
       records_.current_game.play_time += progressing_seconds;
     }
-    
+
+    decideEachPickableCubeFalling();
     boost::remove_erase_if(pickable_cubes_,
                            [](const PickableCubePtr& cube) {
                              return !cube->isActive();
                            });
 
-    decideEachPickableCubeFalling();
     decideEachPickableCubeMoving();
 
     items_.update(stage_);
@@ -140,6 +140,7 @@ public:
 
     case FINISH:
       // 全PickableCubeのfinish判定
+      // FIXME:event処理で判定できる
       if (isAllPickableCubesFinished()) {
         mode_ = CLEAR;
         event_.signal("all-pickable-finished", EventParam());
@@ -479,7 +480,7 @@ private:
   // PickableCubeの落下判定
   void decideEachPickableCubeFalling() {
     for (auto& cube : pickable_cubes_) {
-      if (!cube->isOnStage() || !cube->canPick()) continue;
+      if (!cube->isOnStage() || cube->isMoving()) continue;
       
       auto height = stage_.getStageHeight(cube->blockPosition());
       if (!height.first) {
@@ -503,18 +504,16 @@ private:
   
   // １つでもPickableCubeがStage上にいるか判定
   bool isPickableCubeOnStage() {
-    bool on_stage = false;
     for (auto& cube : pickable_cubes_) {
       // sleep中なのは勘定しない
       if (cube->isSleep()) continue;
       
       if (cube->isOnStage()) {
-        on_stage = true;
-        break;
+        return true;
       }
     }
     
-    return on_stage;
+    return false;
   }
 
   
@@ -522,9 +521,13 @@ private:
     if (first_started_pickable_ || pickable_cubes_.empty()) return false;
 
     for (const auto& cube : pickable_cubes_) {
-      if (!cube->canPick() || cube->isSleep()) continue;
+      if (cube->isSleep()) continue;
 
-      if (cube->blockPosition().z >= start_line_z_) {
+      // 移動中の場合は移動前の位置で判定
+      const auto& position = cube->isMoving() ? cube->prevBlockPosition()
+                                              : cube->blockPosition();
+      
+      if (position.z >= start_line_z_) {
         return true;
       }
     }
@@ -563,12 +566,16 @@ private:
     for (const auto& cube : pickable_cubes_) {
       if (cube->isSleep()) continue;
       
-      if (!cube->canPick()) {
+      if (!cube->isOnStage()) {
         finished = false;
         break;
       }
 
-      if (cube->blockPosition().z < finish_line_z_) {
+      // 移動中の場合は移動前の位置で判定
+      const auto& position = cube->isMoving() ? cube->prevBlockPosition()
+                                              : cube->blockPosition();
+
+      if (position.z < finish_line_z_) {
         // FinishできていないPickableCubeが1つでもあればfalse
         finished = false;
         break;

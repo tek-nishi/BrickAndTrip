@@ -37,17 +37,18 @@ private:
   ci::Color color_;
 
   ci::Vec3i block_position_;
+  ci::Vec3i prev_block_position_;
   
   ci::Anim<ci::Vec3f> position_;
   ci::Anim<ci::Quatf> rotation_;
 
   ci::TimelineRef animation_timeline_;
 
-  bool can_pick_;
-  bool picking_;
+  // on_stage_  stage上に存在
+  // moving_    移動中
+  // sleep_     操作不可
   bool on_stage_;
-
-  // ステージ上で待機(finishlineの先にいるやつ)
+  bool moving_;
   bool sleep_;
 
   int       move_direction_;
@@ -81,11 +82,11 @@ public:
     cube_size_(params["game.cube_size"].getValue<float>()),
     color_(Json::getColor<float>(params["game.pickable.color"])),
     block_position_(entry_pos),
+    prev_block_position_(block_position_),
     rotation_(ci::Quatf::identity()),
     animation_timeline_(ci::Timeline::create()),
-    can_pick_(false),
-    picking_(false),
     on_stage_(false),
+    moving_(false),
     sleep_(sleep),
     move_direction_(MOVE_NONE),
     move_vector_(ci::Vec3i::zero()),
@@ -123,7 +124,6 @@ public:
                                               getEaseFunc(params["game.pickable.entry_ease"].getValue<std::string>()));
 
     options.finishFn([this]() {
-        can_pick_ = true;
         on_stage_ = true;
         
         EventParam params = {
@@ -149,7 +149,7 @@ public:
   }
   
   bool willRotationMove() {
-    return (move_speed_ > 0) && can_pick_ && on_stage_ && !sleep_;
+    return (move_speed_ > 0) && !moving_ && on_stage_ && !sleep_;
   }
 
   void cancelRotationMove() {
@@ -160,12 +160,14 @@ public:
   
   
   void startRotationMove() {
+    moving_ = true;
+    
     // idle演出中に操作されてもよいように
     position_ = ci::Vec3f(block_position_) * cube_size_;
     position_().y += cube_size_;
     rotation_ = move_start_rotation_;
 
-    can_pick_ = false;
+    prev_block_position_ = block_position_;
     block_position_ += move_vector_;
 
     auto angle = ci::toRadians(90.0f);
@@ -208,12 +210,13 @@ public:
         position_().y += cube_size_;
         move_start_rotation_ = rotation_;
 
+        moving_ = false;
+        
         EventParam params = {
           { "id", id_ },
           { "block_pos", block_position_ },
         };
         event_.signal("pickable-moved", params);
-        can_pick_ = true;
         move_speed_ -= 1;
       });
   }
@@ -264,7 +267,6 @@ public:
   }
 
   void fallFromStage() {
-    can_pick_ = false;
     on_stage_ = false;
 
     // idle中の動作を中断
@@ -285,8 +287,8 @@ public:
   u_int id() const { return id_; }
   
   bool isActive() const { return active_; }
-  bool canPick() const { return can_pick_; }
   bool isOnStage() const { return on_stage_; }
+  bool isMoving() const { return moving_; }
 
   bool isSleep() const { return sleep_; }
   void awaken(const bool sleeing = false) { sleep_ = sleeing; }
@@ -297,6 +299,7 @@ public:
   const ci::Quatf& rotation() const { return rotation_(); }
 
   const ci::Vec3i& blockPosition() const { return block_position_; }
+  const ci::Vec3i& prevBlockPosition() const { return prev_block_position_; }
   
   float cubeSize() const { return cube_size_; }
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
