@@ -32,6 +32,10 @@ class FieldView : private boost::noncopyable {
   ci::Vec3f target_point_;
   ci::Vec3f new_target_point_;
   float target_radius_;
+
+  float eye_distance_rate_;
+  float eye_offset_rate_;
+
   float camera_speed_;
 
   struct Light {
@@ -92,6 +96,8 @@ public:
     target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
     new_target_point_(target_point_),
     target_radius_(0.0f),
+    eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
+    eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
     camera_speed_(params["game_view.camera.speed"].getValue<float>()),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
@@ -477,10 +483,18 @@ private:
     for (const auto& pos : cube_pos) {
       target_radius_ = std::max(new_target_point_.distance(pos), target_radius_);
     }
+
+    // 中心点から一番離れたpickable cubeへの距離に応じて注視点を移動
+    {
+      auto d = ci::Vec2f(eye_point_.x, eye_point_.z).normalized() * target_radius_ * eye_offset_rate_;
+      new_target_point_.x += d.x;
+      new_target_point_.z += d.y;
+    }
     
+    // 中心点から一番離れたpickable cubeへの距離に応じてカメラを引く
     float eye_rx = params_["game_view.camera.eye_rx"].getValue<float>();
     float eye_ry = params_["game_view.camera.eye_ry"].getValue<float>();
-    float eye_distance = params_["game_view.camera.eye_distance"].getValue<float>() + target_radius_;
+    float eye_distance = params_["game_view.camera.eye_distance"].getValue<float>() + target_radius_ * eye_distance_rate_;
       
     eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
       * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
@@ -514,7 +528,7 @@ private:
       }
     }
 
-#ifdef DEBUG
+#if 0
     ci::gl::pushModelView();
     ci::gl::translate(new_target_point_);
     ci::gl::rotate(ci::Vec3f(90, 0, 0));

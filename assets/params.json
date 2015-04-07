@@ -63,6 +63,9 @@
       "eye_ry": -140,
       "eye_rx": -40,
 
+      "eye_distance_rate": 0.8,
+      "eye_offset_rate": 0.3,
+      
       "speed": 1
     },
 
