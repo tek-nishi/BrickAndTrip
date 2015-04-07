@@ -66,7 +66,7 @@
       "eye_distance_rate": 0.8,
       "eye_offset_rate": 0.3,
       
-      "speed": 1
+      "speed": 0.05
     },
 
     "lights": [

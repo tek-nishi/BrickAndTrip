@@ -30,12 +30,14 @@ class FieldView : private boost::noncopyable {
   ci::Vec3f interest_point_;
   ci::Vec3f eye_point_;
   ci::Vec3f target_point_;
-  ci::Vec3f new_target_point_;
   float target_radius_;
 
   float eye_distance_rate_;
   float eye_offset_rate_;
 
+  ci::Vec3f new_target_point_;
+  ci::Vec3f new_eye_point_;
+  
   float camera_speed_;
 
   struct Light {
@@ -98,7 +100,7 @@ public:
     target_radius_(0.0f),
     eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
-    camera_speed_(params["game_view.camera.speed"].getValue<float>()),
+    camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
@@ -116,6 +118,8 @@ public:
     
     camera_.setCenterOfInterestPoint(interest_point_);
     camera_.setEyePoint(eye_point_);
+
+    new_eye_point_ = eye_point_;
 
     // camera_editor_.setParams(eye_rx, eye_ry, eye_distance);
     
@@ -185,8 +189,16 @@ public:
 
   // 時間経過での計算が必要なもの
   void update(const double progressing_seconds) {
-    auto d = new_target_point_ - target_point_;
-    target_point_ += d * 0.1f;
+    // 等加速運動の近似
+    float speed_rate = std::pow(camera_speed_, progressing_seconds / (1 / 60.0));
+    {
+      auto d = new_target_point_ - target_point_;
+      target_point_ = new_target_point_ - d * speed_rate;
+    }
+    {
+      auto d = new_eye_point_ - eye_point_;
+      eye_point_ = new_eye_point_ - d * speed_rate;
+    }
     
     camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
     camera_.setEyePoint(eye_point_ + target_point_);
@@ -496,7 +508,7 @@ private:
     float eye_ry = params_["game_view.camera.eye_ry"].getValue<float>();
     float eye_distance = params_["game_view.camera.eye_distance"].getValue<float>() + target_radius_ * eye_distance_rate_;
       
-    eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
+    new_eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
       * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
       * ci::Vec3f(0, 0, eye_distance) + interest_point_;
   }
