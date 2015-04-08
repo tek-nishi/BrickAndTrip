@@ -20,6 +20,8 @@ namespace ngs {
 namespace CubeTextDrawer {
 
 
+#if 0
+
 void drawFontRect(ci::gl::TextureRef texture, const ci::Rectf &rect, const float z, const float base_line) {
   texture->enableAndBind();
   glEnableClientState( GL_VERTEX_ARRAY );
@@ -57,6 +59,8 @@ void drawFontRect(ci::gl::TextureRef texture, const ci::Rectf &rect, const float
   glDisableClientState( GL_TEXTURE_COORD_ARRAY );	
   texture->disable();
 }
+
+#endif
 
 
 void drawCubeAndText(TextTexture& texture_info,

@@ -27,7 +27,7 @@ public:
   }
   
 
-  const ci::gl::VboMeshRef mesh() const { return mesh_; }
+  const ci::gl::VboMesh& mesh() const { return *mesh_; }
   
 
 private:

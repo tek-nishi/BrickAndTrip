@@ -7,6 +7,7 @@
 #include "cinder/Json.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
+#include "DrawVboMesh.hpp"
 #include "AntiAliasingType.hpp"
 #include "Autolayout.hpp"
 #include "JsonUtil.hpp"
