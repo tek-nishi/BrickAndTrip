@@ -14,6 +14,7 @@
 #include "Event.hpp"
 #include "FontHolder.hpp"
 #include "RootController.hpp"
+#include "Model.hpp"
 
 
 using namespace ci;
@@ -37,6 +38,8 @@ class ColoColoParadeApp : public AppNative {
   bool pause_;
 
   FontHolder fonts_;
+  std::unique_ptr<Model> cube_font_;
+  std::unique_ptr<Model> cube_text_;
 
   Vec2f mouse_pos_;
   Vec2f mouse_prev_pos_;
@@ -82,6 +85,9 @@ class ColoColoParadeApp : public AppNative {
     
     controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
 
+    cube_font_ = std::unique_ptr<Model>(new Model("cube_font.obj"));
+    cube_text_ = std::unique_ptr<Model>(new Model("cube_text.obj"));
+    
     // 以下OpenGL設定
     gl::enableDepthRead();
     gl::enableDepthWrite();
@@ -226,7 +232,7 @@ class ColoColoParadeApp : public AppNative {
   }
   
 	void draw() {
-    controller_->draw(fonts_);
+    controller_->draw(fonts_, *cube_font_, *cube_text_);
   }
 
 

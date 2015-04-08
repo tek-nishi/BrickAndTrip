@@ -12,6 +12,7 @@
 #include "cinder/Tween.h"
 #include "CubeText.hpp"
 #include "TextureFont.hpp"
+#include "Model.hpp"
 #include <map>
 
 
@@ -59,15 +60,15 @@ void drawFontRect(ci::gl::TextureRef texture, const ci::Rectf &rect, const float
 
 
 void drawCubeAndText(TextTexture& texture_info,
-                     const ci::Vec3f& pos, const ci::Vec3f& size,
+                     Model& cube, Model& text,
                      const ci::Color& color, const ci::Color& text_color) {
   ci::gl::enable(GL_LIGHTING);
   ci::gl::enableDepthRead();
   ci::gl::enableDepthWrite();
 
   ci::gl::color(color);
-    
-  ci::gl::drawCube(pos, size);
+
+  ci::gl::draw(cube.mesh());
 
   ci::gl::disable(GL_LIGHTING);
   ci::gl::enableDepthRead(false);
@@ -75,17 +76,15 @@ void drawCubeAndText(TextTexture& texture_info,
 
   ci::gl::color(text_color);
 
-  // 立方体の裏と表に文字を描画
-  ci::Rectf rect_front = { -size.x / 2, size.y / 2, size.x / 2, -size.y / 2 };
-  drawFontRect(texture_info.first, rect_front, size.z / 2, texture_info.second);
-
-  ci::Rectf rect_back = { -size.x / 2, -size.y / 2, size.x / 2, size.y / 2 };
-  drawFontRect(texture_info.first, rect_back, -size.z / 2, texture_info.second);
+  texture_info.first->enableAndBind();
+  ci::gl::draw(text.mesh());
+  texture_info.first->disable();
 }
 
 
 void draw(const CubeText& cube_text,
           TextureFont& font,
+          Model& model_cube, Model& model_text,
           const ci::Vec3f& pos,
           const ci::Vec3f& scale,
           const ci::Color& text_color,
@@ -95,7 +94,7 @@ void draw(const CubeText& cube_text,
 
   const float chara_size = cube_text.size();
   const float chara_spacing = cube_text.spacing();
-  ci::Vec3f cube_size(chara_size, chara_size, chara_size);
+  auto cube_size = ci::Vec3f(chara_size, chara_size, chara_size) * scale;
   
   const auto& text = cube_text.text();
 
@@ -112,9 +111,9 @@ void draw(const CubeText& cube_text,
         ci::gl::rotate(ci::Quatf(ci::Vec3f(1, 0, 0), std::fmod<float>(rotation[i], M_PI * 2.0f)));
         // ci::gl::rotate(ci::Quatf(ci::Vec3f(1, 0, 0), rotation[i]));
       }
-      ci::gl::scale(scale);
+      ci::gl::scale(cube_size);
       
-      drawCubeAndText(texture_info, ci::Vec3f::zero(), cube_size, base_color, text_color);
+      drawCubeAndText(texture_info, model_cube, model_text, base_color, text_color);
       
       ci::gl::popModelView();
     }

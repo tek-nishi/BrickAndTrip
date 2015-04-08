@@ -218,11 +218,11 @@ private:
                            });
   }
   
-  void draw(FontHolder& fonts) override {
+  void draw(FontHolder& fonts, Model& cube, Model& text) override {
     ci::gl::clear(background_);
 
     for (auto& child : children_) {
-      child->draw(fonts);
+      child->draw(fonts, cube, text);
     }
   }
 

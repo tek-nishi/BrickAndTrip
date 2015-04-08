@@ -88,7 +88,7 @@ public:
   }
   
   
-  void draw(FontHolder& fonts) {
+  void draw(FontHolder& fonts, Model& cube, Model& text) {
     if (!disp_) return;
 
     // TODO:Depth Bufferをクリアしたくない
@@ -106,7 +106,7 @@ public:
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;
       
-      widget->draw(fonts);
+      widget->draw(fonts, cube, text);
     }
 
     for (auto& light : lights_) {

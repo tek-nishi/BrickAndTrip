@@ -135,8 +135,9 @@ public:
   }
 
 
-  void draw(FontHolder& fonts) {
+  void draw(FontHolder& fonts, Model& cube, Model& text) {
     CubeTextDrawer::draw(text_, fonts.getFont(font_name_),
+                         cube, text,
                          pos_() + layout_->getPos(), scale_(),
                          text_color_(), base_color_(),
                          rotate_);

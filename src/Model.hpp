@@ -1,28 +1,33 @@
 ﻿#pragma once
 
 //
-// .objの表示
+// .obj保持
 //
 
 #include <boost/noncopyable.hpp>
 #include "cinder/TriMesh.h"
 #include "cinder/ObjLoader.h"
+#include "cinder/gl/Vbo.h"
 
 
 namespace ngs {
 
 class Model : private boost::noncopyable {
-  ci::TriMesh mesh_;
+  ci::gl::VboMeshRef mesh_;
 
 
 public:
   Model(const std::string& path) {
     ci::ObjLoader loader(ci::app::loadAsset(path));
-    loader.load(&mesh_);
+
+    ci::TriMesh mesh;
+    loader.load(&mesh);
+
+    mesh_ = ci::gl::VboMesh::create(mesh);
   }
   
 
-  const ci::TriMesh& mesh() const { return mesh_; }
+  const ci::gl::VboMeshRef mesh() const { return mesh_; }
   
 
 private:

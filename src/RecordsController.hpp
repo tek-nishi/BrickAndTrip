@@ -104,8 +104,8 @@ private:
   void update(const double progressing_seconds) override {
   }
   
-  void draw(FontHolder& fonts) override {
-    view_->draw(fonts);
+  void draw(FontHolder& fonts, Model& cube, Model& text) override {
+    view_->draw(fonts, cube, text);
   }
 
 };
