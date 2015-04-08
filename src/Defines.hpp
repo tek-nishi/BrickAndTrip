@@ -25,6 +25,13 @@
 #define PREPRO_STR(value)    #value
 
 
+#if defined(CINDER_COCOA_TOUCH)
+
+#define glFogi(pname, param) glFogx(pname, param)
+
+#endif
+
+
 namespace ngs {
 
 // 符号無し整数の別名定義

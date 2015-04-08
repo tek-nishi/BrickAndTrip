@@ -13,6 +13,7 @@
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
 #include "EventParam.hpp"
+#include "Model.hpp"
 // #include "CameraEditor.hpp"
 
 
@@ -80,7 +81,10 @@ class FieldView : private boost::noncopyable {
   
   // CameraEditor camera_editor_;
 
-
+  Model stage_cube_;
+  Model pickable_cube_;
+  Model item_cube_;
+  
   
 public:
   FieldView(const ci::JsonTree& params,
@@ -104,7 +108,10 @@ public:
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
-    animation_timeline_(ci::Timeline::create())
+    animation_timeline_(ci::Timeline::create()),
+    stage_cube_("stage_cube.obj"),
+    pickable_cube_("pickable_cube.obj"),
+    item_cube_("item_cube.obj")
     // camera_editor_(camera_, interest_point_, eye_point_)
   {
     // 注視点からの距離、角度でcamera位置を決めている
@@ -215,6 +222,13 @@ public:
     ci::gl::enable(GL_LIGHTING);
     ci::gl::enableDepthRead();
     ci::gl::enableDepthWrite();
+
+    ci::gl::enable(GL_FOG);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    auto color = Json::getColorA<float>(params_["ui_view.fog_color"]);
+    glFogfv(GL_FOG_COLOR, color.ptr());
+    glFogf(GL_FOG_START, params_["ui_view.fog_start"].getValue<float>());
+    glFogf(GL_FOG_END, params_["ui_view.fog_end"].getValue<float>());
     
     ci::gl::setMatrices(camera_);
 
@@ -232,6 +246,7 @@ public:
     for (auto& light : lights_) {
       light.l.disable();
     }
+    ci::gl::disable(GL_FOG);
 
 #if 0
     ci::gl::disable(GL_LIGHTING);
@@ -533,8 +548,9 @@ private:
         ci::gl::pushModelView();
         ci::gl::translate(cube.position);
         ci::gl::rotate(cube.rotation);
+        ci::gl::scale(cube.size());
       
-        ci::gl::drawCube(ci::Vec3f::zero(), cube.size());
+        ci::gl::draw(stage_cube_.mesh());
       
         ci::gl::popModelView();
       }
@@ -559,8 +575,9 @@ private:
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
       ci::gl::rotate(cube->rotation());
-      
-      ci::gl::drawCube(ci::Vec3f::zero(), cube->size());
+      ci::gl::scale(cube->size());
+
+      ci::gl::draw(pickable_cube_.mesh());
       
       ci::gl::popModelView();
 
@@ -583,8 +600,9 @@ private:
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
       ci::gl::rotate(cube->rotation());
-      
-      ci::gl::drawCube(ci::Vec3f::zero(), cube->size() * 0.5f);
+      ci::gl::scale(cube->size());
+
+      ci::gl::draw(item_cube_.mesh());
       
       ci::gl::popModelView();
     }
