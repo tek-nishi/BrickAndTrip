@@ -14,15 +14,20 @@ namespace ngs {
 
 class TextureFont {
   Font font_;
+
+  ci::Vec3f scale_;
+  ci::Vec3f offset_;
   
   std::map<std::string, ci::gl::TextureRef> texture_cache_;
 
 
 public:
-  TextureFont() = default;
-  
-  explicit TextureFont(const std::string& path, FontCreator& creator, const int size) :
-    font_(path, creator)
+  explicit TextureFont(const std::string& path, FontCreator& creator,
+                       const int size,
+                       const ci::Vec3f& scale, const ci::Vec3f& offset) :
+    font_(path, creator),
+    scale_(scale),
+    offset_(offset)
   {
     font_.setSize(size);
   }
@@ -41,6 +46,9 @@ public:
 
     return inserted.first->second;
   }
+
+  const ci::Vec3f& scale() const { return scale_; }
+  const ci::Vec3f& offset() const { return offset_; }
 
   
 private:

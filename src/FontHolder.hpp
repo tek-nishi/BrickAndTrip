@@ -34,10 +34,13 @@ public:
     return it->second;
   }
 
-  void addFont(const std::string& name, const std::string& path, const int size) {
+  
+  void addFont(const std::string& name, const std::string& path,
+               const int size,
+               const ci::Vec3f& scale, const ci::Vec3f& offset) {
     fonts_.emplace(std::piecewise_construct,
                    std::forward_as_tuple(name),
-                   std::forward_as_tuple(path, font_creator_, size));
+                   std::forward_as_tuple(path, font_creator_, size, scale, offset));
   }
 
   void setDefaultFont(const std::string& name) {

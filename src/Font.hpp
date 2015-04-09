@@ -31,146 +31,6 @@
 
 namespace ngs {
 
-#if 0
-
-class Font : private boost::noncopyable {
-public:
-  class Handle : private boost::noncopyable {
-    FT_Face face_;
-
-    int size_;
-    
-    int ascender_;
-    int descender_;
-    int font_width_;
-    int font_height_;
-    int font_edge_;
-    
-    
-  public:
-    Handle(const std::string& path, FT_Library library) {
-      DOUT << "Font::Handle()" << std::endl;
-
-      auto error = FT_New_Face(library,
-                               ci::app::getAssetPath(path).string().c_str(),
-                               0,
-                               &face_);
-      if (error) {
-        ci::app::console() << "error FT_New_Face:" << path << std::endl;
-        throw;
-      }
-    }
-
-    ~Handle() {
-      DOUT << "Font::~Handle()" << std::endl;
-
-      FT_Done_Face(face_);
-    }
-
-
-    void setSize(const int size) {
-      size_ = size;
-      float font_aspect = face_->max_advance_width / float(face_->max_advance_height);
-      int height = size * font_aspect;
-      FT_Set_Pixel_Sizes(face_, 0, height);
-
-      ascender_    = face_->size->metrics.ascender >> 6;
-      descender_   = face_->size->metrics.descender >> 6;
-      font_width_  = face_->size->metrics.max_advance >> 6;
-      font_height_ = ascender_ - descender_;
-      font_edge_   = (face_->size->metrics.height >> 6) - font_height_;
-    }
-
-    
-    // 一文字レンダリング
-    ci::Surface8u rendering(const char32_t chara) {
-      FT_Load_Char(face_, chara, FT_LOAD_RENDER);
-      FT_GlyphSlot slot = face_->glyph;
-      auto bitmap = slot->bitmap;
-      
-      ci::Surface8u surface(size_, size_, true);
-      ci::ip::fill(&surface, ci::ColorAT<uint8_t>(255, 255, 255, 0));
-
-      // アルファチャンネルにのみ書き込む
-      for (int iy = 0; iy < bitmap.rows; ++iy) {
-        for (int ix = 0; ix < bitmap.width; ++ix) {
-          surface.setPixel(ci::Vec2i(ix + slot->bitmap_left, iy + ascender_ - slot->bitmap_top - font_edge_),
-                           ci::ColorA8u(255, 255, 255, bitmap.buffer[iy * bitmap.width + ix]));
-        }
-      }
-
-      return surface;
-    }
-
-    // 文字列をレンダリング
-    ci::Surface8u rendering(const std::string& text) {
-      size_t chara_num = strlen(text);
-
-      ci::Surface8u surface(size_ * chara_num, size_, true);
-      ci::ip::fill(&surface, ci::ColorAT<uint8_t>(255, 255, 255, 0));
-
-      FT_GlyphSlot slot = face_->glyph;
-      int pen_x = 0;
-      for (size_t ic = 0; ic < chara_num; ++ic) {
-        char32_t chara = getCharactor(text, ic);
-        FT_Load_Char(face_, chara, FT_LOAD_RENDER);
-        
-        // アルファチャンネルにのみ書き込む
-        auto bitmap = slot->bitmap;
-        for (int iy = 0; iy < bitmap.rows; ++iy) {
-          for (int ix = 0; ix < bitmap.width; ++ix) {
-            surface.setPixel(ci::Vec2i(ix + slot->bitmap_left + pen_x, iy + ascender_ - slot->bitmap_top - font_edge_),
-                             ci::ColorA8u(255, 255, 255, bitmap.buffer[iy * bitmap.width + ix]));
-          }
-        }
-        
-        pen_x += slot->advance.x >> 6;
-      }
-
-      // FIXME:リサイズはCinder任せ
-      return ci::ip::resizeCopy(surface, ci::Area(0, 0, pen_x, size_), ci::Vec2i(size_, size_));
-    }
-
-  private:
-
-  };
-
-
-private:
-  FT_Library library_;
-  
-
-public:
-  Font() {
-    DOUT << "Font()" << std::endl;
-    
-    auto error = FT_Init_FreeType(&library_);
-    if (error) {
-      ci::app::console() << "error FT_Init_FreeType" << std::endl;
-      throw;
-    }
-  }
-
-  ~Font() {
-    DOUT << "~Font()" << std::endl;
-
-    FT_Done_FreeType(library_);
-  }
-
-
-  Handle create(const std::string& path) {
-    return Handle(path, library_);
-  }
-  
-
-private:
-
-  
-};
-
-#endif
-
-
 class FontCreator : private boost::noncopyable {
   FT_Library library_;
 
@@ -232,8 +92,12 @@ public:
 
   void setSize(const int size) {
     size_ = size;
+
+    // FT_Set_Pixel_Sizesは横サイズ基準でサイズを決めるので、
+    // 縦横比から逆算する
     float font_aspect = face_->max_advance_width / float(face_->max_advance_height);
-    int height = size * font_aspect;
+    // TIPS:まれに横がはみ出す状況があるのに対処(ちょっとだけ小さくする)
+    int height = (size - 1) * font_aspect;
     FT_Set_Pixel_Sizes(face_, 0, height);
 
     ascender_    = face_->size->metrics.ascender >> 6;
@@ -241,6 +105,14 @@ public:
     font_width_  = face_->size->metrics.max_advance >> 6;
     font_height_ = ascender_ - descender_;
     font_edge_   = (face_->size->metrics.height >> 6) - font_height_;
+
+    DOUT << "ascender:" << ascender_ << std::endl
+         << "descender:" << descender_ << std::endl
+         << "font_width:" << font_width_ << std::endl
+         << "font_height:" << font_height_ << std::endl
+         << "metrics.height:" << (face_->size->metrics.height >> 6) << std::endl
+         << "font_edge:" << font_edge_ << std::endl
+         << "size:" << size_ << std::endl;
   }
 
     
@@ -253,10 +125,16 @@ public:
     ci::Surface8u surface(size_, size_, true);
     ci::ip::fill(&surface, ci::ColorAT<uint8_t>(255, 255, 255, 0));
 
+    // font_heightがsurfaceサイズより大きい場合はascenderを調整
+    int ascender = ascender_;
+    if ((ascender_ - slot->bitmap_top - font_edge_ + bitmap.rows) > size_) {
+      ascender = size_ + slot->bitmap_top + font_edge_ - bitmap.rows;
+    }
+
     // アルファチャンネルにのみ書き込む
     for (int iy = 0; iy < bitmap.rows; ++iy) {
       for (int ix = 0; ix < bitmap.width; ++ix) {
-        surface.setPixel(ci::Vec2i(ix + slot->bitmap_left, iy + ascender_ - slot->bitmap_top - font_edge_),
+        surface.setPixel(ci::Vec2i(ix + slot->bitmap_left, iy + ascender - slot->bitmap_top - font_edge_),
                          ci::ColorA8u(255, 255, 255, bitmap.buffer[iy * bitmap.width + ix]));
       }
     }
@@ -276,12 +154,18 @@ public:
     for (size_t ic = 0; ic < chara_num; ++ic) {
       char32_t chara = getCharactor(text, ic);
       FT_Load_Char(face_, chara, FT_LOAD_RENDER);
+      auto bitmap = slot->bitmap;
+
+      // font_heightがsurfaceサイズより大きい場合はascenderを調整
+      int ascender = ascender_;
+      if ((ascender_ - slot->bitmap_top - font_edge_ + bitmap.rows) > size_) {
+        ascender = size_ + slot->bitmap_top + font_edge_ - bitmap.rows;
+      }
         
       // アルファチャンネルにのみ書き込む
-      auto bitmap = slot->bitmap;
       for (int iy = 0; iy < bitmap.rows; ++iy) {
         for (int ix = 0; ix < bitmap.width; ++ix) {
-          surface.setPixel(ci::Vec2i(ix + slot->bitmap_left + pen_x, iy + ascender_ - slot->bitmap_top - font_edge_),
+          surface.setPixel(ci::Vec2i(ix + slot->bitmap_left + pen_x, iy + ascender - slot->bitmap_top - font_edge_),
                            ci::ColorA8u(255, 255, 255, bitmap.buffer[iy * bitmap.width + ix]));
         }
       }

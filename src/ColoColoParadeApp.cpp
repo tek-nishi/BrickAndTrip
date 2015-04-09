@@ -246,7 +246,9 @@ class ColoColoParadeApp : public AppNative {
       const auto& name = p["name"].getValue<std::string>();
       const auto& path = p["path"].getValue<std::string>();
       int size = p["size"].getValue<int>();
-      fonts_->addFont(name, path, size);
+      ci::Vec3f scale = Json::getVec3<float>(p["scale"]);
+      ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
+      fonts_->addFont(name, path, size, scale, offset);
 
       if (Json::getValue(p, "default", false)) {
         fonts_->setDefaultFont(name);

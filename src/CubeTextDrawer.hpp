@@ -18,53 +18,10 @@
 namespace ngs {
 namespace CubeTextDrawer {
 
-
-#if 0
-
-void drawFontRect(ci::gl::TextureRef texture, const ci::Rectf &rect, const float z, const float base_line) {
-  texture->enableAndBind();
-  glEnableClientState( GL_VERTEX_ARRAY );
-  glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-
-  GLfloat verts[3 * 4];
-  glVertexPointer( 3, GL_FLOAT, 0, verts );
-
-  GLfloat texCoords[2 * 4];
-  glTexCoordPointer( 2, GL_FLOAT, 0, texCoords );
-
-#if defined(CINDER_MSW)
-  // baseLineを足してやる必要がある
-  float v_ofs = (base_line - 1) / texture->getHeight();
-#else
-  float v_ofs = 0.0f;
-#endif
-    
-  verts[0*3+0] = rect.getX2(); texCoords[0*2+0] = texture->getMaxU();
-  verts[0*3+1] = rect.getY1(); texCoords[0*2+1] = 0 + v_ofs;
-  verts[0*3+2] = z;
-  verts[1*3+0] = rect.getX1(); texCoords[1*2+0] = 0;
-  verts[1*3+1] = rect.getY1(); texCoords[1*2+1] = 0 + v_ofs;
-  verts[1*3+2] = z;
-  verts[2*3+0] = rect.getX2(); texCoords[2*2+0] = texture->getMaxU();
-  verts[2*3+1] = rect.getY2(); texCoords[2*2+1] = texture->getMaxV() + v_ofs;
-  verts[2*3+2] = z;
-  verts[3*3+0] = rect.getX1(); texCoords[3*2+0] = 0;
-  verts[3*3+1] = rect.getY2(); texCoords[3*2+1] = texture->getMaxV() + v_ofs;
-  verts[3*3+2] = z;
-
-  glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
-
-  glDisableClientState( GL_VERTEX_ARRAY );
-  glDisableClientState( GL_TEXTURE_COORD_ARRAY );	
-  texture->disable();
-}
-
-#endif
-
-
 void drawCubeAndText(ci::gl::TextureRef texture,
                      Model& cube, Model& text,
-                     const ci::Color& color, const ci::Color& text_color) {
+                     const ci::Color& color, const ci::Color& text_color,
+                     const ci::Vec3f& scale, const ci::Vec3f& offset) {
   ci::gl::enable(GL_LIGHTING);
   ci::gl::enableDepthRead();
   ci::gl::enableDepthWrite();
@@ -79,6 +36,9 @@ void drawCubeAndText(ci::gl::TextureRef texture,
 
   ci::gl::color(text_color);
 
+  ci::gl::translate(offset);
+  ci::gl::scale(scale);
+  
   texture->enableAndBind();
   ci::gl::draw(text.mesh());
   texture->disable();
@@ -116,7 +76,9 @@ void draw(const CubeText& cube_text,
       }
       ci::gl::scale(cube_size);
       
-      drawCubeAndText(texture, model_cube, model_text, base_color, text_color);
+      drawCubeAndText(texture, model_cube, model_text,
+                      base_color, text_color,
+                      font.scale(), font.offset());
       
       ci::gl::popModelView();
     }
