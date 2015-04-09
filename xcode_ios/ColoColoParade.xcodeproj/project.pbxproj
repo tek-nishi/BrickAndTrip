@@ -20,7 +20,6 @@
 		475C50E41ABBE5E200CFC3E1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 475C50E01ABBE5E200CFC3E1 /* Default.png */; };
 		475C50E51ABBE5E200CFC3E1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 475C50E11ABBE5E200CFC3E1 /* Default@2x.png */; };
 		475C50E71ABBE93E00CFC3E1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475C50E61ABBE93E00CFC3E1 /* Images.xcassets */; };
-		47A8C39C1AC670510009B7AD /* TextRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39B1AC670510009B7AD /* TextRender.cpp */; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2CE151AD5099E00C9FF09 /* Vbo.cpp */; };
 		47C2CE181AD51C6800C9FF09 /* DrawVboMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2CE171AD51C6800C9FF09 /* DrawVboMesh.cpp */; };
@@ -51,7 +50,6 @@
 		475C50E01ABBE5E200CFC3E1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		475C50E11ABBE5E200CFC3E1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		475C50E61ABBE93E00CFC3E1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ColoColoParade/Images.xcassets; sourceTree = "<group>"; };
-		47A8C39B1AC670510009B7AD /* TextRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextRender.cpp; path = ../src/TextRender.cpp; sourceTree = "<group>"; };
 		47A8C39D1ACC43C10009B7AD /* FileUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileUtil.mm; path = ../src/FileUtil.mm; sourceTree = "<group>"; };
 		47C2CE151AD5099E00C9FF09 /* Vbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vbo.cpp; path = ../src/Vbo.cpp; sourceTree = "<group>"; };
 		47C2CE171AD51C6800C9FF09 /* DrawVboMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DrawVboMesh.cpp; path = ../src/DrawVboMesh.cpp; sourceTree = "<group>"; };
@@ -138,7 +136,6 @@
 				47C2CE171AD51C6800C9FF09 /* DrawVboMesh.cpp */,
 				47C2CE151AD5099E00C9FF09 /* Vbo.cpp */,
 				47A8C39D1ACC43C10009B7AD /* FileUtil.mm */,
-				47A8C39B1AC670510009B7AD /* TextRender.cpp */,
 				D94FCF0D83574B138433F88A /* ColoColoParadeApp.cpp */,
 			);
 			name = Source;
@@ -244,7 +241,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */,
-				47A8C39C1AC670510009B7AD /* TextRender.cpp in Sources */,
 				EC43B19189734030A187325A /* ColoColoParadeApp.cpp in Sources */,
 				47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */,
 				47C2CE181AD51C6800C9FF09 /* DrawVboMesh.cpp in Sources */,
@@ -276,7 +272,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include/freetype2\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -304,7 +303,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include/freetype2\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -326,10 +328,12 @@
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
 					"\"$(CINDER_PATH)/lib/libcinder-iphone_d.a\"",
 					"-lz",
+					"\"$(CINDER_PATH)/lib/ios/libfreetype.a\"",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
 					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a\"",
 					"-lz",
+					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -348,10 +352,12 @@
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
 					"\"$(CINDER_PATH)/lib/libcinder-iphone.a\"",
 					"-lz",
+					"\"$(CINDER_PATH)/lib/ios/libfreetype.a\"",
 				);
 				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
 					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim.a\"",
 					"-lz",
+					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

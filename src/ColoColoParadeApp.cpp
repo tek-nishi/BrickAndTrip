@@ -38,7 +38,8 @@ class ColoColoParadeApp : public AppNative {
   bool forward_speed_change_;
   bool pause_;
 
-  FontHolder fonts_;
+  std::unique_ptr<FontHolder> fonts_;
+  
   std::unique_ptr<Model> cube_font_;
   std::unique_ptr<Model> cube_text_;
 
@@ -233,21 +234,22 @@ class ColoColoParadeApp : public AppNative {
   }
   
 	void draw() {
-    controller_->draw(fonts_, *cube_font_, *cube_text_);
+    controller_->draw(*fonts_, *cube_font_, *cube_text_);
   }
 
 
   void setupFonts() {
+    fonts_ = std::unique_ptr<FontHolder>(new FontHolder());
     const auto& fonts_params = params_["app.fonts"];
 
     for(const auto& p : fonts_params) {
       const auto& name = p["name"].getValue<std::string>();
       const auto& path = p["path"].getValue<std::string>();
-      float size = p["size"].getValue<float>();
-      fonts_.addFont(name, path, size);
+      int size = p["size"].getValue<int>();
+      fonts_->addFont(name, path, size);
 
       if (Json::getValue(p, "default", false)) {
-        fonts_.setDefaultFont(name);
+        fonts_->setDefaultFont(name);
       }
     }
   }

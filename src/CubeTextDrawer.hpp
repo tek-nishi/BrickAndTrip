@@ -4,7 +4,6 @@
 // 立方体文字列表示
 //
 
-#include "cinder/Font.h"
 #include "cinder/Text.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
@@ -63,7 +62,7 @@ void drawFontRect(ci::gl::TextureRef texture, const ci::Rectf &rect, const float
 #endif
 
 
-void drawCubeAndText(TextTexture& texture_info,
+void drawCubeAndText(ci::gl::TextureRef texture,
                      Model& cube, Model& text,
                      const ci::Color& color, const ci::Color& text_color) {
   ci::gl::enable(GL_LIGHTING);
@@ -80,9 +79,9 @@ void drawCubeAndText(TextTexture& texture_info,
 
   ci::gl::color(text_color);
 
-  texture_info.first->enableAndBind();
+  texture->enableAndBind();
   ci::gl::draw(text.mesh());
-  texture_info.first->disable();
+  texture->disable();
 }
 
 
@@ -104,7 +103,7 @@ void draw(const CubeText& cube_text,
 
   for (size_t i = 0; i < text.size(); ++i) {
     const auto& t = text[i];
-    auto texture_info = font.getTextureFromString(t.chara);
+    auto texture = font.getTextureFromString(t.chara);
 
     if (t.disp) {
       ci::gl::pushModelView();
@@ -117,7 +116,7 @@ void draw(const CubeText& cube_text,
       }
       ci::gl::scale(cube_size);
       
-      drawCubeAndText(texture_info, model_cube, model_text, base_color, text_color);
+      drawCubeAndText(texture, model_cube, model_text, base_color, text_color);
       
       ci::gl::popModelView();
     }

@@ -13,7 +13,6 @@
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		470D34A61ABBDFE300F51D76 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 470D34A51ABBDFE300F51D76 /* assets */; };
-		475C50E91ABBFB4200CFC3E1 /* TextRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 475C50E81ABBFB4200CFC3E1 /* TextRender.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8C1FC4B7889544768E118AFC /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9534BDB9B93E477E8BDC9657 /* CinderApp.icns */; };
@@ -33,7 +32,6 @@
 		2E3C3BFD5AF34615BF2554EA /* ColoColoParadeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = ColoColoParadeApp.cpp; path = ../src/ColoColoParadeApp.cpp; sourceTree = "<group>"; };
 		450D9852779747439722773C /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 		470D34A51ABBDFE300F51D76 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
-		475C50E81ABBFB4200CFC3E1 /* TextRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextRender.cpp; path = ../src/TextRender.cpp; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		88013F0599324B478E25E9F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -71,7 +69,6 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				475C50E81ABBFB4200CFC3E1 /* TextRender.cpp */,
 				2E3C3BFD5AF34615BF2554EA /* ColoColoParadeApp.cpp */,
 			);
 			name = Source;
@@ -214,7 +211,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				475C50E91ABBFB4200CFC3E1 /* TextRender.cpp in Sources */,
 				970166FC64E241928EFE23FA /* ColoColoParadeApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,7 +236,11 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
+					"\"$(CINDER_PATH)/lib/macosx/libfreetype.a\"",
+					"-lz",
+				);
 				PRODUCT_NAME = ColoColoParade;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -265,7 +265,11 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder.a\"",
+					"\"$(CINDER_PATH)/lib/macosx/libfreetype.a\"",
+					"-lz",
+				);
 				PRODUCT_NAME = ColoColoParade;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
@@ -284,7 +288,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCT_NAME=\"$(PRODUCT_NAME)\"";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include/freetype2\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
@@ -302,7 +309,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCT_NAME=\"$(PRODUCT_NAME)\"";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include/freetype2\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";

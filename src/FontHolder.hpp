@@ -12,6 +12,8 @@
 namespace ngs {
 
 class FontHolder : private boost::noncopyable {
+  FontCreator font_creator_;
+
   std::map<std::string, TextureFont> fonts_;
 
   std::string default_font_name_;
@@ -32,8 +34,10 @@ public:
     return it->second;
   }
 
-  void addFont(const std::string& name, const std::string& path, const float size) {
-    fonts_.emplace(name, TextureFont(path, size));
+  void addFont(const std::string& name, const std::string& path, const int size) {
+    fonts_.emplace(std::piecewise_construct,
+                   std::forward_as_tuple(name),
+                   std::forward_as_tuple(path, font_creator_, size));
   }
 
   void setDefaultFont(const std::string& name) {

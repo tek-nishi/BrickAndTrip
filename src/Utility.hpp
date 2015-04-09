@@ -28,6 +28,14 @@ std::string substr(const std::string& s,
     return conv.to_bytes(sub);                      // UTF32 -> UTF8にして返す
 }
 
+// utf8文字列から1文字列を取り出す
+char32_t getCharactor(const std::string& s, const size_t pos) {
+  std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+
+  auto u32string = conv.from_bytes(s);            // UTF8 -> UTF32
+  return u32string[pos];
+}
+
 // 重複しないidを生成
 u_int getUniqueNumber() {
   static u_int unique_number = 0;

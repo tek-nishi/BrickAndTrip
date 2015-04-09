@@ -8,12 +8,12 @@
         "name": "medium",
         "path": "mplus-1m-medium.ttf",
         "default": true,
-        "size": 48
+        "size": 64
       },
       {
         "name": "icon",
         "path": "WebSymbolsLiga-Regular.otf",
-        "size": 48
+        "size": 64
       }
     ],
     
