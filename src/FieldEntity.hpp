@@ -412,6 +412,34 @@ public:
   void pickupedItemCube() {
     records_.current_game.item_num += 1;
   }
+
+  // PickableCubeのIdle
+  void startIdlePickableCube(const u_int id) {
+    auto it = findPickableCube(id);
+    if (!it) return;
+
+    auto& cube = *it;
+    const ci::Vec3i block_pos = cube->blockPosition();
+
+    std::vector<int> directions;
+
+    static ci::Vec3i move_vec[] = {
+      {  0, 0,  1 },
+      {  0, 0, -1 },
+      {  1, 0,  0 },
+      { -1, 0,  0 },
+    };
+    
+    for (int i = 0; i < elemsof(move_vec); ++i) {
+      if (!isPickableCube(block_pos + move_vec[i])) {
+        directions.push_back(i);
+      }
+    }
+
+    if (directions.empty()) return;
+
+    cube->startIdleMotion(directions);
+  }
   
   // プレイ中の情報を記録に取る
   void enableRecordPlay(const bool enable = true) {
@@ -506,7 +534,7 @@ private:
     }
   }
 
-  bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) {
+  bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) const {
     // 移動先に他のPickableCubeがいたら移動できない
     for (auto& other_cube : pickable_cubes_) {
       if (*cube == *other_cube) continue;
@@ -519,7 +547,7 @@ private:
     return height.first && (height.second == block_pos.y);
   }
 
-  bool isPickableCube(const ci::Vec3i& block_pos) {
+  bool isPickableCube(const ci::Vec3i& block_pos) const {
     for (auto& cube : pickable_cubes_) {
       const auto& pos = cube->blockPosition();
       
@@ -529,7 +557,6 @@ private:
     }
     return false;
   }
-  
   
   // PickableCubeの落下判定
   void decideEachPickableCubeFalling() {
@@ -558,7 +585,7 @@ private:
 
   
   // １つでもPickableCubeがStage上にいるか判定
-  bool isPickableCubeOnStage() {
+  bool isPickableCubeOnStage() const {
     for (auto& cube : pickable_cubes_) {
       // sleep中なのは勘定しない
       if (cube->isSleep()) continue;
@@ -572,7 +599,7 @@ private:
   }
 
   
-  bool isPickableCubeStarted() {
+  bool isPickableCubeStarted() const {
     if (first_started_pickable_ || pickable_cubes_.empty()) return false;
 
     for (const auto& cube : pickable_cubes_) {

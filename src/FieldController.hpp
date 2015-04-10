@@ -165,6 +165,13 @@ public:
                                    });
 #endif
 
+    connections_ += event_.connect("pickable-start-idle",
+                                   [this](const Connection&, EventParam& param) {
+                                     u_int id = boost::any_cast<u_int>(param["id"]);
+                                     entity_.startIdlePickableCube(id);
+                                   });
+
+    
     connections_ += event_.connect("startline-opened",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "startline-opened" << std::endl;

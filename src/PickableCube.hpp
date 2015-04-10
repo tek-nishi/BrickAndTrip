@@ -149,8 +149,7 @@ public:
           { "block_pos", block_position_ },
         };
         event_.signal("pickable-on-stage", params);
-
-        startIdleMotion();
+        event_.signal("pickable-start-idle", params);
       });
 
     // sleep開始演出
@@ -242,7 +241,7 @@ public:
       });
   }
 
-  void startIdleMotion() {
+  void startIdleMotion(const std::vector<int>& directions) {
     ci::Quatf rotation_table[] = {
       { ci::Vec3f(1, 0, 0),  idle_angle_ },
       { ci::Vec3f(1, 0, 0), -idle_angle_ },
@@ -250,7 +249,7 @@ public:
       { ci::Vec3f(0, 0, 1),  idle_angle_ },
     };
 
-    int move_direction = ci::randInt(MOVE_MAX);
+    int move_direction = directions[ci::randInt(directions.size())];
     auto options = animation_timeline_->apply(&move_rotation_,
                                               ci::Quatf::identity(), rotation_table[move_direction],
                                               idle_duration_,
@@ -283,7 +282,11 @@ public:
         position_ = ci::Vec3f(block_position_) * cube_size_;
         position_().y += cube_size_;
 
-        startIdleMotion();
+        EventParam params = {
+          { "id", id_ },
+          { "block_pos", block_position_ },
+        };
+        event_.signal("pickable-start-idle", params);
       });    
   }
 
