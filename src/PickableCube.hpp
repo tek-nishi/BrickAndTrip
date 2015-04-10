@@ -358,7 +358,7 @@ public:
   float cubeSize() const { return cube_size_; }
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
 
-  const ci::Color& color() const { return color_; }
+  ci::ColorA color() const { return color_(); }
 
 
   // std::findを利用するための定義

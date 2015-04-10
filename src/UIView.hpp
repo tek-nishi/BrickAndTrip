@@ -102,6 +102,8 @@ public:
     for (auto& light : lights_) {
       light.enable();
     }
+
+    glEnable(GL_COLOR_MATERIAL);
     
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;
