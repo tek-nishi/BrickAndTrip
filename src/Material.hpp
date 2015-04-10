@@ -22,7 +22,8 @@ public:
               Json::getColorA<float>(params["diffuse"]),
               Json::getColorA<float>(params["specular"]),
               params["shininess"].getValue<float>(),
-              Json::getColorA<float>(params["emission"]))
+              Json::getColorA<float>(params["emission"]),
+              GL_FRONT_AND_BACK)
   { }
 
   

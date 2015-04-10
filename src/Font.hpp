@@ -127,13 +127,13 @@ public:
 
     // font_heightがsurfaceサイズより大きい場合はascenderを調整
     int ascender = ascender_;
-    if ((ascender_ - slot->bitmap_top - font_edge_ + bitmap.rows) > size_) {
+    if ((ascender_ - slot->bitmap_top - font_edge_ + int(bitmap.rows)) > size_) {
       ascender = size_ + slot->bitmap_top + font_edge_ - bitmap.rows;
     }
 
     // アルファチャンネルにのみ書き込む
-    for (int iy = 0; iy < bitmap.rows; ++iy) {
-      for (int ix = 0; ix < bitmap.width; ++ix) {
+    for (u_int iy = 0; iy < bitmap.rows; ++iy) {
+      for (u_int ix = 0; ix < bitmap.width; ++ix) {
         surface.setPixel(ci::Vec2i(ix + slot->bitmap_left, iy + ascender - slot->bitmap_top - font_edge_),
                          ci::ColorA8u(255, 255, 255, bitmap.buffer[iy * bitmap.width + ix]));
       }
@@ -158,13 +158,13 @@ public:
 
       // font_heightがsurfaceサイズより大きい場合はascenderを調整
       int ascender = ascender_;
-      if ((ascender_ - slot->bitmap_top - font_edge_ + bitmap.rows) > size_) {
+      if ((ascender_ - slot->bitmap_top - font_edge_ + int(bitmap.rows)) > size_) {
         ascender = size_ + slot->bitmap_top + font_edge_ - bitmap.rows;
       }
         
       // アルファチャンネルにのみ書き込む
-      for (int iy = 0; iy < bitmap.rows; ++iy) {
-        for (int ix = 0; ix < bitmap.width; ++ix) {
+      for (u_int iy = 0; iy < bitmap.rows; ++iy) {
+        for (u_int ix = 0; ix < bitmap.width; ++ix) {
           surface.setPixel(ci::Vec2i(ix + slot->bitmap_left + pen_x, iy + ascender - slot->bitmap_top - font_edge_),
                            ci::ColorA8u(255, 255, 255, bitmap.buffer[iy * bitmap.width + ix]));
         }

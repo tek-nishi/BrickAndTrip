@@ -430,7 +430,7 @@ public:
       { -1, 0,  0 },
     };
     
-    for (int i = 0; i < elemsof(move_vec); ++i) {
+    for (u_int i = 0; i < elemsof(move_vec); ++i) {
       if (!isPickableCube(block_pos + move_vec[i])) {
         directions.push_back(i);
       }
