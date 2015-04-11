@@ -53,6 +53,8 @@ private:
   bool on_stage_;
   bool moving_;
   bool sleep_;
+  
+  bool first_moved_;
 
   int       move_direction_;
   ci::Vec3i move_vector_;
@@ -101,6 +103,7 @@ public:
     on_stage_(false),
     moving_(false),
     sleep_(sleep),
+    first_moved_(false),
     move_direction_(MOVE_NONE),
     move_vector_(ci::Vec3i::zero()),
     move_speed_(0),
@@ -149,7 +152,18 @@ public:
           { "block_pos", block_position_ },
         };
         event_.signal("pickable-on-stage", params);
-        event_.signal("pickable-start-idle", params);
+
+        // 時間差でidle動作
+        animation_timeline_->add([this]() {
+            if (isOnStage() && !first_moved_) {
+              EventParam params = {
+                { "id", id_ },
+                { "block_pos", block_position_ },
+              };
+              event_.signal("pickable-start-idle", params);
+            }
+          },
+          animation_timeline_->getCurrentTime() + ci::randFloat(idle_delay_.x, idle_delay_.y));
       });
 
     // sleep開始演出
@@ -168,7 +182,7 @@ public:
     move_speed_     = speed;
   }
   
-  bool willRotationMove() {
+  bool willRotationMove() const {
     return (move_speed_ > 0) && !moving_ && on_stage_ && !sleep_;
   }
 
@@ -181,6 +195,7 @@ public:
   
   void startRotationMove() {
     moving_ = true;
+    first_moved_ = true;
     
     // idle演出中に操作されてもよいように
     position_ = ci::Vec3f(block_position_) * cube_size_;
@@ -255,7 +270,7 @@ public:
                                               idle_duration_,
                                               getEaseFunc(idle_ease_));
 
-    options.delay(ci::randFloat(idle_delay_.x, idle_delay_.y));
+    // options.delay(ci::randFloat(idle_delay_.x, idle_delay_.y));
 
     ci::Vec3f pivot_table[] = {
       ci::Vec3f(              0, -cube_size_ / 2,  cube_size_ / 2),
@@ -282,11 +297,17 @@ public:
         position_ = ci::Vec3f(block_position_) * cube_size_;
         position_().y += cube_size_;
 
-        EventParam params = {
-          { "id", id_ },
-          { "block_pos", block_position_ },
-        };
-        event_.signal("pickable-start-idle", params);
+        // 時間差でidle動作
+        animation_timeline_->add([this]() {
+            if (isOnStage() && !first_moved_) {
+              EventParam params = {
+                { "id", id_ },
+                { "block_pos", block_position_ },
+              };
+              event_.signal("pickable-start-idle", params);
+            }
+          },
+          animation_timeline_->getCurrentTime() + ci::randFloat(idle_delay_.x, idle_delay_.y));
       });    
   }
 
