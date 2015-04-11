@@ -68,7 +68,7 @@ public:
     ui_lights_(createLights(params["ui_view.lights"])),
     autolayout_(ui_camera_),
     touch_event_(touch_event),
-    view_creator_(timeline, ui_camera_, ui_lights_, autolayout_, event_, touch_event),
+    view_creator_(params, timeline, ui_camera_, ui_lights_, autolayout_, event_, touch_event),
     sound_(params["sounds"]),
     background_(Json::getColor<float>(params["app.background"]))
   {

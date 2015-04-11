@@ -16,7 +16,7 @@ struct StageCube {
 
   ci::Vec3i block_position;
   
-  ci::ColorA color;
+  ci::Color color;
 
   bool can_ride;
   bool active;

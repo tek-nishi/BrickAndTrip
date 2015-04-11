@@ -109,13 +109,12 @@ class ColoColoParadeApp : public AppNative {
     gl::enable(GL_LIGHTING);
     gl::enable(GL_NORMALIZE);
 
-    // TIPS: ci::gl::colorで色を決める
-    //       ci::gl::Materialを使わない
-    glEnable(GL_COLOR_MATERIAL);
 #if !defined(CINDER_COCOA_TOUCH)
     // OpenGL ESは未対応
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 #endif
+    // TIPS: ambientとdiffuseをci::gl::colorで決める
+    glEnable(GL_COLOR_MATERIAL);
     
     elapsed_seconds_ = getElapsedSeconds();
   }

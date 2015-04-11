@@ -15,7 +15,7 @@
       {
         "name": "icon",
         "path": "WebSymbolsLiga-Regular.otf",
-        "size": 64,
+        "size": 128,
         "scale": [ 0.95, 1, 1 ],
         "offset": [ 0, 0.025, 0 ]
       }
@@ -41,7 +41,7 @@
 
     "lights": [
       {
-        "pos": [ 0, 0, 10 ],
+        "pos": [ -2, 2, 10 ],
         
         "constant_attenuation":  0,
         "linear_attenuation":    0,
@@ -52,6 +52,14 @@
         "specular": [ 0.1, 0.1, 0.1 ]
       }
     ],
+
+    "material" : {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+    },
 
     "fog_start": 30,
     "fog_end": 35,

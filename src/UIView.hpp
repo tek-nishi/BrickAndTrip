@@ -17,6 +17,7 @@
 #include "EventParam.hpp"
 #include "ConnectionHolder.hpp"
 #include "FontHolder.hpp"
+#include "Material.hpp"
 
 
 namespace ngs {
@@ -33,6 +34,8 @@ class UIView : private boost::noncopyable {
 
   std::vector<std::unique_ptr<UIWidget> > widgets_;
 
+  Material material_;
+  
   // 入力処理用
   bool  touching_;
   u_int touching_id_;
@@ -42,6 +45,7 @@ class UIView : private boost::noncopyable {
   
 public:
   explicit UIView(const ci::JsonTree& params,
+                  const ci::JsonTree& widget_params,
                   ci::TimelineRef timeline,
                   ci::Camera& camera,
                   std::vector<ci::gl::Light>& lights,
@@ -53,9 +57,10 @@ public:
     camera_(camera),
     lights_(lights),
     event_(event),
+    material_(params["ui_view.material"]),
     touching_(false)
   {
-    for (const auto p : params) {
+    for (const auto p : widget_params) {
       auto widget = std::unique_ptr<UIWidget>(new UIWidget(p, timeline, autolayout));
       widgets_.push_back(std::move(widget));
     }
@@ -103,7 +108,7 @@ public:
       light.enable();
     }
 
-    glEnable(GL_COLOR_MATERIAL);
+    material_.apply();
     
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;

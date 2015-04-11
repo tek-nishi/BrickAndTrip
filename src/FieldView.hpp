@@ -228,8 +228,6 @@ public:
       light.l.enable();
     }
 
-    glDisable(GL_COLOR_MATERIAL);
-
     drawStageCubes(field.active_cubes);
     drawStageCubes(field.collapse_cubes);
     drawPickableCubes(field.pickable_cubes);
@@ -548,21 +546,23 @@ private:
 
   
   void drawStageCubes(const std::deque<std::vector<StageCube> >& cubes) {
+    auto& material = materials_.get("stage_cube");
+    material.apply();
+
     for (const auto& row : cubes) {
       for (const auto& cube : row) {
         if (!cube.active) continue;
         
-        // ci::gl::color(cube.color);
+        ci::gl::color(cube.color);
 
         ci::gl::pushModelView();
         ci::gl::translate(cube.position);
         ci::gl::rotate(cube.rotation);
         ci::gl::scale(cube.size());
 
-        auto& material = materials_.get("stage_cube");
-        material.setAmbient(cube.color);
-        material.setDiffuse(cube.color);
-        material.apply();
+        // auto& material = materials_.get("stage_cube");
+        // material.setAmbient(cube.color);
+        // material.setDiffuse(cube.color);
         
         ci::gl::draw(models_.get("stage_cube").mesh());
       
@@ -581,20 +581,18 @@ private:
   }
 
   void drawPickableCubes(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+    auto& material = materials_.get("pickable_cube");
+    material.apply();
+    
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
-      // ci::gl::color(cube->color());
+      ci::gl::color(cube->color());
       
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
       ci::gl::rotate(cube->rotation());
       ci::gl::scale(cube->size());
-
-      auto& material = materials_.get("pickable_cube");
-      material.setAmbient(cube->color());
-      material.setDiffuse(cube->color());
-      material.apply();
 
       ci::gl::draw(models_.get("pickable_cube").mesh());
       
@@ -611,20 +609,18 @@ private:
   }
 
   void drawItemCubes(const std::vector<std::unique_ptr<ItemCube> >& cubes) {
+    auto& material = materials_.get("item_cube");
+    material.apply();
+    
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
-      // ci::gl::color(cube->color());
+      ci::gl::color(cube->color());
       
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
       ci::gl::rotate(cube->rotation());
       ci::gl::scale(cube->size());
-
-      auto& material = materials_.get("item_cube");
-      material.setAmbient(cube->color());
-      material.setDiffuse(cube->color());
-      material.apply();
 
       ci::gl::draw(models_.get("item_cube").mesh());
       
