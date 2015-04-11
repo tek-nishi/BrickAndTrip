@@ -264,8 +264,9 @@ public:
   int getTopZ() const { return top_z_; }
   
   int addCubes(const ci::JsonTree& stage_data,
-                const std::vector<ci::Color>& cube_color,
-                const ci::Color& line_color) {
+               const int x_offset,
+               const std::vector<ci::Color>& cube_color,
+               const ci::Color& line_color) {
     build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
     auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
@@ -277,7 +278,7 @@ public:
     int iz = 0;
     for (const auto& row : body) {
       std::vector<StageCube> cube_row;
-      int x = 0;
+      int x = x_offset;
       int z = iz + top_z_;
 
       const auto& base_color = (iz == last_iz) ? line_color

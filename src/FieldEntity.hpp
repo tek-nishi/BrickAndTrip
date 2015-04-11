@@ -494,12 +494,14 @@ private:
     auto stage = ci::JsonTree(ci::app::loadAsset(path));
     int current_z = stage_.getTopZ();
 
+    int x_offset = Json::getValue(stage, "x_offest", 0);
     int top_z = stage_.addCubes(stage,
+                                x_offset,
                                 cube_stage_color_, cube_line_color_);
 
     int entry_num = Json::getValue(stage, "pickable", 0);
 
-    items_.addItemCubes(stage, current_z);
+    items_.addItemCubes(stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,

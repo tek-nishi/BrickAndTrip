@@ -61,10 +61,10 @@ public:
     entry_items_.clear();
   }
   
-  int addItemCubes(const ci::JsonTree& params, const int start_z) {
+  int addItemCubes(const ci::JsonTree& params, const int start_z, const int x_offset) {
     if (!params.hasChild("items")) return 0;
 
-    ci::Vec3i start_pos(0, 0, start_z);
+    ci::Vec3i start_pos(x_offset, 0, start_z);
 
     int entry_num = 0;
     for (const auto& entry : params["items"]) {

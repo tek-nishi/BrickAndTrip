@@ -7,6 +7,7 @@
 #include "cinder/Json.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
+#include "cinder/System.h"
 #include "DrawVboMesh.hpp"
 #include "AntiAliasingType.hpp"
 #include "Autolayout.hpp"
@@ -38,6 +39,8 @@ class ColoColoParadeApp : public AppNative {
   bool forward_speed_change_;
   bool pause_;
 
+  bool active_touch_;
+  
   std::unique_ptr<FontHolder> fonts_;
   
   std::unique_ptr<Model> cube_font_;
@@ -58,8 +61,11 @@ class ColoColoParadeApp : public AppNative {
     settings->setWindowSize(size);
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
-    
-    settings->enableMultiTouch();
+
+    active_touch_ = ci::System::hasMultiTouch();
+    if (active_touch_) {
+      settings->enableMultiTouch();
+    }
 
     fast_speed_ = params_["app.fast_speed"].getValue<double>();
     slow_speed_ = params_["app.slow_speed"].getValue<double>();
