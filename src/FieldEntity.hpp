@@ -194,6 +194,7 @@ public:
         { "play-time", records_.current_game.play_time },
         { "tumble-num", records_.current_game.tumble_num },
         { "item-num", records_.current_game.item_num },
+        { "operation_num", records_.current_game.operation_num },
       };
       event_.signal("update-record", params);
     }
@@ -282,6 +283,7 @@ public:
         { "clear_time", records_.current_game.play_time },
         { "tumble_num", records_.current_game.tumble_num },
         { "item_num", records_.current_game.item_num },
+        { "operation_num", records_.current_game.operation_num },
         { "play_time", records_.getCurrentGamePlayTime() },
         { "all_cleared", all_cleard_ },
       };
@@ -309,6 +311,8 @@ public:
       EventParam params = {
         { "clear_time", records_.current_game.play_time },
         { "tumble_num", records_.current_game.tumble_num },
+        { "operation_num", records_.current_game.operation_num },
+        { "play_time", records_.getCurrentGamePlayTime() },
       };
       event_.signal("begin-gameover", params);
     }
@@ -358,6 +362,9 @@ public:
     auto& cube = *it;
 
     cube->endPickingColor();
+
+    // 動こうが動くまいが、操作はカウント
+    records_.current_game.operation_num += 1;
     
     if ((direction == PickableCube::MOVE_NONE) || !speed) {
       cube->cancelRotationMove();

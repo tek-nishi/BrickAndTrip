@@ -95,11 +95,12 @@ public:
     event_.connect("begin-records",
                    [this](const Connection& connection, EventParam& param) {
                      EventParam records = {
-                       { "total_play",   records_.getTotalPlayNum() },
-                       { "total_time",   records_.getTotalPlayTime() },
-                       { "total_tumble", records_.getTotalTumbleNum() },
-                       { "total_item",   records_.getTotalItemNum() },
-                       { "total_clear",  records_.getTotalClearNum() },
+                       { "total_play",      records_.getTotalPlayNum() },
+                       { "total_time",      records_.getTotalPlayTime() },
+                       { "total_tumble",    records_.getTotalTumbleNum() },
+                       { "total_operation", records_.getTotalOperationNum() },
+                       { "total_item",      records_.getTotalItemNum() },
+                       { "total_clear",     records_.getTotalClearNum() },
                      };
                      
                      addController<RecordsController>(params_, timeline_, event_, records, view_creator_.create("ui_records.json"));
@@ -170,6 +171,20 @@ public:
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
     addController<TitleController>(params, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+
+#if 0
+    {
+      EventParam param = {
+        { "clear_time", 10.5 },
+        { "tumble_num", 2 },
+        { "item_num", 1 },
+        { "operation_num", 99 },
+        { "play_time", 1.5 },
+        { "all_cleared", false },
+      };
+      addController<StageclearController>(params_, timeline_, event_, param, view_creator_.create("ui_stageclear.json"));
+    }
+#endif
   }
 
 

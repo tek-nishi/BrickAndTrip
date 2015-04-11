@@ -73,6 +73,11 @@ public:
     }
     
     {
+      auto total_operation = boost::any_cast<int>(records.at("total_operation"));
+      view_->getWidget("total_operation").getCubeText().setText(toFormatedString(total_operation, 5));
+    }
+    
+    {
       auto total_item = boost::any_cast<int>(records.at("total_item"));
       view_->getWidget("total_item").getCubeText().setText(toFormatedString(total_item, 5));
     }

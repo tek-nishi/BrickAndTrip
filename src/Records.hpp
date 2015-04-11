@@ -17,12 +17,14 @@ public:
     double clear_time;
     int    tumble_num;
     int    item_num;
+    int    operation_num;
     int    score;
 
     StageRecord() :
       clear_time(0.0),
       tumble_num(0),
       item_num(0),
+      operation_num(0),
       score()
     {}
   };
@@ -33,12 +35,14 @@ public:
 
     int tumble_num;
     int item_num;
+    int operation_num;
 
     CurrentGame() :
       start_time(0.0),
       play_time(0.0),
       tumble_num(0),
-      item_num(0)
+      item_num(0),
+      operation_num(0)
     {}
   };
   
@@ -50,6 +54,7 @@ private:
   double total_play_time_;
   int    total_tumble_num_;
   int    total_item_num_;
+  int    total_operation_num_;
   int    total_clear_num_;
 
   int    current_stage_;
@@ -67,6 +72,7 @@ public:
     total_play_time_(0.0),
     total_tumble_num_(0),
     total_item_num_(0),
+    total_operation_num_(0),
     total_clear_num_(0),
     current_stage_(0),
     current_play_time_(0.0),
@@ -99,9 +105,11 @@ public:
     StageRecord record;
 
     double play_time = current_time - current_game.start_time;
-    record.clear_time = play_time;
-    record.tumble_num = current_game.tumble_num;
-    record.item_num   = current_game.item_num;
+    record.clear_time    = play_time;
+    record.tumble_num    = current_game.tumble_num;
+    record.item_num      = current_game.item_num;
+    record.operation_num = current_game.operation_num;
+
     // TODO:score計算
     // record.score = 0;
     
@@ -115,9 +123,10 @@ public:
 
     current_play_time_ += play_time;
     
-    total_play_time_  += record.clear_time;
-    total_tumble_num_ += current_game.tumble_num;
-    total_item_num_   += current_game.item_num;
+    total_play_time_     += record.clear_time;
+    total_tumble_num_    += current_game.tumble_num;
+    total_item_num_      += current_game.item_num;
+    total_operation_num_ += current_game.operation_num;
   }
 
   
@@ -127,10 +136,11 @@ public:
     current_play_time_ += play_time;
 
     // TIPS:GameOverでも記録が伸びる親切設計
-    total_play_time_  += play_time;
-    total_tumble_num_ += current_game.tumble_num;
-    total_item_num_   += current_game.item_num;
-    total_play_num_   += 1;
+    total_play_time_     += play_time;
+    total_tumble_num_    += current_game.tumble_num;
+    total_item_num_      += current_game.item_num;
+    total_operation_num_ += current_game.operation_num;
+    total_play_num_      += 1;
   }
 
   // クリア回数
@@ -148,11 +158,12 @@ public:
     
     ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
 
-    total_play_num_   = record["records.total_play_num"].getValue<int>();
-    total_play_time_  = record["records.total_play_time"].getValue<double>();
-    total_tumble_num_ = record["records.total_tumble_num"].getValue<int>();
-    total_item_num_   = record["records.total_item_num"].getValue<int>();
-    total_clear_num_  = record["records.total_clear_num"].getValue<int>();
+    total_play_num_      = record["records.total_play_num"].getValue<int>();
+    total_play_time_     = record["records.total_play_time"].getValue<double>();
+    total_tumble_num_    = record["records.total_tumble_num"].getValue<int>();
+    total_item_num_      = record["records.total_item_num"].getValue<int>();
+    total_operation_num_ = record["records.total_operation_num"].getValue<int>();
+    total_clear_num_     = record["records.total_clear_num"].getValue<int>();
 
     se_on_  = record["records.se_on"].getValue<bool>();
     bgm_on_ = record["records.bgm_on"].getValue<bool>();
@@ -162,10 +173,11 @@ public:
       for (const auto& sr : stage) {
         StageRecord s;
 
-        s.clear_time = sr["clear_time"].getValue<double>();
-        s.tumble_num = sr["tumble_num"].getValue<int>();
-        s.item_num   = sr["item_num"].getValue<int>();
-        s.score      = sr["score"].getValue<int>();
+        s.clear_time    = sr["clear_time"].getValue<double>();
+        s.tumble_num    = sr["tumble_num"].getValue<int>();
+        s.item_num      = sr["item_num"].getValue<int>();
+        s.operation_num = sr["opration_num"].getValue<int>();
+        s.score         = sr["score"].getValue<int>();
 
         stage_records_.push_back(std::move(s));
       }
@@ -179,6 +191,7 @@ public:
       .addChild(ci::JsonTree("total_play_time", total_play_time_))
       .addChild(ci::JsonTree("total_tumble_num", total_tumble_num_))
       .addChild(ci::JsonTree("total_item_num", total_item_num_))
+      .addChild(ci::JsonTree("total_operation_num", total_operation_num_))
       .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
       .addChild(ci::JsonTree("se_on", se_on_))
       .addChild(ci::JsonTree("bgm_on", bgm_on_));
@@ -190,6 +203,7 @@ public:
         sr.addChild(ci::JsonTree("clear_time", s.clear_time))
           .addChild(ci::JsonTree("tumble_num", s.tumble_num))
           .addChild(ci::JsonTree("item_num", s.item_num))
+          .addChild(ci::JsonTree("operation_num", s.operation_num))
           .addChild(ci::JsonTree("score", s.score));
 
         stage.pushBack(sr);
@@ -209,6 +223,7 @@ public:
   double getTotalPlayTime() const { return total_play_time_; }
   int getTotalTumbleNum() const { return total_tumble_num_; }
   int getTotalItemNum() const { return total_item_num_; }
+  int getTotalOperationNum() const { return total_operation_num_; }
   int getTotalClearNum() const { return total_clear_num_; }
 
   bool isSeOn() const { return se_on_; }

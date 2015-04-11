@@ -77,6 +77,15 @@ public:
 
       view_->getWidget("tumble-result").getCubeText().setText(str.str());
     }
+
+    {
+      auto operation_num = boost::any_cast<int>(result.at("operation_num"));
+
+      std::ostringstream str;
+      str << std::setw(5) << std::setfill('0') << operation_num;
+
+      view_->getWidget("operation-result").getCubeText().setText(str.str());
+    }
     
     {
       auto item_num = boost::any_cast<int>(result.at("item_num"));
