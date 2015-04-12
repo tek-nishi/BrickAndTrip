@@ -234,7 +234,8 @@ private:
   }
   
   void draw(FontHolder& fonts, Model& cube, Model& text) override {
-    ci::gl::clear(background_);
+    // ci::gl::clear(background_);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
     for (auto& child : children_) {
       child->draw(fonts, cube, text);

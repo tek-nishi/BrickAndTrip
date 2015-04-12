@@ -7,6 +7,7 @@
 #include "cinder/Camera.h"
 #include "cinder/gl/Light.h"
 #include "cinder/gl/gl.h"
+#include "cinder/gl/Texture.h"
 #include <boost/range/algorithm_ext/erase.hpp>
 #include <boost/noncopyable.hpp>
 #include <numeric>
@@ -86,6 +87,9 @@ class FieldView : private boost::noncopyable {
   ModelHolder models_;
   MaterialHolder materials_;
 
+  ci::gl::Texture bg_texture_;
+
+  
   
 public:
   FieldView(const ci::JsonTree& params,
@@ -110,7 +114,8 @@ public:
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
     animation_timeline_(ci::Timeline::create()),
-    progressing_seconds_(0.0)
+    progressing_seconds_(0.0),
+    bg_texture_(ci::loadImage(ci::app::loadAsset("bg.png")))
     // camera_editor_(camera_, interest_point_, eye_point_)
   {
     // 注視点からの距離、角度でcamera位置を決めている
@@ -211,6 +216,18 @@ public:
     updateCamera(progressing_seconds_);
     updateLight();
 
+    // 遠景
+    {
+      ci::CameraOrtho camera(0, 255, 255, 0, -1, 1);
+      ci::gl::setMatrices(camera);
+        
+      ci::gl::disableDepthRead();
+      ci::gl::disableDepthWrite();
+      ci::gl::disable(GL_LIGHTING);
+      ci::gl::color(ci::Color(1, 1, 1));
+      ci::gl::draw(bg_texture_);
+    }
+
     ci::gl::enable(GL_LIGHTING);
     ci::gl::enableDepthRead();
     ci::gl::enableDepthWrite();
@@ -232,6 +249,7 @@ public:
     drawStageCubes(field.collapse_cubes);
     drawPickableCubes(field.pickable_cubes);
     drawItemCubes(field.item_cubes);
+    drawBgCubes(field.bg_cubes);
 
     
     for (auto& light : lights_) {
@@ -623,6 +641,23 @@ private:
       ci::gl::scale(cube->size());
 
       ci::gl::draw(models_.get("item_cube").mesh());
+      
+      ci::gl::popModelView();
+    }
+  }
+  
+  void drawBgCubes(const std::vector<Bg::Cube>& cubes) {
+    auto& material = materials_.get("bg_cube");
+    material.apply();
+    
+    for (const auto& cube : cubes) {
+      ci::gl::color(cube.color);
+      
+      ci::gl::pushModelView();
+      ci::gl::translate(cube.position);
+      ci::gl::scale(cube.size);
+
+      ci::gl::draw(models_.get("bg_cube").mesh());
       
       ci::gl::popModelView();
     }

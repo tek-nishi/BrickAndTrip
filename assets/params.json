@@ -1,7 +1,7 @@
 {
   "app": {
     "size": [ 960, 640 ],
-    "background": [ 0.2, 0.2, 0.2 ],
+    "background": [ 0.4, 0.4, 0.4 ],
 
     "fonts": [
       {
@@ -61,9 +61,9 @@
         "emission": [ 0, 0, 0, 1 ]
     },
 
-    "fog_start": 30,
-    "fog_end": 35,
-    "fog_color": [ 0.2, 0.2, 0.2, 1 ]
+    "fog_start": 25,
+    "fog_end": 30,
+    "fog_color": [ 0.4, 0.4, 0.4, 1 ]
   },
   
   "game_view": {
@@ -117,13 +117,12 @@
     "move_threshold": 0.8,
     "move_speed_rate": 0.25,
 
-
     "models": {
       "pickable_cube": "pickable_cube.obj",
       "item_cube": "item_cube.obj",
-      "stage_cube": "stage_cube.obj"
+      "stage_cube": "stage_cube.obj",
+      "bg_cube": "bg_cube.obj"
     },
-
   
     "materials": {
       "pickable_cube": {
@@ -143,6 +142,14 @@
       },
 
       "stage_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
+      "bg_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
         "specular": [ 0.2, 0.2, 0.2, 1 ],
@@ -286,6 +293,14 @@
 
       "model": "item_cube",
       "material": "item_cube"
+    },
+
+    "bg": {
+      "cube_density": 0.25,
+      "cube_speed": [ 0.1, 1 ],
+      
+      "bbox_min": [  -5, -10,  -5 ],
+      "bbox_max": [  25,  -2,  25 ]
     },
 
     "records": "records.json"

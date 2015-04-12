@@ -198,6 +198,8 @@ public:
       };
       event_.signal("update-record", params);
     }
+
+    bg_.update(progressing_seconds);
   }
 
 
@@ -459,7 +461,8 @@ public:
       stage_.activeCubes(),
       stage_.collapseCubes(),
       pickable_cubes_,
-      items_.items()
+      items_.items(),
+      bg_.cubes()
     };
 
     return field;

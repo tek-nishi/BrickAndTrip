@@ -176,7 +176,7 @@ public:
         s.clear_time    = sr["clear_time"].getValue<double>();
         s.tumble_num    = sr["tumble_num"].getValue<int>();
         s.item_num      = sr["item_num"].getValue<int>();
-        s.operation_num = sr["opration_num"].getValue<int>();
+        s.operation_num = sr["operation_num"].getValue<int>();
         s.score         = sr["score"].getValue<int>();
 
         stage_records_.push_back(std::move(s));

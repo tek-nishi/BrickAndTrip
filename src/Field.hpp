@@ -9,6 +9,7 @@
 #include "StageCube.hpp"
 #include "PickableCube.hpp"
 #include "ItemCube.hpp"
+#include "Bg.hpp"
 
 
 namespace ngs {
@@ -22,6 +23,8 @@ struct Field {
   const std::vector<std::unique_ptr<PickableCube> >& pickable_cubes;
 
   const std::vector<std::unique_ptr<ItemCube> >& item_cubes;
+
+  const std::vector<Bg::Cube>& bg_cubes;
 };
 
 }
