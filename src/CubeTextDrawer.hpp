@@ -33,6 +33,7 @@ void drawCubeAndText(ci::gl::TextureRef texture,
   ci::gl::disable(GL_LIGHTING);
   ci::gl::enableDepthRead(false);
   ci::gl::enableDepthWrite(false);
+  ci::gl::enableAlphaBlending();
 
   ci::gl::color(text_color);
 
@@ -42,6 +43,8 @@ void drawCubeAndText(ci::gl::TextureRef texture,
   texture->enableAndBind();
   ci::gl::draw(text.mesh());
   texture->disable();
+
+  ci::gl::disableAlphaBlending();
 }
 
 

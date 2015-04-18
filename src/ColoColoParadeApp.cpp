@@ -100,7 +100,7 @@ class ColoColoParadeApp : public AppNative {
     gl::enableDepthRead();
     gl::enableDepthWrite();
 
-    gl::enableAlphaBlending();
+    // gl::enableAlphaBlending();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     gl::enable(GL_CULL_FACE);
