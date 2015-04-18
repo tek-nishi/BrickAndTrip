@@ -37,28 +37,6 @@
       "far_z":  500,
     
       "eye_point": [ 0, 0, 20 ]
-    },
-
-    "lights": [
-      {
-        "pos": [ -2, 2, 10 ],
-        
-        "constant_attenuation":  0,
-        "linear_attenuation":    0,
-        "quadratic_attenuation": 0.015,
-        
-        "diffuse": [ 0.8, 0.8, 0.8 ],
-        "ambient": [ 0.2, 0.2, 0.2 ],
-        "specular": [ 0.1, 0.1, 0.1 ]
-      }
-    ],
-
-    "material" : {
-        "ambient": [ 0, 0, 0, 1 ],
-        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.3, 0.3, 0.3, 1 ],
-        "shininess": 80,
-        "emission": [ 0, 0, 0, 1 ]
     }
   },
   
@@ -154,8 +132,8 @@
       }
     },
 
-    "fog_start": 20,
-    "fog_end": 25,
+    "fog_start": 22,
+    "fog_end": 26,
     "fog_color": [ 0.4, 0.4, 0.4, 1 ],
     
     "bg_fog_start": 23,

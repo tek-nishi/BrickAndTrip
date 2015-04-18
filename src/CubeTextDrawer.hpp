@@ -22,19 +22,10 @@ void drawCubeAndText(ci::gl::TextureRef texture,
                      Model& cube, Model& text,
                      const ci::Color& color, const ci::Color& text_color,
                      const ci::Vec3f& scale, const ci::Vec3f& offset) {
-  ci::gl::enable(GL_LIGHTING);
-  ci::gl::enableDepthRead();
-  ci::gl::enableDepthWrite();
-
   ci::gl::color(color);
-
   ci::gl::draw(cube.mesh());
 
-  ci::gl::disable(GL_LIGHTING);
-  ci::gl::enableDepthRead(false);
-  ci::gl::enableDepthWrite(false);
   ci::gl::enableAlphaBlending();
-
   ci::gl::color(text_color);
 
   ci::gl::translate(offset);
@@ -42,8 +33,8 @@ void drawCubeAndText(ci::gl::TextureRef texture,
   
   texture->enableAndBind();
   ci::gl::draw(text.mesh());
-  texture->disable();
 
+  texture->disable();
   ci::gl::disableAlphaBlending();
 }
 

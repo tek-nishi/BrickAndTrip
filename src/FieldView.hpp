@@ -229,9 +229,9 @@ public:
       ci::gl::draw(bg_texture_);
     }
 
-    ci::gl::enable(GL_LIGHTING);
     ci::gl::enableDepthRead();
     ci::gl::enableDepthWrite();
+    ci::gl::enable(GL_LIGHTING);
 
     ci::gl::enable(GL_FOG);
     glFogi(GL_FOG_MODE, GL_LINEAR);

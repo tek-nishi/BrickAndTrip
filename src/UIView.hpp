@@ -27,15 +27,12 @@ class UIView : private boost::noncopyable {
   bool active_;
 
   ci::Camera& camera_;
-  std::vector<ci::gl::Light>& lights_;
 
   Event<EventParam>& event_;
   ConnectionHolder connections_;
 
   std::vector<std::unique_ptr<UIWidget> > widgets_;
 
-  Material material_;
-  
   // 入力処理用
   bool  touching_;
   u_int touching_id_;
@@ -48,16 +45,13 @@ public:
                   const ci::JsonTree& widget_params,
                   ci::TimelineRef timeline,
                   ci::Camera& camera,
-                  std::vector<ci::gl::Light>& lights,
                   Autolayout& autolayout,
                   Event<EventParam>& event,
                   Event<std::vector<Touch> >& touch_event) :
     disp_(true),
     active_(true),
     camera_(camera),
-    lights_(lights),
     event_(event),
-    material_(params["ui_view.material"]),
     touching_(false)
   {
     for (const auto p : widget_params) {
@@ -96,28 +90,16 @@ public:
   void draw(FontHolder& fonts, Model& cube, Model& text) {
     if (!disp_) return;
 
-    // TODO:Depth Bufferをクリアしたくない
-    glClear(GL_DEPTH_BUFFER_BIT);
-    
-    ci::gl::enableDepthRead();
-    ci::gl::enableDepthWrite();
+    ci::gl::disableDepthRead();
+    ci::gl::disableDepthWrite();
+    ci::gl::disable(GL_LIGHTING);
 
     ci::gl::setMatrices(camera_);
 
-    for (auto& light : lights_) {
-      light.enable();
-    }
-
-    material_.apply();
-    
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;
       
       widget->draw(fonts, cube, text);
-    }
-
-    for (auto& light : lights_) {
-      light.disable();
     }
   }
 

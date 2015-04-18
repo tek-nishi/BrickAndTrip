@@ -39,8 +39,6 @@ class RootController : public ControllerBase {
   float near_z_;
   float far_z_;
   
-  std::vector<ci::gl::Light> ui_lights_;
-
   Autolayout autolayout_;
   UIViewCreator view_creator_;
 
@@ -65,10 +63,9 @@ public:
     fov_(ui_camera_.getFov()),
     near_z_(ui_camera_.getNearClip()),
     far_z_(ui_camera_.getFarClip()),
-    ui_lights_(createLights(params["ui_view.lights"])),
     autolayout_(ui_camera_),
     touch_event_(touch_event),
-    view_creator_(params, timeline, ui_camera_, ui_lights_, autolayout_, event_, touch_event),
+    view_creator_(params, timeline, ui_camera_, autolayout_, event_, touch_event),
     sound_(params["sounds"]),
     background_(Json::getColor<float>(params["app.background"]))
   {
@@ -235,6 +232,7 @@ private:
   
   void draw(FontHolder& fonts, Model& cube, Model& text) override {
     // ci::gl::clear(background_);
+    ci::gl::enableDepthWrite();
     glClear(GL_DEPTH_BUFFER_BIT);
 
     for (auto& child : children_) {
@@ -260,33 +258,6 @@ private:
     camera.setEyePoint(Json::getVec3<float>(params["eye_point"]));
 
     return camera;
-  }
-
-  // 汎用的なパラメーターからLightを生成する
-  static std::vector<ci::gl::Light> createLights(const ci::JsonTree& params) {
-    int id = 0;
-    std::vector<ci::gl::Light> lights;
-    for (const auto& param : params) {
-      auto light = ci::gl::Light(ci::gl::Light::POINT, id);
-
-      light.setPosition(Json::getVec3<float>(param["pos"]));
-
-      float constant_attenuation  = param["constant_attenuation"].getValue<float>();
-      float linear_attenuation    = param["linear_attenuation"].getValue<float>();
-      float quadratic_attenuation = param["quadratic_attenuation"].getValue<float>();
-      light.setAttenuation(constant_attenuation,
-                           linear_attenuation,
-                           quadratic_attenuation);
-
-      light.setDiffuse(Json::getColor<float>(param["diffuse"]));
-      light.setAmbient(Json::getColor<float>(param["ambient"]));
-
-      lights.push_back(std::move(light));
-      
-      ++id;
-    }
-    
-    return lights;
   }
   
 };

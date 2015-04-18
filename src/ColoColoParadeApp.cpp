@@ -97,16 +97,11 @@ class ColoColoParadeApp : public AppNative {
     cube_text_ = std::unique_ptr<Model>(new Model("cube_text.obj"));
     
     // 以下OpenGL設定
-    gl::enableDepthRead();
-    gl::enableDepthWrite();
-
-    // gl::enableAlphaBlending();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     gl::enable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    gl::enable(GL_LIGHTING);
     gl::enable(GL_NORMALIZE);
 
 #if !defined(CINDER_COCOA_TOUCH)
