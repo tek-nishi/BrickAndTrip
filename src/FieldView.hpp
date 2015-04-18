@@ -235,10 +235,10 @@ public:
 
     ci::gl::enable(GL_FOG);
     glFogi(GL_FOG_MODE, GL_LINEAR);
-    auto color = Json::getColorA<float>(params_["ui_view.fog_color"]);
+    auto color = Json::getColorA<float>(params_["game_view.fog_color"]);
     glFogfv(GL_FOG_COLOR, color.ptr());
-    glFogf(GL_FOG_START, params_["ui_view.fog_start"].getValue<float>());
-    glFogf(GL_FOG_END, params_["ui_view.fog_end"].getValue<float>());
+    glFogf(GL_FOG_START, params_["game_view.fog_start"].getValue<float>());
+    glFogf(GL_FOG_END, params_["game_view.fog_end"].getValue<float>());
     
     ci::gl::setMatrices(camera_);
 
@@ -250,10 +250,15 @@ public:
     drawStageCubes(field.collapse_cubes);
     drawPickableCubes(field.pickable_cubes);
     drawItemCubes(field.item_cubes);
+
+    // bgのfogは別設定
+    glFogf(GL_FOG_START, params_["game_view.bg_fog_start"].getValue<float>());
+    glFogf(GL_FOG_END, params_["game_view.bg_fog_end"].getValue<float>());
+
     drawBgCubes(field.bg_cubes);
 
 #ifdef DEBUG
-    drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
+    // drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
 #endif
 
     

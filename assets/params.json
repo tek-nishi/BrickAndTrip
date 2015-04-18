@@ -59,11 +59,7 @@
         "specular": [ 0.3, 0.3, 0.3, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
-    },
-
-    "fog_start": 25,
-    "fog_end": 35,
-    "fog_color": [ 0.4, 0.4, 0.4, 1 ]
+    }
   },
   
   "game_view": {
@@ -156,7 +152,14 @@
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       }
-    }
+    },
+
+    "fog_start": 20,
+    "fog_end": 25,
+    "fog_color": [ 0.4, 0.4, 0.4, 1 ],
+    
+    "bg_fog_start": 23,
+    "bg_fog_end": 40
   },
 
   
@@ -300,7 +303,7 @@
       "cube_speed": [ 0.1, 1 ],
       "cube_lifetime": [ 10, 15 ],
       
-      "bbox_min": [  -7, -10,  -3 ],
+      "bbox_min": [  -7, -13,  -3 ],
       "bbox_max": [  22,  -2,  30 ],
 
       "revise_duration": 0.25,
