@@ -19,7 +19,7 @@ namespace ngs {
 namespace CubeTextDrawer {
 
 void drawCubeAndText(ci::gl::TextureRef texture,
-                     Model& cube, Model& text,
+                     const Model& cube, const Model& text,
                      const ci::Color& color, const ci::Color& text_color,
                      const ci::Vec3f& scale, const ci::Vec3f& offset) {
   ci::gl::color(color);
@@ -41,7 +41,7 @@ void drawCubeAndText(ci::gl::TextureRef texture,
 
 void draw(const CubeText& cube_text,
           TextureFont& font,
-          Model& model_cube, Model& model_text,
+          const Model& model_cube, const Model& model_text,
           const ci::Vec3f& pos,
           const ci::Vec3f& scale,
           const ci::Color& text_color,

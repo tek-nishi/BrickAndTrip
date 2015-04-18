@@ -191,7 +191,12 @@
   {
     "name": "agree",
     "disp": true,
+
+    "base_model": "button_base",
+    "text_model": "button_text",
+
     "active": true,
+    "event_message": "records-agree",
 
     "text": "õ",
     "font": "icon",
@@ -202,8 +207,6 @@
     "origin": "top-center",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0, 0, 1 ],
-
-    "event_message": "records-agree"
+    "text_color": [ 0, 0, 1 ]
   }
 ]

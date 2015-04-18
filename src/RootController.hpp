@@ -230,13 +230,13 @@ private:
                            });
   }
   
-  void draw(FontHolder& fonts, Model& cube, Model& text) override {
+  void draw(FontHolder& fonts, ModelHolder& models) override {
     // ci::gl::clear(background_);
     ci::gl::enableDepthWrite();
     glClear(GL_DEPTH_BUFFER_BIT);
 
     for (auto& child : children_) {
-      child->draw(fonts, cube, text);
+      child->draw(fonts, models);
     }
   }
 

@@ -279,9 +279,9 @@ private:
     view_.update(progressing_seconds);
   }
 
-  void draw(FontHolder& fonts, Model& cube, Model& text) override {
+  void draw(FontHolder& fonts, ModelHolder& models) override {
     const auto field = entity_.fieldData();
-    view_.draw(field);
+    view_.draw(field, models);
   }
 
   

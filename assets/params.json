@@ -5,7 +5,7 @@
 
     "fonts": [
       {
-        "name": "medium",
+        "name": "default",
         "path": "mplus-1m-medium.ttf",
         "default": true,
         "size": 128,
@@ -20,6 +20,18 @@
         "offset": [ 0, 0.025, 0 ]
       }
     ],
+
+    "models": {
+      "text_base": "text_base.obj",
+      "text_text": "text_text.obj",
+      "button_base": "button_base.obj",
+      "button_text": "button_text.obj",
+      
+      "pickable_cube": "pickable_cube.obj",
+      "item_cube": "item_cube.obj",
+      "stage_cube": "stage_cube.obj",
+      "bg_cube": "bg_cube.obj"
+    },
     
     "fast_speed": 3,
     "slow_speed": 0.25,
@@ -90,13 +102,6 @@
     
     "move_threshold": 0.8,
     "move_speed_rate": 0.25,
-
-    "models": {
-      "pickable_cube": "pickable_cube.obj",
-      "item_cube": "item_cube.obj",
-      "stage_cube": "stage_cube.obj",
-      "bg_cube": "bg_cube.obj"
-    },
   
     "materials": {
       "pickable_cube": {

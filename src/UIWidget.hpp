@@ -25,6 +25,9 @@ class UIWidget {
   CubeText text_;
   std::string font_name_;
 
+  std::string base_model_;
+  std::string text_model_;
+  
   ci::Anim<ci::Vec3f> pos_;
   ci::Anim<ci::Vec3f> scale_;
   std::vector<ci::Anim<float> > rotate_;
@@ -55,7 +58,9 @@ public:
           params["size"].getValue<float>(),
           params["spacing"].getValue<float>(),
           params["chara_split"].getValue<size_t>()),
-    font_name_(Json::getValue(params, "font", std::string(""))),
+    font_name_(Json::getValue(params, "font", std::string("default"))),
+    base_model_(Json::getValue(params, "base_model", std::string("text_base"))),
+    text_model_(Json::getValue(params, "text_model", std::string("text_text"))),
     pos_(ci::Vec3f::zero()),
     scale_(ci::Vec3f::one()),
     rotate_(text_.text().size()),
@@ -135,9 +140,9 @@ public:
   }
 
 
-  void draw(FontHolder& fonts, Model& cube, Model& text) {
+  void draw(FontHolder& fonts, ModelHolder& models) {
     CubeTextDrawer::draw(text_, fonts.getFont(font_name_),
-                         cube, text,
+                         models.get(base_model_), models.get(text_model_),
                          pos_() + layout_->getPos(), scale_(),
                          text_color_(), base_color_(),
                          rotate_);

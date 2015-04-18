@@ -126,7 +126,7 @@ private:
     bbox_ = ci::AxisAlignedBox3f(-size_ / 2, size_ / 2).transformed(transform);
   }
   
-  void draw(FontHolder& fonts, Model& cube, Model& text) {
+  void draw(FontHolder& fonts, ModelHolder& models) {
     ci::gl::setMatrices(camera_);
 
     ci::gl::enable(GL_LIGHTING);

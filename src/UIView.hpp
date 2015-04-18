@@ -17,7 +17,7 @@
 #include "EventParam.hpp"
 #include "ConnectionHolder.hpp"
 #include "FontHolder.hpp"
-#include "Material.hpp"
+#include "ModelHolder.hpp"
 
 
 namespace ngs {
@@ -87,7 +87,7 @@ public:
   }
   
   
-  void draw(FontHolder& fonts, Model& cube, Model& text) {
+  void draw(FontHolder& fonts, ModelHolder& models) {
     if (!disp_) return;
 
     ci::gl::disableDepthRead();
@@ -99,7 +99,7 @@ public:
     for (auto& widget : widgets_) {
       if (!widget->isDisp()) continue;
       
-      widget->draw(fonts, cube, text);
+      widget->draw(fonts, models);
     }
   }
 

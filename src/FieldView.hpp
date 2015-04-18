@@ -85,7 +85,6 @@ class FieldView : private boost::noncopyable {
   
   // CameraEditor camera_editor_;
 
-  ModelHolder models_;
   MaterialHolder materials_;
 
   ci::gl::Texture bg_texture_;
@@ -159,7 +158,6 @@ public:
       ++id;
     }
 
-    readModels(params["game_view.models"]);
     readMaterials(params["game_view.materials"]);
     
     auto current_time = timeline->getCurrentTime();
@@ -210,7 +208,7 @@ public:
 
   
   // Fieldの表示
-  void draw(const Field& field) {
+  void draw(const Field& field, ModelHolder& models) {
     // FIXME:drawの中で、PikableCubeからTouch情報を生成している
     makeTouchCubeInfo(field.pickable_cubes);
     updateCameraTarget(field.pickable_cubes);
@@ -246,16 +244,16 @@ public:
       light.l.enable();
     }
 
-    drawStageCubes(field.active_cubes);
-    drawStageCubes(field.collapse_cubes);
-    drawPickableCubes(field.pickable_cubes);
-    drawItemCubes(field.item_cubes);
+    drawStageCubes(field.active_cubes, models);
+    drawStageCubes(field.collapse_cubes, models);
+    drawPickableCubes(field.pickable_cubes, models);
+    drawItemCubes(field.item_cubes, models);
 
     // bgのfogは別設定
     glFogf(GL_FOG_START, params_["game_view.bg_fog_start"].getValue<float>());
     glFogf(GL_FOG_END, params_["game_view.bg_fog_end"].getValue<float>());
 
-    drawBgCubes(field.bg_cubes);
+    drawBgCubes(field.bg_cubes, models);
 
 #ifdef DEBUG
     // drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
@@ -573,7 +571,8 @@ private:
   }
 
   
-  void drawStageCubes(const std::deque<std::vector<StageCube> >& cubes) {
+  void drawStageCubes(const std::deque<std::vector<StageCube> >& cubes,
+                      ModelHolder& models) {
     auto& material = materials_.get("stage_cube");
     material.apply();
 
@@ -592,7 +591,7 @@ private:
         // material.setAmbient(cube.color);
         // material.setDiffuse(cube.color);
         
-        ci::gl::draw(models_.get("stage_cube").mesh());
+        ci::gl::draw(models.get("stage_cube").mesh());
       
         ci::gl::popModelView();
       }
@@ -608,7 +607,8 @@ private:
 #endif
   }
 
-  void drawPickableCubes(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+  void drawPickableCubes(const std::vector<std::unique_ptr<PickableCube> >& cubes,
+                         ModelHolder& models) {
     auto& material = materials_.get("pickable_cube");
     material.apply();
     
@@ -622,7 +622,7 @@ private:
       ci::gl::rotate(cube->rotation());
       ci::gl::scale(cube->size());
 
-      ci::gl::draw(models_.get("pickable_cube").mesh());
+      ci::gl::draw(models.get("pickable_cube").mesh());
       
       ci::gl::popModelView();
 
@@ -636,7 +636,8 @@ private:
     }
   }
 
-  void drawItemCubes(const std::vector<std::unique_ptr<ItemCube> >& cubes) {
+  void drawItemCubes(const std::vector<std::unique_ptr<ItemCube> >& cubes,
+                     ModelHolder& models) {
     auto& material = materials_.get("item_cube");
     material.apply();
     
@@ -650,13 +651,14 @@ private:
       ci::gl::rotate(cube->rotation());
       ci::gl::scale(cube->size());
 
-      ci::gl::draw(models_.get("item_cube").mesh());
+      ci::gl::draw(models.get("item_cube").mesh());
       
       ci::gl::popModelView();
     }
   }
   
-  void drawBgCubes(const std::vector<Bg::Cube>& cubes) {
+  void drawBgCubes(const std::vector<Bg::Cube>& cubes,
+                   ModelHolder& models) {
     auto& material = materials_.get("bg_cube");
     material.apply();
     
@@ -667,7 +669,7 @@ private:
       ci::gl::translate(cube.position);
       ci::gl::scale(cube.size);
 
-      ci::gl::draw(models_.get("bg_cube").mesh());
+      ci::gl::draw(models.get("bg_cube").mesh());
       
       ci::gl::popModelView();
     }
@@ -684,12 +686,6 @@ private:
 #endif
   
 
-  void readModels(const ci::JsonTree& params) {
-    for (const auto& p : params) {
-      models_.add(p.getKey(), p.getValue<std::string>());
-    }
-  }
-  
   void readMaterials(const ci::JsonTree& params) {
     for (const auto& p : params) {
       materials_.add(p.getKey(), p);

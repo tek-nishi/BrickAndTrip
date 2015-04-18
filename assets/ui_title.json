@@ -54,7 +54,7 @@
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, -1.7, 0 ],
+    "pos": [ 0, -1.6, 0 ],
     "origin": "top-center",
     "layout": "top-center",
     "base_color": [ 1, 1, 1 ],
@@ -97,7 +97,7 @@
     "name": "copyright",
     "disp": true,
 
-    "text": "©　２０１５　ｎｅｗ　ｇａｍｅ　ｓｔｙｌｅ",
+    "text": "©２０１５　ｎｅｗ　ｇａｍｅ　ｓｔｙｌｅ",
     "size": 0.25,
     "spacing": 0.02,
     "chara_split": 1,
@@ -141,43 +141,27 @@
       }
     }
   },
-
-  {
-    "name": "credits",
-    "disp": true,
-    
-    "active": true,
-    "event_message": "credits-start",
-
-    "text": "=",
-    "font": "icon",
-    "size": 0.5,
-    "spacing": 0.05,
-    "chara_split": 1,
-    "pos": [ -0.5, 0.5, 0 ],
-    "origin": "bottom-right",
-    "layout": "bottom-right",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
-  },
   
   {
     "name": "records",
     "disp": true,
+
+    "base_model": "button_base",
+    "text_model": "button_text",
     
     "active": true,
     "event_message": "records-start",
 
     "text": "m",
     "font": "icon",
-    "size": 0.5,
+    "size": 0.7,
     "spacing": 0.05,
     "chara_split": 1,
-    "pos": [ -0.5, 2.0, 0 ],
+    "pos": [ -0.3, 2.5, 0 ],
     "origin": "bottom-right",
     "layout": "bottom-right",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 0.2, 0.2, 1 ],
     
     "tween": {
       "tween-touch-in": {
@@ -186,7 +170,7 @@
             "target": "scale",
             "type": "EaseOutExpo",
             "duration": 0.25,
-            "end": [ 1.25, 1.25, 1.25 ]
+            "end": [ 1.4, 1.4, 1.4 ]
           },
           {
             "target": "base_color",
@@ -221,7 +205,7 @@
             "target": "text_color",
             "type": "EaseOutExpo",
             "duration": 0.25,
-            "end": [ 0.1, 0.1, 0.1 ]
+            "end": [ 0.1, 0.1, 1 ]
           }
         ]
       },
@@ -232,7 +216,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.5,
-            "start": [ 1.25, 1.25, 1.25 ],
+            "start": [ 1.4, 1.4, 1.4 ],
             "end": [ 1, 1, 1 ]
           },
           {
@@ -264,20 +248,23 @@
   {
     "name": "settings",
     "disp": true,
+
+    "base_model": "button_base",
+    "text_model": "button_text",
     
     "active": true,
     "event_message": "settings-start",
 
     "text": "^",
     "font": "icon",
-    "size": 0.5,
+    "size": 0.7,
     "spacing": 0.05,
     "chara_split": 1,
-    "pos": [ -0.5, 1.25, 0 ],
+    "pos": [ -0.3, 1.55, 0 ],
     "origin": "bottom-right",
     "layout": "bottom-right",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 0.2, 0.2, 1 ],
 
     "tween": {
       "tween-touch-in": {
@@ -286,7 +273,7 @@
             "target": "scale",
             "type": "EaseOutExpo",
             "duration": 0.25,
-            "end": [ 1.25, 1.25, 1.25 ]
+            "end": [ 1.4, 1.4, 1.4 ]
           },
           {
             "target": "base_color",
@@ -321,7 +308,7 @@
             "target": "text_color",
             "type": "EaseOutExpo",
             "duration": 0.25,
-            "end": [ 0.1, 0.1, 0.1 ]
+            "end": [ 0.1, 0.1, 1 ]
           }
         ]
       },
@@ -332,7 +319,110 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.5,
-            "start": [ 1.25, 1.25, 1.25 ],
+            "start": [ 1.4, 1.4, 1.4 ],
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "rotate",
+            "type": "EaseOutBack",
+            "duration": 0.5,
+            "start": 0,
+            "end": -180
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.5,
+            "start": [ 0.25, 0.25, 1 ],
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.5,
+            "start": [ 1, 1, 1 ],
+            "end": [ 0.1, 0.1, 0.1 ]
+          }
+        ]
+      }
+    }
+  },
+
+  {
+    "name": "credits",
+    "disp": true,
+
+    "base_model": "button_base",
+    "text_model": "button_text",
+    
+    "active": true,
+    "event_message": "credits-start",
+
+    "text": "=",
+    "font": "icon",
+    "size": 0.7,
+    "spacing": 0.05,
+    "chara_split": 1,
+    "pos": [ -0.3, 0.6, 0 ],
+    "origin": "bottom-right",
+    "layout": "bottom-right",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.2, 0.2, 1 ],
+    
+    "tween": {
+      "tween-touch-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1.4, 1.4, 1.4 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 0.25, 0.25, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 0.1, 0.1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-end": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutBack",
+            "duration": 0.5,
+            "start": [ 1.4, 1.4, 1.4 ],
             "end": [ 1, 1, 1 ]
           },
           {

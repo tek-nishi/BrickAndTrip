@@ -101,6 +101,9 @@
     "name": "agree",
     "disp": true,
 
+    "base_model": "button_base",
+    "text_model": "button_text",
+
     "active": true,
     "event_message": "gameover-agree",
 

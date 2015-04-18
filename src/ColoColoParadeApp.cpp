@@ -3,6 +3,7 @@
 // 
 
 #include "Defines.hpp"
+#include <boost/noncopyable.hpp>
 #include "cinder/app/AppNative.h"
 #include "cinder/Json.h"
 #include "cinder/gl/gl.h"
@@ -25,7 +26,8 @@ using namespace ci::app;
 
 namespace ngs {
 
-class ColoColoParadeApp : public AppNative {
+class ColoColoParadeApp : public AppNative,
+                          private boost::noncopyable {
   JsonTree params_;
 
   double fast_speed_;
@@ -41,11 +43,9 @@ class ColoColoParadeApp : public AppNative {
 
   bool active_touch_;
   
-  std::unique_ptr<FontHolder> fonts_;
+  FontHolder fonts_;
+  ModelHolder models_;
   
-  std::unique_ptr<Model> cube_font_;
-  std::unique_ptr<Model> cube_text_;
-
   Vec2f mouse_pos_;
   Vec2f mouse_prev_pos_;
   Event<std::vector<ngs::Touch> > touch_event_;
@@ -90,12 +90,10 @@ class ColoColoParadeApp : public AppNative {
     pause_ = false;
     
     setupFonts();
+    setupModels();
     
     controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
 
-    cube_font_ = std::unique_ptr<Model>(new Model("cube_font.obj"));
-    cube_text_ = std::unique_ptr<Model>(new Model("cube_text.obj"));
-    
     // 以下OpenGL設定
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -214,7 +212,7 @@ class ColoColoParadeApp : public AppNative {
   
   
 	void update() {
-    double elapsed_seconds     = getElapsedSeconds();
+    double elapsed_seconds = getElapsedSeconds();
 
     // 経過時間が大きな値になりすぎないよう調整
     double progressing_seconds = std::min(elapsed_seconds - elapsed_seconds_,
@@ -234,12 +232,11 @@ class ColoColoParadeApp : public AppNative {
   }
   
 	void draw() {
-    controller_->draw(*fonts_, *cube_font_, *cube_text_);
+    controller_->draw(fonts_, models_);
   }
 
 
   void setupFonts() {
-    fonts_ = std::unique_ptr<FontHolder>(new FontHolder());
     const auto& fonts_params = params_["app.fonts"];
 
     for(const auto& p : fonts_params) {
@@ -248,11 +245,17 @@ class ColoColoParadeApp : public AppNative {
       int size = p["size"].getValue<int>();
       ci::Vec3f scale = Json::getVec3<float>(p["scale"]);
       ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
-      fonts_->addFont(name, path, size, scale, offset);
+      fonts_.addFont(name, path, size, scale, offset);
 
       if (Json::getValue(p, "default", false)) {
-        fonts_->setDefaultFont(name);
+        fonts_.setDefaultFont(name);
       }
+    }
+  }
+
+  void setupModels() {
+    for(const auto& p : params_["app.models"]) {
+      models_.add(p.getKey(), p.getValue<std::string>());
     }
   }
 

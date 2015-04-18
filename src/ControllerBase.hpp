@@ -7,7 +7,7 @@
 #include "Event.hpp"
 #include "EventParam.hpp"
 #include "FontHolder.hpp"
-#include "Model.hpp"
+#include "ModelHolder.hpp"
 #include <boost/noncopyable.hpp>
 
 
@@ -23,7 +23,7 @@ struct ControllerBase : private boost::noncopyable {
   virtual void resize() = 0;
   
   virtual void update(const double progressing_seconds) = 0;
-  virtual void draw(FontHolder& fonts, Model& cube, Model& text) = 0;
+  virtual void draw(FontHolder& fonts, ModelHolder& models) = 0;
 };
 
 }

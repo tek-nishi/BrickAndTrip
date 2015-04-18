@@ -18,6 +18,9 @@
     "name": "cencel",
     "disp": true,
 
+    "base_model": "button_base",
+    "text_model": "button_text",
+
     "active": true,
     "event_message": "pause-cancel",
 
@@ -117,6 +120,9 @@
   {
     "name": "abort",
     "disp": true,
+
+    "base_model": "button_base",
+    "text_model": "button_text",
 
     "active": true,
     "event_message": "pause-abort",
