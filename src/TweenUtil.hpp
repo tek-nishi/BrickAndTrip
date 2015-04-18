@@ -64,10 +64,11 @@ void setColorTween(ci::Timeline& timeline,
 
 void setVec3Tween(ci::Timeline& timeline,
                   ci::Anim<ci::Vec3f>& value, const ci::JsonTree& param,
-                  const float cube_size, const bool is_first) {
-  auto start = param.hasChild("start") ? Json::getVec3<float>(param["start"]) * cube_size + value()
+                  const ci::Vec3f& offset, const float cube_size,
+                  const bool is_first) {
+  auto start = param.hasChild("start") ? Json::getVec3<float>(param["start"]) * cube_size + offset
                                        : value();
-  auto end = param.hasChild("end") ? Json::getVec3<float>(param["end"]) * cube_size + value()
+  auto end = param.hasChild("end") ? Json::getVec3<float>(param["end"]) * cube_size + offset
                                    : value();
 
   auto option = is_first ? timeline.apply(&value,

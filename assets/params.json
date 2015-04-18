@@ -301,7 +301,31 @@
       "cube_lifetime": [ 10, 15 ],
       
       "bbox_min": [  -7, -10,  -3 ],
-      "bbox_max": [  22,  -2,  30 ]
+      "bbox_max": [  22,  -2,  30 ],
+
+      "revise_duration": 0.25,
+      
+      "tween": {
+        "in_box": [
+          {
+            "target": "scale",
+            "type": "EaseInOutQuad",
+            "duration": 0.25,
+            "start": [ 0, 0, 0 ],
+            "end": [ 1, 1, 1 ]
+          }
+        ],
+        
+        "out_box": [
+          {
+            "target": "scale",
+            "type": "EaseInOutQuad",
+            "duration": 0.25,
+            "start": [ 1, 1, 1 ],
+            "end": [ 0, 0, 0 ]
+          }
+        ]
+      }
     },
 
     "records": "records.json"

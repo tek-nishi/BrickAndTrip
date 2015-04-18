@@ -148,7 +148,8 @@ private:
                std::function<void (const ci::JsonTree&, const bool)> > tween_setup = {
         { "position",
           [this](const ci::JsonTree& params, const bool is_first) {
-            setVec3Tween(*animation_timeline_, position_, params, cube_size_, is_first);
+            auto offset = position_();
+            setVec3Tween(*animation_timeline_, position_, params, offset, cube_size_, is_first);
           }
         },
         { "color",
