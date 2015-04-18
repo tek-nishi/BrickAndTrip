@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <deque>
+#include <limits>
 #include <boost/noncopyable.hpp>
 #include "StageCube.hpp"
 #include "EasingUtil.hpp"
@@ -49,6 +50,8 @@ class Stage : private boost::noncopyable {
   bool started_collapse_;
   bool finished_build_;
   bool finished_collapse_;
+
+  ci::Vec2i stage_width_;
   
   ci::TimelineRef event_timeline_;
   ci::TimelineRef animation_timeline_;
@@ -78,6 +81,7 @@ public:
     started_collapse_(false),
     finished_build_(false),
     finished_collapse_(false),
+    stage_width_(ci::Vec2i::zero()),
     event_timeline_(ci::Timeline::create()),
     animation_timeline_(ci::Timeline::create())
   {
@@ -262,6 +266,9 @@ public:
   
 
   int getTopZ() const { return top_z_; }
+  int getActiveBottomZ() const { return active_top_z_ - active_cubes_.size(); }
+
+  const ci::Vec2i& getStageWidth() const { return stage_width_; }
   
   int addCubes(const ci::JsonTree& stage_data,
                const int x_offset,
@@ -272,6 +279,11 @@ public:
     auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
 
     const auto stage_color = ci::hsvToRGB(Json::getHsvColor(stage_data["color"]));
+
+    stage_width_.x = x_offset;
+    // yにはstageの最大値を入れたいので、初期値として最小値を入れておく
+    stage_width_.y = std::numeric_limits<int>::min();
+    
     
     const auto& body = stage_data["body"];
     int last_iz = body.getNumChildren() - 1;
@@ -305,6 +317,9 @@ public:
         x += 1;
       }
       cubes_.push_back(std::move(cube_row));
+
+      // stageのxの最大値を保持
+      if (x > stage_width_.y) stage_width_.y = x;
       
       iz += 1;
     }

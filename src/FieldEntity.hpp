@@ -70,6 +70,8 @@ class FieldEntity : private boost::noncopyable {
 
   bool all_cleard_;
   bool game_aborted_;
+
+  int stage_center_x_;
   
   ci::TimelineRef event_timeline_;
 
@@ -104,6 +106,7 @@ public:
     mode_(NONE),
     all_cleard_(false),
     game_aborted_(false),
+    stage_center_x_(0),
     event_timeline_(ci::Timeline::create())
   {
     const auto& colors = params["game.cube_stage_color"];
@@ -199,6 +202,11 @@ public:
       event_.signal("update-record", params);
     }
 
+    {
+      // 背景で使う中央座標を算出
+      ci::Vec3i pos(stage_center_x_, 0, stage_.getActiveBottomZ());
+      bg_.setCenterPosition(pos);
+    }
     bg_.update(progressing_seconds);
   }
 
@@ -208,6 +216,10 @@ public:
     auto stage_info = addCubeStage("startline.json");
     next_start_line_z_ = stage_info.top_z - 1;
     entry_packable_num_ = stage_info.entry_num;
+
+    // bgの位置を決めるためにステージの中央座標を求める
+    const auto& width = stage_.getStageWidth();
+    stage_center_x_ = (width.x + width.y) / 2;
     
     stage_.buildStage();
 
@@ -237,6 +249,10 @@ public:
     entry_packable_num_ = stage_info.entry_num;
     stage_.setFinishLine(finish_line_z_);
     stage_color_ = stage_info.stage_color;
+
+    // bgの位置を決めるためにステージの中央座標を求める
+    const auto& width = stage_.getStageWidth();
+    stage_center_x_ = (width.x + width.y) / 2;
 
     start_line_z_ = next_start_line_z_;
     stage_info = addCubeStage("finishline.json");
@@ -454,15 +470,25 @@ public:
   void enableRecordPlay(const bool enable = true) {
     record_play_ = enable;
   }
+
   
   // 現在のFieldの状態を作成
   Field fieldData() {
+#ifdef DEBUG
+    auto bg_bbox = bg_.getBbox();
+#endif
+    
     Field field = {
       stage_.activeCubes(),
       stage_.collapseCubes(),
       pickable_cubes_,
       items_.items(),
-      bg_.cubes()
+      bg_.cubes(),
+
+#ifdef DEBUG
+      bg_bbox.first,
+      bg_bbox.second,
+#endif
     };
 
     return field;

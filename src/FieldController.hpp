@@ -237,7 +237,7 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      view_.enableTouchInput();
                                    });
-
+    
     
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",

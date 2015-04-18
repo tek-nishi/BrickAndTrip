@@ -8,6 +8,7 @@
 #include "cinder/gl/Light.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/ImageIo.h"
 #include <boost/range/algorithm_ext/erase.hpp>
 #include <boost/noncopyable.hpp>
 #include <numeric>
@@ -250,6 +251,10 @@ public:
     drawPickableCubes(field.pickable_cubes);
     drawItemCubes(field.item_cubes);
     drawBgCubes(field.bg_cubes);
+
+#ifdef DEBUG
+    drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
+#endif
 
     
     for (auto& light : lights_) {
@@ -663,6 +668,16 @@ private:
     }
   }
 
+
+#ifdef DEBUG
+  void drawBgBbox(const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) {
+    ci::AxisAlignedBox3f bbox(bbox_min, bbox_max);
+    
+    ci::gl::color(0, 1, 0);
+    ci::gl::drawStrokedCube(bbox);
+  }
+#endif
+  
 
   void readModels(const ci::JsonTree& params) {
     for (const auto& p : params) {

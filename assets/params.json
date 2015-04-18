@@ -62,7 +62,7 @@
     },
 
     "fog_start": 25,
-    "fog_end": 30,
+    "fog_end": 35,
     "fog_color": [ 0.4, 0.4, 0.4, 1 ]
   },
   
@@ -298,9 +298,10 @@
     "bg": {
       "cube_density": 0.25,
       "cube_speed": [ 0.1, 1 ],
+      "cube_lifetime": [ 10, 15 ],
       
-      "bbox_min": [  -5, -10,  -5 ],
-      "bbox_max": [  25,  -2,  25 ]
+      "bbox_min": [  -7, -10,  -3 ],
+      "bbox_max": [  22,  -2,  30 ]
     },
 
     "records": "records.json"

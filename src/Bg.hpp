@@ -29,6 +29,9 @@ private:
 
   std::vector<Cube> cubes_;
 
+  ci::Vec3f bbox_min_orig_;
+  ci::Vec3f bbox_max_orig_;
+
   ci::Vec3f bbox_min_;
   ci::Vec3f bbox_max_;
   
@@ -40,8 +43,10 @@ public:
     event_(event),
     animation_timeline_(ci::Timeline::create()),
     cube_size_(params["game.cube_size"].getValue<float>()),
-    bbox_min_(Json::getVec3<float>(params["game.bg.bbox_min"]) * cube_size_),
-    bbox_max_(Json::getVec3<float>(params["game.bg.bbox_max"]) * cube_size_)
+    bbox_min_orig_(Json::getVec3<float>(params["game.bg.bbox_min"]) * cube_size_),
+    bbox_max_orig_(Json::getVec3<float>(params["game.bg.bbox_max"]) * cube_size_),
+    bbox_min_(bbox_min_orig_),
+    bbox_max_(bbox_max_orig_)
   {
     auto current_time = timeline->getCurrentTime();
     animation_timeline_->setStartTime(current_time);
@@ -98,48 +103,48 @@ public:
   }
   
 
+  void setCenterPosition(const ci::Vec3i& pos) {
+    
+    bbox_min_ = bbox_min_orig_ + ci::Vec3f(pos) * cube_size_;
+    bbox_max_ = bbox_max_orig_ + ci::Vec3f(pos) * cube_size_;
+  }
+
+
   void update(const double progressing_seconds) {
     for (auto& cube : cubes_) {
       cube.position += cube.speed * progressing_seconds;
 
       // FIXME:コピペ甚だしい
-      if (cube.speed.x > 0.0f) {
-        if (cube.position.x > bbox_max_.x) {
-          cube.position.x = bbox_min_.x + (cube.position.x - bbox_max_.x);
-        }
+      if (cube.position.x > bbox_max_.x) {
+        cube.position.x = bbox_min_.x + (cube.position.x - bbox_max_.x);
       }
-      else {
-        if (cube.position.x < bbox_min_.x) {
-          cube.position.x = bbox_max_.x + (cube.position.x - bbox_min_.x);
-        }
+      else if (cube.position.x < bbox_min_.x) {
+        cube.position.x = bbox_max_.x + (cube.position.x - bbox_min_.x);
       }
       
-      if (cube.speed.y > 0.0f) {
-        if (cube.position.y > bbox_max_.y) {
-          cube.position.y = bbox_min_.y + (cube.position.y - bbox_max_.y);
-        }
+      if (cube.position.y > bbox_max_.y) {
+        cube.position.y = bbox_min_.y + (cube.position.y - bbox_max_.y);
       }
-      else {
-        if (cube.position.y < bbox_min_.y) {
-          cube.position.y = bbox_max_.y + (cube.position.y - bbox_min_.y);
-        }
+      else if (cube.position.y < bbox_min_.y) {
+        cube.position.y = bbox_max_.y + (cube.position.y - bbox_min_.y);
       }
       
-      if (cube.speed.z > 0.0f) {
-        if (cube.position.z > bbox_max_.z) {
-          cube.position.z = bbox_min_.z + (cube.position.z - bbox_max_.z);
-        }
+      if (cube.position.z > bbox_max_.z) {
+        cube.position.z = bbox_min_.z + (cube.position.z - bbox_max_.z);
       }
-      else {
-        if (cube.position.z < bbox_min_.z) {
-          cube.position.z = bbox_max_.z + (cube.position.z - bbox_min_.z);
-        }
+      else if (cube.position.z < bbox_min_.z) {
+        cube.position.z = bbox_max_.z + (cube.position.z - bbox_min_.z);
       }
     }
   }
 
 
   const std::vector<Cube>& cubes() const { return cubes_; }
+
+  std::pair<ci::Vec3f, ci::Vec3f> getBbox() const {
+    return std::make_pair(bbox_min_, bbox_max_);
+  }
+  
 
 private:
 
