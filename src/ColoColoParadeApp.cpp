@@ -42,9 +42,10 @@ class ColoColoParadeApp : public AppNative,
   bool pause_;
 
   bool active_touch_;
-  
-  FontHolder fonts_;
-  ModelHolder models_;
+
+  // FIXME:setupが呼ばれるまではCinderの機能を使ってはならない
+  std::unique_ptr<FontHolder> fonts_;
+  std::unique_ptr<ModelHolder> models_;
   
   Vec2f mouse_pos_;
   Vec2f mouse_prev_pos_;
@@ -232,11 +233,13 @@ class ColoColoParadeApp : public AppNative,
   }
   
 	void draw() {
-    controller_->draw(fonts_, models_);
+    controller_->draw(*fonts_, *models_);
   }
 
 
   void setupFonts() {
+    fonts_ = std::unique_ptr<FontHolder>(new FontHolder);
+
     const auto& fonts_params = params_["app.fonts"];
 
     for(const auto& p : fonts_params) {
@@ -245,17 +248,19 @@ class ColoColoParadeApp : public AppNative,
       int size = p["size"].getValue<int>();
       ci::Vec3f scale = Json::getVec3<float>(p["scale"]);
       ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
-      fonts_.addFont(name, path, size, scale, offset);
+      fonts_->addFont(name, path, size, scale, offset);
 
       if (Json::getValue(p, "default", false)) {
-        fonts_.setDefaultFont(name);
+        fonts_->setDefaultFont(name);
       }
     }
   }
 
   void setupModels() {
+    models_ = std::unique_ptr<ModelHolder>(new ModelHolder);
+
     for(const auto& p : params_["app.models"]) {
-      models_.add(p.getKey(), p.getValue<std::string>());
+      models_->add(p.getKey(), p.getValue<std::string>());
     }
   }
 

@@ -48,7 +48,7 @@ public:
     fonts_.at(name);
     default_font_name_ = name;
   }
-
+  
 
 private:
   

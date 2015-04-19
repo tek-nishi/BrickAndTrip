@@ -123,6 +123,12 @@ public:
       creator[object.type](ctx, it);
     }
   }
+
+  ~Sound() {
+    auto* ctx = ci::audio::Context::master();
+    ctx->disable();
+    ctx->disconnectAllNodes();
+  }
   
 
   void play(const std::string& name, const float gain = 1.0f) {

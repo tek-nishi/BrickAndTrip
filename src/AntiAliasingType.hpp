@@ -36,7 +36,7 @@ int getAntiAliasingType() {
     DOUT << result[0] << " " << result[1] << std::endl;
 
     // iPad2より新しいiPadでAA有効
-    return (std::stoi(result[1]) >= 3) ? RendererGl::AA_MSAA_4 : RendererGl::AA_NONE;
+    return (std::stoi(result[1]) >= 2) ? RendererGl::AA_MSAA_4 : RendererGl::AA_NONE;
   }
   else if (std::regex_search(hard_type, result, ipod)) {
     DOUT << result[0] << " " << result[1] << std::endl;
