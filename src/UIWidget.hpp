@@ -31,13 +31,12 @@ class UIWidget {
   ci::Anim<ci::Vec3f> pos_;
   ci::Anim<ci::Vec3f> scale_;
   std::vector<ci::Anim<float> > rotate_;
-  
+
   ci::Anim<ci::Color> base_color_;
   ci::Anim<ci::Color> text_color_;
 
   Autolayout::WidgetRef layout_;
   ci::TimelineRef timeline_;
-
   
   // dispは表示のON/OFF
   // activeはタッチイベントのON/OFF

@@ -41,7 +41,14 @@ public:
       return cached.second->second;
     }
 
-    auto texture  = ci::gl::Texture::create(font_.rendering(str));
+    // TIPS:文字はmipmapを利用(縮小時の見栄えが良くなる)
+    ci::gl::Texture::Format format;
+    format.enableMipmapping();
+    
+    auto texture  = ci::gl::Texture::create(font_.rendering(str), format);
+    texture->setMinFilter(GL_LINEAR_MIPMAP_NEAREST);
+    texture->setMagFilter(GL_LINEAR);
+    
     auto inserted = texture_cache_.emplace(str, std::move(texture));
 
     return inserted.first->second;

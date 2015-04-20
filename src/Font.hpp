@@ -173,8 +173,20 @@ public:
       pen_x += slot->advance.x >> 6;
     }
 
-    // FIXME:リサイズはCinder任せ
-    return ci::ip::resizeCopy(surface, ci::Area(0, 0, pen_x, size_), ci::Vec2i(size_, size_));
+    if (pen_x < surface.getWidth()) {
+      // TIPS:描画幅が小さい場合、想定サイズの中央へコピー
+      int offset_x = (surface.getWidth() - pen_x) / 2;
+
+      ci::Surface8u surface_dst(size_ * chara_num, size_, true);
+      ci::ip::fill(&surface_dst, ci::ColorAT<uint8_t>(255, 255, 255, 0));
+      surface_dst.copyFrom(surface, ci::Area(0, 0, pen_x, size_), ci::Vec2i(offset_x, 0));
+      
+      return surface_dst;
+    }
+    else {
+      // FIXME:リサイズはCinder任せ
+      return ci::ip::resizeCopy(surface, ci::Area(0, 0, pen_x, size_), ci::Vec2i(size_, size_));
+    }
   }
   
 };

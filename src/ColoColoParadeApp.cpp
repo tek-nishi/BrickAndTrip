@@ -36,6 +36,7 @@ class ColoColoParadeApp : public AppNative,
   TimelineRef timeline_;
 
   double elapsed_seconds_;
+  double max_elapsed_seconds_;
 
   double forward_speed_;
   bool forward_speed_change_;
@@ -109,8 +110,16 @@ class ColoColoParadeApp : public AppNative,
 #endif
     // TIPS: ambientとdiffuseをci::gl::colorで決める
     glEnable(GL_COLOR_MATERIAL);
-    
+
     elapsed_seconds_ = getElapsedSeconds();
+
+    // 起動後安定するまでは経過時間の許容を少なく
+    max_elapsed_seconds_ = 1.0 / 30;
+
+    timeline().add([this]() {
+        max_elapsed_seconds_ = 1.0 / 20;
+      },
+      timeline().getCurrentTime() + 1.0f);
   }
 
   
@@ -217,7 +226,7 @@ class ColoColoParadeApp : public AppNative,
 
     // 経過時間が大きな値になりすぎないよう調整
     double progressing_seconds = std::min(elapsed_seconds - elapsed_seconds_,
-                                          1.0 / 20);
+                                          max_elapsed_seconds_);
 
 #ifdef DEBUG
     if (pause_) progressing_seconds = 0.0;
