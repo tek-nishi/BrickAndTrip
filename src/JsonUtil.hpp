@@ -6,6 +6,7 @@
 //
 
 #include "cinder/Vector.h"
+#include <sstream>
 
 
 namespace ngs {
@@ -63,6 +64,17 @@ template<typename T>
 T getValue(const ci::JsonTree& json, const std::string& name, const T& default_value) {
   return (json.hasChild(name)) ? json[name].getValue<T>()
                                : default_value;
+}
+
+
+ci::JsonTree readParams(const std::string& path) {
+#if defined (DEBUG) && defined (CINDER_MAC)
+  std::ostringstream full_path;
+  full_path << PREPRO_TO_STR(SRCROOT) << "../assets/" << path;
+  return ci::JsonTree(ci::DataSourcePath::create(full_path.str()));
+#else
+  return ci::JsonTree(ci::loadAsset(path));
+#endif
 }
 
 }

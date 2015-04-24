@@ -5,6 +5,7 @@
 //
 
 #include "UIView.hpp"
+#include "JsonUtil.hpp"
 
 
 namespace ngs {
@@ -39,7 +40,7 @@ public:
 
   std::unique_ptr<UIView> create(const std::string& path) {
     return std::unique_ptr<UIView>(new UIView(params_,
-                                              ci::JsonTree(ci::app::loadAsset(path)),
+                                              Json::readParams(path),
                                               timeline_,
                                               camera_, autolayout_, event_, touch_event_));
   }
