@@ -318,6 +318,16 @@
   },
 
   
+  "title": {
+    "event_delay": 0.4
+  },
+
+
+  "records": {
+    "event_delay": 0.4
+  },
+  
+  
   "sounds": [
     {
       "name": "title",

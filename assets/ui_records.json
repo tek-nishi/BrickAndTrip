@@ -187,6 +187,7 @@
     "base_color": [ 1, 1, 1 ],
     "text_color": [ 0.1, 0.1, 0.1 ]
   },
+
   
   {
     "name": "agree",
@@ -203,10 +204,96 @@
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, -2, 0 ],
-    "origin": "top-center",
-    "layout": "center",
+    "pos": [ 0, 0.2, 0 ],
+    "origin": "bottom-center",
+    "layout": "bottom-center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0, 0, 1 ]
+    "text_color": [ 0, 0, 1 ],
+
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutBack",
+            "duration": 0.3,
+            "delay": 1.0,
+            "start": [ 0, 0, 0 ]
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseInExpo",
+            "duration": 0.3,
+            "delay": 0.4,
+            "end": [ 0, 0, 0 ]
+          }
+        ]
+      },
+
+      
+      "tween-touch-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 0.9, 0.9, 0.9 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 0.25, 0.25, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 1, 1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 0.1, 0.1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-end": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutBounce",
+            "duration": 0.3,
+            "start": [ 1.4, 1.4, 1.4 ],
+            "end": [ 1.1, 1.1, 1.1 ]
+          }
+        ]
+      }
+    }
   }
 ]
