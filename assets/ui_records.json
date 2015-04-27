@@ -208,8 +208,7 @@
     "origin": "bottom-center",
     "layout": "bottom-center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0, 0, 1 ],
-
+    "text_color": [ 0.1, 0.1, 1 ],
     
     "tween": {
       "tween-in": {
@@ -230,7 +229,6 @@
             "target": "scale",
             "type": "EaseInExpo",
             "duration": 0.3,
-            "delay": 0.4,
             "end": [ 0, 0, 0 ]
           }
         ]
@@ -287,10 +285,10 @@
         "body": [
           {
             "target": "scale",
-            "type": "EaseOutBounce",
-            "duration": 0.3,
-            "start": [ 1.4, 1.4, 1.4 ],
-            "end": [ 1.1, 1.1, 1.1 ]
+            "type": "EaseOutElastic",
+            "duration": 0.6,
+            "start": [ 0.4, 0.4, 0.4 ],
+            "end": [ 1.25, 1.25, 1.25 ]
           }
         ]
       }

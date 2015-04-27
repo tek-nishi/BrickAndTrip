@@ -71,6 +71,8 @@ class ColoColoParadeApp : public AppNative,
 
     fast_speed_ = params_["app.fast_speed"].getValue<double>();
     slow_speed_ = params_["app.slow_speed"].getValue<double>();
+
+    setEasingParams(params_);
   }
   
 	void setup() {
@@ -306,6 +308,20 @@ class ColoColoParadeApp : public AppNative,
     }
     
     return touches;
+  }
+
+  static void setEasingParams(const JsonTree& params) {
+    ease_in_elastic_a = params["easing.ease_in_elastic_a"].getValue<float>();
+    ease_in_elastic_b = params["easing.ease_in_elastic_b"].getValue<float>();
+
+    ease_out_elastic_a = params["easing.ease_out_elastic_a"].getValue<float>();
+    ease_out_elastic_b = params["easing.ease_out_elastic_b"].getValue<float>();
+
+    ease_inout_elastic_a = params["easing.ease_inout_elastic_a"].getValue<float>();
+    ease_inout_elastic_b = params["easing.ease_inout_elastic_b"].getValue<float>();
+
+    ease_outin_elastic_a = params["easing.ease_outin_elastic_a"].getValue<float>();
+    ease_outin_elastic_b = params["easing.ease_outin_elastic_b"].getValue<float>();
   }
   
 };

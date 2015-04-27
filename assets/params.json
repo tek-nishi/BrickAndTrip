@@ -319,14 +319,36 @@
 
   
   "title": {
-    "event_delay": 0.4
+    "event_delay": 0.6
   },
-
 
   "records": {
-    "event_delay": 0.4
+    "event_delay": 0.6
+  },
+
+  "settings": {
+    "event_delay": 0.6
+  },
+
+  "credits": {
+    "event_delay": 0.6
   },
   
+
+  "easing": {
+    "ease_in_elastic_a": 1.25,
+    "ease_in_elastic_b": 0.35,
+
+    "ease_out_elastic_a": 1.25,
+    "ease_out_elastic_b": 0.35,
+    
+    "ease_inout_elastic_a": 1.25,
+    "ease_inout_elastic_b": 0.35,
+
+    "ease_outin_elastic_a": 1.25,
+    "ease_outin_elastic_b": 0.35
+  },
+
   
   "sounds": [
     {

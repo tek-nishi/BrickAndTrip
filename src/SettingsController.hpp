@@ -16,6 +16,8 @@ class SettingsController : public ControllerBase {
   Event<EventParam>& event_;
   Records& records_;
 
+  float event_delay_;
+
   std::unique_ptr<UIView> view_;
   
   bool active_;
@@ -33,6 +35,7 @@ public:
                      std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
+    event_delay_(params["settings.event_delay"].getValue<float>()),
     records_(records),
     view_(std::move(view)),
     active_(true),
@@ -68,21 +71,21 @@ public:
 
     connections_ += event.connect("settings-agree",
                                   [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
                                     records_.write(params_["game.records"].getValue<std::string>());
 
                                     // 時間差tween & Title起動
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
-                                        event_.signal("begin-title", EventParam());
+
+                                        // 時間差でControllerを破棄
+                                        event_timeline_->add([this]() {
+                                            event_.signal("begin-title", EventParam());
+                                            active_ = false;
+                                          },
+                                          event_timeline_->getCurrentTime() + 1.5f);
                                       },
-                                      event_timeline_->getCurrentTime() + 0.5f);
-                                    
-                                    // 時間差でControllerを破棄
-                                    event_timeline_->add([this]() {
-                                        
-                                        active_ = false;
-                                      },
-                                      event_timeline_->getCurrentTime() + 1.0f);
+                                      event_timeline_->getCurrentTime() + event_delay_);
                                   });
     
     setSoundIcon("se-setting", records_.isSeOn());

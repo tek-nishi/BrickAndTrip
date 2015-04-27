@@ -30,6 +30,20 @@ public:
 };
 
 
+#ifdef DEBUG
+
+float ease_in_elastic_a = 2;
+float ease_in_elastic_b = 1;
+float ease_out_elastic_a = 2;
+float ease_out_elastic_b = 1;
+float ease_inout_elastic_a = 2;
+float ease_inout_elastic_b = 1;
+float ease_outin_elastic_a = 2;
+float ease_outin_elastic_b = 1;
+
+#endif
+
+
 ci::EaseFn getEaseFunc(const std::string& name) {
   static std::map<std::string, ci::EaseFn> tbl = {
     { "EaseInQuad", ci::EaseInQuad() },
@@ -82,10 +96,14 @@ ci::EaseFn getEaseFunc(const std::string& name) {
     { "EaseInOutBounce", ci::EaseInOutBounce() },
     { "EaseOutInBounce", ci::EaseOutInBounce() },
       
-    { "EaseInElastic", ci::EaseInElastic(2, 1) },
-    { "EaseOutElastic", ci::EaseOutElastic(1, 4) },
-    { "EaseInOutElastic", ci::EaseInOutElastic(2, 1) },
-    { "EaseOutInElastic", ci::EaseOutInElastic(4, 1) },
+    { "EaseInElastic", ci::EaseInElastic(ease_in_elastic_a,
+                                         ease_in_elastic_b) },
+    { "EaseOutElastic", ci::EaseOutElastic(ease_out_elastic_a,
+                                           ease_out_elastic_b) },
+    { "EaseInOutElastic", ci::EaseInOutElastic(ease_inout_elastic_a,
+                                               ease_inout_elastic_b) },
+    { "EaseOutInElastic", ci::EaseOutInElastic(ease_outin_elastic_a,
+                                               ease_outin_elastic_b) },
 
 
     { "EasePingPongInQuad", EasePingPong<ci::EaseInQuad>() },
@@ -138,10 +156,14 @@ ci::EaseFn getEaseFunc(const std::string& name) {
     { "EasePingPongInOutBounce", EasePingPong<ci::EaseInOutBounce>() },
     { "EasePingPongOutInBounce", EasePingPong<ci::EaseOutInBounce>() },
       
-    { "EasePingPongInElastic", EasePingPong<ci::EaseInElastic>(2, 1) },
-    { "EasePingPongOutElastic", EasePingPong<ci::EaseOutElastic>(1, 4) },
-    { "EasePingPongInOutElastic", EasePingPong<ci::EaseInOutElastic>(2, 1) },
-    { "EasePingPongOutInElastic", EasePingPong<ci::EaseOutInElastic>(4, 1) },
+    { "EasePingPongInElastic", EasePingPong<ci::EaseInElastic>(ease_in_elastic_a,
+                                                               ease_in_elastic_b) },
+    { "EasePingPongOutElastic", EasePingPong<ci::EaseOutElastic>(ease_out_elastic_a,
+                                                                 ease_out_elastic_b) },
+    { "EasePingPongInOutElastic", EasePingPong<ci::EaseInOutElastic>(ease_inout_elastic_a,
+                                                                     ease_inout_elastic_b) },
+    { "EasePingPongOutInElastic", EasePingPong<ci::EaseOutInElastic>(ease_outin_elastic_a,
+                                                                     ease_outin_elastic_b) },
   };
 
   return tbl[name];
