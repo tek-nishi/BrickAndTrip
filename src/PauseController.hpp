@@ -15,6 +15,9 @@ class PauseController : public ControllerBase {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 
+  float event_delay_;
+  float deactive_delay_;
+  
   std::unique_ptr<UIView> view_;
   
   bool active_;
@@ -31,6 +34,8 @@ public:
                   std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
+    event_delay_(params["pause.event_delay"].getValue<float>()),
+    deactive_delay_(params["pause.deactive_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -43,38 +48,38 @@ public:
 
     connections_ += event.connect("pause-cancel",
                                   [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    
                                     // 時間差tween
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
+
+                                        // 時間差でControllerを破棄
+                                        event_timeline_->add([this]() {
+                                            event_.signal("game-continue", EventParam());
+                                            active_ = false;
+                                          },
+                                          event_timeline_->getCurrentTime() + deactive_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + 0.5f);
-                                    
-                                    // 時間差でControllerを破棄
-                                    event_timeline_->add([this]() {
-                                        event_.signal("game-continue", EventParam());
-                                        active_ = false;
-                                      },
-                                      event_timeline_->getCurrentTime() + 1.0f);
-                                    
-                                    connection.disconnect();
+                                      event_timeline_->getCurrentTime() + event_delay_);
                                   });
 
     connections_ += event.connect("pause-abort",
                                   [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    
                                     // 時間差tween
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
+
+                                        // 時間差でControllerを破棄
+                                        event_timeline_->add([this]() {
+                                            event_.signal("game-abort", EventParam());
+                                            active_ = false;
+                                          },
+                                          event_timeline_->getCurrentTime() + deactive_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + 0.5f);
-                                    
-                                    // 時間差でControllerを破棄
-                                    event_timeline_->add([this]() {
-                                        event_.signal("game-abort", EventParam());
-                                        active_ = false;
-                                      },
-                                      event_timeline_->getCurrentTime() + 1.0f);
-                                    
-                                    connection.disconnect();
+                                      event_timeline_->getCurrentTime() + event_delay_);
                                   });
 
     view_->startWidgetTween("tween-in");

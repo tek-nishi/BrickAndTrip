@@ -11,29 +11,59 @@
 
     "text": "Ý",
     "font": "icon",
-    "size": 0.5,
+    "size": 0.6,
     "spacing": 0.1,
     "chara_split": 1,
     "pos": [ 0.1, -0.1, 0 ],
     "origin": "top-left",
     "layout": "top-left",
-    "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ],
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 1 ],
     
     "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutBack",
+            "duration": 0.3,
+            "delay": 0.1,
+            "start": [ 0, 0, 0 ]
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseInExpo",
+            "duration": 0.3,
+            "end": [ 0, 0, 0 ]
+          }
+        ]
+      },
+
+      
       "tween-touch-in": {
         "body": [
           {
             "target": "scale",
             "type": "EaseOutExpo",
-            "duration": 0.25,
-            "end": [ 1.25, 1.25, 1.25 ]
+            "duration": 0.4,
+            "end": [ 0.9, 0.9, 0.9 ]
           },
           {
             "target": "base_color",
             "type": "EaseOutExpo",
-            "duration": 0.25,
-            "end": [ 1, 0.25, 0.25 ]
+            "duration": 0.4,
+            "end": [ 0.25, 0.25, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 1, 1, 1 ]
           }
         ]
       },
@@ -50,7 +80,13 @@
             "target": "base_color",
             "type": "EaseOutExpo",
             "duration": 0.25,
-            "end": [ 0.1, 0.1, 0.1 ]
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 0.1, 0.1, 1 ]
           }
         ]
       },
@@ -59,24 +95,10 @@
         "body": [
           {
             "target": "scale",
-            "type": "EaseOutBack",
-            "duration": 0.5,
-            "start": [ 1.25, 1.25, 1.25 ],
-            "end": [ 1, 1, 1 ]
-          },
-          {
-            "target": "rotate",
-            "type": "EaseOutBack",
-            "duration": 0.5,
-            "start": 0,
-            "end": -180
-          },
-          {
-            "target": "base_color",
-            "type": "EaseOutExpo",
-            "duration": 0.5,
-            "start": [ 1, 0.25, 0.25 ],
-            "end": [ 0.1, 0.1, 0.1 ]
+            "type": "EaseOutElastic",
+            "duration": 0.6,
+            "start": [ 0.3, 0.3, 0.3 ],
+            "end": [ 1.25, 1.25, 1.25 ]
           }
         ]
       }
@@ -95,6 +117,34 @@
     "origin": "bottom-right",
     "layout": "bottom-right",
     "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ]
+    "text_color": [ 1, 1, 1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.05,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   }
 ]

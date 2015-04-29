@@ -120,6 +120,12 @@ public:
     return *(*it);
   }
 
+  void resetWidgetTween() {
+    for (auto& widget : widgets_) {
+      widget->resetTweens();
+    }
+  }
+
   
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {

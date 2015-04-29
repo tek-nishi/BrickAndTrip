@@ -11,9 +11,38 @@
     "origin": "top-center",
     "layout": "top-center",
     "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ]
+    "text_color": [ 1, 1, 1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
 
+  
   {
     "name": "play",
     "disp": true,
@@ -26,7 +55,36 @@
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.15,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
   {
     "name": "total_play",
@@ -40,9 +98,38 @@
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
-  },
+    "text_color": [ 0.1, 0.1, 0.1 ],
 
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.15,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
+  },
+  
   {
     "name": "time",
     "disp": true,
@@ -55,7 +142,36 @@
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.2,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
   {
     "name": "total_time",
@@ -69,7 +185,36 @@
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.2,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
 
   {
@@ -84,7 +229,36 @@
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.25,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
   {
     "name": "total_tumble",
@@ -98,7 +272,36 @@
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.25,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
 
   {
@@ -113,7 +316,36 @@
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.3,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
   {
     "name": "total_operation",
@@ -127,7 +359,36 @@
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.3,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
 
   {
@@ -142,7 +403,36 @@
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.35,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
   {
     "name": "total_item",
@@ -156,7 +446,36 @@
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.35,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
 
   {
@@ -171,7 +490,36 @@
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.4,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
   {
     "name": "total_clear",
@@ -185,7 +533,36 @@
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ]
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.4,
+            "interval": 0.05,
+            "start": -90,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -90
+          }
+        ]
+      }
+    }
   },
 
   
@@ -217,7 +594,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 1.0,
+            "delay": 0.6,
             "start": [ 0, 0, 0 ]
           }
         ]
@@ -287,7 +664,7 @@
             "target": "scale",
             "type": "EaseOutElastic",
             "duration": 0.6,
-            "start": [ 0.4, 0.4, 0.4 ],
+            "start": [ 0.3, 0.3, 0.3 ],
             "end": [ 1.25, 1.25, 1.25 ]
           }
         ]

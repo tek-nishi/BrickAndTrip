@@ -155,7 +155,25 @@ public:
     makeTween(name, tween);
   }
 
-  
+  void resetTweens() {
+    pos_.stop();
+    scale_.stop();
+    for (auto& r : rotate_) {
+      r.stop();
+    }
+
+    base_color_.stop();
+    text_color_.stop();
+
+    pos_ = ci::Vec3f::zero();
+    scale_ = ci::Vec3f::one();
+    std::fill(std::begin(rotate_), std::end(rotate_), 0.0f);
+    
+    base_color_ = Json::getColor<float>(params_["base_color"]);
+    text_color_ = Json::getColor<float>(params_["text_color"]);
+  }
+
+
 private:
   void makeTween(const std::string& name, const ci::JsonTree& tween) {
     std::set<std::string> apply;
@@ -207,9 +225,9 @@ private:
 
   static void setRotationTween(ci::Timeline& timeline,
                                std::vector<ci::Anim<float> >& values, const ci::JsonTree& param, const bool is_first) {
-    float delta_interval = param.hasChild("interval") ? param["interval"].getValue<float>()
-                                                      : 0.0f;
-    float interval = 0.0f;
+    float delta_interval = Json::getValue(param, "interval", 0.0f);
+    float interval       = 0.0f;
+    
     for (auto& value : values) {
       auto start = param.hasChild("start") ? ci::toRadians(param["start"].getValue<float>())
                                            : value();
@@ -226,14 +244,9 @@ private:
                                                  getEaseFunc(param["type"].getValue<std::string>()));
 
       if (is_first) value = start;
+
       setTweenOption<float>(option, param);
-
-      float delay = interval;
-      if (param.hasChild("delay")) {
-        delay += param["delay"].getValue<float>();
-      }
-      option.delay(delay);
-
+      option.delay(interval);                       // delayは加算される
       interval += delta_interval;
     }
   }

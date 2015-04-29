@@ -333,6 +333,17 @@
   "credits": {
     "event_delay": 0.6
   },
+
+  "progress": {
+    "tween_delay": 0.6,
+    "event_delay": 0.2,
+    "deactive_delay": 0.5
+  },
+
+  "pause": {
+    "event_delay": 0.6,
+    "deactive_delay": 1.0
+  },
   
 
   "easing": {
