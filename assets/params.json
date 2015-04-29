@@ -359,6 +359,12 @@
     "event_delay": 1.5,
     "deactive_delay": 0.1
   },
+
+  "stageclear": {
+    "tween_delay": 0.6,
+    "event_delay": 1.0,
+    "deactive_delay": 0.5
+  },
   
 
   "easing": {

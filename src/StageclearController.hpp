@@ -15,9 +15,14 @@ class StageclearController : public ControllerBase {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 
+  float tween_delay_;
+  float event_delay_;
+  float deactive_delay_;
+
   std::unique_ptr<UIView> view_;
   
   bool active_;
+  bool all_cleard_;
 
   ConnectionHolder connections_;
 
@@ -32,8 +37,12 @@ public:
                        std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
+    tween_delay_(params["stageclear.tween_delay"].getValue<float>()),
+    event_delay_(params["stageclear.event_delay"].getValue<float>()),
+    deactive_delay_(params["stageclear.deactive_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
+    all_cleard_(boost::any_cast<bool>(result.at("all_cleared"))),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "StageclearController()" << std::endl;
@@ -42,26 +51,26 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
-    
-#if 0
-    connections_ += event.connect("stageclear-agree",
+    connections_ += event.connect("selected-agree",
                                   [this](const Connection& connection, EventParam& param) {
-                                    // 時間差tween
+                                    view_->setActive(false);
+                                    
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
+
+                                        event_timeline_->add([this]() {
+                                            event_.signal(all_cleard_ ? "all-stageclear-agree"
+                                                                      : "stageclear-agree", EventParam());
+
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
+                                          },
+                                          event_timeline_->getCurrentTime() + event_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + 0.5f);
-                                    
-                                    // 時間差でControllerを破棄
-                                    event_timeline_->add([this]() {
-                                        
-                                        active_ = false;
-                                      },
-                                      event_timeline_->getCurrentTime() + 1.0f);
-                                    
-                                    connection.disconnect();
+                                      event_timeline_->getCurrentTime() + tween_delay_);
                                   });
-#endif
 
     {
       // constなのでatを使っている
@@ -99,21 +108,15 @@ public:
       }
     }
 
+#if 0
     // 全ステージクリア用設定
-    bool all_cleard = boost::any_cast<bool>(result.at("all_cleared"));
-    if (all_cleard) {
+    if (all_cleard_) {
       view_->getWidget("try").setDisp(false);
       view_->getWidget("next").setDisp(false);
     }
+#endif
     
     view_->startWidgetTween("tween-in");
-
-    event_timeline_->add([this, all_cleard]() {
-        event_.signal(all_cleard ? "all-stageclear-agree"
-                                 : "stageclear-agree", EventParam());
-        active_ = false;
-      },
-      event_timeline_->getCurrentTime() + 3.0f);
   }
 
   ~StageclearController() {
