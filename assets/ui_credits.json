@@ -43,6 +43,569 @@
   },
 
   {
+    "name": "created",
+    "disp": true,
+
+    "text": "ＣＲＥＡＴＥＤ　ＢＹ",
+    "size": 0.2,
+    "spacing": 0.02,
+    "chara_split": 1,
+    "pos": [ 0, 2.2, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.15,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "nishiyama",
+    "disp": true,
+
+    "text": "ＮＩＳＨＩＹＡＭＡ　ＮＯＢＵＹＵＫＩ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, 1.85, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.2,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+
+  {
+    "name": "powered",
+    "disp": true,
+
+    "text": "ＰＯＷＥＲＥＤ　ＢＹ",
+    "size": 0.2,
+    "spacing": 0.02,
+    "chara_split": 1,
+    "pos": [ 0, 1.4, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.15,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "cinder",
+    "disp": true,
+
+    "text": "ＣＩＮＤＥＲ　０.８.６",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, 1.05, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.2,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "boost",
+    "disp": true,
+
+    "text": "ＢＯＯＳＴ　Ｃ＋＋　ＬＩＢＲＡＲＩＥＳ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, 0.7, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.25,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "boost2",
+    "disp": true,
+
+    "text": "１.５７.０",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, 0.425, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.3,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "freetype",
+    "disp": true,
+
+    "text": "ＦＲＥＥＴＹＰＥ　２.５.４",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, 0.075, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.35,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+
+  {
+    "name": "thanks",
+    "disp": true,
+
+    "text": "ＴＨＡＮＫＳ　ＴＯ",
+    "size": 0.2,
+    "spacing": 0.02,
+    "chara_split": 1,
+    "pos": [ 0, -0.375, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.15,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "sp1",
+    "disp": true,
+
+    "text": "ＪＡＰＡＮ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, -0.725, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.2,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "sp11",
+    "disp": true,
+
+    "text": "ＥＬＥＣＴＲＯＮＩＣＳ　ＣＯＬＬＥＧＥ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, -1, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.25,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "sp2",
+    "disp": true,
+
+    "text": "ＶＡＮＴＡＮ　ＧＡＭＥ　ＡＣＡＤＥＭＹ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, -1.35, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.3,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "sp3",
+    "disp": true,
+
+    "text": "ＳＯＦＴＷＡＲＥ　ＳＯＣＩＥＴＹ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, -1.7, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.35,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "sp31",
+    "disp": true,
+
+    "text": "ＡＫＩＨＡＢＡＲＡ",
+    "size": 0.25,
+    "spacing": 0.025,
+    "chara_split": 1,
+    "pos": [ 0, -1.975, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.4,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+
+  
+  {
     "name": "agree",
     "disp": true,
 
@@ -70,7 +633,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 1.0,
+            "delay": 1.5,
             "start": [ 0, 0, 0 ]
           }
         ]

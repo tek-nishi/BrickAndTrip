@@ -338,8 +338,8 @@
 
   "credits": {
     "tween_delay": 0.6,
-    "event_delay": 0.7,
-    "deactive_delay": 0.3
+    "event_delay": 0.9,
+    "deactive_delay": 0.8
   },
 
   "progress": {
