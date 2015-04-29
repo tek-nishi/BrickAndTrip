@@ -15,7 +15,9 @@ class CreditsController : public ControllerBase {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 
+  float tween_delay_;
   float event_delay_;
+  float deactive_delay_;
 
   std::unique_ptr<UIView> view_;
   
@@ -33,7 +35,9 @@ public:
                     std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
+    tween_delay_(params["credits.tween_delay"].getValue<float>()),
     event_delay_(params["credits.event_delay"].getValue<float>()),
+    deactive_delay_(params["credits.deactive_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -48,18 +52,20 @@ public:
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
                                     
-                                    // 時間差tween
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
 
-                                        // 時間差でControllerを破棄
                                         event_timeline_->add([this]() {
                                             event_.signal("begin-title", EventParam());
-                                            active_ = false;
+                                            
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
                                           },
-                                          event_timeline_->getCurrentTime() + 1.5f);
+                                          event_timeline_->getCurrentTime() + event_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + event_delay_);
+                                      event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
     view_->startWidgetTween("tween-in");

@@ -319,19 +319,27 @@
 
   
   "title": {
-    "event_delay": 0.6
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.3
   },
 
   "records": {
-    "event_delay": 0.6
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.3
   },
 
   "settings": {
-    "event_delay": 0.6
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.3
   },
 
   "credits": {
-    "event_delay": 0.6
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.3
   },
 
   "progress": {
@@ -341,7 +349,8 @@
   },
 
   "pause": {
-    "event_delay": 0.6,
+    "tween_delay": 0.6,
+    "event_delay": 0.2,
     "deactive_delay": 1.0
   },
   

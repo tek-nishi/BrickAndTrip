@@ -16,7 +16,9 @@ class TitleController : public ControllerBase {
   Event<EventParam>& event_;
   Records& records_;
 
+  float tween_delay_;
   float event_delay_;
+  float deactive_delay_;
   
   std::unique_ptr<UIView> view_;
   
@@ -36,7 +38,9 @@ public:
     params_(params),
     event_(event),
     records_(records),
+    tween_delay_(params["title.tween_delay"].getValue<float>()),
     event_delay_(params["title.event_delay"].getValue<float>()),
+    deactive_delay_(params["title.deactive_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -53,10 +57,12 @@ public:
                                     view_->startWidgetTween("tween-out");
 
                                     // 時間差でControllerを破棄
+                                    // メニュー遷移の時間調整方法とあわせるために
+                                    // event_delay_ + deactive_delay_ としている
                                     event_timeline_->add([this]() {
                                         active_ = false;
                                       },
-                                      event_timeline_->getCurrentTime() + 1.5f);
+                                      event_timeline_->getCurrentTime() + event_delay_ + deactive_delay_);
                                     
                                     connection.disconnect();
                                   });
@@ -69,14 +75,19 @@ public:
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
 
-                                        // 時間差でControllerを破棄
+                                        // 時間差でsignal
                                         event_timeline_->add([this]() {
                                             event_.signal("begin-records", EventParam());
-                                            active_ = false;
+
+                                            // 時間差で消滅
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
                                           },
-                                          event_timeline_->getCurrentTime() + 1.5f);
+                                          event_timeline_->getCurrentTime() + event_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + event_delay_);
+                                      event_timeline_->getCurrentTime() + tween_delay_);
                                   });
                                   
     
@@ -88,14 +99,17 @@ public:
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
 
-                                        // 時間差でControllerを破棄
                                         event_timeline_->add([this]() {
                                             event_.signal("begin-settings", EventParam());
-                                            active_ = false;
+
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
                                           },
-                                          event_timeline_->getCurrentTime() + 1.5f);
+                                          event_timeline_->getCurrentTime() + event_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + event_delay_);
+                                      event_timeline_->getCurrentTime() + tween_delay_);
                                   });
     
     connections_ += event.connect("credits-start",
@@ -106,14 +120,17 @@ public:
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
 
-                                        // 時間差でControllerを破棄
                                         event_timeline_->add([this]() {
                                             event_.signal("begin-credits", EventParam());
-                                            active_ = false;
+
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
                                           },
-                                          event_timeline_->getCurrentTime() + 1.5f);
+                                          event_timeline_->getCurrentTime() + event_delay_);
                                       },
-                                      event_timeline_->getCurrentTime() + event_delay_);
+                                      event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
     if (records.getTotalPlayNum() == 0) {
