@@ -21,7 +21,7 @@
             "type": "EaseOutElastic",
             "duration": 1.5,
             "interval": 0.15,
-            "start": -90,
+            "start": -95,
             "end": 0
           }
         ]
@@ -35,7 +35,7 @@
             "duration": 0.45,
             "delay": 0.1,
             "interval": 0.05,
-            "end": -90
+            "end": -95
           }
         ]
       }
@@ -65,7 +65,7 @@
             "duration": 1.5,
             "delay": 0.1,
             "interval": 0.15,
-            "start": -90,
+            "start": -95,
             "end": 0
           }
         ]
@@ -79,7 +79,7 @@
             "duration": 0.45,
             "delay": 0.35,
             "interval": 0.05,
-            "end": -90
+            "end": -95
           }
         ]
       }

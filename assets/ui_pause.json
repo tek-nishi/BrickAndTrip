@@ -21,7 +21,7 @@
             "type": "EaseOutElastic",
             "duration": 1.2,
             "interval": 0.05,
-            "start": -90,
+            "start": -95,
             "end": 0
           }
         ]
@@ -34,7 +34,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -95
           }
         ]
       }

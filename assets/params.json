@@ -327,7 +327,7 @@
   "records": {
     "tween_delay": 0.6,
     "event_delay": 0.7,
-    "deactive_delay": 0.3
+    "deactive_delay": 0.5
   },
 
   "settings": {
@@ -345,7 +345,7 @@
   "progress": {
     "tween_delay": 0.6,
     "event_delay": 0.2,
-    "deactive_delay": 0.5
+    "deactive_delay": 0.8
   },
 
   "pause": {

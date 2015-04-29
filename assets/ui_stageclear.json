@@ -22,7 +22,7 @@
             "type": "EaseOutElastic",
             "duration": 1.2,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -36,7 +36,7 @@
             "duration": 0.5,
             "delay": 0.15,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -67,7 +67,7 @@
             "duration": 1.2,
             "delay": 0.1,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -81,7 +81,7 @@
             "duration": 0.5,
             "delay": 0.2,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -112,7 +112,7 @@
             "duration": 1.2,
             "delay": 0.3,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -125,7 +125,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -155,7 +155,7 @@
             "duration": 1.2,
             "delay": 0.3,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -168,7 +168,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -199,7 +199,7 @@
             "duration": 1.2,
             "delay": 0.35,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -212,7 +212,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -242,7 +242,7 @@
             "duration": 1.2,
             "delay": 0.35,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -255,7 +255,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -286,7 +286,7 @@
             "duration": 1.2,
             "delay": 0.4,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -299,7 +299,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -329,7 +329,7 @@
             "duration": 1.2,
             "delay": 0.4,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -342,7 +342,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -373,7 +373,7 @@
             "duration": 1.2,
             "delay": 0.5,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -386,7 +386,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
@@ -417,7 +417,7 @@
             "duration": 1.2,
             "delay": 0.6,
             "interval": 0.05,
-            "start": -90,
+            "start": -100,
             "end": 0
           }
         ]
@@ -430,7 +430,7 @@
             "type": "EaseInExpo",
             "duration": 0.5,
             "interval": 0.05,
-            "end": -90
+            "end": -100
           }
         ]
       }
