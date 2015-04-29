@@ -108,6 +108,14 @@ public:
       }
     }
 
+    {
+      // FIXME:ランダムにコメントを選ぶ
+      auto comment = params["stageclear.comment"];
+      int num = int(comment.getNumChildren());
+      
+      view_->getWidget("comment").setText(comment[ci::randInt(num)].getValue<std::string>());
+    }
+
 #if 0
     // 全ステージクリア用設定
     if (all_cleard_) {

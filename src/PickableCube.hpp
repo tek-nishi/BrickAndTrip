@@ -264,7 +264,7 @@ public:
       { ci::Vec3f(0, 0, 1),  idle_angle_ },
     };
 
-    int move_direction = directions[ci::randInt(directions.size())];
+    int move_direction = directions[ci::randInt(int(directions.size()))];
     auto options = animation_timeline_->apply(&move_rotation_,
                                               ci::Quatf::identity(), rotation_table[move_direction],
                                               idle_duration_,

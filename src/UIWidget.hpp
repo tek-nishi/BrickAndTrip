@@ -114,8 +114,18 @@ public:
   CubeText& getCubeText() { return text_; }
 
   void setText(const std::string& text) {
+    size_t chara_num = text_.getNumCharactors();
+    
     text_.setText(text);
-    layout_->resizeWidget(text_.textSize());
+
+    // 文字数が変わったら回転演出のバッファをレイアウトを更新
+    size_t new_chara_num = text_.getNumCharactors();
+    if (new_chara_num != chara_num) {
+      rotate_.resize(new_chara_num);
+      std::fill(std::begin(rotate_), std::end(rotate_), 0.0f);
+
+      layout_->resizeWidget(text_.textSize());
+    }
   }
   
 

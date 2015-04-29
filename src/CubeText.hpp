@@ -64,6 +64,8 @@ public:
   float size() const { return size_; }
   float spacing() const { return spacing_; }
 
+  size_t getNumCharactors() const { return text_.size(); }
+  
   ci::Vec3f textSize() const {
     return max_pos_ - min_pos_;
   }

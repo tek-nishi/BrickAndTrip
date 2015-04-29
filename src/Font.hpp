@@ -100,11 +100,11 @@ public:
     int height = (size - 1) * font_aspect;
     FT_Set_Pixel_Sizes(face_, 0, height);
 
-    ascender_    = face_->size->metrics.ascender >> 6;
-    descender_   = face_->size->metrics.descender >> 6;
-    font_width_  = face_->size->metrics.max_advance >> 6;
+    ascender_    = int(face_->size->metrics.ascender >> 6);
+    descender_   = int(face_->size->metrics.descender >> 6);
+    font_width_  = int(face_->size->metrics.max_advance >> 6);
     font_height_ = ascender_ - descender_;
-    font_edge_   = (face_->size->metrics.height >> 6) - font_height_;
+    font_edge_   = int(face_->size->metrics.height >> 6) - font_height_;
 
     DOUT << "ascender:" << ascender_ << std::endl
          << "descender:" << descender_ << std::endl
@@ -144,7 +144,7 @@ public:
 
   // 文字列をレンダリング
   ci::Surface8u rendering(const std::string& text) {
-    size_t chara_num = strlen(text);
+    int chara_num = int(strlen(text));
 
     ci::Surface8u surface(size_ * chara_num, size_, true);
     ci::ip::fill(&surface, ci::ColorAT<uint8_t>(255, 255, 255, 0));

@@ -363,7 +363,15 @@
   "stageclear": {
     "tween_delay": 0.6,
     "event_delay": 1.0,
-    "deactive_delay": 0.5
+    "deactive_delay": 0.5,
+
+    "comment": [
+      "ＷＡＹ　ＴＯ　ＧＯ‼",
+      "ＧＯＯＤ　ＦＯＲ　ＹＯＵ‼",
+      "ＡＷＥＳＯＭＥ‼",
+      "ＡＭＡＺＩＮＧ‼",
+      "ＣＯＯＬ　ＢＥＡＮＳ‼"
+    ]
   },
   
 

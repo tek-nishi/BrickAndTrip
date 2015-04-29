@@ -98,7 +98,7 @@ public:
   }
 
   int cleardStageNum() {
-    return stage_records_.size();
+    return int(stage_records_.size());
   }
 
   void storeStageRecord(const double current_time) {

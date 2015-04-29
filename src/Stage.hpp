@@ -151,7 +151,7 @@ public:
   }
 
   void collapseStage(const int stop_z, const float speed_rate = 1.0f) {
-    int bottom_z = active_top_z_ - active_cubes_.size() - 1;
+    int bottom_z = active_top_z_ - int(active_cubes_.size()) - 1;
     
     if (!canCollapse() || (bottom_z == stop_z)) {
       finished_collapse_ = true;
@@ -266,7 +266,7 @@ public:
   
 
   int getTopZ() const { return top_z_; }
-  int getActiveBottomZ() const { return active_top_z_ - active_cubes_.size(); }
+  int getActiveBottomZ() const { return active_top_z_ - int(active_cubes_.size()); }
 
   const ci::Vec2i& getStageWidth() const { return stage_width_; }
   
@@ -286,7 +286,7 @@ public:
     
     
     const auto& body = stage_data["body"];
-    int last_iz = body.getNumChildren() - 1;
+    int last_iz = int(body.getNumChildren()) - 1;
     int iz = 0;
     for (const auto& row : body) {
       std::vector<StageCube> cube_row;
@@ -337,7 +337,7 @@ public:
     }
 
     int top_z    = active_top_z_ - 1;
-    int bottom_z = active_top_z_ - active_cubes_.size();
+    int bottom_z = active_top_z_ - int(active_cubes_.size());
     
     if ((block_pos.z < bottom_z) || (block_pos.z > top_z)) {
       return std::make_pair(false, 0);
