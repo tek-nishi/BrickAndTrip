@@ -226,7 +226,7 @@ public:
     int   entry_z = 0 + params_["game.pickable.entry_z"].getValue<int>();
     float delay   = params_["game.pickable.entry_start_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay);
+      entryPickableCube(entry_z, delay, false);
     }
     
     stage_num_    = 0;
@@ -425,7 +425,7 @@ public:
     int entry_z = finish_line_z_ + 1 + params_["game.pickable.entry_z"].getValue<int>();
     float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay, true);
+      entryPickableCube(entry_z, delay);
     }
   }
 
@@ -513,7 +513,10 @@ private:
     event_timeline_->add([this, entry_z, sleep]() {
         while (1) {
           // Stageは(x >= 0)を保証しているので手抜きできる
-          auto entry_pos = ci::Vec3i(ci::randInt(1, 8), 0, entry_z);
+          int x = sleep ? ci::randInt(1, 8)
+                        : params_["game.pickable.entry_x"].getValue<int>(); 
+            
+          auto entry_pos = ci::Vec3i(x, 0, entry_z);
           if (isPickableCube(entry_pos)) continue;
 
           

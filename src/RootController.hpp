@@ -167,7 +167,11 @@ public:
       
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
-    addController<TitleController>(params, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+
+    timeline_->add([this]() {
+        addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+      },
+      timeline_->getCurrentTime() + params["app.start_title_delay"].getValue<float>());
 
 #if 0
     {

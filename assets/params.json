@@ -36,6 +36,8 @@
     "fast_speed": 3,
     "slow_speed": 0.25,
 
+    "start_title_delay": 3.8,
+
     "debug": {
       "d": "force-collapse",
       "s": "stop-build-and-collapse"
@@ -183,6 +185,7 @@
     },
 
     "pickable": {
+      "entry_x": 3,
       "entry_z": 1,
       "entry_start_delay": 2,
       "entry_next_delay": 3,
