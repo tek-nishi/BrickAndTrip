@@ -163,7 +163,7 @@
   
     "materials": {
       "pickable_cube": {
-        "ambient": [ 0, 0, 0, 1 ],
+        "ambient": [ 1, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
         "specular": [ 0.3, 0.3, 0.3, 1 ],
         "shininess": 80,

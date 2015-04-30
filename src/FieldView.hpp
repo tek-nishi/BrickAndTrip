@@ -43,6 +43,7 @@ class FieldView : private boost::noncopyable {
   ci::Vec3f new_eye_point_;
   
   float camera_speed_;
+  bool camera_follow_target_;
 
   struct Light {
     ci::gl::Light l;
@@ -110,6 +111,7 @@ public:
     eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
     camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
+    camera_follow_target_(true),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
@@ -299,6 +301,11 @@ public:
   }
 
   void setStageColor(const ci::Color& color) {
+    // TODO:背景色を滑らかに変化
+  }
+
+  void enableFollowCamera(const bool enable = true) {
+    camera_follow_target_ = enable;
   }
   
   
@@ -508,15 +515,13 @@ private:
   }
 
   void updateCameraTarget(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
-    // ci::Vec3f target_pos = ci::Vec3f::zero();
-    // int cube_num = 0;
+    if (!camera_follow_target_) return;
+    
     std::vector<ci::Vec3f> cube_pos;
     for (const auto& cube : cubes) {
       if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
 
-      // target_pos += cube->position();
       cube_pos.push_back(cube->position());
-      // cube_num += 1;
     }
 
     if (cube_pos.empty()) return;

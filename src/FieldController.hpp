@@ -152,6 +152,7 @@ public:
                                      DOUT << "first-fallen-pickable" << std::endl;
                                      entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
+                                     view_.enableFollowCamera(false);
                                      entity_.gameover();
                                    });
 
@@ -299,6 +300,7 @@ private:
 
     view_.enableTouchInput();
     view_.resetCamera();
+    view_.enableFollowCamera();
     entity_.setupStartStage();
   }
 
