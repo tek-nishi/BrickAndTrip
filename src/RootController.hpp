@@ -193,7 +193,7 @@ public:
   ~RootController() {
     DOUT << "~RootController()" << std::endl;
 
-    timeline_->removeSelf();
+    timeline_->clear();
   }
 
 
