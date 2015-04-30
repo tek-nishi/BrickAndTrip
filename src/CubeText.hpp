@@ -14,20 +14,7 @@
 namespace ngs {
 
 class CubeText {
-public:
-  struct Chara {
-    std::string chara;
-    bool disp;
-
-    Chara(const std::string& c) :
-      chara(c),
-      disp(true)
-    {}
-  };
-
-
-private:
-  std::vector<Chara> text_;
+  std::vector<std::string> text_;
 
   float size_;
   float spacing_;
@@ -59,7 +46,7 @@ public:
     makeText(text);
   }
   
-  const std::vector<Chara>& text() const { return text_; }
+  const std::vector<std::string>& text() const { return text_; }
 
   float size() const { return size_; }
   float spacing() const { return spacing_; }

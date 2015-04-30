@@ -70,6 +70,8 @@ public:
     active_(false),
     touch_event_(false)
   {
+    DOUT << "UIWidet" << std::endl;
+    
     std::fill(std::begin(rotate_), std::end(rotate_), 0.0f);
     
     layout_ = autolayout.makeWidget(Json::getVec3<float>(params["pos"]),

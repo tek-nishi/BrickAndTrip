@@ -100,6 +100,7 @@ class ColoColoParadeApp : public AppNative,
 
     // 以下OpenGL設定
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    gl::disableAlphaTest();
 
     gl::enable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -273,7 +274,13 @@ class ColoColoParadeApp : public AppNative,
     models_ = std::unique_ptr<ModelHolder>(new ModelHolder);
 
     for(const auto& p : params_["app.models"]) {
-      models_->add(p.getKey(), p.getValue<std::string>());
+      const auto& name = p["name"].getValue<std::string>();
+      const auto& path = p["path"].getValue<std::string>();
+      bool has_normals = p["normals"].getValue<bool>();
+      bool has_uvs = p["uvs"].getValue<bool>();
+      bool has_indices = p["indices"].getValue<bool>();
+      
+      models_->add(name, path, has_normals, has_uvs, has_indices);
     }
   }
 

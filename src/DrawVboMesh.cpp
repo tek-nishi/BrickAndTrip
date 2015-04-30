@@ -14,7 +14,7 @@ void drawRange( const VboMesh &vbo, const GLsizei indexCount) {
 	vbo.enableClientStates();
 	vbo.bindAllData();
 	
-	glDrawElements( vbo.getPrimitiveType(), indexCount, GL_UNSIGNED_SHORT, (GLvoid*)(0) );
+	glDrawElements( vbo.getPrimitiveType(), indexCount, GL_UNSIGNED_SHORT, 0 );
 	
 	gl::VboMesh::unbindBuffers();
 	vbo.disableClientStates();
@@ -23,6 +23,7 @@ void drawRange( const VboMesh &vbo, const GLsizei indexCount) {
 void drawArrays( const VboMesh &vbo, const GLsizei count ) {
 	vbo.enableClientStates();
 	vbo.bindAllData();
+  
 	glDrawArrays( vbo.getPrimitiveType(), 0, count );
 
 	gl::VboMesh::unbindBuffers();

@@ -54,6 +54,8 @@ public:
     event_(event),
     touching_(false)
   {
+    DOUT << "UIView" << std::endl;
+
     for (const auto p : widget_params) {
       auto widget = std::unique_ptr<UIWidget>(new UIWidget(p, timeline, autolayout));
       widgets_.push_back(std::move(widget));

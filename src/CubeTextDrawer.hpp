@@ -25,17 +25,17 @@ void drawCubeAndText(ci::gl::TextureRef texture,
   ci::gl::color(color);
   ci::gl::draw(cube.mesh());
 
-  ci::gl::enableAlphaBlending();
   ci::gl::color(text_color);
 
   ci::gl::translate(offset);
   ci::gl::scale(scale);
   
+  ci::gl::enable(GL_BLEND);
   texture->enableAndBind();
   ci::gl::draw(text.mesh());
 
   texture->disable();
-  ci::gl::disableAlphaBlending();
+  ci::gl::disable(GL_BLEND);
 }
 
 
@@ -57,29 +57,27 @@ void draw(const CubeText& cube_text,
 
   for (size_t i = 0; i < text.size(); ++i) {
     const auto& t = text[i];
-    auto texture = font.getTextureFromString(t.chara);
+    auto texture = font.getTextureFromString(t);
 
-    if (t.disp) {
-      ci::gl::pushModelView();
+    ci::gl::pushModelView();
 
-      // 立方体の左下を(0, 0)として位置を決める
-      ci::gl::translate(text_pos + ci::Vec3f(chara_size / 2, chara_size / 2, -chara_size / 2));
-      if (!rotation.empty()) {
-        float angle = std::fmod<float>(rotation[i], M_PI * 2.0f);
-        float t = (i & 1) ? -chara_size / 2 : chara_size / 2;
+    // 立方体の左下を(0, 0)として位置を決める
+    ci::gl::translate(text_pos + ci::Vec3f(chara_size / 2, chara_size / 2, -chara_size / 2));
+    if (!rotation.empty()) {
+      float angle = std::fmod<float>(rotation[i], M_PI * 2.0f);
+      float t = (i & 1) ? -chara_size / 2 : chara_size / 2;
 
-        ci::gl::translate(0, t, 0);
-        ci::gl::rotate(ci::Quatf(ci::Vec3f(1, 0, 0), angle));
-        ci::gl::translate(0, -t, 0);
-      }
-      ci::gl::scale(cube_size);
-      
-      drawCubeAndText(texture, model_cube, model_text,
-                      base_color, text_color,
-                      font.scale(), font.offset());
-      
-      ci::gl::popModelView();
+      ci::gl::translate(0, t, 0);
+      ci::gl::rotate(ci::Quatf(ci::Vec3f(1, 0, 0), angle));
+      ci::gl::translate(0, -t, 0);
     }
+    ci::gl::scale(cube_size);
+      
+    drawCubeAndText(texture, model_cube, model_text,
+                    base_color, text_color,
+                    font.scale(), font.offset());
+      
+    ci::gl::popModelView();
 
     text_pos.x += chara_size + chara_spacing;
   }

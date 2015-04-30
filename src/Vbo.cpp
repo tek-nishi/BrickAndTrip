@@ -126,8 +126,13 @@ VboMesh::VboMesh( const TriMesh &triMesh, Layout layout )
 	mObj->mNumIndices = triMesh.getNumIndices();
 	mObj->mNumVertices = triMesh.getNumVertices();
 
+
+  // TODO:VAO
+  // GLuint vao;
+  // glGenVertexArraysOES(1, &vao);
+  
 	initializeBuffers( false );
-			
+
 	// upload the indices
   // FIXME:OpenGL ES はindexはshort型
   std::vector<uint16_t> indices;
@@ -135,7 +140,9 @@ VboMesh::VboMesh( const TriMesh &triMesh, Layout layout )
     indices.push_back(index);
   }
   
-	getIndexVbo().bufferData( sizeof(uint16_t) * triMesh.getNumIndices(), &indices[0], (mObj->mLayout.hasStaticIndices()) ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW );
+	getIndexVbo().bufferData( sizeof(uint16_t) * triMesh.getNumIndices(), &indices[0],
+                            (mObj->mLayout.hasStaticIndices()) ? GL_STATIC_DRAW
+                                                               : GL_DYNAMIC_DRAW );
 	
 	// upload the verts
 	for( int buffer = STATIC_BUFFER; buffer <= DYNAMIC_BUFFER; ++buffer ) {
@@ -465,10 +472,12 @@ void VboMesh::enableClientStates() const
 		glEnableClientState( GL_VERTEX_ARRAY );
 	else
 		glDisableClientState( GL_VERTEX_ARRAY );
+
 	if( mObj->mLayout.hasNormals() )
 		glEnableClientState( GL_NORMAL_ARRAY );
 	else
 		glDisableClientState( GL_NORMAL_ARRAY );
+
 	if( mObj->mLayout.hasColorsRGB() || mObj->mLayout.hasColorsRGBA() )
 		glEnableClientState( GL_COLOR_ARRAY );
 	else
@@ -499,9 +508,21 @@ void VboMesh::enableClientStates() const
 
 void VboMesh::disableClientStates() const
 {
+#if 1
+	if( mObj->mLayout.hasPositions() ) 
+		glDisableClientState( GL_VERTEX_ARRAY );
+
+	if( mObj->mLayout.hasNormals() )
+		glDisableClientState( GL_NORMAL_ARRAY );
+
+	if( mObj->mLayout.hasColorsRGB() || mObj->mLayout.hasColorsRGBA() )
+		glDisableClientState( GL_COLOR_ARRAY );
+#else
 	glDisableClientState( GL_VERTEX_ARRAY );
 	glDisableClientState( GL_NORMAL_ARRAY );
 	glDisableClientState( GL_COLOR_ARRAY );
+#endif
+
 	for( size_t t = 0; t <= ATTR_MAX_TEXTURE_UNIT; ++t ) {
 		if( mObj->mLayout.hasTexCoords( t ) ) {
 			glClientActiveTexture( GL_TEXTURE0 + (GLenum)t );
@@ -530,7 +551,7 @@ void VboMesh::bindAllData() const
 	if( mObj->mLayout.hasIndices() ) {
 		mObj->mBuffers[INDEX_BUFFER].bind();
 	}
-	
+  
 	for( int buffer = STATIC_BUFFER; buffer <= DYNAMIC_BUFFER; ++buffer ) {
 		if( ! mObj->mBuffers[buffer] ) continue;
 		

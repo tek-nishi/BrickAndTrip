@@ -30,8 +30,6 @@ public:
 };
 
 
-#ifdef DEBUG
-
 float ease_in_elastic_a = 2;
 float ease_in_elastic_b = 1;
 float ease_out_elastic_a = 2;
@@ -40,8 +38,6 @@ float ease_inout_elastic_a = 2;
 float ease_inout_elastic_b = 1;
 float ease_outin_elastic_a = 2;
 float ease_outin_elastic_b = 1;
-
-#endif
 
 
 ci::EaseFn getEaseFunc(const std::string& name) {

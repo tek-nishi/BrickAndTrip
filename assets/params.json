@@ -8,30 +8,86 @@
         "name": "default",
         "path": "mplus-1m-medium.ttf",
         "default": true,
-        "size": 128,
+        "size": 64,
         "scale": [ 1.2, 1.2, 1 ],
         "offset": [ 0, -0.12, 0 ]
       },
       {
         "name": "icon",
         "path": "WebSymbolsLiga-Regular.otf",
-        "size": 128,
+        "size": 64,
         "scale": [ 1.15, 1.15, 1 ],
         "offset": [ 0, 0.03, 0 ]
+      },
+      {
+        "name": "logo",
+        "path": "mplus-1m-medium.ttf",
+        "default": true,
+        "size": 128,
+        "scale": [ 1.2, 1.2, 1 ],
+        "offset": [ 0, -0.12, 0 ]
       }
     ],
 
-    "models": {
-      "text_base": "text_base.obj",
-      "text_text": "text_text.obj",
-      "button_base": "button_base.obj",
-      "button_text": "button_text.obj",
-      
-      "pickable_cube": "pickable_cube.obj",
-      "item_cube": "item_cube.obj",
-      "stage_cube": "stage_cube.obj",
-      "bg_cube": "bg_cube.obj"
-    },
+    "models": [
+      {
+        "name": "text_base",
+        "path": "text_base.obj",
+        "normals": false,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "text_text",
+        "path": "text_text.obj",
+        "normals": false,
+        "uvs": true,
+        "indices": true
+      },
+      {
+        "name": "button_base",
+        "path": "button_base.obj",
+        "normals": false,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "button_text",
+        "path": "button_text.obj",
+        "normals": false,
+        "uvs": true,
+        "indices": true
+      },
+
+      {
+        "name": "pickable_cube",
+        "path": "pickable_cube.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "item_cube",
+        "path": "item_cube.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "stage_cube",
+        "path": "stage_cube.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "bg_cube",
+        "path": "bg_cube.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      }
+    ],
     
     "fast_speed": 3,
     "slow_speed": 0.25,
@@ -47,8 +103,8 @@
   "ui_view": {
     "camera": {
       "fov": 20,
-      "near_z": 0.05,
-      "far_z":  500,
+      "near_z": 1,
+      "far_z":  100,
     
       "eye_point": [ 0, 0, 20 ]
     }

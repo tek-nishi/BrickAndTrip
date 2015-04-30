@@ -19,20 +19,17 @@ public:
   ModelHolder() = default;
 
 
-  void add(const std::string& name, const std::string& path) {
+  void add(const std::string& name, const std::string& path,
+           const bool has_normals = true, const bool has_uvs = true,
+           const bool has_indices = true) {
     models_.emplace(std::piecewise_construct,
                     std::forward_as_tuple(name),
-                    std::forward_as_tuple(path));
+                    std::forward_as_tuple(path, has_normals, has_uvs, has_indices));
   }
 
-  const Model& get(const std::string& name) {
-    auto it = models_.find(name);
-    if (it == std::end(models_)) {
-      // 見つからなかったら例外
-      throw;
-    }
-
-    return it->second;
+  
+  const Model& get(const std::string& name) const {
+    return models_.at(name);
   }
 
   
