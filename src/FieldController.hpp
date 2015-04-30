@@ -216,7 +216,8 @@ public:
     connections_ += event_.connect("game-abort",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "game-abort" << std::endl;
-                                     view_.enableTouchInput();
+                                     // view_.enableTouchInput(false);
+                                     view_.enableFollowCamera(false);
                                      paused_ = false;
                                      entity_.abortGame();
                                    });
