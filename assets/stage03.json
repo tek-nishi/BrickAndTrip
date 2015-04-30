@@ -28,5 +28,6 @@
   "collapse_speed": 0.8,
   "auto_collapse": 8,
 
-  "color": [ 205, 0.36, 0.8 ]
+  "color": [ 205, 0.36, 0.8 ],
+  "bg_color": [ 0, 0, 0.7 ]
 }

@@ -311,7 +311,7 @@ public:
     new_target_point_ = Json::getVec3<float>(params_["game_view.camera.target_point"]);
   }
 
-  void setStageColor(const ci::Color& color) {
+  void setStageBgColor(const ci::Color& color) {
     animation_timeline_->apply(&bg_color_,
                                color,
                                bg_tween_duration_, getEaseFunc(bg_tween_type_));

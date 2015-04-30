@@ -216,7 +216,6 @@
     ],
 
     "cube_line_color": [ 359, 1, 0.7 ],
-    "stage_color": [ 0, 0, 0.6 ],
 
     "finish_rate": 0.1,
 

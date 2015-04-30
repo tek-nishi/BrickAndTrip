@@ -31,8 +31,12 @@ class FieldEntity : private boost::noncopyable {
 
   std::vector<ci::Color> cube_stage_color_;
   ci::Color cube_line_color_;
+
   ci::Color stage_color_;
-  ci::Color finish_color_;
+  ci::Color bg_color_;
+
+  ci::Color finish_stage_color_;
+  ci::Color finish_bg_color_;
 
   float finish_rate_;
 
@@ -81,6 +85,7 @@ class FieldEntity : private boost::noncopyable {
     int top_z;
     int entry_num;
     ci::Color stage_color;
+    ci::Color bg_color;
   };
   
   
@@ -94,7 +99,10 @@ public:
     event_(event),
     records_(records),
     cube_line_color_(ci::hsvToRGB(Json::getHsvColor(params["game.cube_line_color"]))),
-    stage_color_(ci::hsvToRGB(Json::getHsvColor(params["game.stage_color"]))),
+    stage_color_(0, 0, 0),
+    bg_color_(0, 0, 0),
+    finish_stage_color_(0, 0, 0),
+    finish_bg_color_(0, 0, 0),
     stage_num_(0),
     stage_(params, timeline, event),
     items_(params, timeline, event),
@@ -157,6 +165,7 @@ public:
 
         EventParam params = {
           { "stage_color", stage_color_ },
+          { "bg_color", bg_color_ }
         };
         event_.signal("first-pickable-started", params);
       }
@@ -170,7 +179,8 @@ public:
         event_.signal("all-pickable-finished", EventParam());
         {
           EventParam params = {
-            { "stage_color", finish_color_ }
+            { "stage_color", finish_stage_color_ },
+            { "bg_color",    finish_bg_color_ }
           };
           event_.signal("stage-color", params);
         }
@@ -230,7 +240,8 @@ public:
 
     {
       EventParam params = {
-        { "stage_color", stage_info.stage_color }
+        { "stage_color", stage_info.stage_color },
+        { "bg_color",    stage_info.bg_color }
       };
       event_.signal("stage-color", params);
     }
@@ -258,20 +269,25 @@ public:
     std::ostringstream path;
     // stage_num が 0 -> stage01.json 
     path << "stage" << std::setw(2) << std::setfill('0') << (stage_num_ + 1) << ".json";
-    auto stage_info = addCubeStage(path.str());
-    finish_line_z_ = stage_info.top_z - 1;
+    auto stage_info     = addCubeStage(path.str());
+    finish_line_z_      = stage_info.top_z - 1;
     entry_packable_num_ = stage_info.entry_num;
+
     stage_.setFinishLine(finish_line_z_);
+    
     stage_color_ = stage_info.stage_color;
+    bg_color_    = stage_info.bg_color;
 
     // bgの位置を決めるためにステージの中央座標を求める
     const auto& width = stage_.getStageWidth();
-    stage_center_x_ = (width.x + width.y) / 2;
+    stage_center_x_   = (width.x + width.y) / 2;
 
-    start_line_z_ = next_start_line_z_;
-    stage_info = addCubeStage("finishline.json");
+    start_line_z_      = next_start_line_z_;
+    stage_info         = addCubeStage("finishline.json");
     next_start_line_z_ = stage_info.top_z - 1;
-    finish_color_ = stage_info.stage_color;
+
+    finish_stage_color_ = stage_info.stage_color;
+    finish_bg_color_    = stage_info.bg_color;
 
     mode_ = START;
     first_started_pickable_ = false;
@@ -567,6 +583,7 @@ private:
       top_z,
       entry_num,
       ci::hsvToRGB(Json::getHsvColor(stage["color"])),
+      ci::hsvToRGB(Json::getHsvColor(stage["bg_color"])),
     };
     
     return info;

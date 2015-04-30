@@ -75,8 +75,8 @@ public:
     connections_ += event_.connect("first-pickable-started",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "first-pickable-started" << std::endl;
-                                     const auto& color = boost::any_cast<const ci::Color&>(param["stage_color"]);
-                                     view_.setStageColor(color);
+                                     const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
+                                     view_.setStageBgColor(color);
                                      entity_.startStageCollapse();
                                    });
     
@@ -245,8 +245,8 @@ public:
 
     connections_ += event_.connect("stage-color",
                                    [this](const Connection& connection, EventParam& param) {
-                                     const auto& color = boost::any_cast<const ci::Color&>(param["stage_color"]);
-                                     view_.setStageColor(color);
+                                     const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
+                                     view_.setStageBgColor(color);
                                    });
     
 #ifdef DEBUG

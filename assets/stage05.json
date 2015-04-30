@@ -29,6 +29,7 @@
   "auto_collapse": 10,
 
   "color": [ 38, 0.34, 0.8 ],
+  "bg_color": [ 0, 0, 0.7 ],
   
   "pickable": 1
 }
