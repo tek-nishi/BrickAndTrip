@@ -216,7 +216,6 @@ public:
     connections_ += event_.connect("game-abort",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "game-abort" << std::endl;
-                                     // view_.enableTouchInput(false);
                                      view_.enableFollowCamera(false);
                                      paused_ = false;
                                      entity_.abortGame();
@@ -232,11 +231,13 @@ public:
     connections_ += event_.connect("field-input-stop",
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.cancelPickPickableCubes();
+                                     entity_.enablePickableCubeMovedEvent(false);
                                      view_.enableTouchInput(false);
                                    });
 
     connections_ += event_.connect("field-input-start",
                                    [this](const Connection& connection, EventParam& param) {
+                                     entity_.enablePickableCubeMovedEvent();
                                      view_.enableTouchInput();
                                    });
     

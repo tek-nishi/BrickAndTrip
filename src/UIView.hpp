@@ -79,13 +79,14 @@ public:
   void setDisp(const bool value) { disp_ = value; }
   
   bool isActive() const { return active_; }
-  void setActive(const bool value) {
-    active_ = value;
+  void setActive(const bool active) {
+    active_ = active;
 
-    // ONにする時にTouchイベントを初期化
-    if (value) {
-      touching_ = false;
+    // OFFにする時はタッチ中のWidgetの後処理を
+    if (!active && touching_) {
+      touching_widget_->startTween("tween-touch-out");
     }
+    touching_ = false;
   }
   
   
@@ -187,14 +188,16 @@ private:
     if (touch_in || (touch_in != touch_in_)) {
       touching_widget_->startTween(touch_in ? "tween-touch-end" : "tween-touch-out");
     }
+    
+    // signal先で自分自身のsetActiveが呼ばれるので、ここで更新
+    touching_ = false;
+
     if (touch_in) {
       EventParam params = {
         { "widget", touching_widget_->getName() },
       };
       event_.signal(touching_widget_->eventMessage(), params);
     }
-
-    touching_ = false;
   }
   
 };

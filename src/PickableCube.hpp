@@ -55,6 +55,7 @@ private:
   bool sleep_;
   
   bool first_moved_;
+  bool move_event_;
 
   int       move_direction_;
   ci::Vec3i move_vector_;
@@ -104,6 +105,7 @@ public:
     moving_(false),
     sleep_(sleep),
     first_moved_(false),
+    move_event_(true),
     move_direction_(MOVE_NONE),
     move_vector_(ci::Vec3i::zero()),
     move_speed_(0),
@@ -192,6 +194,9 @@ public:
 
   const ci::Vec3i& moveVector() const { return move_vector_; }
   
+  void enableMovedEvent(const bool enable = true) {
+    move_event_ = enable;
+  }
   
   void startRotationMove() {
     moving_ = true;
@@ -246,13 +251,15 @@ public:
         move_start_rotation_ = rotation_;
 
         moving_ = false;
+        move_speed_ -= 1;
+
+        if (!move_event_) return;
         
         EventParam params = {
           { "id", id_ },
           { "block_pos", block_position_ },
         };
         event_.signal("pickable-moved", params);
-        move_speed_ -= 1;
       });
   }
 

@@ -417,6 +417,12 @@ public:
     records_.current_game.tumble_num += 1;
   }
 
+  void enablePickableCubeMovedEvent(const bool enable = true) {
+    for (auto& cube : pickable_cubes_) {
+      cube->enableMovedEvent(enable);
+    }
+  }
+  
   // finish-line上のPickableCubeを生成
   void entryPickableCubes() {
     if (entry_packable_num_ == 0) return;
