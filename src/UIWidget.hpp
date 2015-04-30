@@ -157,6 +157,14 @@ public:
                          pos_() + layout_->getPos(), scale_(),
                          text_color_(), base_color_(),
                          rotate_);
+
+#if 0
+    ci::gl::color(0, 1, 0);
+    
+    auto pos = pos_() + layout_->getPos();
+    auto bbox = ci::AxisAlignedBox3f(pos + text_.minPos(), pos + text_.maxPos());
+    ci::gl::drawStrokedCube(bbox);
+#endif
   }
 
 
