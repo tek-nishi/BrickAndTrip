@@ -101,11 +101,11 @@
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, -2, 0 ],
-    "origin": "top-center",
-    "layout": "center",
+    "pos": [ 0, 0.2, 0 ],
+    "origin": "bottom-center",
+    "layout": "bottom-center",
     "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0, 0, 1 ],
+    "text_color": [ 0.1, 0.1, 1 ],
     
     "tween": {
       "tween-in": {

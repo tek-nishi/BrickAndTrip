@@ -32,6 +32,7 @@ class FieldEntity : private boost::noncopyable {
   std::vector<ci::Color> cube_stage_color_;
   ci::Color cube_line_color_;
   ci::Color stage_color_;
+  ci::Color finish_color_;
 
   float finish_rate_;
 
@@ -167,6 +168,12 @@ public:
       if (isAllPickableCubesFinished()) {
         mode_ = CLEAR;
         event_.signal("all-pickable-finished", EventParam());
+        {
+          EventParam params = {
+            { "stage_color", finish_color_ }
+          };
+          event_.signal("stage-color", params);
+        }
       }
       break;
 
@@ -220,6 +227,13 @@ public:
     // bgの位置を決めるためにステージの中央座標を求める
     const auto& width = stage_.getStageWidth();
     stage_center_x_ = (width.x + width.y) / 2;
+
+    {
+      EventParam params = {
+        { "stage_color", stage_info.stage_color }
+      };
+      event_.signal("stage-color", params);
+    }
     
     stage_.buildStage();
 
@@ -257,6 +271,7 @@ public:
     start_line_z_ = next_start_line_z_;
     stage_info = addCubeStage("finishline.json");
     next_start_line_z_ = stage_info.top_z - 1;
+    finish_color_ = stage_info.stage_color;
 
     mode_ = START;
     first_started_pickable_ = false;

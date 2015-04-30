@@ -240,7 +240,12 @@ public:
                                      entity_.enablePickableCubeMovedEvent();
                                      view_.enableTouchInput();
                                    });
-    
+
+    connections_ += event_.connect("stage-color",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     const auto& color = boost::any_cast<const ci::Color&>(param["stage_color"]);
+                                     view_.setStageColor(color);
+                                   });
     
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",
@@ -299,7 +304,6 @@ private:
                                        
                                      connection.disconnect();
                                    });
-
     view_.enableTouchInput();
     view_.resetCamera();
     view_.enableFollowCamera();

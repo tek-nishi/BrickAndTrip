@@ -197,10 +197,13 @@
 
     "fog_start": 22,
     "fog_end": 26,
-    "fog_color": [ 0.4, 0.4, 0.4, 1 ],
+    "fog_color": [ 0.55, 0.55, 0.55, 1 ],
     
     "bg_fog_start": 23,
-    "bg_fog_end": 40
+    "bg_fog_end": 40,
+
+    "bg_tween_type": "EaseOutExpo",
+    "bg_tween_duration": 1.5
   },
 
   

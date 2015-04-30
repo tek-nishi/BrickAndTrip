@@ -89,7 +89,14 @@ class FieldView : private boost::noncopyable {
   MaterialHolder materials_;
 
   ci::gl::Texture bg_texture_;
+  
+  std::string bg_tween_type_;
+  float bg_tween_duration_;
 
+  ci::ColorA fog_color_rate_;
+
+  ci::Anim<ci::Color> bg_color_;
+  ci::Anim<ci::ColorA> fog_color_;
   
   
 public:
@@ -117,7 +124,12 @@ public:
     touch_input_(true),
     animation_timeline_(ci::Timeline::create()),
     progressing_seconds_(0.0),
-    bg_texture_(ci::loadImage(ci::app::loadAsset("bg.png")))
+    bg_texture_(ci::loadImage(ci::app::loadAsset("bg.png"))),
+    bg_tween_type_(params["game_view.bg_tween_type"].getValue<std::string>()),
+    bg_tween_duration_(params["game_view.bg_tween_duration"].getValue<float>()),
+    fog_color_rate_(Json::getColorA<float>(params["game_view.fog_color"])),
+    bg_color_(ci::Color(0, 0, 0)),
+    fog_color_(ci::ColorA(0, 0, 0, 1))
     // camera_editor_(camera_, interest_point_, eye_point_)
   {
     // 注視点からの距離、角度でcamera位置を決めている
@@ -225,7 +237,7 @@ public:
       ci::gl::disableDepthRead();
       ci::gl::disableDepthWrite();
       ci::gl::disable(GL_LIGHTING);
-      ci::gl::color(ci::Color(1, 1, 1));
+      ci::gl::color(bg_color_);
       ci::gl::draw(bg_texture_);
     }
 
@@ -235,8 +247,7 @@ public:
 
     ci::gl::enable(GL_FOG);
     glFogi(GL_FOG_MODE, GL_LINEAR);
-    auto color = Json::getColorA<float>(params_["game_view.fog_color"]);
-    glFogfv(GL_FOG_COLOR, color.ptr());
+    glFogfv(GL_FOG_COLOR, fog_color_().ptr());
     glFogf(GL_FOG_START, params_["game_view.fog_start"].getValue<float>());
     glFogf(GL_FOG_END, params_["game_view.fog_end"].getValue<float>());
     
@@ -301,7 +312,15 @@ public:
   }
 
   void setStageColor(const ci::Color& color) {
-    // TODO:背景色を滑らかに変化
+    animation_timeline_->apply(&bg_color_,
+                               color,
+                               bg_tween_duration_, getEaseFunc(bg_tween_type_));
+
+    ci::ColorA fog_color = ci::ColorA(color.r, color.g, color.b, 1) * fog_color_rate_;
+    
+    animation_timeline_->apply(&fog_color_,
+                               fog_color,
+                               bg_tween_duration_, getEaseFunc(bg_tween_type_));
   }
 
   void enableFollowCamera(const bool enable = true) {
