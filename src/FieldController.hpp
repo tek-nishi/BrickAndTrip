@@ -48,6 +48,8 @@ public:
     stage_cleard_(false),
     stageclear_agree_(false)
   {
+    DOUT << "FieldController()" << std::endl;
+    
     connections_ += event_.connect("picking-start",
                                    [this](const Connection&, EventParam& param) {
                                      entity_.pickPickableCube(boost::any_cast<u_int>(param["cube_id"]));
@@ -263,8 +265,10 @@ public:
   }
 
   ~FieldController() {
+    DOUT << "~FieldController()" << std::endl;
+
     // 再生途中のものもあるので、手動で取り除く
-    timeline_->removeSelf();;
+    timeline_->removeSelf();
   }
 
 

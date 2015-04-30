@@ -188,6 +188,7 @@ class ColoColoParadeApp : public AppNative,
       controller_.reset();
 
       params_ = Json::readParams("params.json");
+
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
       // すぐさまresizeを呼んでCameraの調整
       resize();

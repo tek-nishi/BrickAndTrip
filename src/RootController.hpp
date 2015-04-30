@@ -69,6 +69,8 @@ public:
     sound_(params["sounds"]),
     background_(Json::getColor<float>(params["app.background"]))
   {
+    DOUT << "RootController()" << std::endl;
+    
     event_.connect("begin-progress",
                    [this](const Connection& connection, EventParam& param) {
                      addController<ProgressController>(params_, timeline_, event_, view_creator_.create("ui_progress.json"));
@@ -186,6 +188,12 @@ public:
       addController<StageclearController>(params_, timeline_, event_, param, view_creator_.create("ui_stageclear.json"));
     }
 #endif
+  }
+
+  ~RootController() {
+    DOUT << "~RootController()" << std::endl;
+
+    timeline_->removeSelf();
   }
 
 
