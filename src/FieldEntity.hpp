@@ -226,7 +226,7 @@ public:
     int   entry_z = 0 + params_["game.pickable.entry_z"].getValue<int>();
     float delay   = params_["game.pickable.entry_start_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay, false);
+      entryPickableCube(entry_z, delay);
     }
     
     stage_num_    = 0;
@@ -431,7 +431,7 @@ public:
     int entry_z = finish_line_z_ + 1 + params_["game.pickable.entry_z"].getValue<int>();
     float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay);
+      entryPickableCube(entry_z, delay, true);
     }
   }
 

@@ -125,6 +125,8 @@ public:
     picking_end_ease_(params["game.pickable.picking_end.ease"].getValue<std::string>()),
     picking_end_duration_(params["game.pickable.picking_end.duration"].getValue<float>())
   {
+    DOUT << "PickableCube " << sleep << std::endl;
+    
     auto current_time = timeline->getCurrentTime();
     animation_timeline_->setStartTime(current_time);
     timeline->apply(animation_timeline_);
