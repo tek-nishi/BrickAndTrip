@@ -567,7 +567,7 @@ private:
   }
   
   StageInfo addCubeStage(const std::string& path) {
-    auto stage = ci::JsonTree(ci::app::loadAsset(path));
+    auto stage = Json::readFromFile(path);
     int current_z = stage_.getTopZ();
 
     int x_offset = Json::getValue(stage, "x_offest", 0);

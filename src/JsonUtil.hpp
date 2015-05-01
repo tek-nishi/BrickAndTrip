@@ -67,7 +67,7 @@ T getValue(const ci::JsonTree& json, const std::string& name, const T& default_v
 }
 
 
-ci::JsonTree readParams(const std::string& path) {
+ci::JsonTree readFromFile(const std::string& path) {
 #if defined (DEBUG) && defined (CINDER_MAC)
   // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
   std::ostringstream full_path;

@@ -57,7 +57,7 @@ class ColoColoParadeApp : public AppNative,
   
   void prepareSettings(Settings* settings) {
     // アプリ起動時の設定はここで処理する
-    params_ = Json::readParams("params.json");
+    params_ = Json::readFromFile("params.json");
 
     auto size = Json::getVec2<int>(params_["app.size"]);
     settings->setWindowSize(size);
@@ -187,7 +187,7 @@ class ColoColoParadeApp : public AppNative,
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
       controller_.reset();
 
-      params_ = Json::readParams("params.json");
+      params_ = Json::readFromFile("params.json");
 
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
       // すぐさまresizeを呼んでCameraの調整

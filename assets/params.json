@@ -197,7 +197,7 @@
 
     "fog_start": 22,
     "fog_end": 26,
-    "fog_color": [ 0.55, 0.55, 0.55, 1 ],
+    "fog_color": [ 0.6, 0.6, 0.6, 1 ],
     
     "bg_fog_start": 23,
     "bg_fog_end": 40,

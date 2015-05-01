@@ -40,7 +40,7 @@ public:
 
   std::unique_ptr<UIView> create(const std::string& path) {
     return std::unique_ptr<UIView>(new UIView(params_,
-                                              Json::readParams(path),
+                                              Json::readFromFile(path),
                                               timeline_,
                                               camera_, autolayout_, event_, touch_event_));
   }

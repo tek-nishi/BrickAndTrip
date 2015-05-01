@@ -151,7 +151,7 @@ public:
 
     FT_GlyphSlot slot = face_->glyph;
     int pen_x = 0;
-    for (size_t ic = 0; ic < chara_num; ++ic) {
+    for (size_t ic = 0; ic < size_t(chara_num); ++ic) {
       char32_t chara = getCharactor(text, ic);
       FT_Load_Char(face_, chara, FT_LOAD_RENDER);
       auto bitmap = slot->bitmap;
