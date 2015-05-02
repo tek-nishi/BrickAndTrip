@@ -75,6 +75,14 @@ public:
     }
   }
 
+  bool isCubeExists(const ci::Vec3i& block_pos) const {
+    for (const auto& cube : cubes_) {
+      if (block_pos == cube->blockPosition()) return true;
+    }
+    return false;
+  }
+
+  
   const std::vector<MovingCubePtr>& cubes() const { return cubes_; }
 
   

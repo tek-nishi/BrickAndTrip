@@ -623,12 +623,16 @@ private:
 
   bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) const {
     // 移動先に他のPickableCubeがいたら移動できない
-    for (auto& other_cube : pickable_cubes_) {
+    for (const auto& other_cube : pickable_cubes_) {
       if (*cube == *other_cube) continue;
 
       if (block_pos == other_cube->blockPosition()) return false;
     }
 
+    // 異動先にMovingCubeがあってもダメ
+    if (moving_cubes_.isCubeExists(block_pos)) return false;
+
+    
     // 移動先の高さが同じじゃないと移動できない
     auto height = stage_.getStageHeight(block_pos);
     return height.first && (height.second == block_pos.y);
