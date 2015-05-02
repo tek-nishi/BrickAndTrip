@@ -151,7 +151,8 @@ public:
     decideEachPickableCubeMoving();
 
     items_.update(stage_);
-    moving_cubes_.update(stage_);
+    moving_cubes_.update(progressing_seconds,
+                         stage_, gatherPickableCubePosition());
 
 #if 0
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
@@ -707,6 +708,16 @@ private:
     return false;
   }
 
+
+  std::vector<ci::Vec3i> gatherPickableCubePosition() const {
+    std::vector<ci::Vec3i> pos;
+    
+    for (const auto& cube : pickable_cubes_) {
+      pos.push_back(cube->blockPosition());
+    }
+    return pos;
+  }
+  
 #if 0
   // すべてのPickableCubeがStartしたか判定
   bool isAllPickableCubesStarted() {
