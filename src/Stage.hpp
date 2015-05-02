@@ -278,7 +278,7 @@ public:
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
     auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
 
-    const auto stage_color = ci::hsvToRGB(Json::getHsvColor(stage_data["color"]));
+    const auto stage_color = Json::getColor<float>(stage_data["color"]);
 
     stage_width_.x = x_offset;
     // yにはstageの最大値を入れたいので、初期値として最小値を入れておく

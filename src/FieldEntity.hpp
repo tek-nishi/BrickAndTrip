@@ -15,6 +15,7 @@
 #include "Stage.hpp"
 #include "Field.hpp"
 #include "PickableCube.hpp"
+#include "MovingCube.hpp"
 #include "StageItems.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
@@ -53,6 +54,9 @@ class FieldEntity : private boost::noncopyable {
   using PickableCubePtr = std::unique_ptr<PickableCube>;
   std::vector<PickableCubePtr> pickable_cubes_;
 
+  using MovingCubePtr = std::unique_ptr<MovingCube>;
+  std::vector<MovingCubePtr> moving_cubes_;
+  
   bool record_play_;
 
   bool first_started_pickable_;
@@ -98,7 +102,7 @@ public:
     timeline_(timeline),
     event_(event),
     records_(records),
-    cube_line_color_(ci::hsvToRGB(Json::getHsvColor(params["game.cube_line_color"]))),
+    cube_line_color_(Json::getColor<float>(params["game.cube_line_color"])),
     stage_color_(0, 0, 0),
     bg_color_(0, 0, 0),
     finish_stage_color_(0, 0, 0),
@@ -582,8 +586,8 @@ private:
     StageInfo info = {
       top_z,
       entry_num,
-      ci::hsvToRGB(Json::getHsvColor(stage["color"])),
-      ci::hsvToRGB(Json::getHsvColor(stage["bg_color"])),
+      Json::getColor<float>(stage["color"]),
+      Json::getColor<float>(stage["bg_color"]),
     };
     
     return info;

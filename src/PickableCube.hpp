@@ -95,7 +95,7 @@ public:
     active_(true),
     id_(getUniqueNumber()),
     cube_size_(params["game.cube_size"].getValue<float>()),
-    orig_color_(ci::hsvToRGB(Json::getHsvColor(params["game.pickable.color"]))),
+    orig_color_(Json::getColor<float>(params["game.pickable.color"])),
     color_(orig_color_),
     block_position_(entry_pos),
     prev_block_position_(block_position_),
@@ -119,7 +119,7 @@ public:
     idle_duration_(params["game.pickable.idle_duration"].getValue<float>()),
     idle_angle_(ci::toRadians(params["game.pickable.idle_angle"].getValue<float>())),
     idle_delay_(Json::getVec2<float>(params["game.pickable.idle_delay"])),
-    picking_color_(ci::hsvToRGB(Json::getHsvColor(params["game.pickable.picking_color"]))),
+    picking_color_(Json::getColor<float>(params["game.pickable.picking_color"])),
     picking_start_ease_(params["game.pickable.picking_start.ease"].getValue<std::string>()),
     picking_start_duration_(params["game.pickable.picking_start.duration"].getValue<float>()),
     picking_end_ease_(params["game.pickable.picking_end.ease"].getValue<std::string>()),
@@ -354,7 +354,7 @@ public:
 
   void startSleepingColor() {
     animation_timeline_->apply(&color_,
-                               ci::hsvToRGB(Json::getHsvColor(params_["game.pickable.sleeping_color"])),
+                               Json::getColor<float>(params_["game.pickable.sleeping_color"]),
                                params_["game.pickable.sleeping_start.duration"].getValue<float>(),
                                getEaseFunc(params_["game.pickable.sleeping_start.ease"].getValue<std::string>()));
   }

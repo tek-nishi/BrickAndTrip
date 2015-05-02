@@ -137,9 +137,9 @@
         "linear_attenuation":    0,
         "quadratic_attenuation": 0.015,
         
-        "diffuse": [ 0, 0, 0.84 ],
-        "ambient": [ 0, 0, 0.13 ],
-        "specular": [ 0, 0, 0.13 ]
+        "diffuse": [ 0.84, 0.84, 0.84 ],
+        "ambient": [ 0.13, 0.13, 0.13 ],
+        "specular": [ 0.13, 0.13, 0.13 ]
       },
       {
         "pos": [ -2, -5, -2 ],
@@ -148,13 +148,13 @@
         "linear_attenuation":    0,
         "quadratic_attenuation": 0.015,
         
-        "diffuse": [ 240, 0.49, 0.2 ],
+        "diffuse": [ 0.102, 0.102, 0.2 ],
         "ambient": [ 0, 0, 0 ],
-        "specular": [ 0, 0, 0.13 ]
+        "specular": [ 0.13, 0.13, 0.13 ]
       }
     ],
 
-    "stagecolor": [ 0, 0, 0.5 ],
+    "stagecolor": [ 0.5, 0.5, 0.5 ],
     "stagecolor_ease": "EaseOutQuad",
     "stagecolor_duration": 2,
     
@@ -215,7 +215,7 @@
       [ 0.6, 0.6, 0.6 ]
     ],
 
-    "cube_line_color": [ 359, 1, 0.7 ],
+    "cube_line_color": [ 0.7, 0, 0 ],
 
     "finish_rate": 0.1,
 
@@ -252,7 +252,7 @@
       "entry_duration": 1.5,
       "entry_y": [ 15, 18 ],
 
-      "color": [ 0, 0, 1 ],
+      "color": [ 1, 1, 1 ],
 
       "rotate_ease": "EaseInQuad",
       "rotate_duration": 0.5,
@@ -267,7 +267,7 @@
       "idle_angle": 15,
       "idle_delay": [ 2, 5 ],
 
-      "picking_color": [ 240, 1, 1 ],
+      "picking_color": [ 0, 0, 1 ],
       "picking_start": {
         "ease": "EaseOutExpo",
         "duration": 0.2
@@ -277,7 +277,7 @@
         "duration": 0.5
       },
 
-      "sleeping_color": [ 0, 0, 0.2 ],
+      "sleeping_color": [ 0.2, 0.2, 0.2 ],
       "sleeping_start": {
         "ease": "EaseNone",
         "duration": 0.1
@@ -286,6 +286,25 @@
         "ease": "EaseOutQuad",
         "duration": 0.5
       },
+
+      "model": "pickable_cube",
+      "material": "pickable_cube"
+    },
+    
+    "moving": {
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "color": [ 0.1, 0.1, 0.1 ],
+      
+      "rotate_ease": "EaseInQuad",
+      "rotate_duration": 0.5,
+      "rotate_speed_rate": [ 1, 0.8, 0.6, 0.4, 0.2 ],
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10,
 
       "model": "pickable_cube",
       "material": "pickable_cube"
@@ -351,6 +370,8 @@
       "bbox_max": [  22,  -2,  30 ],
 
       "revise_duration": 0.25,
+
+      "color_range": [ 0.1, 0.9 ],
       
       "tween": {
         "in_box": [

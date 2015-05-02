@@ -164,8 +164,8 @@ public:
                              linear_attenuation,
                              quadratic_attenuation);
 
-      light.l.setDiffuse(ci::hsvToRGB(Json::getHsvColor(param["diffuse"])));
-      light.l.setAmbient(ci::hsvToRGB(Json::getHsvColor(param["ambient"])));
+      light.l.setDiffuse(Json::getColor<float>(param["diffuse"]));
+      light.l.setAmbient(Json::getColor<float>(param["ambient"]));
 
       lights_.push_back(std::move(light));
       

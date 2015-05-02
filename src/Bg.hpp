@@ -61,6 +61,8 @@ public:
 
     auto cube_speed = Json::getVec2<float>(params["game.bg.cube_speed"]);
     auto cube_density = params["game.bg.cube_density"].getValue<float>();
+    auto color_range = Json::getVec2<float>(params["game.bg.color_range"]);
+
     int max_y = bbox_max_.y;
     for (int iy = bbox_min_.y; iy < max_y; ++iy) {
       if (ci::randInt(100) < 50) {
@@ -70,12 +72,15 @@ public:
           if (ci::randFloat() > cube_density) continue;
 
           float speed = ci::randFloat(cube_speed.x, cube_speed.y);
+          // 確率1/2で向きを逆に
           if (ci::randInt(100) < 50) speed = -speed;
+
+          float v = ci::randFloat(color_range.x, color_range.y);
           
           Cube cube = {
             ci::Vec3f(ix, iy, ci::randInt(bbox_min_.z, bbox_max_.z)),
             ci::Vec3f(cube_size_, cube_size_, cube_size_),
-            ci::hsvToRGB(ci::Vec3f(0, 0, ci::randFloat(0, 1))),
+            ci::Color(v, v, v),
             ci::Vec3f(0, 0, speed),
             ci::Vec3f::zero(),
             false,
@@ -92,10 +97,12 @@ public:
           float speed = ci::randFloat(cube_speed.x, cube_speed.y);
           if (ci::randInt(100) < 50) speed = -speed;
 
+          float v = ci::randFloat(color_range.x, color_range.y);
+
           Cube cube = {
             ci::Vec3f(ci::randInt(bbox_min_.x, bbox_max_.x), iy, iz),
             ci::Vec3f(cube_size_, cube_size_, cube_size_),
-            ci::hsvToRGB(ci::Vec3f(0, 0, ci::randFloat(0, 1))),
+            ci::Color(v, v, v),
             ci::Vec3f(speed, 0, 0),
             ci::Vec3f::zero(),
             false,

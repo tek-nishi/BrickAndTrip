@@ -28,8 +28,8 @@
   "collapse_speed": 1,
   "auto_collapse": 10,
 
-  "color": [ 278, 0.2, 0.8 ],
-  "bg_color": [ 0, 0, 0.7 ],
+  "color": [ 0.8, 0.64, 0.64 ],
+  "bg_color": [ 0.7, 0.7, 0.7 ],
   
   "pickable": 1
 }
