@@ -15,8 +15,8 @@
 #include "Stage.hpp"
 #include "Field.hpp"
 #include "PickableCube.hpp"
-#include "MovingCube.hpp"
 #include "StageItems.hpp"
+#include "StageMovingCubes.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
 #include "Bg.hpp"
@@ -46,6 +46,7 @@ class FieldEntity : private boost::noncopyable {
   Stage stage_;
 
   StageItems items_;
+  StageMovingCubes moving_cubes_;
 
   Bg bg_;
   
@@ -53,9 +54,6 @@ class FieldEntity : private boost::noncopyable {
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
   using PickableCubePtr = std::unique_ptr<PickableCube>;
   std::vector<PickableCubePtr> pickable_cubes_;
-
-  using MovingCubePtr = std::unique_ptr<MovingCube>;
-  std::vector<MovingCubePtr> moving_cubes_;
   
   bool record_play_;
 
@@ -110,6 +108,7 @@ public:
     stage_num_(0),
     stage_(params, timeline, event),
     items_(params, timeline, event),
+    moving_cubes_(params, timeline, event),
     bg_(params, timeline, event),
     record_play_(false),
     first_started_pickable_(false),
@@ -152,6 +151,7 @@ public:
     decideEachPickableCubeMoving();
 
     items_.update(stage_);
+    moving_cubes_.update(stage_);
 
 #if 0
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
@@ -269,6 +269,7 @@ public:
   void startStageBuild() {
     stage_.openStartLine();
     items_.clear();
+    moving_cubes_.clear();
     
     std::ostringstream path;
     // stage_num が 0 -> stage01.json 
@@ -471,8 +472,9 @@ public:
   }
 
 
-  void entryItemCubes(const int active_z) {
+  void entryStageObjects(const int active_z) {
     items_.entryItemCube(active_z);
+    moving_cubes_.entryCube(active_z);
   }
 
   void pickupedItemCube() {
@@ -524,6 +526,7 @@ public:
       stage_.collapseCubes(),
       pickable_cubes_,
       items_.items(),
+      moving_cubes_.cubes(),
       bg_.cubes(),
 
 #ifdef DEBUG
@@ -582,6 +585,7 @@ private:
     int entry_num = Json::getValue(stage, "pickable", 0);
 
     items_.addItemCubes(stage, current_z, x_offset);
+    moving_cubes_.addCubes(stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,

@@ -126,7 +126,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "build-one-line" << std::endl;
                                      int active_top_z = boost::any_cast<int>(param["active_top_z"]);
-                                     entity_.entryItemCubes(active_top_z);
+                                     entity_.entryStageObjects(active_top_z);
                                    });
 
 #if 0

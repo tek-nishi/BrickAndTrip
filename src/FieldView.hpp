@@ -259,9 +259,11 @@ public:
 
     drawStageCubes(field.active_cubes, models);
     drawStageCubes(field.collapse_cubes, models);
-    drawPickableCubes(field.pickable_cubes, models);
-    drawItemCubes(field.item_cubes, models);
 
+    drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
+    drawCubes(field.item_cubes, models, "item_cube", "item_cube");
+    drawCubes(field.moving_cubes, models, "pickable_cube", "pickable_cube");
+    
     // bgのfogは別設定
     glFogf(GL_FOG_START, params_["game_view.bg_fog_start"].getValue<float>());
     glFogf(GL_FOG_END, params_["game_view.bg_fog_end"].getValue<float>());
@@ -600,6 +602,8 @@ private:
     auto& material = materials_.get("stage_cube");
     material.apply();
 
+    const auto& mesh = models.get("stage_cube").mesh();
+    
     for (const auto& row : cubes) {
       for (const auto& cube : row) {
         if (!cube.active) continue;
@@ -611,11 +615,7 @@ private:
         ci::gl::rotate(cube.rotation);
         ci::gl::scale(cube.size());
 
-        // auto& material = materials_.get("stage_cube");
-        // material.setAmbient(cube.color);
-        // material.setDiffuse(cube.color);
-        
-        ci::gl::draw(models.get("stage_cube").mesh());
+        ci::gl::draw(mesh);
       
         ci::gl::popModelView();
       }
@@ -631,6 +631,34 @@ private:
 #endif
   }
 
+
+  template<typename T>
+  void drawCubes(const std::vector<T>& cubes,
+                 ModelHolder& models,
+                 const std::string& model_name, const std::string& material_name) {
+    auto& material = materials_.get(material_name);
+    material.apply();
+
+    const auto& mesh = models.get(model_name).mesh();
+
+    for (const auto& cube : cubes) {
+      if (!cube->isActive()) continue;
+
+      ci::gl::color(cube->color());
+      
+      ci::gl::pushModelView();
+      ci::gl::translate(cube->position());
+      ci::gl::rotate(cube->rotation());
+      ci::gl::scale(cube->size());
+
+      ci::gl::draw(mesh);
+      
+      ci::gl::popModelView();
+    }    
+  }
+
+
+#if 0
   void drawPickableCubes(const std::vector<std::unique_ptr<PickableCube> >& cubes,
                          ModelHolder& models) {
     auto& material = materials_.get("pickable_cube");
@@ -659,32 +687,14 @@ private:
 #endif
     }
   }
-
-  void drawItemCubes(const std::vector<std::unique_ptr<ItemCube> >& cubes,
-                     ModelHolder& models) {
-    auto& material = materials_.get("item_cube");
-    material.apply();
-    
-    for (const auto& cube : cubes) {
-      if (!cube->isActive()) continue;
-
-      ci::gl::color(cube->color());
-      
-      ci::gl::pushModelView();
-      ci::gl::translate(cube->position());
-      ci::gl::rotate(cube->rotation());
-      ci::gl::scale(cube->size());
-
-      ci::gl::draw(models.get("item_cube").mesh());
-      
-      ci::gl::popModelView();
-    }
-  }
+#endif
   
   void drawBgCubes(const std::vector<Bg::Cube>& cubes,
                    ModelHolder& models) {
     auto& material = materials_.get("bg_cube");
     material.apply();
+
+    const auto& mesh = models.get("bg_cube").mesh();
     
     for (const auto& cube : cubes) {
       ci::gl::color(cube.color);
@@ -693,7 +703,7 @@ private:
       ci::gl::translate(cube.position);
       ci::gl::scale(cube.size);
 
-      ci::gl::draw(models.get("bg_cube").mesh());
+      ci::gl::draw(mesh);
       
       ci::gl::popModelView();
     }
