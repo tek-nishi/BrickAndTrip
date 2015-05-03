@@ -64,7 +64,8 @@ public:
 
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection&, EventParam& param) {
-                                     entity_.movedPickableCube();
+                                     const auto& block_pos = boost::any_cast<const ci::Vec3i&>(param["block_pos"]);
+                                     entity_.movedPickableCube(block_pos);
                                    });
     
     connections_ += event_.connect("pickable-on-stage",

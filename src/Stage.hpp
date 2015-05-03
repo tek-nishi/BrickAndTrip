@@ -9,7 +9,6 @@
 #include <limits>
 #include <boost/noncopyable.hpp>
 #include "StageCube.hpp"
-#include "Switch.hpp"
 #include "EasingUtil.hpp"
 
 
@@ -26,8 +25,6 @@ class Stage : private boost::noncopyable {
 
   // 崩れ中のCube
   std::deque<std::vector<StageCube> > collapse_cubes_;
-
-  std::vector<Switch> switches_;
   
   float cube_size_;
   int top_z_;
@@ -219,7 +216,6 @@ public:
     finished_collapse_ = false;
 
     cubes_.clear();
-    switches_.clear();
   }
   
 
@@ -334,64 +330,22 @@ public:
   }
 
   
-  void addSwitches(const ci::JsonTree& params,
-                   const int bottom_z, const int offset_x) {
-    if (!params.hasChild("switches")) return;
-
-    for (const auto& p : params["switches"]) {
-      switches_.emplace_back(p, offset_x, bottom_z);
-    }
-  }
-
-  void startSwitch(const ci::Vec3i& block_pos) {
-    for (auto& s : switches_) {
-      if (s.checkStart(block_pos)) {
-        s.start();
-
-        for (const auto& target : s.targets()) {
-          // 存在判定をしたいのでポインタ
-          auto* cube = getStageCube(target);
-          if (!cube) continue;
-
-          moveStageCube(*cube);
-        }
-        return;
-      }
-    }
-  }
-
-  
   // 「この場所にはCubeが無い」も結果に含めるので、std::pairを利用
   std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) const {
-#if 1
     const auto* const cube = getStageCube(block_pos);
     if (!cube) return std::make_pair(false, 0);
     
     return std::make_pair(cube->can_ride, cube->block_position.y);
-#else
-    if (active_cubes_.empty()) {
-      return std::make_pair(false, 0);
-    }
-
-    int top_z    = active_top_z_ - 1;
-    int bottom_z = active_top_z_ - int(active_cubes_.size());
-    
-    if ((block_pos.z < bottom_z) || (block_pos.z > top_z)) {
-      return std::make_pair(false, 0);
-    }
-
-    // TIPS:z値とコンテナの添え字が一致するようになっているので、
-    //      コンテナからz値を検索する必要がない
-    int iz = block_pos.z - bottom_z;
-    for (const auto& cube : active_cubes_[iz]) {
-      if (cube.block_position.x == block_pos.x) {
-        return std::make_pair(cube.can_ride, cube.block_position.y);
-      }
-    }
-    return std::make_pair(false, 0);
-#endif
   }
 
+  void moveStageCube(const ci::Vec3i& block_pos) {
+    auto* const target = getStageCube(block_pos);
+    if (!target) return;
+
+    moveStageCube(*target);
+  }
+
+  
   
   const std::deque<std::vector<StageCube> >& activeCubes() const {
     return active_cubes_;
@@ -418,7 +372,7 @@ private:
     return nullptr;
   }
 
-  StageCube* getStageCube(const ci::Vec3i& block_pos) {
+  StageCube* const getStageCube(const ci::Vec3i& block_pos) {
     // FIXME:constなし版のための苦肉の策
     return const_cast<StageCube*>(static_cast<const Stage*>(this)->getStageCube(block_pos));
   }

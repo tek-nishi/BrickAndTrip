@@ -17,6 +17,7 @@
 #include "PickableCube.hpp"
 #include "StageItems.hpp"
 #include "StageMovingCubes.hpp"
+#include "StageSwitches.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
 #include "Bg.hpp"
@@ -47,6 +48,7 @@ class FieldEntity : private boost::noncopyable {
 
   StageItems items_;
   StageMovingCubes moving_cubes_;
+  StageSwitches switches_;
 
   Bg bg_;
   
@@ -271,6 +273,7 @@ public:
     stage_.openStartLine();
     items_.clear();
     moving_cubes_.clear();
+    switches_.clear();
     
     std::ostringstream path;
     // stage_num が 0 -> stage01.json 
@@ -450,9 +453,14 @@ public:
     }
   }
 
-  void movedPickableCube() {
-    if (!record_play_) return;
+  void movedPickableCube(const ci::Vec3i& block_pos) {
+    // switch踏んだ処理
+    const auto* const targets = switches_.startSwitch(block_pos);
+    if (targets) {
+      startSwitchTargets(*targets);
+    }
     
+    if (!record_play_) return;
     records_.current_game.tumble_num += 1;
   }
 
@@ -589,7 +597,7 @@ private:
 
     items_.addItemCubes(stage, current_z, x_offset);
     moving_cubes_.addCubes(stage, current_z, x_offset);
-    stage_.addSwitches(stage, current_z, x_offset);
+    switches_.addSwitches(stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,
@@ -610,7 +618,6 @@ private:
           cube->startRotationMove();
           // 回転開始時にitem pickup判定とか
           pickupStageItems(cube);
-          stage_.startSwitch(cube->blockPosition());
         }
         else {
           cube->cancelRotationMove();
@@ -772,6 +779,14 @@ private:
     
     return finished;
   }
+
+
+  void startSwitchTargets(const std::vector<ci::Vec3i>& targets) {
+    for (const auto& target : targets) {
+      stage_.moveStageCube(target);
+    }
+  }
+
   
 };
 
