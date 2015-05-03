@@ -202,6 +202,12 @@ public:
                                      }
                                    });
 
+    connections_ += event.connect("title-started",
+                                  [this](const Connection&, EventParam& param) {
+                                    view_.enableTouchInput();
+                                  });
+                                  
+
     connections_ += event_.connect("pause-start",
                                    [this](const Connection&, EventParam& param) {
                                      entity_.cancelPickPickableCubes();
@@ -308,7 +314,7 @@ private:
                                        
                                      connection.disconnect();
                                    });
-    view_.enableTouchInput();
+    view_.enableTouchInput(false);
     view_.resetCamera();
     view_.enableFollowCamera();
     entity_.setupStartStage();

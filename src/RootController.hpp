@@ -112,7 +112,7 @@ public:
 
     event_.connect("begin-title",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+                     startTitle();
                    });
 
     event_.connect("begin-settings",
@@ -171,7 +171,7 @@ public:
     addController<FieldController>(params, touch_event_, event_, records_);
 
     timeline_->add([this]() {
-        addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+        startTitle();
       },
       timeline_->getCurrentTime() + params["app.start_title_delay"].getValue<float>());
 
@@ -198,6 +198,15 @@ public:
 
 
 private:
+  void startTitle() {
+    addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+
+    // Title画面は時間差で起動する
+    // それまではゲームを開始できないようにする必要がある
+    event_.signal("title-started", EventParam());
+  }
+
+  
   bool isActive() const override { return true; }
 
   Event<EventParam>& event() override { return event_; }
