@@ -111,7 +111,6 @@ public:
     far_z_(params["game_view.camera.far_z"].getValue<float>()),
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
     interest_point_(Json::getVec3<float>(params["game_view.camera.interest_point"])),
-    eye_point_(interest_point_),
     target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
     new_target_point_(target_point_),
     target_radius_(0.0f),
@@ -138,11 +137,11 @@ public:
     float eye_distance = params["game_view.camera.eye_distance"].getValue<float>();
     
     eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
-      * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
-      * ci::Vec3f(0, 0, eye_distance) + interest_point_;
+               * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
+               * ci::Vec3f(0, 0, eye_distance) + interest_point_;
     
-    camera_.setCenterOfInterestPoint(interest_point_);
-    camera_.setEyePoint(eye_point_);
+    camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
+    camera_.setEyePoint(eye_point_ + target_point_);
 
     new_eye_point_ = eye_point_;
 
