@@ -47,6 +47,10 @@ class Stage : private boost::noncopyable {
   float       open_duration_;
   float       open_delay_;
 
+  std::string move_ease_;
+  float       move_duration_;
+  float       move_delay_;
+
   bool started_collapse_;
   bool finished_build_;
   bool finished_collapse_;
@@ -78,6 +82,9 @@ public:
     open_ease_(params["game.stage.open_ease"].getValue<std::string>()),
     open_duration_(params["game.stage.open_duration"].getValue<float>()),
     open_delay_(params["game.stage.open_delay"].getValue<float>()),
+    move_ease_(params["game.stage.move_ease"].getValue<std::string>()),
+    move_duration_(params["game.stage.move_duration"].getValue<float>()),
+    move_delay_(params["game.stage.move_delay"].getValue<float>()),
     started_collapse_(false),
     finished_build_(false),
     finished_collapse_(false),
@@ -419,9 +426,9 @@ private:
   void moveStageCube(StageCube& cube) {
     ci::Vec3f end_value(cube.position() + ci::Vec3f(0, -cube_size_, 0));
     auto option = animation_timeline_->apply(&cube.position, end_value,
-                                             open_duration_, getEaseFunc(open_ease_));
+                                             move_duration_, getEaseFunc(move_ease_));
 
-    option.delay(0.5);
+    option.delay(move_delay_);
 
     ci::Vec3f block_position = cube.block_position;
     event_timeline_->add([this, block_position]() {
@@ -430,7 +437,7 @@ private:
           cube->block_position -= 1;
         }
       },
-      event_timeline_->getCurrentTime() +  + open_duration_);
+      event_timeline_->getCurrentTime() + move_delay_ + move_duration_);
   }
 
   

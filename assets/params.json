@@ -238,6 +238,10 @@
       "open_duration": 0.5,
       "open_delay": 4,
 
+      "move_ease" : "EaseOutQuad",
+      "move_duration": 0.5,
+      "move_delay": 0.25,
+      
       "model": "stage_cube",
       "material": "stage_cube"
     },
