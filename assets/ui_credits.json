@@ -3,7 +3,7 @@
     "name": "credits",
     "disp": true,
 
-    "text": "ＣＲＥＤＩＴＳ",
+    "text": "CREDITS",
     "size": 0.6,
     "spacing": 0.06,
     "chara_split": 1,
@@ -46,7 +46,7 @@
     "name": "created",
     "disp": true,
 
-    "text": "ＣＲＥＡＴＥＤ　ＢＹ",
+    "text": "CREATED BY",
     "size": 0.2,
     "spacing": 0.02,
     "chara_split": 1,
@@ -89,7 +89,7 @@
     "name": "nishiyama",
     "disp": true,
 
-    "text": "ＮＩＳＨＩＹＡＭＡ　ＮＯＢＵＹＵＫＩ",
+    "text": "NISHIYAMA NOBUYUKI",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -133,7 +133,7 @@
     "name": "powered",
     "disp": true,
 
-    "text": "ＰＯＷＥＲＥＤ　ＢＹ",
+    "text": "POWERED BY",
     "size": 0.2,
     "spacing": 0.02,
     "chara_split": 1,
@@ -176,7 +176,7 @@
     "name": "cinder",
     "disp": true,
 
-    "text": "ＣＩＮＤＥＲ　０.８.６",
+    "text": "CINDER 0.8.6",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -219,7 +219,7 @@
     "name": "boost",
     "disp": true,
 
-    "text": "ＢＯＯＳＴ　Ｃ＋＋　ＬＩＢＲＡＲＩＥＳ",
+    "text": "BOOST C++ LIBRARIES",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -262,7 +262,7 @@
     "name": "boost2",
     "disp": true,
 
-    "text": "１.５７.０",
+    "text": "1.57.0",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -305,7 +305,7 @@
     "name": "freetype",
     "disp": true,
 
-    "text": "ＦＲＥＥＴＹＰＥ　２.５.４",
+    "text": "FREETYPE 2.5.4",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -349,7 +349,7 @@
     "name": "thanks",
     "disp": true,
 
-    "text": "ＴＨＡＮＫＳ　ＴＯ",
+    "text": "THANKS TO",
     "size": 0.2,
     "spacing": 0.02,
     "chara_split": 1,
@@ -392,7 +392,7 @@
     "name": "sp1",
     "disp": true,
 
-    "text": "ＪＡＰＡＮ",
+    "text": "JAPAN",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -435,7 +435,7 @@
     "name": "sp11",
     "disp": true,
 
-    "text": "ＥＬＥＣＴＲＯＮＩＣＳ　ＣＯＬＬＥＧＥ",
+    "text": "ELECTRONICS COLLEGE",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -478,7 +478,7 @@
     "name": "sp2",
     "disp": true,
 
-    "text": "ＶＡＮＴＡＮ　ＧＡＭＥ　ＡＣＡＤＥＭＹ",
+    "text": "VANTAN GAME ACADEMY",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -521,7 +521,7 @@
     "name": "sp3",
     "disp": true,
 
-    "text": "ＳＯＦＴＷＡＲＥ　ＳＯＣＩＥＴＹ",
+    "text": "SOFTWARE SOCIETY",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
@@ -564,7 +564,7 @@
     "name": "sp31",
     "disp": true,
 
-    "text": "ＡＫＩＨＡＢＡＲＡ",
+    "text": "AKIHABARA",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,

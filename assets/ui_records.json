@@ -3,7 +3,7 @@
     "name": "records",
     "disp": true,
 
-    "text": "ＲＥＣＯＲＤＳ",
+    "text": "RECORDS",
     "size": 0.6,
     "spacing": 0.06,
     "chara_split": 1,
@@ -47,7 +47,7 @@
     "name": "play",
     "disp": true,
 
-    "text": "ＰＬＡＹＳ",
+    "text": "PLAYS",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -134,7 +134,7 @@
     "name": "time",
     "disp": true,
 
-    "text": "ＰＬＡＹＴＩＭＥ",
+    "text": "PLAYTIME",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -221,7 +221,7 @@
     "name": "tumble",
     "disp": true,
 
-    "text": "ＴＵＭＢＬＥＳ",
+    "text": "TUMBLES",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -308,7 +308,7 @@
     "name": "operation",
     "disp": true,
 
-    "text": "ＡＣＴＩＯＮＳ",
+    "text": "ACTIONS",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -395,7 +395,7 @@
     "name": "item",
     "disp": true,
 
-    "text": "ＩＴＥＭＳ",
+    "text": "ITEMS",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -482,7 +482,7 @@
     "name": "clear",
     "disp": true,
 
-    "text": "ＣＬＥＡＲＳ",
+    "text": "CLEARS",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,

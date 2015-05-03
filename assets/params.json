@@ -6,11 +6,11 @@
     "fonts": [
       {
         "name": "default",
-        "path": "mplus-1m-medium.ttf",
+        "path": "SGIEXB.ttf",
         "default": true,
         "size": 64,
-        "scale": [ 1.2, 1.2, 1 ],
-        "offset": [ 0, -0.12, 0 ]
+        "scale": [ 0.95, 0.95, 1 ],
+        "offset": [ 0, 0.085, 0 ]
       },
       {
         "name": "icon",
@@ -448,11 +448,11 @@
     "deactive_delay": 0.5,
 
     "comment": [
-      "ＷＡＹ　ＴＯ　ＧＯ‼",
-      "ＧＯＯＤ　ＦＯＲ　ＹＯＵ‼",
-      "ＡＷＥＳＯＭＥ‼",
-      "ＡＭＡＺＩＮＧ‼",
-      "ＣＯＯＬ　ＢＥＡＮＳ‼"
+      "WAY TO GO!",
+      "GOOD FOR YOU!",
+      "AWESOME!",
+      "AMAZING!",
+      "COOL BEANS!"
     ]
   },
   

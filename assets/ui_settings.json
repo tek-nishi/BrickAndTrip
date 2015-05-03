@@ -3,7 +3,7 @@
     "name": "settings",
     "disp": true,
 
-    "text": "ＳＥＴＴＩＮＧＳ",
+    "text": "SETTINGS",
     "size": 0.6,
     "spacing": 0.06,
     "chara_split": 1,
@@ -46,7 +46,7 @@
     "name": "bgm",
     "disp": true,
 
-    "text": "ＢＧＭ",
+    "text": "BGM",
     "size": 0.5,
     "spacing": 0.05,
     "chara_split": 1,
@@ -208,7 +208,7 @@
     "name": "se",
     "disp": true,
 
-    "text": "ＳＥ",
+    "text": "SE",
     "size": 0.5,
     "spacing": 0.05,
     "chara_split": 1,

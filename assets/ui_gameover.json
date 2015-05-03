@@ -3,7 +3,7 @@
     "name": "game",
     "disp": true,
 
-    "text": "ＧＡＭＥ",
+    "text": "GAME",
     "size": 0.8,
     "spacing": 0.08,
     "chara_split": 1,
@@ -47,7 +47,7 @@
     "name": "over",
     "disp": true,
 
-    "text": "ＯＶＥＲ",
+    "text": "OVER",
     "size": 0.8,
     "spacing": 0.08,
     "chara_split": 1,

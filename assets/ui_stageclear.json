@@ -4,7 +4,7 @@
     
     "disp": true,
 
-    "text": "ＳＴＡＧＥ",
+    "text": "STAGE",
     "size": 0.6,
     "spacing": 0.06,
     "chara_split": 1,
@@ -48,7 +48,7 @@
     
     "disp": true,
 
-    "text": "ＣＬＥＡＲ",
+    "text": "CLEAR",
     "size": 0.6,
     "spacing": 0.06,
     "chara_split": 1,
@@ -93,7 +93,7 @@
 
     "disp": true,
 
-    "text": "ＴＩＭＥ",
+    "text": "TIME",
     "size": 0.38,
     "spacing": 0.038,
     "chara_split": 1,
@@ -180,7 +180,7 @@
 
     "disp": true,
 
-    "text": "ＴＵＭＢＬＥＳ",
+    "text": "TUMBLES",
     "size": 0.38,
     "spacing": 0.038,
     "chara_split": 1,
@@ -267,7 +267,7 @@
 
     "disp": true,
 
-    "text": "ＡＣＴＩＯＮＳ",
+    "text": "ACTIONS",
     "size": 0.38,
     "spacing": 0.038,
     "chara_split": 1,
@@ -398,7 +398,7 @@
 
     "disp": true,
 
-    "text": "ＷＡＹ　ＴＯ　ＧＯ！",
+    "text": "WAY TO GO!",
     "size": 0.5,
     "spacing": 0.05,
     "chara_split": 1,
