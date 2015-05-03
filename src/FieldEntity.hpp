@@ -589,6 +589,7 @@ private:
 
     items_.addItemCubes(stage, current_z, x_offset);
     moving_cubes_.addCubes(stage, current_z, x_offset);
+    stage_.addSwitches(stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,
@@ -607,8 +608,9 @@ private:
       if (cube->willRotationMove()) {
         if (canPickableCubeMove(cube, cube->blockPosition() + cube->moveVector())) {
           cube->startRotationMove();
-          // 回転開始時にitem pickup判定
+          // 回転開始時にitem pickup判定とか
           pickupStageItems(cube);
+          stage_.startSwitch(cube->blockPosition());
         }
         else {
           cube->cancelRotationMove();
