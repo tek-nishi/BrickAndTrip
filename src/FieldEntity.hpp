@@ -388,6 +388,8 @@ public:
   // リスタート前のClean-up
   void cleanupField() {
     event_timeline_->clear();
+    items_.cleanup();
+    moving_cubes_.cleanup();
 
     first_started_pickable_ = true;
     first_fallen_pickable_  = true;

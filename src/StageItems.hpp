@@ -56,6 +56,11 @@ public:
                            });
   }
 
+
+  void cleanup() {
+    event_timeline_->clear();
+  }
+  
   
   void clear() {
     entry_items_.clear();

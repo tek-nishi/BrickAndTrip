@@ -25,7 +25,6 @@ class StageMovingCubes {
   std::vector<MovingCubePtr> cubes_;
 
   ci::TimelineRef timeline_;
-  ci::TimelineRef event_timeline_;
 
   
 public:
@@ -34,12 +33,8 @@ public:
                    Event<EventParam>& event) :
     params_(params),
     event_(event),
-    timeline_(timeline),
-    event_timeline_(ci::Timeline::create())
+    timeline_(timeline)
   {
-    auto current_time = timeline->getCurrentTime();
-    event_timeline_->setStartTime(current_time);
-    timeline->apply(event_timeline_);
   }
 
   ~StageMovingCubes() {
@@ -62,6 +57,10 @@ public:
                            });
   }
 
+
+  void cleanup() {
+  }
+  
   void clear() {
     entry_cubes_.clear();
   }
