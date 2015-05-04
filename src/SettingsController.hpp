@@ -125,8 +125,8 @@ private:
 
 
   void setSoundIcon(const std::string& widget, const bool is_sound) {
-    view_->getWidget(widget).getCubeText().setText(is_sound ? "z"
-                                                            : "x");
+    view_->getWidget(widget).setText(is_sound ? "z"
+                                              : "x");
   }
   
 };

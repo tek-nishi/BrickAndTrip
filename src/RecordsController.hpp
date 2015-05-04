@@ -69,36 +69,7 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
-    {
-      // constなのでatを使っている
-      auto total_play = boost::any_cast<int>(records.at("total_play"));
-      view_->getWidget("total_play").getCubeText().setText(toFormatedString(total_play, 4));
-    }
-
-    {
-      auto total_time = boost::any_cast<double>(records.at("total_time"));
-      view_->getWidget("total_time").getCubeText().setText(toFormatedString(total_time, true));
-    }
-    
-    {
-      auto total_tumble = boost::any_cast<int>(records.at("total_tumble"));
-      view_->getWidget("total_tumble").getCubeText().setText(toFormatedString(total_tumble, 5));
-    }
-    
-    {
-      auto total_operation = boost::any_cast<int>(records.at("total_operation"));
-      view_->getWidget("total_operation").getCubeText().setText(toFormatedString(total_operation, 5));
-    }
-    
-    {
-      auto total_item = boost::any_cast<int>(records.at("total_item"));
-      view_->getWidget("total_item").getCubeText().setText(toFormatedString(total_item, 5));
-    }
-    
-    {
-      auto total_clear = boost::any_cast<int>(records.at("total_clear"));
-      view_->getWidget("total_clear").getCubeText().setText(toFormatedString(total_clear, 4));
-    }
+    setupView(records);
     
     view_->startWidgetTween("tween-in");
   }
@@ -126,6 +97,72 @@ private:
     view_->draw(fonts, models);
   }
 
+
+  void setupView(const EventParam& records) {
+    {
+      // constなのでatを使っている
+      auto total_play = boost::any_cast<int>(records.at("total_play"));
+      view_->getWidget("total_play").setText(toFormatedString(total_play, 4));
+    }
+
+    {
+      auto total_time = boost::any_cast<double>(records.at("total_time"));
+      view_->getWidget("total_time").setText(toFormatedString(total_time, true));
+    }
+    
+    {
+      auto total_tumble = boost::any_cast<int>(records.at("total_tumble"));
+      view_->getWidget("total_tumble").setText(toFormatedString(total_tumble, 5));
+    }
+    
+    {
+      auto total_operation = boost::any_cast<int>(records.at("total_operation"));
+      view_->getWidget("total_operation").setText(toFormatedString(total_operation, 5));
+    }
+    
+    {
+      auto total_item = boost::any_cast<int>(records.at("total_item"));
+      view_->getWidget("total_item").setText(toFormatedString(total_item, 5));
+    }
+    
+    {
+      auto total_clear = boost::any_cast<int>(records.at("total_clear"));
+      view_->getWidget("total_clear").setText(toFormatedString(total_clear, 4));
+    }
+
+    {
+      const auto& item_completed = boost::any_cast<const std::deque<bool>& >(records.at("item_completed"));
+
+      {
+        size_t stage_item = std::min(item_completed.size(), static_cast<size_t>(5));
+        if (stage_item > 0) {
+          std::string text;
+          for (size_t i = 0; i < stage_item; ++i) {
+            text = text + (item_completed[i] ? "t" : " ");
+          }
+
+          auto& widget = view_->getWidget("stage_item_1");
+          widget.setText(text);
+          widget.setDisp(true);
+        }
+      }
+
+      {
+        size_t stage_item = std::max(item_completed.size(), static_cast<size_t>(5)) - 5;
+        if (stage_item > 0) {
+          std::string text;
+          for (size_t i = 0; i < stage_item; ++i) {
+            text = text + (item_completed[i + 5] ? "t" : " ");
+          }
+          
+          auto& widget = view_->getWidget("stage_item_2");
+          widget.setText(text);
+          widget.setDisp(true);
+        }
+      }      
+    }
+  }
+  
 };
 
 }

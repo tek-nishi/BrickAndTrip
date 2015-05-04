@@ -75,7 +75,7 @@ public:
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-      view_->getWidget("time-result").getCubeText().setText(toFormatedString(clear_time));
+      view_->getWidget("time-result").setText(toFormatedString(clear_time));
     }
 
     {
@@ -84,7 +84,7 @@ public:
       std::ostringstream str;
       str << std::setw(5) << std::setfill('0') << tumble_num;
 
-      view_->getWidget("tumble-result").getCubeText().setText(str.str());
+      view_->getWidget("tumble-result").setText(str.str());
     }
 
     {
@@ -93,7 +93,7 @@ public:
       std::ostringstream str;
       str << std::setw(5) << std::setfill('0') << operation_num;
 
-      view_->getWidget("operation-result").getCubeText().setText(str.str());
+      view_->getWidget("operation-result").setText(str.str());
     }
     
     {

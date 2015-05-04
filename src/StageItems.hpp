@@ -71,12 +71,11 @@ public:
 
     ci::Vec3i start_pos(x_offset, 0, start_z);
 
-    int entry_num = 0;
     for (const auto& entry : params["items"]) {
       entry_items_.push_back(Json::getVec3<int>(entry) + start_pos);
     }
 
-    return entry_num;
+    return entry_items_.size();
   }
 
   void entryItemCube(const int current_z) {

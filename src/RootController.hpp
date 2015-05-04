@@ -100,6 +100,7 @@ public:
                        { "total_operation", records_.getTotalOperationNum() },
                        { "total_item",      records_.getTotalItemNum() },
                        { "total_clear",     records_.getTotalClearNum() },
+                       { "item_completed",  records_.stageItemComplete() },
                      };
                      
                      addController<RecordsController>(params_, timeline_, event_, records, view_creator_.create("ui_records.json"));

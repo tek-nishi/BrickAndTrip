@@ -567,6 +567,97 @@
 
   
   {
+    "name": "stage_item_1",
+    "disp": false,
+    
+    "text": "t    ",
+    "font": "icon",
+    "size": 0.4,
+    "spacing": 0.04,
+    "chara_split": 1,
+    "pos": [ -1.08, -1.0, 0 ],
+    "origin": "left-center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 1, 1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.45,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+
+  {
+    "name": "stage_item_2",
+    "disp": false,
+    
+    "text": "     ",
+    "font": "icon",
+    "size": 0.4,
+    "spacing": 0.04,
+    "chara_split": 1,
+    "pos": [ -1.08, -1.44, 0 ],
+    "origin": "left-center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 1, 1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.45,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+
+  
+  {
     "name": "agree",
     "disp": true,
 

@@ -155,6 +155,7 @@ public:
     record.clear_time    = play_time;
     record.tumble_num    = current_game_.tumble_num;
     record.item_num      = current_game_.item_num;
+    record.all_item_get  = current_game_.item_num == current_game_.item_total_num;
     record.operation_num = current_game_.operation_num;
 
     // TODO:score計算
@@ -164,8 +165,7 @@ public:
       stage_records_.push_back(record);
     }
     else {
-      // TODO:上書きする条件を定義
-      stage_records_[current_stage_] = record;
+      updateStageRecord(stage_records_[current_stage_], record);
     }
 
     current_play_time_ += play_time;
@@ -199,6 +199,16 @@ public:
     total_clear_num_ += 1;
   }
 
+  std::deque<bool> stageItemComplete() {
+    std::deque<bool> item_completed;
+    
+    for (const auto& record : stage_records_) {
+      item_completed.push_back(record.all_item_get);
+    }
+
+    return item_completed;
+  }
+  
   
   void load(const std::string& path) {
     auto full_path = getDocumentPath() / path;
@@ -209,26 +219,27 @@ public:
     
     ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
 
-    total_play_num_      = record["records.total_play_num"].getValue<int>();
-    total_play_time_     = record["records.total_play_time"].getValue<double>();
-    total_tumble_num_    = record["records.total_tumble_num"].getValue<int>();
-    total_item_num_      = record["records.total_item_num"].getValue<int>();
-    total_operation_num_ = record["records.total_operation_num"].getValue<int>();
-    total_clear_num_     = record["records.total_clear_num"].getValue<int>();
+    total_play_num_      = Json::getValue(record, "records.total_play_num", 0);
+    total_play_time_     = Json::getValue(record, "records.total_play_time", 0.0);
+    total_tumble_num_    = Json::getValue(record, "records.total_tumble_num", 0);
+    total_item_num_      = Json::getValue(record, "records.total_item_num", 0);
+    total_operation_num_ = Json::getValue(record, "records.total_operation_num", 0);
+    total_clear_num_     = Json::getValue(record, "records.total_clear_num", 0);
 
-    se_on_  = record["records.se_on"].getValue<bool>();
-    bgm_on_ = record["records.bgm_on"].getValue<bool>();
+    se_on_  = Json::getValue(record, "records.se_on", true);
+    bgm_on_ = Json::getValue(record, "records.bgm_on", true);
 
     if (record.hasChild("records.stage")) {
       const auto& stage = record["records.stage"];
       for (const auto& sr : stage) {
         StageRecord s;
 
-        s.clear_time    = sr["clear_time"].getValue<double>();
-        s.tumble_num    = sr["tumble_num"].getValue<int>();
-        s.item_num      = sr["item_num"].getValue<int>();
-        s.operation_num = sr["operation_num"].getValue<int>();
-        s.score         = sr["score"].getValue<int>();
+        s.clear_time    = Json::getValue(sr, "clear_time", 0.0);
+        s.tumble_num    = Json::getValue(sr, "tumble_num", 0);
+        s.item_num      = Json::getValue(sr, "item_num", 0);
+        s.all_item_get  = Json::getValue(sr, "all_item_get", false);
+        s.operation_num = Json::getValue(sr, "operation_num", 0);
+        s.score         = Json::getValue(sr, "score", 0);
 
         stage_records_.push_back(std::move(s));
       }
@@ -254,6 +265,7 @@ public:
         sr.addChild(ci::JsonTree("clear_time", s.clear_time))
           .addChild(ci::JsonTree("tumble_num", s.tumble_num))
           .addChild(ci::JsonTree("item_num", s.item_num))
+          .addChild(ci::JsonTree("all_item_get", s.all_item_get))
           .addChild(ci::JsonTree("operation_num", s.operation_num))
           .addChild(ci::JsonTree("score", s.score));
 
@@ -289,6 +301,20 @@ public:
     bgm_on_ = !bgm_on_;
     return bgm_on_;
   }
+
+
+private:
+  void updateStageRecord(StageRecord& record, const StageRecord& new_record) {
+    record.clear_time = std::min(record.clear_time, new_record.clear_time);
+    record.tumble_num = std::min(record.tumble_num, new_record.tumble_num);
+
+    record.item_num = std::max(record.item_num, new_record.item_num);
+    if (new_record.all_item_get) record.all_item_get = true;
+    
+    record.operation_num = std::min(record.operation_num, new_record.operation_num);
+    record.score = std::max(record.score, new_record.score);
+  }
+
   
 };
 
