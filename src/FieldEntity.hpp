@@ -57,8 +57,6 @@ class FieldEntity : private boost::noncopyable {
   using PickableCubePtr = std::unique_ptr<PickableCube>;
   std::vector<PickableCubePtr> pickable_cubes_;
   
-  bool record_play_;
-
   bool first_started_pickable_;
   bool first_fallen_pickable_;
   
@@ -88,6 +86,7 @@ class FieldEntity : private boost::noncopyable {
   struct StageInfo {
     int top_z;
     int entry_num;
+    int item_num;
     ci::Color stage_color;
     ci::Color bg_color;
   };
@@ -112,7 +111,6 @@ public:
     items_(params, timeline, event),
     moving_cubes_(params, timeline, event),
     bg_(params, timeline, event),
-    record_play_(false),
     first_started_pickable_(false),
     first_fallen_pickable_(false),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
@@ -140,9 +138,7 @@ public:
 
 
   void update(const double progressing_seconds) {
-    if (record_play_) {
-      records_.current_game.play_time += progressing_seconds;
-    }
+    records_.progressPlayTimeCurrntGame(progressing_seconds);
 
     decideEachPickableCubeFalling();
     boost::remove_erase_if(pickable_cubes_,
@@ -217,11 +213,13 @@ public:
     }
 
     {
+      const auto& current_game = records_.currentGame();
+      
       EventParam params = {
-        { "play-time", records_.current_game.play_time },
-        { "tumble-num", records_.current_game.tumble_num },
-        { "item-num", records_.current_game.item_num },
-        { "operation_num", records_.current_game.operation_num },
+        { "play-time", current_game.play_time },
+        { "tumble-num", current_game.tumble_num },
+        { "item-num", current_game.item_num },
+        { "operation_num", current_game.operation_num },
       };
       event_.signal("update-record", params);
     }
@@ -281,6 +279,7 @@ public:
     auto stage_info     = addCubeStage(path.str());
     finish_line_z_      = stage_info.top_z - 1;
     entry_packable_num_ = stage_info.entry_num;
+    int entry_item_num  = stage_info.item_num;
 
     stage_.setFinishLine(finish_line_z_);
     
@@ -302,8 +301,9 @@ public:
     first_started_pickable_ = false;
     first_fallen_pickable_  = false;
 
-    records_.prepareCurrentGameRecord(stage_num_, event_timeline_->getCurrentTime());
-    enableRecordPlay(false);
+    records_.prepareCurrentGameRecord(stage_num_,
+                                      event_timeline_->getCurrentTime(),
+                                      entry_item_num);
 
     stage_num_ += 1;
 
@@ -324,8 +324,6 @@ public:
     stage_.buildStage(finish_rate_);
     stage_.collapseStage(finish_line_z_ - 1, finish_rate_);
 
-    enableRecordPlay(false);
-
     records_.storeStageRecord(event_timeline_->getCurrentTime());
     // 全ステージクリア判定
     all_cleard_ = stage_num_ == total_stage_num_;
@@ -336,12 +334,14 @@ public:
     records_.write(params_["game.records"].getValue<std::string>());
 
     {
+      const auto& current_game = records_.currentGame();
+
       // 次のステージ or 全ステージクリア
       EventParam params = {
-        { "clear_time", records_.current_game.play_time },
-        { "tumble_num", records_.current_game.tumble_num },
-        { "item_num", records_.current_game.item_num },
-        { "operation_num", records_.current_game.operation_num },
+        { "clear_time", current_game.play_time },
+        { "tumble_num", current_game.tumble_num },
+        { "item_num", current_game.item_num },
+        { "operation_num", current_game.operation_num },
         { "play_time", records_.getCurrentGamePlayTime() },
         { "all_cleared", all_cleard_ },
       };
@@ -361,15 +361,16 @@ public:
   // GameOver時の処理
   void gameover() {
     stopBuildAndCollapse();
-    enableRecordPlay(false);
     records_.storeRecord(event_timeline_->getCurrentTime());
     records_.write(params_["game.records"].getValue<std::string>());
 
     {
+      const auto& current_game = records_.currentGame();
+
       EventParam params = {
-        { "clear_time", records_.current_game.play_time },
-        { "tumble_num", records_.current_game.tumble_num },
-        { "operation_num", records_.current_game.operation_num },
+        { "clear_time", current_game.play_time },
+        { "tumble_num", current_game.tumble_num },
+        { "operation_num", current_game.operation_num },
         { "play_time", records_.getCurrentGamePlayTime() },
       };
       event_.signal("begin-gameover", params);
@@ -385,6 +386,7 @@ public:
   // 中断
   void abortGame() {
     game_aborted_ = true;
+    records_.disableRecordCurrentGame();
     cleanupField();
   }
   
@@ -424,7 +426,7 @@ public:
     cube->endPickingColor();
 
     // 動こうが動くまいが、操作はカウント
-    records_.current_game.operation_num += 1;
+    records_.increaseOperationNumCurrentGame();
     
     if ((direction == PickableCube::MOVE_NONE) || !speed) {
       cube->cancelRotationMove();
@@ -459,9 +461,8 @@ public:
     if (targets) {
       startSwitchTargets(*targets);
     }
-    
-    if (!record_play_) return;
-    records_.current_game.tumble_num += 1;
+
+    records_.increaseTumbleNumCurrentGame();
   }
 
   void enablePickableCubeMovedEvent(const bool enable = true) {
@@ -489,7 +490,7 @@ public:
   }
 
   void pickupedItemCube() {
-    records_.current_game.item_num += 1;
+    records_.increaseItemNumCurrentGame();
   }
 
   // PickableCubeのIdle
@@ -519,10 +520,9 @@ public:
 
     cube->startIdleMotion(directions);
   }
-  
-  // プレイ中の情報を記録に取る
-  void enableRecordPlay(const bool enable = true) {
-    record_play_ = enable;
+
+  void enableRecordPlay() {
+    records_.enableRecordCurrentGame();
   }
 
   
@@ -595,13 +595,14 @@ private:
 
     int entry_num = Json::getValue(stage, "pickable", 0);
 
-    items_.addItemCubes(stage, current_z, x_offset);
+    int item_num = items_.addItemCubes(stage, current_z, x_offset);
     moving_cubes_.addCubes(stage, current_z, x_offset);
     switches_.addSwitches(stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,
       entry_num,
+      item_num,
       Json::getColor<float>(stage["color"]),
       Json::getColor<float>(stage["bg_color"]),
     };

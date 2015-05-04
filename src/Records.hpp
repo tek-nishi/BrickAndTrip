@@ -17,6 +17,7 @@ public:
     double clear_time;
     int    tumble_num;
     int    item_num;
+    bool   all_item_get;
     int    operation_num;
     int    score;
 
@@ -24,17 +25,19 @@ public:
       clear_time(0.0),
       tumble_num(0),
       item_num(0),
+      all_item_get(false),
       operation_num(0),
       score()
     {}
   };
-
+  
   struct CurrentGame {
     double start_time;
     double play_time;
 
     int tumble_num;
     int item_num;
+    int item_total_num;
     int operation_num;
 
     CurrentGame() :
@@ -45,11 +48,13 @@ public:
       operation_num(0)
     {}
   };
-  
-  CurrentGame current_game;
 
   
 private:
+  CurrentGame current_game_;
+
+  bool record_current_game_;
+  
   int    total_play_num_;
   double total_play_time_;
   int    total_tumble_num_;
@@ -59,7 +64,7 @@ private:
 
   int    current_stage_;
   double current_play_time_;
-
+  
   std::vector<StageRecord> stage_records_;
 
   bool se_on_;
@@ -68,6 +73,7 @@ private:
 
 public:
   Records() :
+    record_current_game_(false),
     total_play_num_(0),
     total_play_time_(0.0),
     total_tumble_num_(0),
@@ -81,16 +87,57 @@ public:
   { }
 
 
+  // ゲーム内記録はすべて関数経由で行う
+  void enableRecordCurrentGame() {
+    record_current_game_ = true;
+  }
+
+  void disableRecordCurrentGame() {
+    record_current_game_ = false;
+  }
+  
+  void increaseTumbleNumCurrentGame() {
+    if (!record_current_game_) return;
+
+    current_game_.tumble_num += 1;
+  }
+
+  void increaseItemNumCurrentGame() {
+    if (!record_current_game_) return;
+
+    current_game_.item_num += 1;
+  }
+
+  void increaseOperationNumCurrentGame() {
+    if (!record_current_game_) return;
+
+    current_game_.operation_num += 1;
+  }
+
+  void progressPlayTimeCurrntGame(const double progressing_seconds) {
+    if (!record_current_game_) return;
+
+    current_game_.play_time += progressing_seconds;
+  }
+
+  const CurrentGame& currentGame() const {
+    return current_game_;
+  }
+  
+  
   // 最初のステージでのみ必要な初期化
   void prepareGameRecord() {
     current_play_time_ = 0.0;
   }
-
-  void prepareCurrentGameRecord(const int stage_num, const double current_time) {
+  
+  void prepareCurrentGameRecord(const int stage_num,
+                                const double current_time,
+                                const int item_num) {
     current_stage_ = stage_num;
 
-    current_game = CurrentGame();
-    current_game.start_time = current_time;
+    current_game_ = CurrentGame();
+    current_game_.start_time = current_time;
+    current_game_.item_total_num = item_num;
   }
   
   bool isFirstCleard() const {
@@ -104,11 +151,11 @@ public:
   void storeStageRecord(const double current_time) {
     StageRecord record;
 
-    double play_time = current_time - current_game.start_time;
+    double play_time = current_time - current_game_.start_time;
     record.clear_time    = play_time;
-    record.tumble_num    = current_game.tumble_num;
-    record.item_num      = current_game.item_num;
-    record.operation_num = current_game.operation_num;
+    record.tumble_num    = current_game_.tumble_num;
+    record.item_num      = current_game_.item_num;
+    record.operation_num = current_game_.operation_num;
 
     // TODO:score計算
     // record.score = 0;
@@ -124,23 +171,27 @@ public:
     current_play_time_ += play_time;
     
     total_play_time_     += record.clear_time;
-    total_tumble_num_    += current_game.tumble_num;
-    total_item_num_      += current_game.item_num;
-    total_operation_num_ += current_game.operation_num;
+    total_tumble_num_    += current_game_.tumble_num;
+    total_item_num_      += current_game_.item_num;
+    total_operation_num_ += current_game_.operation_num;
+
+    record_current_game_ = false;
   }
 
   
   void storeRecord(const double current_time) {
-    double play_time = current_time - current_game.start_time;
+    double play_time = current_time - current_game_.start_time;
 
     current_play_time_ += play_time;
 
     // TIPS:GameOverでも記録が伸びる親切設計
     total_play_time_     += play_time;
-    total_tumble_num_    += current_game.tumble_num;
-    total_item_num_      += current_game.item_num;
-    total_operation_num_ += current_game.operation_num;
+    total_tumble_num_    += current_game_.tumble_num;
+    total_item_num_      += current_game_.item_num;
+    total_operation_num_ += current_game_.operation_num;
     total_play_num_      += 1;
+
+    record_current_game_ = false;
   }
 
   // クリア回数
