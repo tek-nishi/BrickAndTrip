@@ -334,12 +334,12 @@
         },
         {
           "target": "color",
-          "type": "EaseInOutQuad",
-          "end": [ 60, 1, 1 ],
-          "duration": 0.5,
+          "type": "EaseNone",
+          "end": [ 420, 0.5, 1 ],
+          "duration": 1.5,
           "delay": 0.5,
           "loop": true,
-          "ping-pong": true
+          "ping-pong": false
         }
       ],
       

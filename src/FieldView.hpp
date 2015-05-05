@@ -502,9 +502,7 @@ private:
   }
 
   bool isPickedCube(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) {
-    float z_cross[2];
-    int num = bbox.intersect(ray, z_cross);
-    return num > 0;
+    return bbox.intersects(ray);
   }
 
   

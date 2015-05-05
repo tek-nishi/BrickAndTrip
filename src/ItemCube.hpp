@@ -123,7 +123,10 @@ public:
 
   float cubeSize() const { return cube_size_; }
   ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
-  ci::Color color() const { return ci::hsvToRGB(color_); }
+
+  ci::Color color() const {
+    return ci::hsvToRGB(ci::Vec3f(std::fmod(color_().x, 1.0f), color_().y, color_().z));
+  }
 
   u_int id() const { return id_; }
 
