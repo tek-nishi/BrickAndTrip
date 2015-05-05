@@ -97,6 +97,10 @@ public:
   bool isCubeExists(const ci::Vec3i& block_pos) const {
     for (const auto& cube : cubes_) {
       if (block_pos == cube->blockPosition()) return true;
+
+      // 移動中の場合は直前の位置も判定
+      if (cube->isMoving()
+          && (block_pos == cube->prevBlockPosition())) return true;
     }
     return false;
   }
@@ -148,6 +152,11 @@ private:
       if (*cube == *other_cube) continue;
 
       if (block_pos == other_cube->blockPosition()) return true;
+
+      // 移動中の場合は直前の位置も判定
+      if (other_cube->isMoving()
+          && block_pos == other_cube->prevBlockPosition()) return true;
+      
     }
     return false;
   }

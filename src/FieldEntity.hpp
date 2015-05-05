@@ -640,6 +640,10 @@ private:
       if (*cube == *other_cube) continue;
 
       if (block_pos == other_cube->blockPosition()) return false;
+
+      // 相手が移動中の場合は直前の位置もダメ
+      if (other_cube->isMoving()
+          && (block_pos == other_cube->prevBlockPosition())) return false;
     }
 
     // 異動先にMovingCubeがあってもダメ
@@ -726,6 +730,9 @@ private:
     
     for (const auto& cube : pickable_cubes_) {
       pos.push_back(cube->blockPosition());
+      if (cube->isMoving()) {
+        pos.push_back(cube->prevBlockPosition());
+      }
     }
     return pos;
   }
