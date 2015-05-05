@@ -9,11 +9,12 @@
 #include "Utility.hpp"
 #include "cinder/Easing.h"
 #include "cinder/AxisAlignedBox.h"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class CubeText {
+class CubeText : private boost::noncopyable {
   std::vector<std::string> text_;
 
   float size_;

@@ -4,13 +4,14 @@
 // UIView生成
 //
 
+#include <boost/noncopyable.hpp>
 #include "UIView.hpp"
 #include "JsonUtil.hpp"
 
 
 namespace ngs {
 
-class UIViewCreator {
+class UIViewCreator : private boost::noncopyable {
   ci::TimelineRef timeline_;
 
   ci::JsonTree& params_;

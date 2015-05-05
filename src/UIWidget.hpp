@@ -13,11 +13,12 @@
 #include "TweenUtil.hpp"
 #include "FontHolder.hpp"
 #include <set>
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class UIWidget {
+class UIWidget : private boost::noncopyable {
   const ci::JsonTree params_;
 
   std::string name_;

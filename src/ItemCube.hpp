@@ -20,7 +20,6 @@ class ItemCube : private boost::noncopyable {
   u_int id_;
   
   float cube_size_;
-  // ci::Color color_;
 
   ci::Vec3i block_position_;
   

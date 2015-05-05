@@ -5,6 +5,7 @@
 // PickableCubeが踏むと指定ブロックの高さが書き換えられる
 //
 
+
 namespace ngs {
 
 class Switch {

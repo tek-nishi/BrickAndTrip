@@ -6,13 +6,14 @@
 //
 
 #include <map>
+#include <boost/noncopyable.hpp>
 #include "cinder/gl/Texture.h"
 #include "Font.hpp"
 
 
 namespace ngs {
 
-class TextureFont {
+class TextureFont : private boost::noncopyable {
   Font font_;
 
   ci::Vec3f scale_;

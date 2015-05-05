@@ -7,6 +7,7 @@
 
 #include <utility>
 #include <boost/range/algorithm_ext/erase.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
@@ -39,7 +40,7 @@ WorldRect createWorldRect(const ViewRect& view_rect, const float z) {
 }
 
 
-class Autolayout {
+class Autolayout : private boost::noncopyable {
 public:
   class Widget {
   public:

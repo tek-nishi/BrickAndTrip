@@ -5,11 +5,12 @@
 //
 
 #include "Switch.hpp"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class StageSwitches {
+class StageSwitches : private boost::noncopyable {
   std::vector<Switch> switches_;
 
   

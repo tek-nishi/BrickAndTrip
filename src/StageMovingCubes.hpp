@@ -5,11 +5,12 @@
 //
 
 #include "MovingCube.hpp"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
 
-class StageMovingCubes {
+class StageMovingCubes : private boost::noncopyable {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 

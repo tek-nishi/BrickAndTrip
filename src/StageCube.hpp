@@ -5,6 +5,7 @@
 //
 
 #include "cinder/Tween.h"
+#include <boost/noncopyable.hpp>
 
 
 namespace ngs {
