@@ -258,8 +258,12 @@ public:
     for (int i = 0; i < entry_packable_num_; ++i) {
       entryPickableCube(entry_z, delay);
     }
-    
-    stage_num_    = 0;
+
+#ifdef DEBUG
+    stage_num_ = params_["game.start_stage"].getValue<int>();
+#else
+    stage_num_ = 0;
+#endif
     all_cleard_   = false;
     game_aborted_ = false;
 
@@ -585,7 +589,7 @@ private:
   }
   
   StageInfo addCubeStage(const std::string& path) {
-    auto stage = Json::readFromFile(path);
+    auto stage = Json::readFromFile(path)["stage"];
     int current_z = stage_.getTopZ();
 
     int x_offset = Json::getValue(stage, "x_offest", 0);

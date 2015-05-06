@@ -246,6 +246,8 @@
       "material": "stage_cube"
     },
 
+    "start_stage": 0,
+
     "pickable": {
       "entry_x": 3,
       "entry_z": 1,
