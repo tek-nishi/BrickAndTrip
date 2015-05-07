@@ -89,6 +89,16 @@ public:
                                   });
 
     view_->startWidgetTween("tween-in");
+
+    if (params.hasChild("pause.active_delay")) {
+      view_->setActive(false);
+
+      float delay = params["pause.active_delay"].getValue<float>();
+      event_timeline_->add([this]() {
+          view_->setActive(true);
+        },
+        event_timeline_->getCurrentTime() + delay);
+    }
   }
 
   ~PauseController() {

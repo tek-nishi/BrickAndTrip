@@ -67,6 +67,16 @@ public:
                                   });
 
     view_->startWidgetTween("tween-in");
+
+    if (params.hasChild("gameover.active_delay")) {
+      view_->setActive(false);
+
+      float delay = params["gameover.active_delay"].getValue<float>();
+      event_timeline_->add([this]() {
+          view_->setActive(true);
+        },
+        event_timeline_->getCurrentTime() + delay);
+    }
   }
 
   ~GameoverController() {

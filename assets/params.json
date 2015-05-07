@@ -317,7 +317,6 @@
     },
 
     "item": {
-      "size": 0.5,
       "color": [ 60, 0.5, 1 ],
 
       "entry_ease": "EaseOutQuad",
@@ -352,11 +351,18 @@
           "end": [ 0, 2, 0 ],
           "duration": 0.25,
           "delay": 0.1
+        },
+        {
+          "target": "scale",
+          "type": "EaseInBack",
+          "end": [ 0, 0, 0 ],
+          "duration": 0.3,
+          "delay": 0.5
         }
       ],
 
       "pickup_delay": 0.2,
-      "pickup_duration": 0.6,
+      "pickup_duration": 0.8,
       
       
       "fall_ease": "EaseInQuad",
@@ -407,48 +413,56 @@
 
   
   "title": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.7,
     "deactive_delay": 0.3
   },
 
   "records": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.7,
     "deactive_delay": 0.5
   },
 
   "settings": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.7,
     "deactive_delay": 0.3
   },
 
   "credits": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.9,
     "deactive_delay": 0.8
   },
 
   "progress": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.2,
     "deactive_delay": 0.8
   },
 
   "pause": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.2,
     "deactive_delay": 1.0
   },
 
   "gameover": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 1.5,
     "deactive_delay": 0.1
   },
 
   "stageclear": {
+    "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 1.0,
     "deactive_delay": 0.5,

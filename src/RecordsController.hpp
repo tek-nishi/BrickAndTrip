@@ -72,6 +72,16 @@ public:
     setupView(records);
     
     view_->startWidgetTween("tween-in");
+
+    if (params.hasChild("records.active_delay")) {
+      view_->setActive(false);
+
+      float delay = params["records.active_delay"].getValue<float>();
+      event_timeline_->add([this]() {
+          view_->setActive(true);
+        },
+        event_timeline_->getCurrentTime() + delay);
+    }
   }
 
   ~RecordsController() {

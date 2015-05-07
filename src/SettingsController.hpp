@@ -98,6 +98,16 @@ public:
     setSoundIcon("bgm-setting", records_.isBgmOn());
 
     view_->startWidgetTween("tween-in");
+
+    if (params.hasChild("settings.active_delay")) {
+      view_->setActive(false);
+
+      float delay = params["settings.active_delay"].getValue<float>();
+      event_timeline_->add([this]() {
+          view_->setActive(true);
+        },
+        event_timeline_->getCurrentTime() + delay);
+    }
   }
 
   ~SettingsController() {

@@ -125,6 +125,16 @@ public:
 #endif
     
     view_->startWidgetTween("tween-in");
+
+    if (params.hasChild("stageclear.active_delay")) {
+      view_->setActive(false);
+
+      float delay = params["stageclear.active_delay"].getValue<float>();
+      event_timeline_->add([this]() {
+          view_->setActive(true);
+        },
+        event_timeline_->getCurrentTime() + delay);
+    }
   }
 
   ~StageclearController() {

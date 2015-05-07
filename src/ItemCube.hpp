@@ -24,7 +24,8 @@ class ItemCube : private boost::noncopyable {
   ci::Vec3i block_position_;
   
   ci::Anim<ci::Vec3f> position_;
-  ci::Anim<ci::Quatf> rotation_;
+  ci::Quatf rotation_;
+  ci::Anim<ci::Vec3f> scale_;
   ci::Anim<ci::Vec3f> color_;
 
   bool on_stage_;
@@ -49,6 +50,7 @@ public:
     color_(Json::getHsvColor(params["game.item.color"])),
     block_position_(entry_pos),
     rotation_(ci::Quatf::identity()),
+    scale_(ci::Vec3f(1, 1, 1)),
     on_stage_(false),
     fall_ease_(params["game.item.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.item.fall_duration"].getValue<float>()),
@@ -117,12 +119,12 @@ public:
 
   
   const ci::Vec3f& position() const { return position_(); }
-  const ci::Quatf& rotation() const { return rotation_(); }
+  const ci::Quatf& rotation() const { return rotation_; }
 
   const ci::Vec3i& blockPosition() const { return block_position_; }
 
   float cubeSize() const { return cube_size_; }
-  ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
+  ci::Vec3f size() const { return scale_() * cube_size_; }
 
   ci::Color color() const {
     return ci::hsvToRGB(ci::Vec3f(std::fmod(color_().x, 1.0f), color_().y, color_().z));
@@ -159,6 +161,12 @@ private:
             setHsvTween(*animation_timeline_, color_, params, is_first);
           }
         },
+        {
+          "scale",
+          [this](const ci::JsonTree& params, const bool is_first) {
+            setVec3Tween(*animation_timeline_, scale_, params, is_first);
+          }
+        }
       };
 
       const auto& target = params["target"].getValue<std::string>();

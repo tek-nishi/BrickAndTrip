@@ -361,8 +361,9 @@
     "pos": [ 0, -1.0, 0 ],
     "origin": "center",
     "layout": "center",
-    "base_color": [ 1, 1, 0.5 ],
-    "text_color": [ 1, 1, 1 ],
+    "hsv": true,
+    "base_color": [ 60, 0.5, 1 ],
+    "text_color": [ 0, 1, 0 ],
     
     "tween": {
       "tween-in": {
@@ -375,6 +376,14 @@
             "interval": 0.05,
             "start": -120,
             "end": 0
+          },
+          {
+            "target": "base_color",
+            "type": "EaseNone",
+            "duration": 1.4,
+            "loop": true,
+            "delay": 1.0,
+            "end": [ 420, 0.6, 1 ]
           }
         ]
       },

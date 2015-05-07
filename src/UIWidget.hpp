@@ -36,6 +36,9 @@ class UIWidget : private boost::noncopyable {
   ci::Anim<ci::Color> base_color_;
   ci::Anim<ci::Color> text_color_;
 
+  ci::Anim<ci::Vec3f> base_color_hsv_;
+  ci::Anim<ci::Vec3f> text_color_hsv_;
+  
   Autolayout::WidgetRef layout_;
   ci::TimelineRef timeline_;
   
@@ -44,6 +47,8 @@ class UIWidget : private boost::noncopyable {
   bool disp_;
   bool active_;
 
+  bool hsv_;
+  
   bool touch_event_;
   std::string event_message_;
 
@@ -64,8 +69,6 @@ public:
     pos_(ci::Vec3f::zero()),
     scale_(ci::Vec3f::one()),
     rotate_(text_.text().size()),
-    base_color_(Json::getColor<float>(params["base_color"])),
-    text_color_(Json::getColor<float>(params["text_color"])),
     timeline_(ci::Timeline::create()),
     disp_(true),
     active_(false),
@@ -83,8 +86,18 @@ public:
       touch_event_   = true;
     }
 
-    disp_   = Json::getValue(params, "disp", disp_);
+    disp_ = Json::getValue(params, "disp", disp_);
+    hsv_  = Json::getValue(params, "hsv", false);
 
+    if (hsv_) {
+      base_color_hsv_ = Json::getHsvColor(params["base_color"]);
+      text_color_hsv_ = Json::getHsvColor(params["text_color"]);
+    }
+    else {
+      base_color_ = Json::getColor<float>(params["base_color"]);
+      text_color_ = Json::getColor<float>(params["text_color"]);
+    }
+    
     // touchEventがなければactiveは常にfalse
     active_ = touch_event_ ? Json::getValue(params, "active", active_) : false;
 
@@ -100,8 +113,27 @@ public:
   
   const std::string& getName() const { return name_; }
 
-  const ci::Color& getBaseColor() const { return base_color_; }
-  const ci::Color& getTextColor() const { return text_color_; }
+  ci::Color getBaseColor() const {
+    if (hsv_) {
+      const auto& v = base_color_hsv_();
+      auto color = ci::Vec3f(std::fmod(v.x, 1.0f), v.y, v.z);
+      return ci::hsvToRGB(color);
+    }
+    else {
+      return base_color_;
+    }
+  }
+  
+  ci::Color getTextColor() const {
+    if (hsv_) {
+      const auto& v = text_color_hsv_();
+      auto color = ci::Vec3f(std::fmod(v.x, 1.0f), v.y, v.z);
+      return ci::hsvToRGB(color);
+    }
+    else {
+      return text_color_;
+    }
+  }
 
   void setBaseColor(const ci::Color& color) {
     base_color_ = color;
@@ -154,7 +186,7 @@ public:
     CubeTextDrawer::draw(text_, fonts.getFont(font_name_),
                          models.get(base_model_), models.get(text_model_),
                          pos_() + layout_->getPos(), scale_(),
-                         text_color_(), base_color_(),
+                         getTextColor(), getBaseColor(),
                          rotate_);
 
 #if 0
@@ -213,12 +245,22 @@ private:
         },
         { "base_color",
           [this](const ci::JsonTree& param, const bool is_first) {
-            setColorTween(*timeline_, base_color_, param, is_first);
+            if (hsv_) {
+              setHsvTween(*timeline_, base_color_hsv_, param, is_first);
+            }
+            else {
+              setColorTween(*timeline_, base_color_, param, is_first);
+            }
           }
         },
         { "text_color",
           [this](const ci::JsonTree& param, const bool is_first) {
-            setColorTween(*timeline_, text_color_, param, is_first);
+            if (hsv_) {
+              setHsvTween(*timeline_, text_color_hsv_, param, is_first);
+            }
+            else {
+              setColorTween(*timeline_, text_color_, param, is_first);
+            }
           }
         },
         { "rotate",

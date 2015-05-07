@@ -143,6 +143,16 @@ public:
     
     event_.signal("field-input-start", EventParam());
     event_.signal("sound-title-start", EventParam());
+
+    if (params.hasChild("title.active_delay")) {
+      view_->setActive(false);
+
+      float delay = params["title.active_delay"].getValue<float>();
+      event_timeline_->add([this]() {
+          view_->setActive(true);
+        },
+        event_timeline_->getCurrentTime() + delay);
+    }
   }
 
   ~TitleController() {
