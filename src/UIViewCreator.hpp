@@ -40,6 +40,9 @@ public:
 
 
   std::unique_ptr<UIView> create(const std::string& path) {
+    // ちょくちょくAutolayoutのお掃除 
+    autolayout_.eraseInvalid();
+
     return std::unique_ptr<UIView>(new UIView(params_,
                                               Json::readFromFile(path),
                                               timeline_,
