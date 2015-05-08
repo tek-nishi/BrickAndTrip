@@ -413,6 +413,7 @@
 
   
   "intro": {
+    "tween_in_delay": 0.5,
     "tween_out_delay": 2,
     "event_delay": 1.25,
     "deactive_delay": 0.3

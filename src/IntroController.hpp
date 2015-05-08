@@ -42,22 +42,27 @@ public:
     timeline->apply(event_timeline_);
 
     event_timeline_->add([this]() {
-        view_->startWidgetTween("tween-out");
-
+        view_->setDisp(true);
+        view_->startWidgetTween("tween-in");
+    
         event_timeline_->add([this]() {
-            event_.signal("begin-title", EventParam());
+            view_->startWidgetTween("tween-out");
 
             event_timeline_->add([this]() {
-                active_ = false;
-              },
-              event_timeline_->getCurrentTime() + params_["intro.deactive_delay"].getValue<float>());
-          },
-          event_timeline_->getCurrentTime() + params_["intro.event_delay"].getValue<float>());
-      },
-      event_timeline_->getCurrentTime() + params_["intro.tween_out_delay"].getValue<float>());
-    
+                event_.signal("begin-title", EventParam());
 
-    view_->startWidgetTween("tween-in");
+                event_timeline_->add([this]() {
+                    active_ = false;
+                  },
+                  event_timeline_->getCurrentTime() + params_["intro.deactive_delay"].getValue<float>());
+              },
+              event_timeline_->getCurrentTime() + params_["intro.event_delay"].getValue<float>());
+          },
+          event_timeline_->getCurrentTime() + params_["intro.tween_out_delay"].getValue<float>());
+      },
+      event_timeline_->getCurrentTime() + params_["intro.tween_in_delay"].getValue<float>());
+
+    view_->setDisp(false);
   }
 
   ~IntroController() {
