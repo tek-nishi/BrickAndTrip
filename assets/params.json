@@ -86,6 +86,13 @@
         "normals": true,
         "uvs": false,
         "indices": true
+      },
+      {
+        "name": "test",
+        "path": "test.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
       }
     ],
     
@@ -131,6 +138,7 @@
 
     "lights": [
       {
+        "type": "point",
         "pos": [ 3, 10, 1 ],
         
         "constant_attenuation":  0,
@@ -139,18 +147,15 @@
         
         "diffuse": [ 0.84, 0.84, 0.84 ],
         "ambient": [ 0.13, 0.13, 0.13 ],
-        "specular": [ 0.13, 0.13, 0.13 ]
+        "specular": [ 1, 1, 1 ]
       },
       {
-        "pos": [ -2, -5, -2 ],
+        "type": "directional",
+        "pos": [ -1, 0, 0 ],
         
-        "constant_attenuation":  0,
-        "linear_attenuation":    0,
-        "quadratic_attenuation": 0.015,
-        
-        "diffuse": [ 0.102, 0.102, 0.2 ],
+        "diffuse": [ 0.25, 0.25, 0.5 ],
         "ambient": [ 0, 0, 0 ],
-        "specular": [ 0.13, 0.13, 0.13 ]
+        "specular": [ 0.3, 0.3, 0.3 ]
       }
     ],
 

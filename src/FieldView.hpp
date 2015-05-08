@@ -46,6 +46,7 @@ class FieldView : private boost::noncopyable {
   bool camera_follow_target_;
 
   struct Light {
+    int type;
     ci::gl::Light l;
     ci::Vec3f pos;
   };
@@ -149,22 +150,44 @@ public:
     
     
     int id = 0;
+
+    static std::map<std::string, int> light_type = {
+      { "point", ci::gl::Light::POINT },
+      { "directional", ci::gl::Light::DIRECTIONAL },
+    };
+    
     for (const auto& param : params["game_view.lights"]) {
+      const auto& type = light_type.at(param["type"].getValue<std::string>());
       Light light = {
-        { ci::gl::Light::POINT, id },
+        type,
+        { type, id },
         Json::getVec3<float>(param["pos"])
       };
-      light.l.setPosition(light.pos);
 
-      float constant_attenuation  = param["constant_attenuation"].getValue<float>();
-      float linear_attenuation    = param["linear_attenuation"].getValue<float>();
-      float quadratic_attenuation = param["quadratic_attenuation"].getValue<float>();
-      light.l.setAttenuation(constant_attenuation,
-                             linear_attenuation,
-                             quadratic_attenuation);
+      switch (type) {
+      case ci::gl::Light::POINT:
+        {
+          light.l.setPosition(light.pos);
+
+          float constant_attenuation  = param["constant_attenuation"].getValue<float>();
+          float linear_attenuation    = param["linear_attenuation"].getValue<float>();
+          float quadratic_attenuation = param["quadratic_attenuation"].getValue<float>();
+          light.l.setAttenuation(constant_attenuation,
+                                 linear_attenuation,
+                                 quadratic_attenuation);
+        }
+        break;
+
+      case ci::gl::Light::DIRECTIONAL:
+        {
+          light.l.setDirection(light.pos);
+        }
+        break;
+      }
 
       light.l.setDiffuse(Json::getColor<float>(param["diffuse"]));
       light.l.setAmbient(Json::getColor<float>(param["ambient"]));
+      light.l.setSpecular(Json::getColor<float>(param["specular"]));
 
       lights_.push_back(std::move(light));
       
@@ -251,10 +274,15 @@ public:
     glFogf(GL_FOG_END, params_["game_view.fog_end"].getValue<float>());
     
     ci::gl::setMatrices(camera_);
+    // ci::gl::setProjection(camera_);
+    // glMatrixMode(GL_MODELVIEW);
+    // glLoadIdentity();
 
     for (auto& light : lights_) {
       light.l.enable();
     }
+
+    // ci::gl::setModelView(camera_);
 
     drawStageCubes(field.active_cubes, models);
     drawStageCubes(field.collapse_cubes, models);
@@ -586,10 +614,16 @@ private:
 
   void updateLight() {
     for (auto& light : lights_) {
-      ci::Vec3f pos = light.pos;
-      // 注視点のzだけ拝借
-      pos.z += target_point_.z;
-      light.l.setPosition(pos);
+      switch (light.type) {
+      case ci::gl::Light::POINT:
+        {
+          ci::Vec3f pos = light.pos;
+          // 注視点のzだけ拝借
+          pos.z += target_point_.z;
+          light.l.setPosition(pos);
+        }
+        break;
+      }
     }
   }
 

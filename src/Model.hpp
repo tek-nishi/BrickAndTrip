@@ -55,11 +55,14 @@ public:
       mesh.getTexCoords().clear();
     }
 
+    const auto& groups = loader.getGroups();
+    
     DOUT << "model:" << path
          << " v:" << mesh.getVertices().size()
          << " n:" << mesh.getNormals().size()
          << " t:" << mesh.getTexCoords().size()
          << " i:" << mesh.getIndices().size()
+         << " g:" << groups.size()
          << std::endl;
     
     mesh_ = ci::gl::VboMesh::create(mesh);
