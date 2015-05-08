@@ -24,10 +24,13 @@ class ItemCube : private boost::noncopyable {
   ci::Vec3i block_position_;
   
   ci::Anim<ci::Vec3f> position_;
-  ci::Quatf rotation_;
   ci::Anim<ci::Vec3f> scale_;
   ci::Anim<ci::Vec3f> color_;
 
+  ci::Vec3f rotation_;
+  ci::Vec3f rotation_speed_;
+  ci::Anim<float> rotation_speed_rate_;
+  
   bool on_stage_;
 
   std::string fall_ease_;
@@ -49,7 +52,9 @@ public:
     cube_size_(params["game.cube_size"].getValue<float>()),
     color_(Json::getHsvColor(params["game.item.color"])),
     block_position_(entry_pos),
-    rotation_(ci::Quatf::identity()),
+    rotation_(ci::Vec3f::zero()),
+    rotation_speed_(Json::getVec3<float>(params["game.item.rotation_speed"])),
+    rotation_speed_rate_(0),
     scale_(ci::Vec3f(1, 1, 1)),
     on_stage_(false),
     fall_ease_(params["game.item.fall_ease"].getValue<std::string>()),
@@ -76,6 +81,9 @@ public:
                                               params["game.item.entry_duration"].getValue<float>(),
                                               getEaseFunc(params["game.item.entry_ease"].getValue<std::string>()));
 
+    setFloatTween(*animation_timeline_,
+                  rotation_speed_rate_, params["game.item.entry_rotate_speed"], true);
+
     options.finishFn([this]() {
         on_stage_ = true;
         startTween("idle_tween");
@@ -92,6 +100,15 @@ public:
     animation_timeline_->removeSelf();
   }
 
+
+  void update(const double progressing_seconds) {
+    rotation_ += rotation_speed_ * rotation_speed_rate_() * progressing_seconds;
+
+    std::fmod(rotation_.x, static_cast<float>(M_PI * 2.0));
+    std::fmod(rotation_.y, static_cast<float>(M_PI * 2.0));
+    std::fmod(rotation_.z, static_cast<float>(M_PI * 2.0));
+  }
+  
 
   void fallFromStage() {
     on_stage_ = false;
@@ -119,7 +136,10 @@ public:
 
   
   const ci::Vec3f& position() const { return position_(); }
-  const ci::Quatf& rotation() const { return rotation_; }
+
+  ci::Quatf rotation() const {
+    return ci::Quatf(rotation_.x, rotation_.y, rotation_.z);
+  }
 
   const ci::Vec3i& blockPosition() const { return block_position_; }
 
@@ -165,6 +185,12 @@ private:
           "scale",
           [this](const ci::JsonTree& params, const bool is_first) {
             setVec3Tween(*animation_timeline_, scale_, params, is_first);
+          }
+        },
+        {
+          "rotation_speed",
+          [this](const ci::JsonTree& params, const bool is_first) {
+            setFloatTween(*animation_timeline_, rotation_speed_rate_, params, is_first);
           }
         }
       };

@@ -319,9 +319,19 @@
     "item": {
       "color": [ 60, 0.5, 1 ],
 
+      "rotation_speed": [ 0, 0.8, 0.7 ],
+
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,
       "entry_y": [ 15, 18 ],
+
+      "entry_rotate_speed": {
+        "type": "EaseNone",
+        "start": 0,
+        "end": 1,
+        "duration": 0.3,
+        "delay": 1.25
+      },
 
       "idle_tween": [
         {
@@ -358,12 +368,23 @@
           "end": [ 0, 0, 0 ],
           "duration": 0.3,
           "delay": 0.5
+        },
+        {
+          "target": "rotation_speed",
+          "type": "EaseNone",
+          "end": 10,
+          "duration": 0.5
+        },
+        {
+          "target": "rotation_speed",
+          "type": "EaseNone",
+          "end": 0,
+          "duration": 0.1
         }
       ],
 
       "pickup_delay": 0.2,
       "pickup_duration": 0.8,
-      
       
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,

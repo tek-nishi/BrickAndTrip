@@ -148,7 +148,7 @@ public:
 
     decideEachPickableCubeMoving();
 
-    items_.update(stage_);
+    items_.update(stage_, progressing_seconds);
     moving_cubes_.update(progressing_seconds,
                          stage_, gatherPickableCubePosition());
 

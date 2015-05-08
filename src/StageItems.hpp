@@ -47,7 +47,11 @@ public:
   }
 
 
-  void update(const Stage& stage) {
+  void update(const Stage& stage, const double progressing_seconds) {
+    for (auto& cube : items_) {
+      cube->update(progressing_seconds);
+    }
+    
     decideEachItemCubeFalling(stage);
     
     boost::remove_erase_if(items_,
