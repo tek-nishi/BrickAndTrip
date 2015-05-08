@@ -10,6 +10,7 @@
 #include "FontHolder.hpp"
 #include "FieldController.hpp"
 #include "EventParam.hpp"
+#include "IntroController.hpp"
 #include "TitleController.hpp"
 #include "GameoverController.hpp"
 #include "StageclearController.hpp"
@@ -171,10 +172,14 @@ public:
     // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
 
+#if 0
     timeline_->add([this]() {
         startTitle();
       },
       timeline_->getCurrentTime() + params["app.start_title_delay"].getValue<float>());
+#endif
+    addController<IntroController>(params_, timeline_, event_, view_creator_.create("ui_intro.json"));
+    
 
 #if 0
     {

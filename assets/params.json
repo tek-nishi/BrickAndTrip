@@ -412,6 +412,12 @@
   },
 
   
+  "intro": {
+    "tween_out_delay": 2,
+    "event_delay": 1.25,
+    "deactive_delay": 0.3
+  },
+  
   "title": {
     "active_delay": 0.5,
     "tween_delay": 0.6,
