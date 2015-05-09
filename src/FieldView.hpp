@@ -17,6 +17,7 @@
 #include "EventParam.hpp"
 #include "ModelHolder.hpp"
 #include "MaterialHolder.hpp"
+#include "FieldLights.hpp"
 // #include "CameraEditor.hpp"
 
 
@@ -45,13 +46,7 @@ class FieldView : private boost::noncopyable {
   float camera_speed_;
   bool camera_follow_target_;
 
-  struct Light {
-    int type;
-    ci::gl::Light l;
-    ci::Vec3f pos;
-  };
-  
-  std::vector<Light> lights_;
+  FieldLights lights_;
 
   ConnectionHolder connections_;
 
@@ -101,7 +96,7 @@ class FieldView : private boost::noncopyable {
   
   
 public:
-  FieldView(const ci::JsonTree& params,
+  FieldView(ci::JsonTree& params,
             ci::TimelineRef timeline,
             Event<EventParam>& event,
             Event<std::vector<Touch> >& touch_event) :
@@ -119,6 +114,7 @@ public:
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
     camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
     camera_follow_target_(true),
+    lights_(params, timeline),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
@@ -147,52 +143,6 @@ public:
     new_eye_point_ = eye_point_;
 
     // camera_editor_.setParams(eye_rx, eye_ry, eye_distance);
-    
-    
-    int id = 0;
-
-    static std::map<std::string, int> light_type = {
-      { "point", ci::gl::Light::POINT },
-      { "directional", ci::gl::Light::DIRECTIONAL },
-    };
-    
-    for (const auto& param : params["game_view.lights"]) {
-      const auto& type = light_type.at(param["type"].getValue<std::string>());
-      Light light = {
-        type,
-        { type, id },
-        Json::getVec3<float>(param["pos"])
-      };
-
-      switch (type) {
-      case ci::gl::Light::POINT:
-        {
-          light.l.setPosition(light.pos);
-
-          float constant_attenuation  = param["constant_attenuation"].getValue<float>();
-          float linear_attenuation    = param["linear_attenuation"].getValue<float>();
-          float quadratic_attenuation = param["quadratic_attenuation"].getValue<float>();
-          light.l.setAttenuation(constant_attenuation,
-                                 linear_attenuation,
-                                 quadratic_attenuation);
-        }
-        break;
-
-      case ci::gl::Light::DIRECTIONAL:
-        {
-          light.l.setDirection(light.pos);
-        }
-        break;
-      }
-
-      light.l.setDiffuse(Json::getColor<float>(param["diffuse"]));
-      light.l.setAmbient(Json::getColor<float>(param["ambient"]));
-      light.l.setSpecular(Json::getColor<float>(param["specular"]));
-
-      lights_.push_back(std::move(light));
-      
-      ++id;
-    }
 
     readMaterials(params["game_view.materials"]);
     
@@ -249,7 +199,7 @@ public:
     makeTouchCubeInfo(field.pickable_cubes);
     updateCameraTarget(field.pickable_cubes);
     updateCamera(progressing_seconds_);
-    updateLight();
+    lights_.updateLights(target_point_);
 
     // 遠景
     {
@@ -278,9 +228,7 @@ public:
     // glMatrixMode(GL_MODELVIEW);
     // glLoadIdentity();
 
-    for (auto& light : lights_) {
-      light.l.enable();
-    }
+    lights_.enableLights();
 
     // ci::gl::setModelView(camera_);
 
@@ -301,10 +249,7 @@ public:
     // drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
 #endif
 
-    
-    for (auto& light : lights_) {
-      light.l.disable();
-    }
+    lights_.disableLights();
     ci::gl::disable(GL_FOG);
 
 #if 0
@@ -610,21 +555,6 @@ private:
     
     camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
     camera_.setEyePoint(eye_point_ + target_point_);
-  }
-
-  void updateLight() {
-    for (auto& light : lights_) {
-      switch (light.type) {
-      case ci::gl::Light::POINT:
-        {
-          ci::Vec3f pos = light.pos;
-          // 注視点のzだけ拝借
-          pos.z += target_point_.z;
-          light.l.setPosition(pos);
-        }
-        break;
-      }
-    }
   }
 
   

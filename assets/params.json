@@ -147,15 +147,75 @@
         
         "diffuse": [ 0.84, 0.84, 0.84 ],
         "ambient": [ 0.13, 0.13, 0.13 ],
-        "specular": [ 1, 1, 1 ]
+        "specular": [ 1, 1, 1 ],
+
+        "tween": {
+          "normal": [
+            {
+              "target": "position",
+              "type": "EaseOutExpo",
+              "end": [ 3, 10, 1 ],
+              "dulation": 1,
+              "delay": 0.5
+            },
+            {
+              "target": "quadratic_attenuation",
+              "type": "EaseOutExpo",
+              "end": 0.01,
+              "dulation": 1,
+              "delay": 0.5
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseOutExpo",
+              "end": [ 0.5, 0.5, 0.5 ],
+              "dulation": 1
+            }
+          ],
+
+          "dark": [
+            {
+              "target": "position",
+              "type": "EaseOutExpo",
+              "end": [ -3, 10, 1 ],
+              "dulation": 1,
+              "delay": 0.5
+            },
+            {
+              "target": "quadratic_attenuation",
+              "type": "EaseOutExpo",
+              "end": 0.01,
+              "dulation": 1,
+              "delay": 0.5
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseOutExpo",
+              "end": [ 0.15, 0.15, 0.5 ],
+              "dulation": 1
+            }
+          ]
+        }
       },
+      
       {
         "type": "directional",
         "pos": [ -1, 0, 0 ],
         
         "diffuse": [ 0.25, 0.25, 0.5 ],
         "ambient": [ 0, 0, 0 ],
-        "specular": [ 0.3, 0.3, 0.3 ]
+        "specular": [ 0.3, 0.3, 0.3 ],
+
+        "tween": {
+          "normal": [
+            {
+              "target": "direction",
+              "end": [ 0, 0, -1 ],
+              "dulation": 1,
+              "delay": 0.5
+            }
+          ]
+        }
       }
     ],
 
