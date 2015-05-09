@@ -297,6 +297,10 @@ public:
                                bg_tween_duration_, getEaseFunc(bg_tween_type_));
   }
 
+  void setStageLightTween(const std::string& tween_name) {
+    lights_.startLightTween(tween_name);
+  }
+
   void enableFollowCamera(const bool enable = true) {
     camera_follow_target_ = enable;
   }

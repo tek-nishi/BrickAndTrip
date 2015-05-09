@@ -36,9 +36,11 @@ class FieldEntity : private boost::noncopyable {
 
   ci::Color stage_color_;
   ci::Color bg_color_;
+  std::string light_tween_;
 
   ci::Color finish_stage_color_;
   ci::Color finish_bg_color_;
+  std::string finish_light_tween_;
 
   float finish_rate_;
 
@@ -89,6 +91,7 @@ class FieldEntity : private boost::noncopyable {
     int item_num;
     ci::Color stage_color;
     ci::Color bg_color;
+    std::string light_tween;
   };
   
   
@@ -168,7 +171,8 @@ public:
 
         EventParam params = {
           { "stage_color", stage_color_ },
-          { "bg_color", bg_color_ }
+          { "bg_color", bg_color_ },
+          { "light_tween", light_tween_ },
         };
         event_.signal("first-pickable-started", params);
       }
@@ -183,7 +187,8 @@ public:
         {
           EventParam params = {
             { "stage_color", finish_stage_color_ },
-            { "bg_color",    finish_bg_color_ }
+            { "bg_color",    finish_bg_color_ },
+            { "light_tween", finish_light_tween_ },
           };
           event_.signal("stage-color", params);
         }
@@ -246,7 +251,8 @@ public:
     {
       EventParam params = {
         { "stage_color", stage_info.stage_color },
-        { "bg_color",    stage_info.bg_color }
+        { "bg_color",    stage_info.bg_color },
+        { "light_tween", stage_info.light_tween }
       };
       event_.signal("stage-color", params);
     }
@@ -289,6 +295,7 @@ public:
     
     stage_color_ = stage_info.stage_color;
     bg_color_    = stage_info.bg_color;
+    light_tween_ = stage_info.light_tween;
 
     // bgの位置を決めるためにステージの中央座標を求める
     const auto& width = stage_.getStageWidth();
@@ -300,6 +307,7 @@ public:
 
     finish_stage_color_ = stage_info.stage_color;
     finish_bg_color_    = stage_info.bg_color;
+    finish_light_tween_ = stage_info.light_tween;
 
     mode_ = START;
     first_started_pickable_ = false;
@@ -609,6 +617,7 @@ private:
       item_num,
       Json::getColor<float>(stage["color"]),
       Json::getColor<float>(stage["bg_color"]),
+      Json::getValue(stage, "light_tween", std::string("normal")),
     };
     
     return info;

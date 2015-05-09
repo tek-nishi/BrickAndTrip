@@ -16,7 +16,8 @@ class FieldLights {
 
     const ci::JsonTree* const tween_params;
 
-    ci::Anim<ci::Vec3f> vector;
+    ci::Anim<ci::Vec3f> position;
+    ci::Anim<ci::Quatf> direction;
 
     ci::Anim<float> constant_attenuation;
     ci::Anim<float> linear_attenuation;
@@ -25,6 +26,7 @@ class FieldLights {
     ci::Anim<ci::Color> diffuse;
     ci::Anim<ci::Color> ambient;
     ci::Anim<ci::Color> specular;
+
   };
   
   std::vector<Light> lights_;
@@ -55,14 +57,14 @@ public:
       Light light = {
         type,
         { type, id },
-        tween_params,
-        Json::getVec3<float>(param["pos"]),
+        tween_params
       };
 
       switch (type) {
       case ci::gl::Light::POINT:
         {
-          light.l.setPosition(light.vector);
+          light.position = Json::getVec3<float>(param["position"]);
+          light.l.setPosition(light.position);
 
           light.constant_attenuation  = param["constant_attenuation"].getValue<float>();
           light.linear_attenuation    = param["linear_attenuation"].getValue<float>();
@@ -76,7 +78,8 @@ public:
 
       case ci::gl::Light::DIRECTIONAL:
         {
-          light.l.setDirection(light.vector);
+          light.direction = Json::getQuaternion<float>(param["direction"]);
+          light.l.setDirection(light.direction() * ci::Vec3f::zAxis());
         }
         break;
       }
@@ -119,14 +122,26 @@ public:
       switch (light.type) {
       case ci::gl::Light::POINT:
         {
-          ci::Vec3f pos = light.vector;
+          ci::Vec3f pos = light.position;
 
           // 注視点のzだけ拝借
           pos.z += target_position.z;
           light.l.setPosition(pos);
+
+          light.l.setAttenuation(light.constant_attenuation(),
+                                 light.linear_attenuation(),
+                                 light.quadratic_attenuation());
         }
         break;
+
+      case ci::gl::Light::DIRECTIONAL:
+        light.l.setDirection(light.direction() * ci::Vec3f::zAxis());
+        break;
       }
+
+      light.l.setDiffuse(light.diffuse());
+      light.l.setAmbient(light.ambient());
+      light.l.setSpecular(light.specular());
     }
   }
 
@@ -148,12 +163,12 @@ private:
                std::function<void (Light&, const ci::JsonTree&, const bool)> > tween_setup = {
         { "position",
           [this](Light& light, const ci::JsonTree& params, const bool is_first) {
-            setVec3Tween(*animation_timeline_, light.vector, params, is_first);
+            setVec3Tween(*animation_timeline_, light.position, params, is_first);
           }
         },
         { "direction",
           [this](Light& light, const ci::JsonTree& params, const bool is_first) {
-            setVec3Tween(*animation_timeline_, light.vector, params, is_first);
+            setQuatTween(*animation_timeline_, light.direction, params, is_first);
           }
         },
         
@@ -194,11 +209,6 @@ private:
       tween_setup[target](light, params, isFirstApply(target, applyed_targets));
     }
   }  
-
-  static bool isFirstApply(const std::string& type, std::set<std::string>& apply) {
-    auto result = apply.insert(type);
-    return result.second;
-  }
 
 };
 

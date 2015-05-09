@@ -61,6 +61,26 @@ void setVec3Tween(ci::Timeline& timeline,
   if (is_first) value = start;
   setTweenOption<ci::Vec3f>(option, param);
 }
+
+void setQuatTween(ci::Timeline& timeline,
+                  ci::Anim<ci::Quatf>& value, const ci::JsonTree& param, const bool is_first) {
+  auto start = param.hasChild("start") ? Json::getQuaternion<float>(param["start"])
+                                       : value();
+  auto end = param.hasChild("end") ? Json::getQuaternion<float>(param["end"])
+                                   : value();
+
+  auto option = is_first ? timeline.apply(&value,
+                                          start, end,
+                                          param["duration"].getValue<float>(),
+                                          getEaseFunc(param["type"].getValue<std::string>()))
+                         : timeline.appendTo(&value,
+                                             end,
+                                             param["duration"].getValue<float>(),
+                                             getEaseFunc(param["type"].getValue<std::string>()));
+
+  if (is_first) value = start;
+  setTweenOption<ci::Quatf>(option, param);
+}
   
 void setColorTween(ci::Timeline& timeline,
                    ci::Anim<ci::Color>& value, const ci::JsonTree& param, const bool is_first) {
@@ -123,6 +143,12 @@ void setHsvTween(ci::Timeline& timeline,
 
   if (is_first) value = start;
   setTweenOption<ci::Vec3f>(option, param);
+}
+
+
+bool isFirstApply(const std::string& type, std::set<std::string>& apply) {
+  auto result = apply.insert(type);
+  return result.second;
 }
 
 }

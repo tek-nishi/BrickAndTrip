@@ -40,10 +40,12 @@ ci::Vec4<T> getVec4(const ci::JsonTree& json) {
   return ci::Vec4<T>(json[0].getValue<T>(), json[1].getValue<T>(), json[2].getValue<T>(), json[3].getValue<T>());
 }
 
+#if 0
 template<typename T>
 ci::Quaternion<T> getQuaternion(const ci::JsonTree& json) {
   return ci::Quaternion<T>(getVec3<T>(json[0]), ci::toRadians(json[1].getValue<T>()));
 }
+#endif
 
 template<typename T>
 ci::ColorT<T> getColor(const ci::JsonTree& json) {
@@ -64,6 +66,12 @@ template<typename T>
 T getValue(const ci::JsonTree& json, const std::string& name, const T& default_value) {
   return (json.hasChild(name)) ? json[name].getValue<T>()
                                : default_value;
+}
+
+
+template<typename T>
+ci::Quaternion<T> getQuaternion(const ci::JsonTree& json) {
+  return ci::Quaternion<T>(ci::Vec3<T>::zAxis(), getVec3<T>(json));
 }
 
 

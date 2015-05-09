@@ -13,6 +13,8 @@
 
     "color": [ 0.6, 0.6, 0.6 ],
     "bg_color": [ 0.3, 0.3, 0.3 ],
+
+    "light_tween": "start_",
     
     "pickable": 1
   }

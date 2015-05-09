@@ -313,11 +313,6 @@ private:
     }
   }
   
-  static bool isFirstApply(const std::string& type, std::set<std::string>& apply) {
-    auto result = apply.insert(type);
-    return result.second;
-  }
-  
 };
 
 }

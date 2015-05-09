@@ -78,6 +78,10 @@ public:
                                      DOUT << "first-pickable-started" << std::endl;
                                      const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
                                      view_.setStageBgColor(color);
+                                     
+                                     const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
+                                     view_.setStageLightTween(light_tween);
+
                                      entity_.startStageCollapse();
                                    });
     
@@ -254,6 +258,9 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
                                      view_.setStageBgColor(color);
+
+                                     const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
+                                     view_.setStageLightTween(light_tween);
                                    });
     
 #ifdef DEBUG

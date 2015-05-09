@@ -210,14 +210,6 @@ private:
       tween_setup[target](cube, params, isFirstApply(target, applyed_targets));
     }
   }
-
-
-  static bool isFirstApply(const std::string& type, std::set<std::string>& apply) {
-    auto result = apply.insert(type);
-    return result.second;
-  }
-  
-
   
 };
 
