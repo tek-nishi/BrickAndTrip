@@ -14,7 +14,12 @@ class StageFallingCubes : private boost::noncopyable {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 
-  std::vector<ci::Vec3i> entry_cubes_;
+  struct Entry {
+    ci::Vec3i position;
+    float interval;
+  };
+  
+  std::vector<Entry> entry_cubes_;
 
   // VS2013には暗黙のmoveコンストラクタが無いのでstd::unique_ptrで保持
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
@@ -67,15 +72,23 @@ public:
     ci::Vec3i start_pos(x_offset, 0, start_z);
 
     for (const auto& p : params["falling"]) {
-      ci::Vec3i entry_pos = Json::getVec3<int>(p) + start_pos;
-      entry_cubes_.push_back(entry_pos);
+      auto entry_pos = Json::getVec3<int>(p["entry"]) + start_pos;
+      auto interval  = p["interval"].getValue<float>();
+
+      Entry entry = {
+        entry_pos,
+        interval
+      };
+      
+      entry_cubes_.push_back(entry);
     }
   }
 
   void entryCube(const int current_z) {
     for (const auto& entry : entry_cubes_) {
-      if (entry.z == current_z) {
-        auto cube = FallingCubePtr(new FallingCube(params_, timeline_, event_, entry));
+      if (entry.position.z == current_z) {
+        auto cube = FallingCubePtr(new FallingCube(params_, timeline_, event_,
+                                                   entry.position, entry.interval));
         cubes_.push_back(std::move(cube));
       }
     }
@@ -83,7 +96,7 @@ public:
 
   bool isCubeExists(const ci::Vec3i& block_pos) const {
     for (const auto& cube : cubes_) {
-      if (block_pos == cube->blockPosition()) return true;
+      if (cube->canBlock() && (block_pos == cube->blockPosition())) return true;
     }
     return false;
   }

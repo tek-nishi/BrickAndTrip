@@ -10,6 +10,7 @@
 #include "EasingUtil.hpp"
 #include "Utility.hpp"
 
+
 namespace ngs {
 
 class FallingCube : private boost::noncopyable {
@@ -32,17 +33,34 @@ class FallingCube : private boost::noncopyable {
   ci::TimelineRef animation_timeline_;
 
   bool on_stage_;
+
+  enum Status {
+    IDLE,
+    UP,
+    DOWN,
+  };
+  Status status_;
   
   std::string fall_ease_;
   float fall_duration_;
   float fall_y_;
 
+  float interval_;
+
+  std::string up_ease_;
+  float up_duration_;
+  float up_y_;
+  
+  std::string down_ease_;
+  float down_duration_;
+  
   
 public:
   FallingCube(ci::JsonTree& params,
               ci::TimelineRef timeline,
               Event<EventParam>& event,
-              const ci::Vec3i& entry_pos) :
+              const ci::Vec3i& entry_pos,
+              const float interval) :
     params_(params),
     event_(event),
     active_(true),
@@ -53,9 +71,16 @@ public:
     rotation_(ci::Quatf::identity()),
     animation_timeline_(ci::Timeline::create()),
     on_stage_(false),
+    status_(Status::IDLE),
     fall_ease_(params["game.falling.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.falling.fall_duration"].getValue<float>()),
-    fall_y_(params["game.falling.fall_y"].getValue<float>())
+    fall_y_(params["game.falling.fall_y"].getValue<float>()),
+    interval_(interval),
+    up_ease_(params["game.falling.up_ease"].getValue<std::string>()),
+    up_duration_(params["game.falling.up_duration"].getValue<float>()),
+    up_y_(params["game.falling.up_y"].getValue<float>()),
+    down_ease_(params["game.falling.down_ease"].getValue<std::string>()),
+    down_duration_(params["game.falling.down_duration"].getValue<float>())
   {
     DOUT << "FallingCube()" << std::endl;
 
@@ -84,6 +109,8 @@ public:
           { "block_pos", block_position_ },
         };
         event_.signal("falling-on-stage", params);
+
+        startUpEase();
       });
   }
     
@@ -128,6 +155,12 @@ public:
 
   const ci::Color& color() const { return color_; }
 
+  // Pickableを通せんぼする状態か??
+  bool canBlock() const {
+    float y = position_().y - (block_position_.y + 1) * cube_size_;
+    return y < cube_size_;
+  }
+  
 
   // std::findを利用するための定義
   bool operator==(const u_int rhs_id) const {
@@ -136,6 +169,43 @@ public:
 
   bool operator==(const FallingCube& rhs) const {
     return id_ == rhs.id_;
+  }
+
+
+private:
+  void startUpEase() {
+    status_ = Status::UP;
+
+    auto up_pos = ci::Vec3f(block_position_) * cube_size_;
+    up_pos.y += up_y_ * cube_size_;
+    
+    auto options = animation_timeline_->apply(&position_,
+                                              up_pos,
+                                              up_duration_,
+                                              getEaseFunc(up_ease_));
+
+    options.delay(interval_);
+    options.finishFn([this]() {
+        startDownEase();
+      });
+  }
+
+  void startDownEase() {
+    status_ = Status::DOWN;
+
+    auto down_pos = ci::Vec3f(block_position_) * cube_size_;
+    // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
+    down_pos.y += cube_size_;
+      
+    auto options = animation_timeline_->apply(&position_,
+                                              down_pos,
+                                              down_duration_,
+                                              getEaseFunc(down_ease_));
+    options.delay(interval_);
+    options.finishFn([this]() {
+        event_.signal("falling-down", EventParam());
+        startUpEase();
+      });
   }
   
 };

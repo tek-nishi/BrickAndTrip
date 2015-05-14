@@ -460,6 +460,13 @@
       "entry_y": [ 15, 18 ],
 
       "color": [ 0.1, 0.1, 0.1 ],
+
+      "up_ease": "EaseInQuart",
+      "up_duration": 1.5,
+      "up_y": 8,
+
+      "down_ease": "EaseInQuart",
+      "down_duration": 1.5,
       
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
