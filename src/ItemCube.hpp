@@ -76,9 +76,10 @@ public:
     auto entry_y = Json::getVec2<float>(params["game.item.entry_y"]);
     float y = ci::randFloat(entry_y.x, entry_y.y) * cube_size_;
     ci::Vec3f start_value(position() + ci::Vec3f(0, y, 0));
+    float duration = params["game.item.entry_duration"].getValue<float>();
     auto options = animation_timeline_->apply(&position_,
                                               start_value, position_(),
-                                              params["game.item.entry_duration"].getValue<float>(),
+                                              duration,
                                               getEaseFunc(params["game.item.entry_ease"].getValue<std::string>()));
 
     options.finishFn([this]() {

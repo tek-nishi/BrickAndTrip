@@ -30,24 +30,14 @@
       "falling" : [
          {
             "delay" : 0,
-            "entry" : [ 5, 0, 14 ],
+            "entry" : [ 3, 0, 4 ],
             "interval" : 1
          },
          {
-            "delay" : 0,
-            "entry" : [ 6, 0, 14 ],
-            "interval" : 1
-         },
-         {
-            "delay" : 0,
-            "entry" : [ 7, 0, 14 ],
+            "delay" : 2,
+            "entry" : [ 4, 0, 4 ],
             "interval" : 1
          }
-      ],
-      "items" : [
-         [ 3, 0, 3 ],
-         [ 6, 0, 8 ],
-         [ 1, 0, 15 ]
       ],
       "light_tween" : "default",
       "pickable" : 1,

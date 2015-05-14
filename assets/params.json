@@ -277,6 +277,13 @@
       }
     ],
 
+    "quake": {
+      "power": 0.12,
+      "speed": 2500,
+      "w_st": 45,
+      "k": 4
+    },
+    
     "stagecolor": [ 0.5, 0.5, 0.5 ],
     "stagecolor_ease": "EaseOutQuad",
     "stagecolor_duration": 2,
@@ -470,7 +477,9 @@
       
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
-      "fall_y": -10
+      "fall_y": -10,
+
+      "quake_duration": 2
     },
 
     "item": {
@@ -479,7 +488,7 @@
       "rotation_speed": [ 0, 0.8, 0.7 ],
 
       "entry_ease": "EaseOutQuad",
-      "entry_duration": 1.5,
+      "entry_duration": 3,
       "entry_y": [ 15, 18 ],
 
       "entry_rotate_speed": {

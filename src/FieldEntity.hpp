@@ -475,7 +475,7 @@ public:
     }
   }
 
-  void movedPickableCube(const ci::Vec3i& block_pos) {
+  void movedPickableCube(const u_int id, const ci::Vec3i& block_pos) {
     // switch踏んだ処理
     const auto* const targets = switches_.startSwitch(block_pos);
     if (targets) {

@@ -65,7 +65,8 @@ public:
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection&, EventParam& param) {
                                      const auto& block_pos = boost::any_cast<const ci::Vec3i&>(param["block_pos"]);
-                                     entity_.movedPickableCube(block_pos);
+                                     const auto id = boost::any_cast<u_int>(param["id"]);
+                                     entity_.movedPickableCube(id, block_pos);
                                    });
     
     connections_ += event_.connect("pickable-on-stage",
@@ -261,6 +262,12 @@ public:
 
                                      const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
                                      view_.setStageLightTween(light_tween);
+                                   });
+
+    connections_ += event_.connect("falling-down",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     float duration = boost::any_cast<float>(param["duration"]);
+                                     view_.startQuake(duration);
                                    });
     
 #ifdef DEBUG

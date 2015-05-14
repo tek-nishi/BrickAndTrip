@@ -53,6 +53,8 @@ class FallingCube : private boost::noncopyable {
   
   std::string down_ease_;
   float down_duration_;
+
+  float quake_duration_;
   
   
 public:
@@ -80,7 +82,8 @@ public:
     up_duration_(params["game.falling.up_duration"].getValue<float>()),
     up_y_(params["game.falling.up_y"].getValue<float>()),
     down_ease_(params["game.falling.down_ease"].getValue<std::string>()),
-    down_duration_(params["game.falling.down_duration"].getValue<float>())
+    down_duration_(params["game.falling.down_duration"].getValue<float>()),
+    quake_duration_(params["game.falling.quake_duration"].getValue<float>())
   {
     DOUT << "FallingCube()" << std::endl;
 
@@ -203,7 +206,11 @@ private:
                                               getEaseFunc(down_ease_));
     options.delay(interval_);
     options.finishFn([this]() {
-        event_.signal("falling-down", EventParam());
+        EventParam params = {
+          { "duration", quake_duration_ }
+        };
+        
+        event_.signal("falling-down", params);
         startUpEase();
       });
   }

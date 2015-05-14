@@ -18,6 +18,7 @@
 #include "ModelHolder.hpp"
 #include "MaterialHolder.hpp"
 #include "FieldLights.hpp"
+#include "Quake.hpp"
 // #include "CameraEditor.hpp"
 
 
@@ -50,7 +51,9 @@ class FieldView : private boost::noncopyable {
 
   ConnectionHolder connections_;
 
-
+  Quake quake_;
+  float quake_value_;
+  
   // pick用情報
   struct TouchCube {
     u_int id;
@@ -115,6 +118,8 @@ public:
     camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
     camera_follow_target_(true),
     lights_(params, timeline),
+    quake_(params["game_view.quake"]),
+    quake_value_(0.0f),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     touch_input_(true),
@@ -301,6 +306,10 @@ public:
   void enableFollowCamera(const bool enable = true) {
     camera_follow_target_ = enable;
   }
+
+  void startQuake(const float duration) {
+    quake_.start(*animation_timeline_, &quake_value_, duration);
+  }
   
   
 private:
@@ -442,8 +451,6 @@ private:
     return boost::optional<Pick&>();
   }
 
-
-
   
   void removePick(const Touch& touch) {
     boost::remove_erase_if(pickings_,
@@ -553,9 +560,11 @@ private:
       auto d = new_eye_point_ - eye_point_;
       eye_point_ = new_eye_point_ - d * speed_rate;
     }
+
+    auto offset = ci::Vec3f(0.0f, quake_value_, 0.0f);
     
-    camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
-    camera_.setEyePoint(eye_point_ + target_point_);
+    camera_.setCenterOfInterestPoint(interest_point_ + target_point_ + offset);
+    camera_.setEyePoint(eye_point_ + target_point_ + offset);
   }
 
   
