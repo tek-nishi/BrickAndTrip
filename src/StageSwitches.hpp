@@ -85,6 +85,8 @@ public:
     return nullptr;
   }
 
+  // FIXME:stageの崩壊とともに全てのswitchが落下するので
+  //       明示的にclearする必要はなさそう
   void clear() { switches_.clear(); }
 
 

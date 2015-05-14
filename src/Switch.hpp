@@ -21,6 +21,7 @@ class Switch : private boost::noncopyable {
   std::vector<ci::Vec3i> targets_;
 
   ci::Anim<ci::Vec3f> position_;
+  ci::Color color_;
 
   bool on_stage_;
   bool started_;
@@ -43,6 +44,7 @@ public:
     cube_size_(params["game.cube_size"].getValue<float>()),
     alive_(true),
     active_(false),
+    color_(Json::getColor<float>(params["game.switch.color"])),
     on_stage_(false),
     started_(false),
     fall_ease_(params["game.switch.fall_ease"].getValue<std::string>()),
@@ -115,7 +117,10 @@ public:
     return block_position == block_position_;
   }
 
-  void start() { started_ = true; }
+  void start() {
+    started_ = true;
+    active_ = false;
+  }
 
 
   const std::vector<ci::Vec3i>& targets() const { return targets_; }
@@ -137,10 +142,7 @@ public:
   bool isAlive() const { return alive_; }
 
   
-  const ci::Color& color() const {
-    static ci::Color color(0.5, 0.5, 0.5);
-    return color;
-  }
+  const ci::Color& color() const { return color_; }
   
   
 private:

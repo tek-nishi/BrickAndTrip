@@ -88,8 +88,8 @@
         "indices": true
       },
       {
-        "name": "test",
-        "path": "test.obj",
+        "name": "switch",
+        "path": "switch.obj",
         "normals": true,
         "uvs": false,
         "indices": true
@@ -309,6 +309,14 @@
         "emission": [ 0, 0, 0, 1 ]
       },
 
+      "switch": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
       "bg_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
@@ -518,6 +526,8 @@
     },
 
     "switch": {
+      "color": [0.5, 0.5, 0.5],
+      
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,
       "entry_y": [ 15, 18 ],

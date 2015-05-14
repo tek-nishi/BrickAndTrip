@@ -16,6 +16,7 @@ struct StageCube {
   float cube_size;
 
   ci::Vec3i block_position;
+  // Switchでの移動用
   ci::Vec3i block_position_new;
   
   ci::Color color;
