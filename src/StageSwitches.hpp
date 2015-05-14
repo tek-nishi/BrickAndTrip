@@ -37,7 +37,7 @@ public:
   }
   
 
-  void update(const Stage& stage, const double progressing_seconds) {
+  void update(const double progressing_seconds, const Stage& stage) {
     for (auto& cube : switches_) {
       cube->update(progressing_seconds);
     }

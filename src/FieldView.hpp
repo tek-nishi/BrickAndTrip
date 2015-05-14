@@ -232,7 +232,8 @@ public:
 
     drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
     drawCubes(field.item_cubes, models, "item_cube", "item_cube");
-    drawCubes(field.moving_cubes, models, "pickable_cube", "pickable_cube");
+    drawCubes(field.moving_cubes, models, "pickable_cube", "moving_cube");
+    drawCubes(field.falling_cubes, models, "pickable_cube", "falling_cube");
     drawCubes(field.switches, models, "switch", "switch");
     
     // bgのfogは別設定

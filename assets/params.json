@@ -292,6 +292,22 @@
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
+      
+      "moving_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+      
+      "falling_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
 
       "item_cube": {
         "ambient": [ 0, 0, 0, 1 ],
@@ -371,10 +387,7 @@
 
       "move_ease" : "EaseOutQuad",
       "move_duration": 0.5,
-      "move_delay": 0.25,
-      
-      "model": "stage_cube",
-      "material": "stage_cube"
+      "move_delay": 0.25
     },
 
     "start_stage": 0,
@@ -422,10 +435,7 @@
       "sleeping_end": {
         "ease": "EaseOutQuad",
         "duration": 0.5
-      },
-
-      "model": "pickable_cube",
-      "material": "pickable_cube"
+      }
     },
     
     "moving": {
@@ -441,10 +451,19 @@
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
-      "fall_y": -10,
+      "fall_y": -10
+    },
+    
+    "falling": {
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
 
-      "model": "pickable_cube",
-      "material": "pickable_cube"
+      "color": [ 0.1, 0.1, 0.1 ],
+      
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
     },
 
     "item": {
@@ -519,10 +538,7 @@
       
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
-      "fall_y": -10,
-
-      "model": "item_cube",
-      "material": "item_cube"
+      "fall_y": -10
     },
 
     "switch": {

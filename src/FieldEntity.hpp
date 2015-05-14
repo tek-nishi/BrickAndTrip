@@ -18,6 +18,7 @@
 #include "StageItems.hpp"
 #include "StageMovingCubes.hpp"
 #include "StageSwitches.hpp"
+#include "StageFallingCubes.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
 #include "Bg.hpp"
@@ -50,6 +51,7 @@ class FieldEntity : private boost::noncopyable {
 
   StageItems items_;
   StageMovingCubes moving_cubes_;
+  StageFallingCubes falling_cubes_;
   StageSwitches switches_;
 
   Bg bg_;
@@ -113,6 +115,7 @@ public:
     stage_(params, timeline, event),
     items_(params, timeline, event),
     moving_cubes_(params, timeline, event),
+    falling_cubes_(params, timeline, event),
     switches_(timeline, event),
     bg_(params, timeline, event),
     first_started_pickable_(false),
@@ -144,10 +147,11 @@ public:
   void update(const double progressing_seconds) {
     records_.progressPlayTimeCurrntGame(progressing_seconds);
 
-    items_.update(stage_, progressing_seconds);
+    items_.update(progressing_seconds, stage_);
     moving_cubes_.update(progressing_seconds,
                          stage_, gatherPickableCubePosition());
-    switches_.update(stage_, progressing_seconds);
+    falling_cubes_.update(progressing_seconds, stage_);
+    switches_.update(progressing_seconds, stage_);
 
     decideEachPickableCubeFalling();
     boost::remove_erase_if(pickable_cubes_,
@@ -283,6 +287,7 @@ public:
     stage_.openStartLine();
     items_.clear();
     moving_cubes_.clear();
+    falling_cubes_.clear();
     switches_.clear();
     
     std::ostringstream path;
@@ -409,6 +414,7 @@ public:
     event_timeline_->clear();
     items_.cleanup();
     moving_cubes_.cleanup();
+    falling_cubes_.cleanup();
 
     first_started_pickable_ = true;
     first_fallen_pickable_  = true;
@@ -501,6 +507,7 @@ public:
   void entryStageObjects(const int active_z) {
     items_.entryItemCube(active_z);
     moving_cubes_.entryCube(active_z);
+    falling_cubes_.entryCube(active_z);
     switches_.entrySwitches(active_z);
   }
 
@@ -553,6 +560,7 @@ public:
       pickable_cubes_,
       items_.items(),
       moving_cubes_.cubes(),
+      falling_cubes_.cubes(),
       switches_.switches(),
       bg_.cubes(),
 
@@ -613,6 +621,7 @@ private:
 
     int item_num = items_.addItemCubes(stage, current_z, x_offset);
     moving_cubes_.addCubes(stage, current_z, x_offset);
+    falling_cubes_.addCubes(stage, current_z, x_offset);
     switches_.addSwitches(params_, stage, current_z, x_offset);
 
     StageInfo info = {
@@ -666,8 +675,11 @@ private:
       }
     }
 
-    // 異動先にMovingCubeがあってもダメ
+    // 移動先にMovingCubeがあってもダメ
     if (moving_cubes_.isCubeExists(block_pos)) return false;
+
+    // 移動先にFallingCubeがあってもダメ
+    if (falling_cubes_.isCubeExists(block_pos)) return false;
     
     // 移動先の高さが同じじゃないと移動できない
     auto height = stage_.getStageHeight(block_pos);

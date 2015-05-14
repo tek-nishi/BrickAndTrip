@@ -32,6 +32,9 @@
          [ 6, 0, 8 ],
          [ 1, 0, 15 ]
       ],
+     "falling": [
+       [ 4, 0, 3 ]
+     ],
       "light_tween" : "default",
       "pickable" : 1,
       "x_offset" : 0
