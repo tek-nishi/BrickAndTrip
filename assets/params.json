@@ -217,29 +217,6 @@
               "end": [ 1, 1, 1 ],
               "duration": 1
             }
-          ],
-
-          "dark": [
-            {
-              "target": "position",
-              "type": "EaseOutExpo",
-              "end": [ -3, 10, 1 ],
-              "duration": 1,
-              "delay": 0.5
-            },
-            {
-              "target": "quadratic_attenuation",
-              "type": "EaseOutExpo",
-              "end": 0.01,
-              "duration": 1,
-              "delay": 0.5
-            },
-            {
-              "target": "diffuse",
-              "type": "EaseOutExpo",
-              "end": [ 0.15, 0.15, 0.5 ],
-              "duration": 1
-            }
           ]
         }
       },
@@ -538,6 +515,16 @@
 
       "model": "item_cube",
       "material": "item_cube"
+    },
+
+    "switch": {
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
     },
 
     "bg": {

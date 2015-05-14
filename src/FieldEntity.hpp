@@ -113,6 +113,7 @@ public:
     stage_(params, timeline, event),
     items_(params, timeline, event),
     moving_cubes_(params, timeline, event),
+    switches_(timeline, event),
     bg_(params, timeline, event),
     first_started_pickable_(false),
     first_fallen_pickable_(false),
@@ -143,6 +144,11 @@ public:
   void update(const double progressing_seconds) {
     records_.progressPlayTimeCurrntGame(progressing_seconds);
 
+    items_.update(stage_, progressing_seconds);
+    moving_cubes_.update(progressing_seconds,
+                         stage_, gatherPickableCubePosition());
+    switches_.update(stage_, progressing_seconds);
+
     decideEachPickableCubeFalling();
     boost::remove_erase_if(pickable_cubes_,
                            [](const PickableCubePtr& cube) {
@@ -150,10 +156,6 @@ public:
                            });
 
     decideEachPickableCubeMoving();
-
-    items_.update(stage_, progressing_seconds);
-    moving_cubes_.update(progressing_seconds,
-                         stage_, gatherPickableCubePosition());
 
 #if 0
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
@@ -499,6 +501,7 @@ public:
   void entryStageObjects(const int active_z) {
     items_.entryItemCube(active_z);
     moving_cubes_.entryCube(active_z);
+    switches_.entrySwitches(active_z);
   }
 
   void pickupedItemCube() {
@@ -550,6 +553,7 @@ public:
       pickable_cubes_,
       items_.items(),
       moving_cubes_.cubes(),
+      switches_.switches(),
       bg_.cubes(),
 
 #ifdef DEBUG
@@ -609,7 +613,7 @@ private:
 
     int item_num = items_.addItemCubes(stage, current_z, x_offset);
     moving_cubes_.addCubes(stage, current_z, x_offset);
-    switches_.addSwitches(stage, current_z, x_offset);
+    switches_.addSwitches(params_, stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,
@@ -650,21 +654,24 @@ private:
   bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) const {
     // 移動先に他のPickableCubeがいたら移動できない
     for (const auto& other_cube : pickable_cubes_) {
+      // 自分自身との判定はスキップ
       if (*cube == *other_cube) continue;
 
       if (block_pos == other_cube->blockPosition()) return false;
 
       // 相手が移動中の場合は直前の位置もダメ
       if (other_cube->isMoving()
-          && (block_pos == other_cube->prevBlockPosition())) return false;
+          && (block_pos == other_cube->prevBlockPosition())) {
+        return false;
+      }
     }
 
     // 異動先にMovingCubeがあってもダメ
     if (moving_cubes_.isCubeExists(block_pos)) return false;
-
     
     // 移動先の高さが同じじゃないと移動できない
     auto height = stage_.getStageHeight(block_pos);
+
     return height.first && (height.second == block_pos.y);
   }
 

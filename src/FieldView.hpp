@@ -201,7 +201,7 @@ public:
     updateCamera(progressing_seconds_);
     lights_.updateLights(target_point_);
 
-    // 遠景
+    // 遠景(一枚絵)
     {
       ci::CameraOrtho camera(0, 255, 255, 0, -1, 1);
       ci::gl::setMatrices(camera);
@@ -224,13 +224,8 @@ public:
     glFogf(GL_FOG_END, params_["game_view.fog_end"].getValue<float>());
     
     ci::gl::setMatrices(camera_);
-    // ci::gl::setProjection(camera_);
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadIdentity();
 
     lights_.enableLights();
-
-    // ci::gl::setModelView(camera_);
 
     drawStageCubes(field.active_cubes, models);
     drawStageCubes(field.collapse_cubes, models);
@@ -238,6 +233,7 @@ public:
     drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
     drawCubes(field.item_cubes, models, "item_cube", "item_cube");
     drawCubes(field.moving_cubes, models, "pickable_cube", "pickable_cube");
+    drawCubes(field.switches, models, "item_cube", "item_cube");
     
     // bgのfogは別設定
     glFogf(GL_FOG_START, params_["game_view.bg_fog_start"].getValue<float>());

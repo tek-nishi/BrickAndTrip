@@ -10,6 +10,7 @@
 #include "PickableCube.hpp"
 #include "ItemCube.hpp"
 #include "MovingCube.hpp"
+#include "Switch.hpp"
 #include "Bg.hpp"
 
 
@@ -25,6 +26,7 @@ struct Field {
 
   const std::vector<std::unique_ptr<ItemCube> >& item_cubes;
   const std::vector<std::unique_ptr<MovingCube> >& moving_cubes;
+  const std::vector<std::unique_ptr<Switch> >& switches;
 
   const std::vector<Bg::Cube>& bg_cubes;
 

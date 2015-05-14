@@ -315,6 +315,7 @@ public:
             ci::Quatf::identity(),
             cube_size_,
             block_pos,
+            block_pos,
             base_color * cube_color[(x + z) & 1],
             true, true
           };
@@ -424,22 +425,27 @@ private:
 
 
   void moveStageCube(StageCube& cube) {
-    ci::Vec3f end_value(cube.position() + ci::Vec3f(0, -cube_size_, 0));
-    auto option = animation_timeline_->apply(&cube.position, end_value,
-                                             move_duration_, getEaseFunc(move_ease_));
+    cube.block_position_new.y -= 1;
+    
+    auto end_value = ci::Vec3f(cube.block_position_new) * cube.cube_size;
+    auto option = animation_timeline_->appendTo(&cube.position, end_value,
+                                                move_duration_, getEaseFunc(move_ease_));
 
     option.delay(move_delay_);
 
     ci::Vec3f block_position = cube.block_position;
-    event_timeline_->add([this, block_position]() {
+    option.finishFn([this, block_position]() {
         auto* cube = getStageCube(block_position);
         if (cube) {
-          cube->block_position -= 1;
+          cube->block_position.y -= 1;
+          DOUT << cube->block_position << std::endl;
         }
-      },
-      event_timeline_->getCurrentTime() + move_delay_ + move_duration_);
-  }
+      });
 
+    // event_timeline_->add([this, block_position]() {
+    //   },
+    //   event_timeline_->getCurrentTime() + move_delay_ + move_duration_);
+  }
   
 };
 

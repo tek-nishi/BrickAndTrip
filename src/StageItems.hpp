@@ -38,8 +38,6 @@ public:
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
-
-    
   }
 
   ~StageItems() {

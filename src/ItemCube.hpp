@@ -42,9 +42,9 @@ class ItemCube : private boost::noncopyable {
 
 public:
   ItemCube(ci::JsonTree& params,
-               ci::TimelineRef timeline,
-               Event<EventParam>& event,
-               const ci::Vec3i& entry_pos) :
+           ci::TimelineRef timeline,
+           Event<EventParam>& event,
+           const ci::Vec3i& entry_pos) :
     params_(params),
     event_(event),
     active_(true),
@@ -81,9 +81,6 @@ public:
                                               params["game.item.entry_duration"].getValue<float>(),
                                               getEaseFunc(params["game.item.entry_ease"].getValue<std::string>()));
 
-    setFloatTween(*animation_timeline_,
-                  rotation_speed_rate_, params["game.item.entry_rotate_speed"], true);
-
     options.finishFn([this]() {
         on_stage_ = true;
         startTween("idle_tween");
@@ -93,6 +90,9 @@ public:
         };
         event_.signal("item-on-stage", params);
       });
+    
+    setFloatTween(*animation_timeline_,
+                  rotation_speed_rate_, params["game.item.entry_rotate_speed"], true);
   }
 
   ~ItemCube() {
