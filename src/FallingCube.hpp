@@ -60,7 +60,7 @@ public:
               ci::TimelineRef timeline,
               Event<EventParam>& event,
               const ci::Vec3i& entry_pos,
-              const float interval) :
+              const float interval, const float delay) :
     params_(params),
     event_(event),
     active_(true),
@@ -101,7 +101,7 @@ public:
                                               params["game.falling.entry_duration"].getValue<float>(),
                                               getEaseFunc(params["game.falling.entry_ease"].getValue<std::string>()));
 
-    options.finishFn([this]() {
+    options.finishFn([this, delay]() {
         on_stage_ = true;
         
         EventParam params = {
@@ -110,7 +110,7 @@ public:
         };
         event_.signal("falling-on-stage", params);
 
-        startUpEase();
+        startUpEase(delay);
       });
   }
     
@@ -173,7 +173,7 @@ public:
 
 
 private:
-  void startUpEase() {
+  void startUpEase(const float delay = 0.0f) {
     status_ = Status::UP;
 
     auto up_pos = ci::Vec3f(block_position_) * cube_size_;
@@ -184,7 +184,7 @@ private:
                                               up_duration_,
                                               getEaseFunc(up_ease_));
 
-    options.delay(interval_);
+    options.delay(interval_ + delay);
     options.finishFn([this]() {
         startDownEase();
       });
