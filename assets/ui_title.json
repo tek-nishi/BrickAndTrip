@@ -3,7 +3,7 @@
     "name": "logo-up",
     "disp": true,
 
-    "text": "コロコロ",
+    "text": "BRICK",
     "font": "logo",
     "size": 1.1,
     "spacing": 0.11,
@@ -47,7 +47,7 @@
     "name": "logo-down",
     "disp": true,
 
-    "text": "パレード",
+    "text": "TRIP!",
     "font": "logo",
     "size": 1.1,
     "spacing": 0.11,

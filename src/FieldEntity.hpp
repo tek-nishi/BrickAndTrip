@@ -154,6 +154,8 @@ public:
     switches_.update(progressing_seconds, stage_);
 
     decideEachPickableCubeFalling();
+    decideEachPickableCubeAlive();
+    
     boost::remove_erase_if(pickable_cubes_,
                            [](const PickableCubePtr& cube) {
                              return !cube->isActive();
@@ -485,6 +487,7 @@ public:
     records_.increaseTumbleNumCurrentGame();
   }
 
+  // Ttile画面での画面遷移とゲーム開始操作が被るので用意した
   void enablePickableCubeMovedEvent(const bool enable = true) {
     for (auto& cube : pickable_cubes_) {
       cube->enableMovedEvent(enable);
@@ -719,6 +722,17 @@ private:
             event_.signal("first-fallen-pickable", EventParam());
           }
         }
+      }
+    }
+  }
+
+  // ドッスンに踏まれてないか判定
+  void decideEachPickableCubeAlive() {
+    for (auto& cube : pickable_cubes_) {
+      if (!cube->isOnStage()) continue;
+
+      if (falling_cubes_.isCubePressed(cube->blockPosition())) {
+        // 踏まれた!!
       }
     }
   }

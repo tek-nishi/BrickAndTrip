@@ -163,6 +163,12 @@ public:
     float y = position_().y - (block_position_.y + 1) * cube_size_;
     return y < cube_size_;
   }
+
+  // Pickableを踏める状態か??
+  bool canPress() const {
+    float y = position_().y - (block_position_.y + 1) * cube_size_;
+    return (status_ == Status::DOWN) && (y < cube_size_);
+  }
   
 
   // std::findを利用するための定義
