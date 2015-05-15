@@ -337,6 +337,12 @@ public:
       });
   }
 
+  // ドッスンに踏まれた
+  void pressed() {
+    on_stage_ = false;
+    active_   = false;
+  }
+
 
   void startPickingColor() {
     animation_timeline_->apply(&color_,

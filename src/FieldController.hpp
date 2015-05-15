@@ -164,6 +164,16 @@ public:
                                      entity_.gameover();
                                    });
 
+    // ドッスンに踏まれた
+    connections_ += event_.connect("pressed-pickable",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "pressed-pickable" << std::endl;
+                                     entity_.cancelPickPickableCubes();
+                                     view_.enableTouchInput(false);
+                                     view_.enableFollowCamera(false);
+                                     entity_.gameover();
+                                   });
+
 #if 0
     connections_ += event_.connect("fall-all-pickable",
                                    [this](const Connection& connection, EventParam& param) {

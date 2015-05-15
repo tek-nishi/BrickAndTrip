@@ -733,6 +733,14 @@ private:
 
       if (falling_cubes_.isCubePressed(cube->blockPosition())) {
         // 踏まれた!!
+        cube->pressed();
+        
+        EventParam params = {
+          { "id", cube->id() },
+          { "block_position", cube->blockPosition() }
+        };
+        
+        event_.signal("pressed-pickable", params);
       }
     }
   }
