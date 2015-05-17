@@ -158,20 +158,14 @@ public:
     connections_ += event_.connect("first-fallen-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "first-fallen-pickable" << std::endl;
-                                     entity_.cancelPickPickableCubes();
-                                     view_.enableTouchInput(false);
-                                     view_.enableFollowCamera(false);
-                                     entity_.gameover();
+                                     beginGameover();
                                    });
 
     // ドッスンに踏まれた
     connections_ += event_.connect("pressed-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "pressed-pickable" << std::endl;
-                                     entity_.cancelPickPickableCubes();
-                                     view_.enableTouchInput(false);
-                                     view_.enableFollowCamera(false);
-                                     entity_.gameover();
+                                     beginGameover();
                                    });
 
 #if 0
@@ -351,6 +345,13 @@ private:
 
     stage_cleard_     = false;
     stageclear_agree_ = false;
+  }
+
+  void beginGameover() {
+    entity_.cancelPickPickableCubes();
+    view_.enableTouchInput(false);
+    view_.enableFollowCamera(false);
+    entity_.gameover();
   }
   
 };

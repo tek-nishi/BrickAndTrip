@@ -491,7 +491,7 @@ private:
     touch_cubes_.clear();
     
     for (const auto& cube : cubes) {
-      if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
+      if (!cube->isActive() || !cube->isOnStage() || cube->isSleep() || cube->isPressed()) continue;
 
       const auto& pos = cube->position();
       const auto size = cube->size();

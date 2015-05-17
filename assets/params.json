@@ -443,7 +443,11 @@
       "sleeping_end": {
         "ease": "EaseOutQuad",
         "duration": 0.5
-      }
+      },
+
+      "pressed_ease": "EaseInQuad",
+      "pressed_duration": 0.05,
+      "pressed_scale": 0.07
     },
     
     "moving": {
@@ -648,7 +652,8 @@
     "active_delay": 0.5,
     "tween_delay": 0.6,
     "event_delay": 0.2,
-    "deactive_delay": 0.8
+    "deactive_delay": 0.8,
+    "deactivate_view_delay": 1
   },
 
   "pause": {

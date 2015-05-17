@@ -45,6 +45,8 @@ private:
   ci::Anim<ci::Vec3f> position_;
   ci::Anim<ci::Quatf> rotation_;
 
+  ci::Vec3f scale_;
+  
   ci::TimelineRef animation_timeline_;
 
   // on_stage_  stage上に存在
@@ -80,9 +82,16 @@ private:
 
   // FIXME:paramから直接読んでもいいんじゃね??
   std::string picking_start_ease_;
-  float picking_start_duration_;
+  float       picking_start_duration_;
   std::string picking_end_ease_;
-  float picking_end_duration_;
+  float       picking_end_duration_;
+
+  std::string pressed_ease_;
+  float       pressed_ease_duration_;
+  float       pressed_ease_scale_;
+
+  bool pressed_;
+  ci::Anim<float> pressed_scale_;
   
 
 public:
@@ -100,6 +109,7 @@ public:
     block_position_(entry_pos),
     prev_block_position_(block_position_),
     rotation_(ci::Quatf::identity()),
+    scale_(1, 1, 1),
     animation_timeline_(ci::Timeline::create()),
     on_stage_(false),
     moving_(false),
@@ -123,7 +133,12 @@ public:
     picking_start_ease_(params["game.pickable.picking_start.ease"].getValue<std::string>()),
     picking_start_duration_(params["game.pickable.picking_start.duration"].getValue<float>()),
     picking_end_ease_(params["game.pickable.picking_end.ease"].getValue<std::string>()),
-    picking_end_duration_(params["game.pickable.picking_end.duration"].getValue<float>())
+    picking_end_duration_(params["game.pickable.picking_end.duration"].getValue<float>()),
+    pressed_ease_(params["game.pickable.pressed_ease"].getValue<std::string>()),
+    pressed_ease_duration_(params["game.pickable.pressed_duration"].getValue<float>()),
+    pressed_ease_scale_(params["game.pickable.pressed_scale"].getValue<float>()),
+    pressed_(false),
+    pressed_scale_(1)
   {
     DOUT << "PickableCube " << sleep << std::endl;
     
@@ -339,8 +354,19 @@ public:
 
   // ドッスンに踏まれた
   void pressed() {
-    on_stage_ = false;
-    active_   = false;
+    // on_stage_ = false;
+    pressed_  = true;
+
+    auto options = animation_timeline_->apply(&pressed_scale_,
+                                              pressed_ease_scale_,
+                                              pressed_ease_duration_,
+                                              getEaseFunc(pressed_ease_));
+
+    auto position = position_();
+    options.updateFn([this, position]() {
+        scale_.y  = pressed_scale_();
+        position_().y = position.y - (1.0f - scale_.y) * (cube_size_ / 2);
+      });
   }
 
 
@@ -379,6 +405,7 @@ public:
   bool isActive() const { return active_; }
   bool isOnStage() const { return on_stage_; }
   bool isMoving() const { return moving_; }
+  bool isPressed() const { return pressed_; }
 
   bool isSleep() const { return sleep_; }
   void awaken(const bool sleeing = false) { sleep_ = sleeing; }
@@ -392,7 +419,7 @@ public:
   const ci::Vec3i& prevBlockPosition() const { return prev_block_position_; }
   
   float cubeSize() const { return cube_size_; }
-  ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
+  ci::Vec3f size() const { return scale_ * cube_size_; }
 
   const ci::Color& color() const { return color_(); }
 

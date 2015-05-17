@@ -18,6 +18,7 @@ class ProgressController : public ControllerBase {
   float tween_delay_;
   float event_delay_;
   float deactive_delay_;
+  float deactivate_view_delay_;
 
   std::unique_ptr<UIView> view_;
   
@@ -38,6 +39,7 @@ public:
     tween_delay_(params["progress.tween_delay"].getValue<float>()),
     event_delay_(params["progress.event_delay"].getValue<float>()),
     deactive_delay_(params["progress.deactive_delay"].getValue<float>()),
+    deactivate_view_delay_(params["progress.deactivate_view_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -106,14 +108,13 @@ public:
 
     connections_ += event_.connect("first-fallen-pickable",
                                   [this](const Connection& connection, EventParam& param) {
-                                     view_->setActive(false);
-                                     view_->startWidgetTween("tween-out");
-                                     event_timeline_->add([this]() {
-                                         active_ = false;
-                                       },
-                                       event_timeline_->getCurrentTime() + 1.0f);
+                                     deactivateView();
                                    });
 
+    connections_ += event_.connect("pressed-pickable",
+                                  [this](const Connection& connection, EventParam& param) {
+                                     deactivateView();
+                                   });
 
     connections_ += event_.connect("update-record",
                                    [this](const Connection& connection, EventParam& param) {
@@ -144,6 +145,16 @@ public:
 
 
 private:
+  void deactivateView() {
+    view_->setActive(false);
+    view_->startWidgetTween("tween-out");
+    event_timeline_->add([this]() {
+        active_ = false;
+      },
+      event_timeline_->getCurrentTime() + deactivate_view_delay_);
+  }
+
+  
   bool isActive() const override {
     return active_;
   }

@@ -729,7 +729,7 @@ private:
   // ドッスンに踏まれてないか判定
   void decideEachPickableCubeAlive() {
     for (auto& cube : pickable_cubes_) {
-      if (!cube->isOnStage()) continue;
+      if (!cube->isOnStage() || cube->isPressed()) continue;
 
       if (falling_cubes_.isCubePressed(cube->blockPosition())) {
         // 踏まれた!!
@@ -749,8 +749,8 @@ private:
   // １つでもPickableCubeがStage上にいるか判定
   bool isPickableCubeOnStage() const {
     for (auto& cube : pickable_cubes_) {
-      // sleep中なのは勘定しない
-      if (cube->isSleep()) continue;
+      // sleep中や潰されたのは勘定しない
+      if (cube->isSleep() || cube->isPressed()) continue;
       
       if (cube->isOnStage()) {
         return true;
@@ -823,7 +823,7 @@ private:
     for (const auto& cube : pickable_cubes_) {
       if (cube->isSleep()) continue;
       
-      if (!cube->isOnStage()) {
+      if (!cube->isOnStage() || cube->isPressed()) {
         finished = false;
         break;
       }
