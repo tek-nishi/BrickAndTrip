@@ -1,5 +1,5 @@
 ﻿//
-// コロパレ
+// BRICK TRIP
 // 
 
 #include "Defines.hpp"
@@ -207,6 +207,14 @@ class ColoColoParadeApp : public AppNative,
     else if (code == KeyEvent::KEY_ESCAPE) {
       // 強制PAUSE
       pause_ = !pause_;
+    }
+    else if (event.isMetaDown()) {
+      int fixed_size = static_cast<int>(params_["app.fixed_size"].getNumChildren());
+      int index = chara - '1';
+      if ((index >= 0) && (index < fixed_size)) {
+        auto size = Json::getVec2<int>(params_["app.fixed_size"][index]);
+        setWindowSize(size);
+      }
     }
   }
   

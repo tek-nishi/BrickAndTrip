@@ -77,7 +77,7 @@ public:
       entry_items_.push_back(Json::getVec3<int>(entry) + start_pos);
     }
 
-    return entry_items_.size();
+    return static_cast<int>(entry_items_.size());
   }
 
   void entryItemCube(const int current_z) {
