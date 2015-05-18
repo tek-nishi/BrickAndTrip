@@ -214,6 +214,11 @@ class ColoColoParadeApp : public AppNative,
       if ((index >= 0) && (index < fixed_size)) {
         auto size = Json::getVec2<int>(params_["app.fixed_size"][index]);
         setWindowSize(size);
+
+        // 位置は画面中央に
+        DisplayRef display = Display::getMainDisplay();
+        auto display_size = display->getSize();
+        setWindowPos((display_size - size) / 2);
       }
     }
   }
