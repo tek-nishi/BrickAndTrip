@@ -23,6 +23,8 @@ class StageclearController : public ControllerBase {
   
   bool active_;
   bool all_cleard_;
+  bool regular_stage_;
+  bool all_stage_;
 
   ConnectionHolder connections_;
 
@@ -43,6 +45,8 @@ public:
     view_(std::move(view)),
     active_(true),
     all_cleard_(boost::any_cast<bool>(result.at("all_cleared"))),
+    regular_stage_(boost::any_cast<bool>(result.at("regular_stage"))),
+    all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "StageclearController()" << std::endl;
@@ -59,8 +63,13 @@ public:
                                         view_->startWidgetTween("tween-out");
 
                                         event_timeline_->add([this]() {
-                                            event_.signal(all_cleard_ ? "all-stageclear-agree"
-                                                                      : "stageclear-agree", EventParam());
+                                            // クリア状況でmessageが違う
+                                            std::string msg = "stageclear-agree";
+                                            if (all_cleard_) {
+                                              if (regular_stage_)  msg = "begin-regulat-stageclear";
+                                              else if (all_stage_) msg = "begin-all-stageclear";
+                                            }
+                                            event_.signal(msg, EventParam());
 
                                             event_timeline_->add([this]() {
                                                 active_ = false;

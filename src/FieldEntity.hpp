@@ -350,14 +350,19 @@ public:
     records_.storeStageRecord(event_timeline_->getCurrentTime());
 
     // 全ステージクリア判定
-    bool all_cleard = false;
+    bool all_cleard    = false;
+    bool regular_stage = false;
+    bool all_stage     = false;
+
     if (stage_num_ == regular_stage_num_) {
       // 11stageが登場するか判定
       all_cleard = !records_.isRegularStageCompleted();
+      if (all_cleard) regular_stage = true;
     }
     else if (stage_num_ == total_stage_num_) {
       records_.cleardAllStage();
       all_cleard = true;
+      all_stage  = true;
     }
     all_cleard_ = all_cleard;
     
@@ -373,7 +378,9 @@ public:
         { "item_num", current_game.item_num },
         { "operation_num", current_game.operation_num },
         { "play_time", records_.getCurrentGamePlayTime() },
-        { "all_cleared", all_cleard_ },
+        { "all_cleared", all_cleard },
+        { "regular_stage", regular_stage },
+        { "all_stage", all_stage }
       };
 
       event_.signal("begin-stageclear", params);

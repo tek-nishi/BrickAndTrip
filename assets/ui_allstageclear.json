@@ -1,0 +1,16 @@
+[
+  {
+    "name": "message_1",
+    "disp": true,
+
+    "text": "hoge",
+    "size": 0.6,
+    "spacing": 0.06,
+    "chara_split": 1,
+    "pos": [ 0, -0.25, 0 ],
+    "origin": "center",
+    "layout": "center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ]
+  }
+]

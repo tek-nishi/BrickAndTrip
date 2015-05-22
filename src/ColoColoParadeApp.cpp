@@ -176,10 +176,10 @@ class ColoColoParadeApp : public AppNative,
     char chara = event.getChar();
     int  code  = event.getCode();
 
-    // paramsに書かれたsignaiを発生
+    // paramsに書かれたsignalを発生
     auto debug_signal = std::string(1, chara);
-    if (params_["app.debug"].hasChild(debug_signal)) {
-      controller_->event().signal(params_["app.debug." + debug_signal].getValue<std::string>(), EventParam());
+    if (params_["app.debug"].hasChild(debug_signal, true)) {
+      controller_->event().signal(params_.getChild("app.debug." + debug_signal, true).getValue<std::string>(), EventParam());
     }
     
     if (chara == 'R') {

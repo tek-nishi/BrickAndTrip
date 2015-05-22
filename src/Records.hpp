@@ -346,6 +346,16 @@ public:
       record.all_item_get = true;
     }
   }
+
+  void cancelRegularStageComplated() {
+    if (stage_records_.size() < regular_stage_num_) {
+      stage_records_.resize(regular_stage_num_);
+    }
+    
+    for (auto& record : stage_records_) {
+      record.all_item_get = false;
+    }
+  }
 #endif
   
 

@@ -19,6 +19,7 @@
 #include "RecordsController.hpp"
 #include "SettingsController.hpp"
 #include "CreditsController.hpp"
+#include "AllStageClearController.hpp"
 #include "Records.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
@@ -74,22 +75,26 @@ public:
     
     event_.connect("begin-progress",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<ProgressController>(params_, timeline_, event_, view_creator_.create("ui_progress.json"));
+                     addController<ProgressController>(params_, timeline_, event_,
+                                                       view_creator_.create("ui_progress.json"));
                    });
     
     event_.connect("begin-gameover",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<GameoverController>(params_, timeline_, event_, view_creator_.create("ui_gameover.json"));
+                     addController<GameoverController>(params_, timeline_, event_,
+                                                       view_creator_.create("ui_gameover.json"));
                    });
 
     event_.connect("begin-stageclear",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<StageclearController>(params_, timeline_, event_, param, view_creator_.create("ui_stageclear.json"));
+                     addController<StageclearController>(params_, timeline_, event_, param,
+                                                         view_creator_.create("ui_stageclear.json"));
                    });
 
     event_.connect("begin-pause",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<PauseController>(params_, timeline_, event_, view_creator_.create("ui_pause.json"));
+                     addController<PauseController>(params_, timeline_, event_,
+                                                    view_creator_.create("ui_pause.json"));
                    });
 
     event_.connect("begin-records",
@@ -104,12 +109,14 @@ public:
                        { "item_completed",  records_.stageItemComplete() },
                      };
                      
-                     addController<RecordsController>(params_, timeline_, event_, records, view_creator_.create("ui_records.json"));
+                     addController<RecordsController>(params_, timeline_, event_, records,
+                                                      view_creator_.create("ui_records.json"));
                    });
 
     event_.connect("begin-credits",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<CreditsController>(params_, timeline_, event_, view_creator_.create("ui_credits.json"));
+                     addController<CreditsController>(params_, timeline_, event_,
+                                                      view_creator_.create("ui_credits.json"));
                    });
 
     event_.connect("begin-title",
@@ -119,7 +126,20 @@ public:
 
     event_.connect("begin-settings",
                    [this](const Connection& connection, EventParam& param) {
-                     addController<SettingsController>(params_, timeline_, event_, records_, view_creator_.create("ui_settings.json"));
+                     addController<SettingsController>(params_, timeline_, event_, records_,
+                                                       view_creator_.create("ui_settings.json"));
+                   });
+
+    event_.connect("begin-regulat-stageclear",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<AllStageClearController>(params_["regular_stageclear"], timeline_, event_,
+                                                            view_creator_.create("ui_regularstageclear.json"));
+                   });
+
+    event_.connect("begin-all-stageclear",
+                   [this](const Connection& connection, EventParam& param) {
+                     addController<AllStageClearController>(params_["all_stageclear"], timeline_, event_,
+                                                            view_creator_.create("ui_allstageclear.json"));
                    });
 
     
@@ -170,9 +190,13 @@ public:
                      DOUT << "force-regular-completed" << std::endl;
                      records_.forceRegularStageComplated();
                    });
+
+    event_.connect("cancel-regular-completed",
+                   [this](const Connection& connection, EventParam& param) {
+                     DOUT << "cancel-regular-completed" << std::endl;
+                     records_.cancelRegularStageComplated();
+                   });
 #endif
-
-
     
     records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
                          params["game.total_stage_num"].getValue<size_t>());
@@ -189,7 +213,8 @@ public:
       },
       timeline_->getCurrentTime() + params["app.start_title_delay"].getValue<float>());
 #endif
-    addController<IntroController>(params_, timeline_, event_, view_creator_.create("ui_intro.json"));
+    addController<IntroController>(params_, timeline_, event_,
+                                   view_creator_.create("ui_intro.json"));
     
 
 #if 0
@@ -202,7 +227,8 @@ public:
         { "play_time", 1.5 },
         { "all_cleared", false },
       };
-      addController<StageclearController>(params_, timeline_, event_, param, view_creator_.create("ui_stageclear.json"));
+      addController<StageclearController>(params_, timeline_, event_, param,
+                                          view_creator_.create("ui_stageclear.json"));
     }
 #endif
   }
@@ -216,7 +242,8 @@ public:
 
 private:
   void startTitle() {
-    addController<TitleController>(params_, timeline_, event_, records_, view_creator_.create("ui_title.json"));
+    addController<TitleController>(params_, timeline_, event_, records_,
+                                   view_creator_.create("ui_title.json"));
 
     // Title画面は時間差で起動する
     // それまではゲームを開始できないようにする必要がある

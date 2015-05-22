@@ -113,7 +113,8 @@
     "debug": {
       "d": "force-collapse",
       "s": "stop-build-and-collapse",
-      "i": "force-regular-completed"
+      "i": "force-regular-completed",
+      "I": "cancel-regular-completed"
     }
   },
 
@@ -692,6 +693,24 @@
       "AMAZING!",
       "COOL BEANS!"
     ]
+  },
+
+  "regular_stageclear": {
+    "message": "regular-stage-clear-out",
+    "event_delay": 1.0,
+    "tween_in_delay": 0.6,
+    "tween_out_delay": 0.5,
+    "collapse_delay": 0.5,
+    "deactive_delay": 0.5
+  },
+
+  "all_stageclear": {
+    "message": "all-stage-clear-out",
+    "event_delay": 1.0,
+    "tween_in_delay": 0.6,
+    "tween_out_delay": 0.5,
+    "collapse_delay": 0.5,
+    "deactive_delay": 0.5
   },
   
 

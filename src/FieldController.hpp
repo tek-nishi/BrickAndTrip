@@ -121,9 +121,9 @@ public:
                                      }
                                    });
 
-    connections_ += event_.connect("all-stageclear-agree",
+    connections_ += event_.connect("back-to-title",
                                    [this](const Connection&, EventParam& param) {
-                                     DOUT << "all-stageclear-agree" << std::endl;
+                                     DOUT << "back-to-title" << std::endl;
                                      entity_.cleanupField();
                                    });
 
