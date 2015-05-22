@@ -89,13 +89,17 @@ public:
 
     connections_ += event.connect("begin-stageclear",
                                   [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
                                     bool all_cleard = boost::any_cast<bool>(param.at("all_cleared"));
                                     if (all_cleard) {
-                                      active_ = false;
+                                      deactivateView();
                                     }
                                     else {
-                                      view_->setDisp(false);
-                                      view_->setActive(false);
+                                      view_->startWidgetTween("tween-out");
+                                      event_timeline_->add([this]() {
+                                          view_->setDisp(false);
+                                        },
+                                        event_timeline_->getCurrentTime() + deactivate_view_delay_);
                                     }
                                   });
 
@@ -103,6 +107,7 @@ public:
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setDisp(true);
                                     view_->setActive(true);
+                                    view_->resetWidgetTween();
                                     view_->startWidgetTween("tween-in");
                                   });
 

@@ -386,7 +386,7 @@
 
     "total_stage_num": 11,
     "regular_stage_num": 10,
-    "start_stage": 9,
+    "start_stage": 8,
     
     "stage": {
       "build_speed": 1,
