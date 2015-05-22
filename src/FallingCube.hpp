@@ -160,6 +160,8 @@ public:
 
   // Pickableを通せんぼする状態か??
   bool canBlock() const {
+    if (status_ == Status::IDLE) return true;
+    
     float y = position_().y - (block_position_.y + 1) * cube_size_;
     return y < cube_size_;
   }
