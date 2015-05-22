@@ -112,7 +112,8 @@
 
     "debug": {
       "d": "force-collapse",
-      "s": "stop-build-and-collapse"
+      "s": "stop-build-and-collapse",
+      "i": "force-regular-completed"
     }
   },
 
@@ -382,7 +383,9 @@
 
     "finish_rate": 0.1,
 
-    "total_stage_num": 10,
+    "total_stage_num": 11,
+    "regular_stage_num": 10,
+    "start_stage": 9,
     
     "stage": {
       "build_speed": 1,
@@ -405,8 +408,6 @@
       "move_duration": 0.5,
       "move_delay": 0.25
     },
-
-    "start_stage": 0,
 
     "pickable": {
       "entry_x": 3,

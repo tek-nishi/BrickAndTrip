@@ -54,6 +54,11 @@ private:
   CurrentGame current_game_;
 
   bool record_current_game_;
+
+  size_t total_stage_num_;
+  size_t regular_stage_num_;
+  
+  bool all_item_completed_;
   
   int    total_play_num_;
   double total_play_time_;
@@ -74,6 +79,9 @@ private:
 public:
   Records() :
     record_current_game_(false),
+    total_stage_num_(0),
+    regular_stage_num_(0),
+    all_item_completed_(false),
     total_play_num_(0),
     total_play_time_(0.0),
     total_tumble_num_(0),
@@ -86,6 +94,12 @@ public:
     bgm_on_(true)
   { }
 
+
+  void setStageNum(const size_t regular_stage_num, const size_t total_stage_num) {
+    regular_stage_num_ = regular_stage_num;
+    total_stage_num_   = total_stage_num;
+  }
+  
 
   // ゲーム内記録はすべて関数経由で行う
   void enableRecordCurrentGame() {
@@ -167,7 +181,7 @@ public:
     else {
       updateStageRecord(stage_records_[current_stage_], record);
     }
-
+    
     current_play_time_ += play_time;
     
     total_play_time_     += record.clear_time;
@@ -197,6 +211,7 @@ public:
   // クリア回数
   void cleardAllStage() {
     total_clear_num_ += 1;
+    checkAllItemCompleted();
   }
 
   std::deque<bool> stageItemComplete() {
@@ -225,6 +240,8 @@ public:
     total_item_num_      = Json::getValue(record, "records.total_item_num", 0);
     total_operation_num_ = Json::getValue(record, "records.total_operation_num", 0);
     total_clear_num_     = Json::getValue(record, "records.total_clear_num", 0);
+
+    all_item_completed_ = Json::getValue(record, "records.all_item_completed", false);
 
     se_on_  = Json::getValue(record, "records.se_on", true);
     bgm_on_ = Json::getValue(record, "records.bgm_on", true);
@@ -255,6 +272,7 @@ public:
       .addChild(ci::JsonTree("total_item_num", total_item_num_))
       .addChild(ci::JsonTree("total_operation_num", total_operation_num_))
       .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
+      .addChild(ci::JsonTree("all_item_completed", all_item_completed_))
       .addChild(ci::JsonTree("se_on", se_on_))
       .addChild(ci::JsonTree("bgm_on", bgm_on_));
 
@@ -289,6 +307,21 @@ public:
   int getTotalOperationNum() const { return total_operation_num_; }
   int getTotalClearNum() const { return total_clear_num_; }
 
+  // 10stageまでのitemをcompleteしたか??
+  bool isRegularStageCompleted() const {
+    if (stage_records_.size() < regular_stage_num_) return false;
+
+    for (size_t i = 0; i < regular_stage_num_; ++i) {
+      if (!stage_records_[i].all_item_get) return false;
+    }
+    return true;
+  }
+
+  bool isAllItemCompleted() const {
+    return all_item_completed_;
+  }
+
+  
   bool isSeOn() const { return se_on_; }
   bool isBgmOn() const { return bgm_on_; }
   
@@ -303,6 +336,19 @@ public:
   }
 
 
+#ifdef DEBUG
+  void forceRegularStageComplated() {
+    if (stage_records_.size() < regular_stage_num_) {
+      stage_records_.resize(regular_stage_num_);
+    }
+
+    for (auto& record : stage_records_) {
+      record.all_item_get = true;
+    }
+  }
+#endif
+  
+
 private:
   void updateStageRecord(StageRecord& record, const StageRecord& new_record) {
     record.clear_time = std::min(record.clear_time, new_record.clear_time);
@@ -315,6 +361,17 @@ private:
     record.score = std::max(record.score, new_record.score);
   }
 
+  void checkAllItemCompleted() {
+    if (all_item_completed_) return;
+    
+    for (size_t i = 0; i < total_stage_num_; ++i) {
+      auto& record = stage_records_[i];
+      if (!record.all_item_get) return;
+    }
+
+    // 全stageの記録でall_item_getならtrue
+    all_item_completed_ = true;
+  }
   
 };
 

@@ -164,7 +164,18 @@ public:
                      sound_.setFileSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
+#ifdef DEBUG
+    event_.connect("force-regular-completed",
+                   [this](const Connection& connection, EventParam& param) {
+                     DOUT << "force-regular-completed" << std::endl;
+                     records_.forceRegularStageComplated();
+                   });
+#endif
+
+
     
+    records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
+                         params["game.total_stage_num"].getValue<size_t>());
     records_.load(params["game.records"].getValue<std::string>());
     sound_.setBufferSilent(!records_.isSeOn());
     sound_.setFileSilent(!records_.isBgmOn());

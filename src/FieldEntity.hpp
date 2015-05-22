@@ -46,6 +46,7 @@ class FieldEntity : private boost::noncopyable {
   float finish_rate_;
 
   int total_stage_num_;
+  int regular_stage_num_;
   int stage_num_;
   Stage stage_;
 
@@ -122,6 +123,7 @@ public:
     first_fallen_pickable_(false),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
     total_stage_num_(params["game.total_stage_num"].getValue<int>()),
+    regular_stage_num_(params["game.regular_stage_num"].getValue<int>()),
     mode_(NONE),
     all_cleard_(false),
     game_aborted_(false),
@@ -346,11 +348,18 @@ public:
     stage_.collapseStage(finish_line_z_ - 1, finish_rate_);
 
     records_.storeStageRecord(event_timeline_->getCurrentTime());
+
     // 全ステージクリア判定
-    all_cleard_ = stage_num_ == total_stage_num_;
-    if (all_cleard_) {
-      records_.cleardAllStage();
+    bool all_cleard = false;
+    if (stage_num_ == regular_stage_num_) {
+      // 11stageが登場するか判定
+      all_cleard = !records_.isRegularStageCompleted();
     }
+    else if (stage_num_ == total_stage_num_) {
+      records_.cleardAllStage();
+      all_cleard = true;
+    }
+    all_cleard_ = all_cleard;
     
     records_.write(params_["game.records"].getValue<std::string>());
 
