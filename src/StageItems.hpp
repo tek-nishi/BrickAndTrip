@@ -94,7 +94,7 @@ public:
     if (items_.empty()) return std::make_pair(false, 0);
     
     for (const auto& cube : items_) {
-      if (cube->isOnStage()
+      if (cube->isGetatable()
           && (block_pos == cube->blockPosition())) {
         return std::make_pair(true, cube->id());
       }

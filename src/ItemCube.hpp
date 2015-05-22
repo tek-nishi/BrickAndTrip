@@ -32,6 +32,7 @@ class ItemCube : private boost::noncopyable {
   ci::Anim<float> rotation_speed_rate_;
   
   bool on_stage_;
+  bool getatable_;
 
   std::string fall_ease_;
   float fall_duration_;
@@ -57,6 +58,7 @@ public:
     rotation_speed_rate_(0),
     scale_(ci::Vec3f(1, 1, 1)),
     on_stage_(false),
+    getatable_(true),
     fall_ease_(params["game.item.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.item.fall_duration"].getValue<float>()),
     fall_y_(params["game.item.fall_y"].getValue<float>()),
@@ -112,7 +114,8 @@ public:
   
 
   void fallFromStage() {
-    on_stage_ = false;
+    on_stage_  = false;
+    getatable_ = false;
 
     ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_ * cube_size_, 0));
     auto options = animation_timeline_->apply(&position_,
@@ -126,7 +129,9 @@ public:
   }
 
   void pickup() {
-    on_stage_ = false;
+    getatable_ = false;
+    on_stage_  = false;
+
     startTween("pickup_tween");
 
     animation_timeline_->add([this]() {
@@ -155,7 +160,7 @@ public:
 
   bool isActive() const { return active_; }
   bool isOnStage() const { return on_stage_; }
-
+  bool isGetatable() const { return getatable_; }
   
   // std::findを利用するための定義
   bool operator==(const u_int rhs_id) const {
