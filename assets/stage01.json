@@ -32,13 +32,6 @@
       "build_speed" : 1.0,
       "collapse_speed" : 1.0,
       "color" : [ 0.4313730, 0.725490, 0.9294120 ],
-      "falling" : [
-         {
-            "delay" : 1,
-            "entry" : [ 3, 0, 5 ],
-            "interval" : 1
-         }
-      ],
       "items" : [
          [ 3, 0, 4 ],
          [ 6, 0, 8 ],
