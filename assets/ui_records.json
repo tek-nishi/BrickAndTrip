@@ -578,8 +578,9 @@
     "pos": [ -1.08, -1.0, 0 ],
     "origin": "left-center",
     "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 1, 1, 0.1 ],
+    "hsv": true,
+    "base_color": [ 1, 0, 0.1 ],
+    "text_color": [ 0, 0.7, 1 ],
     
     "tween": {
       "tween-in": {
@@ -592,6 +593,13 @@
             "interval": 0.05,
             "start": -120,
             "end": 0
+          },
+          {
+            "target": "text_color",
+            "type": "EaseNone",
+            "duration": 0.6,
+            "loop": true,
+            "end": [ 360, 0.7, 1 ]
           }
         ]
       },
@@ -614,6 +622,7 @@
   {
     "name": "stage_item_2",
     "disp": false,
+    "hsv": true,
     
     "text": "     ",
     "font": "icon",
@@ -623,8 +632,9 @@
     "pos": [ -1.08, -1.44, 0 ],
     "origin": "left-center",
     "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 1, 1, 0.1 ],
+    "hsv": true,
+    "base_color": [ 1, 0, 0.1 ],
+    "text_color": [ 0, 0.7, 1 ],
     
     "tween": {
       "tween-in": {
@@ -637,6 +647,13 @@
             "interval": 0.05,
             "start": -120,
             "end": 0
+          },
+          {
+            "target": "text_color",
+            "type": "EaseNone",
+            "duration": 0.6,
+            "loop": true,
+            "end": [ 360, 0.7, 1 ]
           }
         ]
       },

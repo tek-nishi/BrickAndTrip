@@ -501,7 +501,7 @@
       "rotation_speed": [ 0, 0.8, 0.7 ],
 
       "entry_ease": "EaseOutQuad",
-      "entry_duration": 3,
+      "entry_duration": 1.5,
       "entry_y": [ 15, 18 ],
 
       "entry_rotate_speed": {

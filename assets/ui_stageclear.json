@@ -362,8 +362,8 @@
     "origin": "center",
     "layout": "center",
     "hsv": true,
-    "base_color": [ 60, 0.5, 1 ],
-    "text_color": [ 0, 1, 0 ],
+    "base_color": [ 60, 0.7, 1 ],
+    "text_color": [ 0, 1, 1 ],
     
     "tween": {
       "tween-in": {
@@ -380,10 +380,10 @@
           {
             "target": "base_color",
             "type": "EaseNone",
-            "duration": 1.4,
+            "duration": 0.7,
             "loop": true,
             "delay": 1.0,
-            "end": [ 420, 0.6, 1 ]
+            "end": [ 420, 0.8, 1 ]
           }
         ]
       },
