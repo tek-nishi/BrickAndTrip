@@ -121,6 +121,26 @@ public:
                                      }
                                    });
 
+    
+    connections_ += event_.connect("regular-stage-clear-out",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "regular-stage-clear-out" << std::endl;
+                                     view_.enableTouchInput();
+                                     
+                                   });
+
+    connections_ += event_.connect("all-stage-clear-out",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "all-stage-clear-out" << std::endl;
+                                     view_.enableTouchInput();
+                                   });
+
+    connections_ += event_.connect("collapse-stage",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "collapse-stage" << std::endl;
+                                     entity_.collapseStage();
+                                   });
+    
     connections_ += event_.connect("back-to-title",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "back-to-title" << std::endl;

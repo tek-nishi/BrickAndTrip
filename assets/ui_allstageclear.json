@@ -11,6 +11,34 @@
     "origin": "center",
     "layout": "center",
     "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ]
+    "text_color": [ 1, 1, 1 ],
+
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "delay": 0.15,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
   }
 ]

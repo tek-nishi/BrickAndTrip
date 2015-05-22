@@ -177,6 +177,7 @@ class ColoColoParadeApp : public AppNative,
     int  code  = event.getCode();
 
     // paramsに書かれたsignalを発生
+    // TIPS:大文字小文字の区別をしている
     auto debug_signal = std::string(1, chara);
     if (params_["app.debug"].hasChild(debug_signal, true)) {
       controller_->event().signal(params_.getChild("app.debug." + debug_signal, true).getValue<std::string>(), EventParam());

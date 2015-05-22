@@ -426,6 +426,16 @@ public:
     records_.disableRecordCurrentGame();
     cleanupField();
   }
+
+  // 強制崩壊
+  void collapseStage() {
+    stage_.collapseStage(next_start_line_z_);
+
+    first_started_pickable_ = true;
+    first_fallen_pickable_  = true;
+
+    mode_ = NONE;
+  }
   
   // リスタート前のClean-up
   void cleanupField() {

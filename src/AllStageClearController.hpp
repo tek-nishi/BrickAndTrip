@@ -17,9 +17,10 @@ class AllStageClearController : public ControllerBase {
   std::string message_;
   
   float event_delay_;
+  float collapse_delay_;
   float tween_in_delay_;
   float tween_out_delay_;
-  float collapse_delay_;
+  float titleback_delay_;
   float deactive_delay_;
   
   std::unique_ptr<UIView> view_;
@@ -39,9 +40,10 @@ public:
     event_(event),
     message_(params["message"].getValue<std::string>()),
     event_delay_(params["event_delay"].getValue<float>()),
+    collapse_delay_(params["collapse_delay"].getValue<float>()),
     tween_in_delay_(params["tween_in_delay"].getValue<float>()),
     tween_out_delay_(params["tween_out_delay"].getValue<float>()),
-    collapse_delay_(params["collapse_delay"].getValue<float>()),
+    titleback_delay_(params["titleback_delay"].getValue<float>()),
     deactive_delay_(params["deactive_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
@@ -54,32 +56,43 @@ public:
     timeline->apply(event_timeline_);
 
     event_timeline_->add([this]() {
+        // 演出開始
         event_.signal(message_, EventParam());
 
+        // stage崩壊
         event_timeline_->add([this]() {
-            view_->setActive(true);
-            view_->startWidgetTween("tween-in");
+            event_.signal("collapse-stage", EventParam());
 
+            // text表示
             event_timeline_->add([this]() {
-                view_->startWidgetTween("tween-out");
+                view_->setDisp(true);
+                view_->startWidgetTween("tween-in");
 
+                // text消去
                 event_timeline_->add([this]() {
-                    event_.signal("back-to-title", EventParam());
+                    view_->startWidgetTween("tween-out");
 
+                    // title処理へ
                     event_timeline_->add([this]() {
-                        active_ = false;
+                        event_.signal("back-to-title", EventParam());
+
+                        // 終了
+                        event_timeline_->add([this]() {
+                            active_ = false;
+                          },
+                          event_timeline_->getCurrentTime() + deactive_delay_);
                       },
-                      event_timeline_->getCurrentTime() + deactive_delay_);
+                      event_timeline_->getCurrentTime() + titleback_delay_);
                   },
-                  event_timeline_->getCurrentTime() + collapse_delay_);
+                  event_timeline_->getCurrentTime() + tween_out_delay_);
               },
-              event_timeline_->getCurrentTime() + tween_out_delay_);
+              event_timeline_->getCurrentTime() + tween_in_delay_);
           },
-          event_timeline_->getCurrentTime() + tween_in_delay_);
+          event_timeline_->getCurrentTime() + collapse_delay_);
       },
       event_timeline_->getCurrentTime() + event_delay_);
     
-    view_->setActive(false);
+    view_->setDisp(false);
   }
 
   ~AllStageClearController() {
