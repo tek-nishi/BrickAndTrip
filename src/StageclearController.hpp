@@ -118,7 +118,7 @@ public:
     }
 
     {
-      // FIXME:ランダムにコメントを選ぶ
+      // TODO:プレイ内容でコメントを選ぶ
       auto comment = params["stageclear.comment"];
       int num = int(comment.getNumChildren());
       
