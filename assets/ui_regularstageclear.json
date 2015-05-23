@@ -3,12 +3,12 @@
     "name": "message_1",
     "disp": true,
 
-    "text": "hoge",
-    "size": 0.6,
-    "spacing": 0.06,
+    "text": "NEVER DO THINGS",
+    "size": 0.4,
+    "spacing": 0.04,
     "chara_split": 1,
-    "pos": [ 0, -0.25, 0 ],
-    "origin": "center",
+    "pos": [ 0, 0.04, 0 ],
+    "origin": "bottom-center",
     "layout": "center",
     "base_color": [ 0.1, 0.1, 0.1 ],
     "text_color": [ 1, 1, 1 ],
@@ -20,6 +20,49 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  
+  {
+    "name": "message_2",
+    "disp": true,
+
+    "text": "BY HALVES...",
+    "size": 0.4,
+    "spacing": 0.04,
+    "chara_split": 1,
+    "pos": [ -0.64, -0.04, 0 ],
+    "origin": "top-center",
+    "layout": "center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 0.05,
             "interval": 0.05,
             "start": -120,
             "end": 0
