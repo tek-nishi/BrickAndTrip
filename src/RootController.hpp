@@ -187,13 +187,11 @@ public:
 #ifdef DEBUG
     event_.connect("force-regular-completed",
                    [this](const Connection& connection, EventParam& param) {
-                     DOUT << "force-regular-completed" << std::endl;
                      records_.forceRegularStageComplated();
                    });
 
     event_.connect("cancel-regular-completed",
                    [this](const Connection& connection, EventParam& param) {
-                     DOUT << "cancel-regular-completed" << std::endl;
                      records_.cancelRegularStageComplated();
                    });
 #endif

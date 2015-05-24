@@ -576,6 +576,13 @@ public:
     records_.enableRecordCurrentGame();
   }
 
+  // すべてのPickableCubeを昇天
+  void riseAllPickableCube() {
+    for (auto& cube : pickable_cubes_) {
+      cube->rise();
+    }
+  }
+
   
   // 現在のFieldの状態を作成
   Field fieldData() {

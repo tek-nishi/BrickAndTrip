@@ -457,7 +457,11 @@
 
       "pressed_ease": "EaseInQuad",
       "pressed_duration": 0.05,
-      "pressed_scale": 0.07
+      "pressed_scale": 0.07,
+
+      "rise_ease": "EaseInQuart",
+      "rise_duration": 2.5,
+      "rise_height": [ 15, 20 ]
     },
     
     "moving": {
@@ -707,8 +711,8 @@
 
   "all_stageclear": {
     "message": "all-stage-clear-out",
-    "event_delay": 0.25,
-    "collapse_delay": 3,
+    "event_delay": 1.5,
+    "collapse_delay": 0.25,
     "tween_in_delay": 6,
     "tween_out_delay": 4,
     "titleback_delay": 1,

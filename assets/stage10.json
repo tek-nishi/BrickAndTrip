@@ -28,7 +28,7 @@
       "collapse_speed" : 1.0,
       "color" : [ 0.9411770, 0.9411770, 0.9411770 ],
       "light_tween" : "default",
-      "pickable" : 0,
+      "pickable" : 1,
       "x_offset" : 0
    }
 }

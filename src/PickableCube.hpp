@@ -157,7 +157,7 @@ public:
     // 登場演出
     auto entry_y = Json::getVec2<float>(params["game.pickable.entry_y"]);
     float y = ci::randFloat(entry_y.x, entry_y.y) * cube_size_;
-    ci::Vec3f start_value(position() + ci::Vec3f(0, y, 0));
+    ci::Vec3f start_value = position() + ci::Vec3f(0, y, 0);
     auto options = animation_timeline_->apply(&position_,
                                               start_value, position_(),
                                               params["game.pickable.entry_duration"].getValue<float>(),
@@ -369,6 +369,25 @@ public:
       });
   }
 
+  // 昇天
+  void rise() {
+    on_stage_ = false;
+    
+    auto      ease_type = params_["game.pickable.rise_ease"].getValue<std::string>();
+    float     duration  = params_["game.pickable.rise_duration"].getValue<float>();
+    ci::Vec2f height    = Json::getVec2<float>(params_["game.pickable.rise_height"]);
+
+    ci::Vec3f end_value = position() + ci::Vec3f(0.0, ci::randFloat(height.x, height.y), 0.0);
+    
+    auto options = animation_timeline_->apply(&position_,
+                                              end_value,
+                                              duration,
+                                              getEaseFunc(ease_type));
+
+    options.finishFn([this] {
+        active_ = false;
+      });
+  }
 
   void startPickingColor() {
     animation_timeline_->apply(&color_,

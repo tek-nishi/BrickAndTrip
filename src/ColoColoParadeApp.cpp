@@ -176,13 +176,6 @@ class ColoColoParadeApp : public AppNative,
     char chara = event.getChar();
     int  code  = event.getCode();
 
-    // paramsに書かれたsignalを発生
-    // TIPS:大文字小文字の区別をしている
-    auto debug_signal = std::string(1, chara);
-    if (params_["app.debug"].hasChild(debug_signal, true)) {
-      controller_->event().signal(params_.getChild("app.debug." + debug_signal, true).getValue<std::string>(), EventParam());
-    }
-    
     if (chara == 'R') {
       // Soft Reset
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
@@ -193,6 +186,8 @@ class ColoColoParadeApp : public AppNative,
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
       // すぐさまresizeを呼んでCameraの調整
       resize();
+
+      return;
     }
     
     if (code == KeyEvent::KEY_LCTRL) {
@@ -220,6 +215,24 @@ class ColoColoParadeApp : public AppNative,
         DisplayRef display = Display::getMainDisplay();
         auto display_size = display->getSize();
         setWindowPos((display_size - size) / 2);
+      }
+    }
+    else if ((chara < '0') || (chara > '9')) {
+      // JsonTree::hasChild では数字の場合に自動的にインデックス値
+      // で判断してくれるので、数字キーは除外してから処理
+
+      // paramsに書かれたsignalを発生
+      // TIPS:大文字小文字の区別をしている
+      auto debug_signal = std::string(1, chara);
+      if (params_["app.debug"].hasChild(debug_signal, true)) {
+        auto message = params_.getChild("app.debug." + debug_signal, true).getValue<std::string>();
+        
+        DOUT << "debug-signal: "
+             << debug_signal
+             << " "
+             << message << std::endl;
+      
+        controller_->event().signal(message, EventParam());
       }
     }
   }

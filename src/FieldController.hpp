@@ -132,7 +132,7 @@ public:
     connections_ += event_.connect("all-stage-clear-out",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "all-stage-clear-out" << std::endl;
-                                     view_.enableTouchInput();
+                                     entity_.riseAllPickableCube();
                                    });
 
     connections_ += event_.connect("collapse-stage",
