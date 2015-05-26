@@ -386,7 +386,7 @@
 
     "total_stage_num": 11,
     "regular_stage_num": 10,
-    "start_stage": 10,
+    "start_stage": 0,
     
     "stage": {
       "build_speed": 1,
@@ -629,7 +629,8 @@
   
   "intro": {
     "tween_in_delay": 0.5,
-    "tween_out_delay": 2.8,
+    "tween_out_delay": 4,
+    "tween_out_delay_rate": [ 2, 5 ],
     "event_delay": 1.25,
     "deactive_delay": 0.3
   },

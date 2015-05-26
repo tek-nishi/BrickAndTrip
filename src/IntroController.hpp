@@ -19,8 +19,8 @@ class IntroController : public ControllerBase {
   
   bool active_;
 
-  ConnectionHolder connections_;
-
+  float tween_out_delay_;
+  
   ci::TimelineRef event_timeline_;
   
 
@@ -28,11 +28,13 @@ public:
   IntroController(ci::JsonTree& params,
                   ci::TimelineRef timeline,
                   Event<EventParam>& event,
+                  const int total_play_num,
                   std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
     view_(std::move(view)),
     active_(true),
+    tween_out_delay_(params["intro.tween_out_delay"].getValue<float>()),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "IntroController()" << std::endl;
@@ -41,6 +43,11 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
+    // プレイ回数でtween-outの時間を短くする
+    ci::Vec2f tween_out_rate = Json::getVec2<float>(params_["intro.tween_out_delay_rate"]);
+    tween_out_delay_ += (tween_out_rate.x - tween_out_delay_) / tween_out_rate.y * std::min(float(total_play_num), tween_out_rate.y);
+    DOUT << "tween_out_delay:" << tween_out_delay_ << std::endl;
+    
     event_timeline_->add([this]() {
         view_->setDisp(true);
         view_->startWidgetTween("tween-in");
@@ -58,7 +65,7 @@ public:
               },
               event_timeline_->getCurrentTime() + params_["intro.event_delay"].getValue<float>());
           },
-          event_timeline_->getCurrentTime() + params_["intro.tween_out_delay"].getValue<float>());
+          event_timeline_->getCurrentTime() + tween_out_delay_);
       },
       event_timeline_->getCurrentTime() + params_["intro.tween_in_delay"].getValue<float>());
 

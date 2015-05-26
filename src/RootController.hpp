@@ -212,6 +212,7 @@ public:
       timeline_->getCurrentTime() + params["app.start_title_delay"].getValue<float>());
 #endif
     addController<IntroController>(params_, timeline_, event_,
+                                   records_.getTotalPlayNum(),
                                    view_creator_.create("ui_intro.json"));
     
 
