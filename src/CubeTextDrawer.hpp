@@ -64,11 +64,16 @@ void draw(const CubeText& cube_text,
     // 立方体の左下を(0, 0)として位置を決める
     ci::gl::translate(text_pos + ci::Vec3f(chara_size / 2, chara_size / 2, -chara_size / 2));
     if (!rotation.empty()) {
-      float angle = std::fmod<float>(rotation[i], M_PI * 2.0f);
       float t = (i & 1) ? -chara_size / 2 : chara_size / 2;
 
       ci::gl::translate(0, t, 0);
-      ci::gl::rotate(ci::Quatf(ci::Vec3f(1, 0, 0), angle));
+
+      // TIPS:gl::rotate(Quarf)は、内部でglRotatefを使っている
+      //      この計算が正しく求まらない状況があるため、Quarf->Matrix
+      //      にしている。これだと問題ない
+      ci::Quatf rot(ci::Vec3f(1, 0, 0), rotation[i]);
+      glMultMatrixf(rot.toMatrix44());
+
       ci::gl::translate(0, -t, 0);
     }
     ci::gl::scale(cube_size);
