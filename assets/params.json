@@ -299,7 +299,7 @@
     "stagecolor_ease": "EaseOutQuad",
     "stagecolor_duration": 2,
     
-    "move_threshold": 0.8,
+    "move_threshold": 0.85,
     "move_speed_rate": 0.25,
   
     "materials": {
@@ -423,8 +423,8 @@
       "color": [ 1, 1, 1 ],
 
       "rotate_ease": "EaseInQuad",
-      "rotate_duration": 0.5,
-      "rotate_speed_rate": [ 1, 0.8, 0.6, 0.4, 0.2 ],
+      "rotate_duration": 0.6,
+      "rotate_speed_rate": [ 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3 ],
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,

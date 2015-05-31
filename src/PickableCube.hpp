@@ -198,7 +198,7 @@ public:
   void reserveRotationMove(const int direction, const ci::Vec3i& vector, const int speed) {
     move_direction_ = direction;
     move_vector_    = vector;
-    move_speed_     = speed;
+    move_speed_     = std::min(speed, int(rotate_speed_rate_.size()));
   }
   
   bool willRotationMove() const {
@@ -235,7 +235,7 @@ public:
       { ci::Vec3f(0, 0, 1),  angle },
     };
 
-    float duration = rotate_duration_* rotate_speed_rate_[std::min(move_speed_, int(rotate_speed_rate_.size())) - 1];
+    float duration = rotate_duration_* rotate_speed_rate_[move_speed_ - 1];
     
     auto options = animation_timeline_->apply(&move_rotation_,
                                               ci::Quatf::identity(), rotation_table[move_direction_],
