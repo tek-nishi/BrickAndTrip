@@ -68,6 +68,7 @@ private:
   std::vector<float> rotate_speed_rate_;
   ci::Anim<ci::Quatf> move_rotation_;
   ci::Quatf move_start_rotation_;
+  ci::Quatf move_end_rotation_;
 
   std::string fall_ease_;
   float fall_duration_;
@@ -122,6 +123,7 @@ public:
     rotate_ease_(params["game.pickable.rotate_ease"].getValue<std::string>()),
     rotate_duration_(params["game.pickable.rotate_duration"].getValue<float>()),
     move_start_rotation_(rotation_()),
+    move_end_rotation_(rotation_()),
     fall_ease_(params["game.pickable.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.pickable.fall_duration"].getValue<float>()),
     fall_y_(params["game.pickable.fall_y"].getValue<float>()),
@@ -227,6 +229,8 @@ public:
     prev_block_position_ = block_position_;
     block_position_ += move_vector_;
 
+    float duration = rotate_duration_* rotate_speed_rate_[move_speed_ - 1];
+
     auto angle = ci::toRadians(90.0f);
     ci::Quatf rotation_table[] = {
       { ci::Vec3f(1, 0, 0),  angle },
@@ -235,10 +239,13 @@ public:
       { ci::Vec3f(0, 0, 1),  angle },
     };
 
-    float duration = rotate_duration_* rotate_speed_rate_[move_speed_ - 1];
+    auto move_roation = rotation_table[move_direction_];
+    // easeで回転し続けると誤差が蓄積されるので
+    // 正規化した回転後の向きをあらかじめ計算しておく
+    move_end_rotation_ = (move_start_rotation_ * move_roation).normalized();
     
     auto options = animation_timeline_->apply(&move_rotation_,
-                                              ci::Quatf::identity(), rotation_table[move_direction_],
+                                              ci::Quatf::identity(), move_roation,
                                               duration,
                                               getEaseFunc(rotate_ease_));
     ci::Vec3f pivot_table[] = {
@@ -262,10 +269,10 @@ public:
     
     options.finishFn([this]() {
         // 移動後に正確な位置を設定
-        // FIXME:回転も正規化
         position_ = ci::Vec3f(block_position_) * cube_size_;
         position_().y += cube_size_;
-        move_start_rotation_ = rotation_;
+        rotation_ = move_end_rotation_;
+        move_start_rotation_ = move_end_rotation_;
 
         moving_ = false;
         move_speed_ -= 1;
