@@ -132,7 +132,7 @@ public:
   void fallFromStage() {
     on_stage_ = false;
 
-    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_ * cube_size_, 0));
+    ci::Vec3f end_value(block_position_ * cube_size_ + ci::Vec3f(0, fall_y_ * cube_size_, 0));
     auto options = animation_timeline_->apply(&position_,
                                               end_value,
                                               fall_duration_,
@@ -162,13 +162,13 @@ public:
   bool canBlock() const {
     if (status_ == Status::IDLE) return true;
     
-    float y = position_().y - (block_position_.y + 1) * cube_size_;
+    float y = position_().y - (block_position_.y + 1.5f) * cube_size_;
     return y < cube_size_;
   }
 
   // Pickableを踏める状態か??
   bool canPress() const {
-    float y = position_().y - (block_position_.y + 1) * cube_size_;
+    float y = position_().y - (block_position_.y + 1.5f) * cube_size_;
     return (status_ == Status::DOWN) && (y < cube_size_);
   }
   
