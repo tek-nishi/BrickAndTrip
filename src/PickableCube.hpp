@@ -363,6 +363,14 @@ public:
   void pressed() {
     // on_stage_ = false;
     pressed_  = true;
+    cancelRotationMove();
+
+    // 回転中の動作を取り消す
+    move_rotation_.stop();
+    position_ = ci::Vec3f(block_position_) * cube_size_;
+    position_().y += cube_size_;
+    rotation_ = move_end_rotation_;
+    moving_ = false;
 
     auto options = animation_timeline_->apply(&pressed_scale_,
                                               pressed_ease_scale_,

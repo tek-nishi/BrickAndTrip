@@ -620,12 +620,12 @@ private:
       
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
+      ci::gl::scale(cube->size());
 
       // TIPS:gl::rotate(Quarf)は、内部でglRotatefを使っている
       //      この計算が正しく求まらない状況があるため、Quarf->Matrix
       //      にしている。これだと問題ない
       glMultMatrixf(cube->rotation().toMatrix44());
-      ci::gl::scale(cube->size());
 
       ci::gl::draw(mesh);
       
