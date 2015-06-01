@@ -304,6 +304,11 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.stopBuildAndCollapse();
                                    });
+
+    connections_ += event_.connect("entry-pickable",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     entity_.entryPickableCube();
+                                   });
 #endif
 
     setup();

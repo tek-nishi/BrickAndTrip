@@ -114,7 +114,8 @@
       "d": "force-collapse",
       "s": "stop-build-and-collapse",
       "i": "force-regular-completed",
-      "I": "cancel-regular-completed"
+      "I": "cancel-regular-completed",
+      "p": "entry-pickable"
     }
   },
 
@@ -185,7 +186,7 @@
             }
           ],
           
-          "normal": [
+          "default": [
             {
               "target": "position",
               "type": "EaseOutExpo",
@@ -213,7 +214,7 @@
             {
               "target": "diffuse",
               "type": "EaseOutExpo",
-              "end": [ 0.5, 0.5, 0.5 ],
+              "end": [ 0.84, 0.84, 0.84 ],
               "duration": 1
             },
             {
@@ -227,6 +228,51 @@
               "type": "EaseOutExpo",
               "end": [ 1, 1, 1 ],
               "duration": 1
+            }
+          ],
+          
+          "dark": [
+            {
+              "target": "position",
+              "type": "EaseOutExpo",
+              "end": [ 3, 7, 1 ],
+              "duration": 2
+            },
+            {
+              "target": "constant_attenuation",
+              "type": "EaseOutExpo",
+              "end": 0.0,
+              "duration": 2
+            },
+            {
+              "target": "linear_attenuation",
+              "type": "EaseOutExpo",
+              "end": 0.0,
+              "duration": 2
+            },
+            {
+              "target": "quadratic_attenuation",
+              "type": "EaseOutExpo",
+              "end": 0.04,
+              "duration": 2
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseOutExpo",
+              "end": [ 0.7, 0.7, 0.7 ],
+              "duration": 2
+            },
+            {
+              "target": "ambient",
+              "type": "EaseOutExpo",
+              "end": [ 0.08, 0.08, 0.08 ],
+              "duration": 2
+            },
+            {
+              "target": "specular",
+              "type": "EaseOutExpo",
+              "end": [ 1, 1, 1 ],
+              "duration": 2
             }
           ]
         }
@@ -258,7 +304,7 @@
             }
           ],
           
-          "normal": [
+          "default": [
             {
               "target": "direction",
               "type": "EaseOutExpo",
@@ -283,6 +329,33 @@
               "end": [ 0.3, 0.3, 0.3 ],
               "duration": 1
             }
+          ],
+          
+          "dark": [
+            {
+              "target": "direction",
+              "type": "EaseOutExpo",
+              "end": [ -1, 0, 0 ],
+              "duration": 1
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseOutExpo",
+              "end": [ 0.3, 0.3, 0.1 ],
+              "duration": 2
+            },
+            {
+              "target": "ambient",
+              "type": "EaseOutExpo",
+              "end": [ 0.0, 0.0, 0.0 ],
+              "duration": 2
+            },
+            {
+              "target": "specular",
+              "type": "EaseOutExpo",
+              "end": [ 0.4, 0.4, 0.4 ],
+              "duration": 2
+            }
           ]
         }
       }
@@ -299,8 +372,8 @@
     "stagecolor_ease": "EaseOutQuad",
     "stagecolor_duration": 2,
     
-    "move_threshold": 0.85,
-    "move_speed_rate": 0.25,
+    "move_threshold": 0.75,
+    "move_speed_rate": 0.22,
   
     "materials": {
       "pickable_cube": {
@@ -386,7 +459,7 @@
 
     "total_stage_num": 11,
     "regular_stage_num": 10,
-    "start_stage": 0,
+    "start_stage": 4,
     
     "stage": {
       "build_speed": 1,
@@ -424,7 +497,7 @@
 
       "rotate_ease": "EaseInQuad",
       "rotate_duration": 0.6,
-      "rotate_speed_rate": [ 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3 ],
+      "rotate_speed_rate": [ 1, 0.7, 0.5, 0.3, 0.2, 0.2, 0.2, 0.2 ],
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
