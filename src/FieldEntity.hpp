@@ -648,7 +648,7 @@ private:
     auto stage = Json::readFromFile(path)["stage"];
     int current_z = stage_.getTopZ();
 
-    int x_offset = Json::getValue(stage, "x_offest", 0);
+    int x_offset = Json::getValue(stage, "x_offset", 0);
     int top_z = stage_.addCubes(stage,
                                 x_offset,
                                 cube_stage_color_, cube_line_color_);
