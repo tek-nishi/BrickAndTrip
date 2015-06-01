@@ -528,7 +528,7 @@ public:
     int entry_z = finish_line_z_ + 1 + params_["game.pickable.entry_z"].getValue<int>();
     float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay, true, true);
+      entryPickableCube(entry_z, delay, true);
     }
   }
 
@@ -630,7 +630,8 @@ private:
   }
 
 
-  void entryPickableCube(const int entry_z, const float delay, const bool random, const bool sleep = false) {
+  void entryPickableCube(const int entry_z, const float delay,
+                         const bool random, const bool sleep = false) {
     event_timeline_->add([this, entry_z, random, sleep]() {
         while (1) {
           // Stageは(x >= 0)を保証しているので手抜きできる

@@ -459,7 +459,7 @@
 
     "total_stage_num": 11,
     "regular_stage_num": 10,
-    "start_stage": 4,
+    "start_stage": 0,
     
     "stage": {
       "build_speed": 1,
@@ -487,7 +487,7 @@
       "entry_x": 3,
       "entry_z": 1,
       "entry_start_delay": 2,
-      "entry_next_delay": 3,
+      "entry_next_delay": 0,
       
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,

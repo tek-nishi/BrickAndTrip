@@ -165,7 +165,7 @@ public:
     connections_ += event_.connect("build-finish-line",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "build-finish-line" << std::endl;
-                                     entity_.entryPickableCubes();
+                                     // entity_.entryPickableCubes();
                                    });
 
     connections_ += event_.connect("fall-pickable",
@@ -366,6 +366,7 @@ private:
 
   void startNextStage() {
     view_.enableTouchInput();
+    entity_.entryPickableCubes();
     entity_.startStageBuild();
 
     stage_cleard_     = false;

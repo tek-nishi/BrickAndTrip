@@ -620,6 +620,8 @@ private:
       
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
+      // FIXME:通常のscaleが1.0で、pickableが潰された時のみscaleが変わる
+      //       ので、回転の後でscaleを掛けている
       ci::gl::scale(cube->size());
 
       // TIPS:gl::rotate(Quarf)は、内部でglRotatefを使っている
