@@ -74,10 +74,12 @@ private:
 
   bool se_on_;
   bool bgm_on_;
+
+  float version_;
   
 
 public:
-  Records() :
+  Records(const float version) :
     record_current_game_(false),
     total_stage_num_(0),
     regular_stage_num_(0),
@@ -91,7 +93,8 @@ public:
     current_stage_(0),
     current_play_time_(0.0),
     se_on_(true),
-    bgm_on_(true)
+    bgm_on_(true),
+    version_(version)
   { }
 
 
@@ -274,7 +277,8 @@ public:
       .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
       .addChild(ci::JsonTree("all_item_completed", all_item_completed_))
       .addChild(ci::JsonTree("se_on", se_on_))
-      .addChild(ci::JsonTree("bgm_on", bgm_on_));
+      .addChild(ci::JsonTree("bgm_on", bgm_on_))
+      .addChild(ci::JsonTree("version", version_));
 
     if (!stage_records_.empty()) {
       ci::JsonTree stage = ci::JsonTree::makeArray("stage");

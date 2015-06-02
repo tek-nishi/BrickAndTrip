@@ -69,7 +69,8 @@ public:
     touch_event_(touch_event),
     view_creator_(params, timeline, ui_camera_, autolayout_, event_, touch_event),
     sound_(params["sounds"]),
-    background_(Json::getColor<float>(params["app.background"]))
+    background_(Json::getColor<float>(params["app.background"])),
+    records_(params["version"].getValue<float>())
   {
     DOUT << "RootController()" << std::endl;
     
