@@ -254,7 +254,8 @@ public:
   void fallFromStage() {
     on_stage_ = false;
 
-    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_, 0));
+    const auto& pos = position_();
+    ci::Vec3f end_value(pos.x, block_position_.y + fall_y_, pos.z);
     auto options = animation_timeline_->apply(&position_,
                                               end_value,
                                               fall_duration_,

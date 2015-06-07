@@ -345,8 +345,9 @@ public:
 
     // idle中の動作を中断
     move_rotation_.stop();
-    
-    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_, 0));
+
+    const auto& pos = position_();
+    ci::Vec3f end_value(pos.x, block_position_.y + fall_y_, pos.z);
     auto options = animation_timeline_->apply(&position_,
                                               end_value,
                                               fall_duration_,
@@ -367,6 +368,9 @@ public:
     move_rotation_.stop();
     position_ = ci::Vec3f(block_position_);
     position_().y += 1.0f;
+    // 表示位置が-0.5ずれるので、落下位置もずらしておく
+    fall_y_ -= 0.5f;
+
     rotation_ = move_end_rotation_;
     moving_ = false;
 
@@ -375,9 +379,10 @@ public:
                                               pressed_ease_duration_,
                                               getEaseFunc(pressed_ease_));
 
-    auto position = position_();
+    const auto& position = position_();
     options.updateFn([this, position]() {
         scale_.y  = pressed_scale_();
+        // 潰されたぶん、位置をずらす
         position_().y = position.y - (1.0f - scale_.y) * (1.0f / 2);
       });
   }
