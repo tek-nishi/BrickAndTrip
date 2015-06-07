@@ -583,9 +583,7 @@ private:
 
         ci::gl::pushModelView();
         ci::gl::translate(cube.position);
-        // TIPS:stagecubeは回転しない
-        // ci::gl::rotate(cube.rotation);
-        ci::gl::scale(cube.size());
+        // TIPS:stagecubeはrotateとscalingが無い
 
         ci::gl::draw(mesh);
       

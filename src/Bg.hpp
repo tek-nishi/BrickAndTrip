@@ -29,7 +29,6 @@ private:
 
   ci::TimelineRef animation_timeline_;
 
-  float cube_size_;
   float revise_duration_;
   
   std::vector<Cube> cubes_;
@@ -48,10 +47,9 @@ public:
     params_(params),
     event_(event),
     animation_timeline_(ci::Timeline::create()),
-    cube_size_(params["game.cube_size"].getValue<float>()),
     revise_duration_(params["game.bg.revise_duration"].getValue<float>()),
-    bbox_min_orig_(Json::getVec3<float>(params["game.bg.bbox_min"]) * cube_size_),
-    bbox_max_orig_(Json::getVec3<float>(params["game.bg.bbox_max"]) * cube_size_),
+    bbox_min_orig_(Json::getVec3<float>(params["game.bg.bbox_min"])),
+    bbox_max_orig_(Json::getVec3<float>(params["game.bg.bbox_max"])),
     bbox_min_(bbox_min_orig_),
     bbox_max_(bbox_max_orig_)
   {
@@ -79,7 +77,7 @@ public:
           
           Cube cube = {
             ci::Vec3f(ix, iy, ci::randInt(bbox_min_.z, bbox_max_.z)),
-            ci::Vec3f(cube_size_, cube_size_, cube_size_),
+            ci::Vec3f::one(),
             ci::Color(v, v, v),
             ci::Vec3f(0, 0, speed),
             ci::Vec3f::zero(),
@@ -101,7 +99,7 @@ public:
 
           Cube cube = {
             ci::Vec3f(ci::randInt(bbox_min_.x, bbox_max_.x), iy, iz),
-            ci::Vec3f(cube_size_, cube_size_, cube_size_),
+            ci::Vec3f::one(),
             ci::Color(v, v, v),
             ci::Vec3f(speed, 0, 0),
             ci::Vec3f::zero(),
@@ -123,8 +121,8 @@ public:
 
   void setCenterPosition(const ci::Vec3i& pos) {
     
-    bbox_min_ = bbox_min_orig_ + ci::Vec3f(pos) * cube_size_;
-    bbox_max_ = bbox_max_orig_ + ci::Vec3f(pos) * cube_size_;
+    bbox_min_ = bbox_min_orig_ + ci::Vec3f(pos);
+    bbox_max_ = bbox_max_orig_ + ci::Vec3f(pos);
   }
 
 
@@ -201,7 +199,7 @@ private:
                std::function<void (Cube&, const ci::JsonTree&, const bool)> > tween_setup = {
         { "scale",
           [this](Cube& cube, const ci::JsonTree& params, const bool is_first) {
-            setVec3Tween(*animation_timeline_, cube.size, params, ci::Vec3f::zero(), cube_size_, is_first);
+            setVec3Tween(*animation_timeline_, cube.size, params, ci::Vec3f::zero(), is_first);
           }
         },
       };

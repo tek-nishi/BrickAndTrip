@@ -26,7 +26,6 @@ class Stage : private boost::noncopyable {
   // 崩れ中のCube
   std::deque<std::vector<StageCube> > collapse_cubes_;
   
-  float cube_size_;
   int top_z_;
   int active_top_z_;
   int finish_line_z_;
@@ -66,7 +65,6 @@ public:
         ci::TimelineRef timeline,
         Event<EventParam>& event) :
     event_(event),
-    cube_size_(params["game.cube_size"].getValue<float>()),
     top_z_(0),
     active_top_z_(0),
     finish_line_z_(-1),
@@ -137,7 +135,7 @@ public:
         for (auto& cube : cubes) {
           cube.can_ride = false;
           
-          float y = ci::randFloat(build_y_.x, build_y_.y) * cube_size_;
+          float y = ci::randFloat(build_y_.x, build_y_.y);
           ci::Vec3f start_value(cube.position() + ci::Vec3f(0, y, 0));
           ci::Vec3f end_value = cube.position();
           auto options = animation_timeline_->apply(&cube.position,
@@ -174,7 +172,7 @@ public:
     for (auto& cube : cubes) {
       cube.can_ride = false;
 
-      float y = ci::randFloat(collapse_y_.x, collapse_y_.y) * cube_size_;
+      float y = ci::randFloat(collapse_y_.x, collapse_y_.y);
       ci::Vec3f end_value(cube.position() + ci::Vec3f(0, y, 0));
       animation_timeline_->apply(&cube.position, end_value,
                                  collapse_duration_, getEaseFunc(collapse_ease_));
@@ -231,7 +229,7 @@ public:
     size_t iz = active_cubes_.size() - 1;
 
     for (auto& cube : active_cubes_[iz]) {
-      ci::Vec3f end_value(cube.position() + ci::Vec3f(0, -cube_size_, 0));
+      ci::Vec3f end_value(cube.position() + ci::Vec3f(0.0f, -1.0f, 0.0f));
       auto option = animation_timeline_->apply(&cube.position, end_value,
                                                open_duration_, getEaseFunc(open_ease_));
 
@@ -308,12 +306,11 @@ public:
         
         if (y >= 0) {
           ci::Vec3i block_pos(x, y, z);
-          ci::Vec3f pos = ci::Vec3f(x, y, z) * cube_size_;
+          ci::Vec3f pos = ci::Vec3f(x, y, z);
 
           StageCube cube = {
             pos,
             ci::Quatf::identity(),
-            cube_size_,
             block_pos,
             block_pos,
             base_color * cube_color[(x + z) & 1],
@@ -427,7 +424,7 @@ private:
   void moveStageCube(StageCube& cube) {
     cube.block_position_new.y -= 1;
     
-    auto end_value = ci::Vec3f(cube.block_position_new) * cube.cube_size;
+    auto end_value = ci::Vec3f(cube.block_position_new);
     auto option = animation_timeline_->appendTo(&cube.position, end_value,
                                                 move_duration_, getEaseFunc(move_ease_));
 

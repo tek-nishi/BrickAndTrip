@@ -448,8 +448,6 @@
 
   
   "game": {
-    "cube_size": 1,
-
     "cube_stage_color": [
       [ 1, 1, 1 ],
       [ 0.6, 0.6, 0.6 ]
@@ -460,6 +458,7 @@
     "finish_rate": 0.1,
 
     "total_stage_num": 11,
+    
     "regular_stage_num": 10,
     "start_stage": 0,
     

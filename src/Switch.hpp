@@ -12,8 +12,6 @@ class Switch : private boost::noncopyable {
   ci::JsonTree& params_;
   Event<EventParam>& event_;
 
-  float cube_size_;
-
   bool alive_;
   bool active_;
   
@@ -41,7 +39,6 @@ public:
          const int offset_x, const int bottom_z) :
     params_(params),
     event_(event),
-    cube_size_(params["game.cube_size"].getValue<float>()),
     alive_(true),
     active_(false),
     color_(Json::getColor<float>(params["game.switch.color"])),
@@ -65,9 +62,9 @@ public:
       targets_.push_back(Json::getVec3<int>(target) + offset);
     }
 
-    position_ = ci::Vec3f(block_position_) * cube_size_;
+    position_ = ci::Vec3f(block_position_);
     // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
-    position_().y += cube_size_;
+    position_().y += 1.0f;
   }
 
   ~Switch() {
@@ -84,7 +81,7 @@ public:
     
     // 登場演出
     auto entry_y = Json::getVec2<float>(params_["game.switch.entry_y"]);
-    float y = ci::randFloat(entry_y.x, entry_y.y) * cube_size_;
+    float y = ci::randFloat(entry_y.x, entry_y.y);
     ci::Vec3f start_value(position() + ci::Vec3f(0, y, 0));
     auto options = animation_timeline_->apply(&position_,
                                               start_value, position_(),
@@ -99,7 +96,7 @@ public:
   void fallFromStage() {
     on_stage_ = false;
 
-    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_ * cube_size_, 0));
+    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_, 0));
     auto options = animation_timeline_->apply(&position_,
                                               end_value,
                                               fall_duration_,
@@ -134,8 +131,7 @@ public:
     return rotation;
   }
 
-  float cubeSize() const { return cube_size_; }
-  ci::Vec3f size() const { return ci::Vec3f(cube_size_, cube_size_, cube_size_); }
+  ci::Vec3f size() const { return ci::Vec3f::one(); }
 
   bool isActive() const { return active_; }
   bool isOnStage() const { return on_stage_; }

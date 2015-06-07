@@ -35,7 +35,6 @@ private:
 
   u_int id_;
   
-  float cube_size_;
   ci::Color orig_color_;
   ci::Anim<ci::Color> color_;
 
@@ -104,7 +103,6 @@ public:
     event_(event),
     active_(true),
     id_(getUniqueNumber()),
-    cube_size_(params["game.cube_size"].getValue<float>()),
     orig_color_(Json::getColor<float>(params["game.pickable.color"])),
     color_(orig_color_),
     block_position_(entry_pos),
@@ -148,9 +146,9 @@ public:
     animation_timeline_->setStartTime(current_time);
     timeline->apply(animation_timeline_);
 
-    position_ = ci::Vec3f(block_position_) * cube_size_;
+    position_ = ci::Vec3f(block_position_);
     // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
-    position_().y += cube_size_;
+    position_().y += 1.0f;
 
     for (const auto& param : params["game.pickable.rotate_speed_rate"]) {
       rotate_speed_rate_.push_back(param.getValue<float>());
@@ -158,7 +156,7 @@ public:
 
     // 登場演出
     auto entry_y = Json::getVec2<float>(params["game.pickable.entry_y"]);
-    float y = ci::randFloat(entry_y.x, entry_y.y) * cube_size_;
+    float y = ci::randFloat(entry_y.x, entry_y.y);
     ci::Vec3f start_value = position() + ci::Vec3f(0, y, 0);
     auto options = animation_timeline_->apply(&position_,
                                               start_value, position_(),
@@ -222,8 +220,8 @@ public:
     first_moved_ = true;
     
     // idle演出中に操作されてもよいように
-    position_ = ci::Vec3f(block_position_) * cube_size_;
-    position_().y += cube_size_;
+    position_ = ci::Vec3f(block_position_);
+    position_().y += 1.0f;
     rotation_ = move_start_rotation_;
 
     prev_block_position_ = block_position_;
@@ -249,10 +247,10 @@ public:
                                               duration,
                                               getEaseFunc(rotate_ease_));
     ci::Vec3f pivot_table[] = {
-      ci::Vec3f(              0, -cube_size_ / 2,  cube_size_ / 2),
-      ci::Vec3f(              0, -cube_size_ / 2, -cube_size_ / 2),
-      ci::Vec3f( cube_size_ / 2, -cube_size_ / 2,               0),
-      ci::Vec3f(-cube_size_ / 2, -cube_size_ / 2,               0)
+      ci::Vec3f(        0, -1.0f / 2,  1.0f / 2),
+      ci::Vec3f(        0, -1.0f / 2, -1.0f / 2),
+      ci::Vec3f( 1.0f / 2, -1.0f / 2,         0),
+      ci::Vec3f(-1.0f / 2, -1.0f / 2,         0)
     };
     
     auto pivot_rotation = pivot_table[move_direction_];
@@ -269,8 +267,8 @@ public:
     
     options.finishFn([this]() {
         // 移動後に正確な位置を設定
-        position_ = ci::Vec3f(block_position_) * cube_size_;
-        position_().y += cube_size_;
+        position_ = ci::Vec3f(block_position_);
+        position_().y += 1.0f;
         rotation_ = move_end_rotation_;
         move_start_rotation_ = move_end_rotation_;
 
@@ -304,10 +302,10 @@ public:
     // options.delay(ci::randFloat(idle_delay_.x, idle_delay_.y));
 
     ci::Vec3f pivot_table[] = {
-      ci::Vec3f(              0, -cube_size_ / 2,  cube_size_ / 2),
-      ci::Vec3f(              0, -cube_size_ / 2, -cube_size_ / 2),
-      ci::Vec3f( cube_size_ / 2, -cube_size_ / 2,               0),
-      ci::Vec3f(-cube_size_ / 2, -cube_size_ / 2,               0)
+      ci::Vec3f(        0, -1.0f / 2,  1.0f / 2),
+      ci::Vec3f(        0, -1.0f / 2, -1.0f / 2),
+      ci::Vec3f( 1.0f / 2, -1.0f / 2,         0),
+      ci::Vec3f(-1.0f / 2, -1.0f / 2,         0)
     };
     
     auto pivot_rotation = pivot_table[move_direction];
@@ -325,8 +323,8 @@ public:
     options.finishFn([this]() {
         // 移動後に正確な位置を設定
         // FIXME:回転も正規化
-        position_ = ci::Vec3f(block_position_) * cube_size_;
-        position_().y += cube_size_;
+        position_ = ci::Vec3f(block_position_);
+        position_().y += 1.0f;
 
         // 時間差でidle動作
         animation_timeline_->add([this]() {
@@ -348,7 +346,7 @@ public:
     // idle中の動作を中断
     move_rotation_.stop();
     
-    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_ * cube_size_, 0));
+    ci::Vec3f end_value(position_() + ci::Vec3f(0, fall_y_, 0));
     auto options = animation_timeline_->apply(&position_,
                                               end_value,
                                               fall_duration_,
@@ -367,8 +365,8 @@ public:
 
     // 回転中の動作を取り消す
     move_rotation_.stop();
-    position_ = ci::Vec3f(block_position_) * cube_size_;
-    position_().y += cube_size_;
+    position_ = ci::Vec3f(block_position_);
+    position_().y += 1.0f;
     rotation_ = move_end_rotation_;
     moving_ = false;
 
@@ -380,7 +378,7 @@ public:
     auto position = position_();
     options.updateFn([this, position]() {
         scale_.y  = pressed_scale_();
-        position_().y = position.y - (1.0f - scale_.y) * (cube_size_ / 2);
+        position_().y = position.y - (1.0f - scale_.y) * (1.0f / 2);
       });
   }
 
@@ -452,8 +450,8 @@ public:
   const ci::Vec3i& blockPosition() const { return block_position_; }
   const ci::Vec3i& prevBlockPosition() const { return prev_block_position_; }
   
-  float cubeSize() const { return cube_size_; }
-  ci::Vec3f size() const { return scale_ * cube_size_; }
+  float cubeSize() const { return 1.0f; }
+  ci::Vec3f size() const { return scale_; }
 
   const ci::Color& color() const { return color_(); }
 
