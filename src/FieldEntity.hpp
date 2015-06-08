@@ -269,10 +269,14 @@ public:
     
     stage_.buildStage();
 
-    int   entry_z = 0 + params_["game.pickable.entry_z"].getValue<int>();
-    float delay   = params_["game.pickable.entry_start_delay"].getValue<float>();
+    ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
+    float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
+
+    // 2個目以降はrandom
+    bool entry_random = false;
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay, false);
+      entryPickableCube(entry_pos, delay, entry_random, false);
+      entry_random = true;
     }
 
 #ifdef DEBUG
@@ -525,17 +529,21 @@ public:
     if (entry_packable_num_ == 0) return;
 
     // Finish lineの次が(z = 0)として生成
-    int entry_z = finish_line_z_ + 1 + params_["game.pickable.entry_z"].getValue<int>();
+    ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
+    entry_pos.y += finish_line_z_ + 1;
     float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
     for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_z, delay, true);
+      entryPickableCube(entry_pos, delay, true, false);
     }
   }
 
 #ifdef DEBUG
   // bottom lineに１つ召喚
   void entryPickableCube() {
-    entryPickableCube(stage_.getActiveBottomZ(), 0.0f, true);
+    ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
+    entry_pos.y += stage_.getActiveBottomZ();
+    
+    entryPickableCube(entry_pos, 0.0f, true, false);
   }
 #endif
 
@@ -630,22 +638,28 @@ private:
   }
 
 
-  void entryPickableCube(const int entry_z, const float delay,
-                         const bool random, const bool sleep = false) {
-    event_timeline_->add([this, entry_z, random, sleep]() {
+  void entryPickableCube(const ci::Vec2i& entry_pos,
+                         const float delay,
+                         const bool random, const bool sleep) {
+    event_timeline_->add([this, entry_pos, random, sleep]() {
+        const auto& stage_width = stage_.getStageWidth();
+        int entry_y = entry_pos.y;
         while (1) {
-          // Stageは(x >= 0)を保証しているので手抜きできる
-          int x = random ? ci::randInt(1, 8)
-                         : params_["game.pickable.entry_x"].getValue<int>(); 
+          // 何度か試してみて、ダメなら登場Z位置を変えて試す
+          for (int i = 0; i < 10; ++i) {
+            // Stageは(x >= 0)を保証しているので手抜きできる
+            int x = random ? ci::randInt(stage_width.x + 1, stage_width.y - 1)
+                           : entry_pos.x;
             
-          auto entry_pos = ci::Vec3i(x, 0, entry_z);
-          if (isPickableCube(entry_pos)) continue;
-
+            auto pos = ci::Vec3i(x, 0, entry_y);
+            if (isPickableCube(pos)) continue;
           
-          auto cube = PickableCubePtr(new PickableCube(params_, timeline_, event_, entry_pos,
-                                                       (mode_ == CLEAR) ? false : sleep));
-          pickable_cubes_.push_back(std::move(cube));
-          return;
+            auto cube = PickableCubePtr(new PickableCube(params_, timeline_, event_, pos,
+                                                         (mode_ == CLEAR) ? false : sleep));
+            pickable_cubes_.push_back(std::move(cube));
+            return;
+          }
+          entry_y += 1;
         }
         
       }, event_timeline_->getCurrentTime() + delay);

@@ -485,8 +485,7 @@
     },
 
     "pickable": {
-      "entry_x": 3,
-      "entry_z": 1,
+      "entry_pos": [ 3, 1 ],
       "entry_start_delay": 2,
       "entry_next_delay": 0,
       
