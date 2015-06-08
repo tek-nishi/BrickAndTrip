@@ -508,7 +508,7 @@
       "idle_angle": 15,
       "idle_delay": [ 2, 5 ],
 
-      "picking_color": [ 0, 0, 1 ],
+      "picking_color": [ 0.1, 0.1, 1 ],
       "picking_start": {
         "ease": "EaseOutExpo",
         "duration": 0.2
@@ -765,11 +765,11 @@
     "deactive_delay": 0.5,
 
     "comment": [
+      "NOT TOO BAD",
       "WAY TO GO!",
       "GOOD FOR YOU!",
-      "AWESOME!",
-      "AMAZING!",
-      "COOL BEANS!"
+      "COOL BEANS!",
+      "AWESOME!"
     ]
   },
 

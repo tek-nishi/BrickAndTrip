@@ -215,22 +215,6 @@ public:
     addController<IntroController>(params_, timeline_, event_,
                                    records_.getTotalPlayNum(),
                                    view_creator_.create("ui_intro.json"));
-    
-
-#if 0
-    {
-      EventParam param = {
-        { "clear_time", 10.5 },
-        { "tumble_num", 2 },
-        { "item_num", 1 },
-        { "operation_num", 99 },
-        { "play_time", 1.5 },
-        { "all_cleared", false },
-      };
-      addController<StageclearController>(params_, timeline_, event_, param,
-                                          view_creator_.create("ui_stageclear.json"));
-    }
-#endif
   }
 
   ~RootController() {

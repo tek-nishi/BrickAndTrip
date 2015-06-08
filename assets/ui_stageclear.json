@@ -414,8 +414,9 @@
     "pos": [ 0, 1.5, 0 ],
     "origin": "bottom-center",
     "layout": "bottom-center",
-    "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ],
+    "base_color": [ 0, 0, 0.1 ],
+    "text_color": [ 0, 0, 1 ],
+    "hsv": true,
     
     "tween": {
       "tween-in": {
@@ -428,6 +429,33 @@
             "interval": 0.05,
             "start": -120,
             "end": 0
+          }
+        ]
+      },
+
+      "tween-text-light-normal": {
+        "body": [
+          {
+            "target": "text_color",
+            "type": "EaseNone",
+            "duration": 0.4,
+            "loop": true,
+            "ping-pong": true,
+            "start": [ 54, 0, 1 ],
+            "end": [ 54, 1, 1 ]
+          }
+        ]
+      },
+
+      "tween-text-light-special": {
+        "body": [
+          {
+            "target": "text_color",
+            "type": "EaseNone",
+            "duration": 0.85,
+            "loop": true,
+            "start": [ 0, 0.8, 1 ],
+            "end": [ 360, 0.8, 1 ]
           }
         ]
       },

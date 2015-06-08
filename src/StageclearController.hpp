@@ -118,20 +118,20 @@ public:
     }
 
     {
-      // TODO:プレイ内容でコメントを選ぶ
-      auto comment = params["stageclear.comment"];
-      int num = int(comment.getNumChildren());
-      
-      view_->getWidget("comment").setText(comment[ci::randInt(num)].getValue<std::string>());
-    }
+      auto item_num       = boost::any_cast<int>(result.at("item_num"));
+      auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
 
-#if 0
-    // 全ステージクリア用設定
-    if (all_cleard_) {
-      view_->getWidget("try").setDisp(false);
-      view_->getWidget("next").setDisp(false);
+      auto comment = params["stageclear.comment"];
+      int comment_num = int(comment.getNumChildren());
+
+      // item収集数でコメントを決める
+      int index = (item_num * (comment_num - 1)) / item_total_num;
+      view_->getWidget("comment").setText(comment[index].getValue<std::string>());
+
+      // メッセージの演出をitemパーフェクトとそれ以外で変える
+      view_->startWidgetTween((item_num == item_total_num) ? "tween-text-light-special"
+                                                           : "tween-text-light-normal");
     }
-#endif
     
     view_->startWidgetTween("tween-in");
 

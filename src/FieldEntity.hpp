@@ -380,6 +380,7 @@ public:
         { "clear_time", current_game.play_time },
         { "tumble_num", current_game.tumble_num },
         { "item_num", current_game.item_num },
+        { "item_total_num", current_game.item_total_num },
         { "operation_num", current_game.operation_num },
         { "play_time", records_.getCurrentGamePlayTime() },
         { "all_cleared", all_cleard },
