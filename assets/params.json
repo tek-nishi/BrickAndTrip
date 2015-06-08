@@ -406,8 +406,8 @@
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
         "specular": [ 0.5, 0.5, 0.5, 1 ],
-        "shininess": 80,
-        "emission": [ 0, 0, 0, 1 ]
+        "shininess": 60,
+        "emission": [ 0.15, 0.15, 0.15, 1 ]
       },
 
       "stage_cube": {
