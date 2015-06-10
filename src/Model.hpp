@@ -15,6 +15,8 @@ namespace ngs {
 class Model : private boost::noncopyable {
   ci::gl::VboMeshRef mesh_;
 
+  std::vector<int> group_face_;
+
 
 public:
   Model(const std::string& path,
@@ -64,12 +66,20 @@ public:
          << " i:" << mesh.getIndices().size()
          << " g:" << groups.size()
          << std::endl;
+
+    for (const auto& g : groups) {
+      group_face_.push_back(int(g.mFaces.size()));
+      DOUT << "face:"
+           <<  g.mFaces.size()
+           << std::endl;
+    }
     
     mesh_ = ci::gl::VboMesh::create(mesh);
   }
   
 
   const ci::gl::VboMesh& mesh() const { return *mesh_; }
+  int getGroupFaces(const size_t index) const { return group_face_[index]; }
   
 
 private:

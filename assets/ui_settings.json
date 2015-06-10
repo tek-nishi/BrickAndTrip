@@ -92,8 +92,7 @@
     "active": true,
     "event_message": "bgm-change",
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
 
     "text": "z",
     "font": "icon",
@@ -251,8 +250,7 @@
     "name": "se-setting",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
 
     "active": true,
     "event_message": "se-change",
@@ -371,8 +369,7 @@
     "name": "agree",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
 
     "active": true,
     "event_message": "settings-agree",

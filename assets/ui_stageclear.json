@@ -478,8 +478,7 @@
     "name": "agree",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
 
     "active": true,
     "event_message": "selected-agree",

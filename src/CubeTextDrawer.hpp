@@ -19,12 +19,25 @@ namespace ngs {
 namespace CubeTextDrawer {
 
 void drawCubeAndText(ci::gl::TextureRef texture,
-                     const Model& cube, const Model& text,
+                     const Model& model,
                      const ci::Color& color, const ci::Color& text_color,
                      const ci::Vec3f& scale, const ci::Vec3f& offset) {
   ci::gl::color(color);
-  ci::gl::draw(cube.mesh());
 
+  const auto& mesh = model.mesh();
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+  // 最初のgroupが後ろのパネル
+  int base_vtx_num = model.getGroupFaces(0) * 3;
+  
+#if defined(CINDER_GLES)
+  glDrawElements(mesh.getPrimitiveType(),
+                 base_vtx_num, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(uint16_t) * 0));
+#else
+  glDrawElements(mesh.getPrimitiveType(),
+                 base_vtx_num, GL_UNSIGNED_INT, (GLvoid*)(sizeof(uint32_t) * 0));
+#endif
+  
   ci::gl::color(text_color);
 
   ci::gl::translate(offset);
@@ -32,8 +45,20 @@ void drawCubeAndText(ci::gl::TextureRef texture,
   
   ci::gl::enable(GL_BLEND);
   texture->enableAndBind();
-  ci::gl::draw(text.mesh());
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+  // 2つ目のgroupが文字表示
+  int text_vtx_num = model.getGroupFaces(1) * 3;
+
+#if defined(CINDER_GLES)
+  glDrawElements(mesh.getPrimitiveType(),
+                 text_vtx_num, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(uint16_t) * (base_vtx_num)));
+#else
+  glDrawElements(mesh.getPrimitiveType(),
+                 text_vtx_num, GL_UNSIGNED_INT, (GLvoid*)(sizeof(uint32_t) * (base_vtx_num)));
+#endif
+  
+  texture->unbind();
   texture->disable();
   ci::gl::disable(GL_BLEND);
 }
@@ -41,7 +66,7 @@ void drawCubeAndText(ci::gl::TextureRef texture,
 
 void draw(const CubeText& cube_text,
           TextureFont& font,
-          const Model& model_cube, const Model& model_text,
+          const Model& text_model,
           const ci::Vec3f& pos,
           const ci::Vec3f& scale,
           const ci::Color& text_color,
@@ -55,6 +80,10 @@ void draw(const CubeText& cube_text,
   
   const auto& text = cube_text.text();
 
+  const auto& mesh = text_model.mesh();
+	mesh.enableClientStates();
+	mesh.bindAllData();
+  
   for (size_t i = 0; i < text.size(); ++i) {
     const auto& t = text[i];
     auto texture = font.getTextureFromString(t);
@@ -78,7 +107,7 @@ void draw(const CubeText& cube_text,
     }
     ci::gl::scale(cube_size);
       
-    drawCubeAndText(texture, model_cube, model_text,
+    drawCubeAndText(texture, text_model,
                     base_color, text_color,
                     font.scale(), font.offset());
       
@@ -86,6 +115,9 @@ void draw(const CubeText& cube_text,
 
     text_pos.x += chara_size + chara_spacing;
   }
+  
+  ci::gl::VboMesh::unbindBuffers();
+	mesh.disableClientStates();
 }
 
 }

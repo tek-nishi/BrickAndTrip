@@ -3,8 +3,7 @@
     "name": "pause",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
 
     "active": true,
     "event_message": "pause-start",

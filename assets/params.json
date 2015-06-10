@@ -42,29 +42,15 @@
 
     "models": [
       {
-        "name": "text_base",
-        "path": "text_base.obj",
-        "normals": false,
-        "uvs": false,
-        "indices": true
-      },
-      {
-        "name": "text_text",
-        "path": "text_text.obj",
+        "name": "text",
+        "path": "text.obj",
         "normals": false,
         "uvs": true,
         "indices": true
       },
       {
-        "name": "button_base",
-        "path": "button_base.obj",
-        "normals": false,
-        "uvs": false,
-        "indices": true
-      },
-      {
-        "name": "button_text",
-        "path": "button_text.obj",
+        "name": "button",
+        "path": "button.obj",
         "normals": false,
         "uvs": true,
         "indices": true

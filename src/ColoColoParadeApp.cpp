@@ -112,7 +112,7 @@ class ColoColoParadeApp : public AppNative,
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 #endif
     // TIPS: ambientとdiffuseをci::gl::colorで決める
-    glEnable(GL_COLOR_MATERIAL);
+    gl::enable(GL_COLOR_MATERIAL);
 
     elapsed_seconds_ = getElapsedSeconds();
 

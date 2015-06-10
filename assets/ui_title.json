@@ -93,8 +93,7 @@
     "name": "records",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
     
     "active": true,
     "event_message": "records-start",
@@ -199,8 +198,7 @@
     "name": "settings",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
     
     "active": true,
     "event_message": "settings-start",
@@ -306,8 +304,7 @@
     "name": "credits",
     "disp": true,
 
-    "base_model": "button_base",
-    "text_model": "button_text",
+    "model": "button",
     
     "active": true,
     "event_message": "credits-start",

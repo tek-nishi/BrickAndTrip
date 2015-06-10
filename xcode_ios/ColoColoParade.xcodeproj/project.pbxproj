@@ -18,7 +18,7 @@
 		475C50E71ABBE93E00CFC3E1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475C50E61ABBE93E00CFC3E1 /* Images.xcassets */; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2CE151AD5099E00C9FF09 /* Vbo.cpp */; };
-		47C2CE181AD51C6800C9FF09 /* DrawVboMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2CE171AD51C6800C9FF09 /* DrawVboMesh.cpp */; };
+		47F3CE641B287B250030D955 /* DrawVboMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47F3CE631B287B250030D955 /* DrawVboMesh.cpp */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
@@ -42,7 +42,7 @@
 		475C50E61ABBE93E00CFC3E1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ColoColoParade/Images.xcassets; sourceTree = "<group>"; };
 		47A8C39D1ACC43C10009B7AD /* FileUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileUtil.mm; path = ../src/FileUtil.mm; sourceTree = "<group>"; };
 		47C2CE151AD5099E00C9FF09 /* Vbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vbo.cpp; path = ../src/Vbo.cpp; sourceTree = "<group>"; };
-		47C2CE171AD51C6800C9FF09 /* DrawVboMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DrawVboMesh.cpp; path = ../src/DrawVboMesh.cpp; sourceTree = "<group>"; };
+		47F3CE631B287B250030D955 /* DrawVboMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DrawVboMesh.cpp; path = ../src/DrawVboMesh.cpp; sourceTree = "<group>"; };
 		5D5D9C573C0F4F1EBE1E6BFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -121,7 +121,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				47C2CE171AD51C6800C9FF09 /* DrawVboMesh.cpp */,
+				47F3CE631B287B250030D955 /* DrawVboMesh.cpp */,
 				47C2CE151AD5099E00C9FF09 /* Vbo.cpp */,
 				47A8C39D1ACC43C10009B7AD /* FileUtil.mm */,
 				D94FCF0D83574B138433F88A /* ColoColoParadeApp.cpp */,
@@ -223,8 +223,8 @@
 			files = (
 				47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */,
 				EC43B19189734030A187325A /* ColoColoParadeApp.cpp in Sources */,
+				47F3CE641B287B250030D955 /* DrawVboMesh.cpp in Sources */,
 				47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */,
-				47C2CE181AD51C6800C9FF09 /* DrawVboMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
