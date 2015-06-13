@@ -236,9 +236,7 @@ public:
 #if defined(OBFUSCATION_RECORD)
     ci::JsonTree record(TextCodec::load(full_path.string()));
 #else
-    // JsonTree::serializeだとルートが削除される
-    // その挙動に合わせている
-    ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path))["records"];
+    ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
 #endif
 
     total_play_num_      = Json::getValue(record, "total_play_num", 0);
@@ -308,7 +306,7 @@ public:
 #if defined(OBFUSCATION_RECORD)
     TextCodec::write(full_path.string(), record.serialize());
 #else
-    record.write(full_path, ci::JsonTree::WriteOptions().createDocument(true));
+    record.write(full_path);
 #endif
 
     DOUT << "record writed. " << std::endl

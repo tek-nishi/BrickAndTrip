@@ -32,6 +32,7 @@
 #endif
 
 
+// Recordsの難読化
 #define OBFUSCATION_RECORD
 
 
