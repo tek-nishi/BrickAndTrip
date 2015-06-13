@@ -152,7 +152,7 @@ public:
           node.node->setLoopEnabled(object.loop);
           node.gain->setValue(object.gain * gain);
 
-          node.node->enable();
+          node.node->enable();                      // FIXME:必要か??
           
           node.node >> node.gain >> ctx->getOutput();
         }
@@ -175,7 +175,7 @@ public:
           node.node->setLoopEnabled(object.loop);
           node.gain->setValue(object.gain * gain);
 
-          node.node->enable();
+          node.node->enable();                      // FIXME:必要か??
 
           node.node >> node.gain >> ctx->getOutput();
         }

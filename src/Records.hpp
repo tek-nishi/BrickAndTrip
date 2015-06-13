@@ -7,6 +7,7 @@
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include "FileUtil.hpp"
+#include "TextCodec.hpp"
 
 
 namespace ngs {
@@ -232,25 +233,28 @@ public:
     auto full_path = getDocumentPath() / path;
     if (!ci::fs::is_regular_file(full_path)) return;
 
-    DOUT << "record loaded." << std::endl;
-    DOUT << full_path << std::endl;
-    
-    ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
+#if defined(OBFUSCATION_RECORD)
+    ci::JsonTree record(TextCodec::load(full_path.string()));
+#else
+    // JsonTree::serializeだとルートが削除される
+    // その挙動に合わせている
+    ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path))["records"];
+#endif
 
-    total_play_num_      = Json::getValue(record, "records.total_play_num", 0);
-    total_play_time_     = Json::getValue(record, "records.total_play_time", 0.0);
-    total_tumble_num_    = Json::getValue(record, "records.total_tumble_num", 0);
-    total_item_num_      = Json::getValue(record, "records.total_item_num", 0);
-    total_operation_num_ = Json::getValue(record, "records.total_operation_num", 0);
-    total_clear_num_     = Json::getValue(record, "records.total_clear_num", 0);
+    total_play_num_      = Json::getValue(record, "total_play_num", 0);
+    total_play_time_     = Json::getValue(record, "total_play_time", 0.0);
+    total_tumble_num_    = Json::getValue(record, "total_tumble_num", 0);
+    total_item_num_      = Json::getValue(record, "total_item_num", 0);
+    total_operation_num_ = Json::getValue(record, "total_operation_num", 0);
+    total_clear_num_     = Json::getValue(record, "total_clear_num", 0);
 
-    all_item_completed_ = Json::getValue(record, "records.all_item_completed", false);
+    all_item_completed_ = Json::getValue(record, "all_item_completed", false);
 
-    se_on_  = Json::getValue(record, "records.se_on", true);
-    bgm_on_ = Json::getValue(record, "records.bgm_on", true);
+    se_on_  = Json::getValue(record, "se_on", true);
+    bgm_on_ = Json::getValue(record, "bgm_on", true);
 
-    if (record.hasChild("records.stage")) {
-      const auto& stage = record["records.stage"];
+    if (record.hasChild("stage")) {
+      const auto& stage = record["stage"];
       for (const auto& sr : stage) {
         StageRecord s;
 
@@ -264,6 +268,9 @@ public:
         stage_records_.push_back(std::move(s));
       }
     }
+
+    DOUT << "record loaded." << std::endl
+         << full_path << std::endl;
   }
   
   void write(const std::string& path) {
@@ -298,8 +305,14 @@ public:
     }
 
     auto full_path = getDocumentPath() / path;
-    DOUT << "record writed. " << full_path << std::endl;
+#if defined(OBFUSCATION_RECORD)
+    TextCodec::write(full_path.string(), record.serialize());
+#else
     record.write(full_path, ci::JsonTree::WriteOptions().createDocument(true));
+#endif
+
+    DOUT << "record writed. " << std::endl
+         << full_path << std::endl;
   }
 
   double getCurrentGamePlayTime() const { return current_play_time_; }

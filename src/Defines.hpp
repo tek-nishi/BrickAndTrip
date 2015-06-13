@@ -32,6 +32,9 @@
 #endif
 
 
+#define OBFUSCATION_RECORD
+
+
 namespace ngs {
 
 // 符号無し整数の別名定義
