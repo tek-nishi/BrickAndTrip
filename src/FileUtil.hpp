@@ -14,6 +14,12 @@ namespace ngs {
 
 ci::fs::path getDocumentPath();
 
+#elif defined(CINDER_MAC)
+
+ci::fs::path getDocumentPath() {
+  return ci::app::getAppPath() / "Contents/Resources";
+}
+
 #else
 
 ci::fs::path getDocumentPath() {
