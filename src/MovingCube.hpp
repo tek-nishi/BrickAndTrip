@@ -36,6 +36,7 @@ class MovingCube : private boost::noncopyable {
 
   ci::Vec3i block_position_;
   ci::Vec3i prev_block_position_;
+  ci::Vec3i block_position_new_;
   
   ci::Anim<ci::Vec3f> position_;
   ci::Anim<ci::Quatf> rotation_;
@@ -64,6 +65,10 @@ class MovingCube : private boost::noncopyable {
   float fall_duration_;
   float fall_y_;
 
+  std::string move_ease_;
+  float move_duration_;
+  float move_delay_;
+
   std::vector<int> move_pattern_;
   size_t current_pattern_;
 
@@ -81,6 +86,7 @@ public:
     color_(Json::getColor<float>(params["game.moving.color"])),
     block_position_(entry_pos),
     prev_block_position_(block_position_),
+    block_position_new_(block_position_),
     rotation_(ci::Quatf::identity()),
     animation_timeline_(ci::Timeline::create()),
     on_stage_(false),
@@ -96,6 +102,9 @@ public:
     fall_ease_(params["game.moving.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.moving.fall_duration"].getValue<float>()),
     fall_y_(params["game.moving.fall_y"].getValue<float>()),
+    move_ease_(params["game.stage.move_ease"].getValue<std::string>()),
+    move_duration_(params["game.stage.move_duration"].getValue<float>()),
+    move_delay_(params["game.stage.move_delay"].getValue<float>()),
     current_pattern_(0)
   {
     DOUT << "MovingCube()" << std::endl;
@@ -266,6 +275,23 @@ public:
       });
   }
 
+  void moveDown() {
+    block_position_new_.y -= 1;
+
+    // StageCubeの上に乗るように位置を調整している
+    auto end_value = ci::Vec3f(block_position_new_.x, block_position_new_.y + 1, block_position_new_.z);
+    // 直前のeasingが完了してから動作
+    auto option = animation_timeline_->appendTo(&position_, end_value,
+                                                move_duration_, getEaseFunc(move_ease_));
+
+    option.delay(move_delay_);
+
+    option.finishFn([this]() {
+        block_position_.y -= 1;
+      });
+  }
+
+  
   u_int id() const { return id_; }
   
   bool isActive() const { return active_; }

@@ -438,10 +438,6 @@ private:
           DOUT << cube->block_position << std::endl;
         }
       });
-
-    // event_timeline_->add([this, block_position]() {
-    //   },
-    //   event_timeline_->getCurrentTime() + move_delay_ + move_duration_);
   }
   
 };

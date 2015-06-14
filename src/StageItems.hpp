@@ -117,7 +117,17 @@ public:
       event_timeline_->getCurrentTime() + params_["game.item.pickup_delay"].getValue<float>());
   }
   
+  void moveCube(const ci::Vec3i& block_pos) {
+    for (auto& cube : items_) {
+      const auto& cube_block_pos = cube->blockPosition();
+      if ((cube_block_pos.x == block_pos.x) && (cube_block_pos.z == block_pos.z)) {
+        cube->moveDown();
+        return;
+      }
+    }
+  }
 
+  
   const std::vector<ItemCubePtr>& items() const { return items_; }
   
 

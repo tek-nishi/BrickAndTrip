@@ -105,6 +105,16 @@ public:
     return false;
   }
 
+  void moveCube(const ci::Vec3i& block_pos) {
+    for (auto& cube : cubes_) {
+      const auto& cube_block_pos = cube->blockPosition();
+      if ((cube_block_pos.x == block_pos.x) && (cube_block_pos.z == block_pos.z)) {
+        cube->moveDown();
+        return;
+      }
+    }
+  }
+
   
   const std::vector<MovingCubePtr>& cubes() const { return cubes_; }
 

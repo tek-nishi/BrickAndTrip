@@ -918,6 +918,8 @@ private:
   void startSwitchTargets(const std::vector<ci::Vec3i>& targets) {
     for (const auto& target : targets) {
       stage_.moveStageCube(target);
+      moving_cubes_.moveCube(target);
+      items_.moveCube(target);
     }
   }
 

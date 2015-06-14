@@ -20,10 +20,13 @@ class ItemCube : private boost::noncopyable {
   u_int id_;
   
   ci::Vec3i block_position_;
+  ci::Vec3i block_position_new_;
   
   ci::Anim<ci::Vec3f> position_;
   ci::Anim<ci::Vec3f> scale_;
   ci::Anim<ci::Vec3f> color_;
+
+  ci::Anim<ci::Vec3f> offset_;
 
   ci::Vec3f rotation_;
   ci::Vec3f rotation_speed_;
@@ -35,6 +38,10 @@ class ItemCube : private boost::noncopyable {
   std::string fall_ease_;
   float fall_duration_;
   float fall_y_;
+
+  std::string move_ease_;
+  float move_duration_;
+  float move_delay_;
   
   ci::TimelineRef animation_timeline_;
 
@@ -49,7 +56,9 @@ public:
     active_(true),
     id_(getUniqueNumber()),
     color_(Json::getHsvColor(params["game.item.color"])),
+    offset_(ci::Vec3f::zero()),
     block_position_(entry_pos),
+    block_position_new_(block_position_),
     rotation_(ci::Vec3f::zero()),
     rotation_speed_(Json::getVec3<float>(params["game.item.rotation_speed"])),
     rotation_speed_rate_(0),
@@ -59,6 +68,9 @@ public:
     fall_ease_(params["game.item.fall_ease"].getValue<std::string>()),
     fall_duration_(params["game.item.fall_duration"].getValue<float>()),
     fall_y_(params["game.item.fall_y"].getValue<float>()),
+    move_ease_(params["game.stage.move_ease"].getValue<std::string>()),
+    move_duration_(params["game.stage.move_duration"].getValue<float>()),
+    move_delay_(params["game.stage.move_delay"].getValue<float>()),
     animation_timeline_(ci::Timeline::create())
   {
     DOUT << "ItemCube()" << std::endl;
@@ -114,6 +126,8 @@ public:
     on_stage_  = false;
     getatable_ = false;
 
+    offset_.stop();
+    
     ci::Vec3f end_value(block_position_ + ci::Vec3f(0, fall_y_, 0));
     auto options = animation_timeline_->apply(&position_,
                                               end_value,
@@ -137,8 +151,24 @@ public:
       animation_timeline_->getCurrentTime() + params_["game.item.pickup_duration"].getValue<float>());
   }
 
+  void moveDown() {
+    block_position_new_.y -= 1;
+
+    // StageCubeの上に乗るように位置を調整している
+    auto end_value = ci::Vec3f(block_position_new_.x, block_position_new_.y + 1, block_position_new_.z);
+    // 直前のeasingが完了してから動作
+    auto option = animation_timeline_->appendTo(&position_, end_value,
+                                                move_duration_, getEaseFunc(move_ease_));
+
+    option.delay(move_delay_);
+
+    option.finishFn([this]() {
+        block_position_.y -= 1;
+      });
+  }
   
-  const ci::Vec3f& position() const { return position_(); }
+  
+  ci::Vec3f position() const { return position_() + offset_(); }
 
   ci::Quatf rotation() const {
     return ci::Quatf(rotation_.x, rotation_.y, rotation_.z);
@@ -174,8 +204,7 @@ private:
                std::function<void (const ci::JsonTree&, const bool)> > tween_setup = {
         { "position",
           [this](const ci::JsonTree& params, const bool is_first) {
-            auto offset = position_();
-            setVec3Tween(*animation_timeline_, position_, params, offset, is_first);
+            setVec3Tween(*animation_timeline_, offset_, params, is_first);
           }
         },
         { "color",

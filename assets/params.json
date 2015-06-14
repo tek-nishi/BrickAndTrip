@@ -445,7 +445,7 @@
     "total_stage_num": 11,
     
     "regular_stage_num": 10,
-    "start_stage": 0,
+    "start_stage": 2,
     
     "stage": {
       "build_speed": 1,
