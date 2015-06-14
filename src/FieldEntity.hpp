@@ -418,6 +418,7 @@ public:
         { "tumble_num", current_game.tumble_num },
         { "operation_num", current_game.operation_num },
         { "play_time", records_.getCurrentGamePlayTime() },
+        { "can_continue", canContinue() },
       };
       event_.signal("begin-gameover", params);
     }
@@ -467,6 +468,7 @@ public:
 #else
                                      : 0;
 #endif
+    records_.continuedGame(continue_game);
   }
   
   void restart() {
@@ -916,6 +918,15 @@ private:
     }
   }
 
+  bool canContinue() const {
+    // stage開始時にstage_num_は加算されている
+#ifdef DEBUG
+    return stage_num_ != (params_["game.start_stage"].getValue<int>() + 1);
+#else
+    return stage_num_ != 1;
+#endif
+  }
+  
   
 };
 

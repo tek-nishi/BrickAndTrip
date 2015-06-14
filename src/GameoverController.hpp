@@ -32,6 +32,7 @@ public:
   GameoverController(ci::JsonTree& params,
                      ci::TimelineRef timeline,
                      Event<EventParam>& event,
+                     const EventParam& event_params,
                      std::unique_ptr<UIView>&& view) :
     params_(params),
     event_(event),
@@ -84,6 +85,14 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
+    // 再開できるかどうかの判断
+    if (!boost::any_cast<bool>(event_params.at("can_continue"))) {
+      view_->getWidget("continue").setDisp(false);
+      view_->getWidget("done").setDisp(false);
+
+      view_->getWidget("agree").setDisp(true);
+    }
+    
     view_->startWidgetTween("tween-in");
 
     if (params.hasChild("gameover.active_delay")) {

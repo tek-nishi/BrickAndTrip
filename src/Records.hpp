@@ -70,6 +70,8 @@ private:
 
   int    current_stage_;
   double current_play_time_;
+
+  bool continued_game_;
   
   std::vector<StageRecord> stage_records_;
 
@@ -93,6 +95,7 @@ public:
     total_clear_num_(0),
     current_stage_(0),
     current_play_time_(0.0),
+    continued_game_(false),
     se_on_(true),
     bgm_on_(true),
     version_(version)
@@ -138,6 +141,10 @@ public:
     current_game_.play_time += progressing_seconds;
   }
 
+  void continuedGame(const bool continued_game) {
+    continued_game_ = continued_game;
+  }
+
   const CurrentGame& currentGame() const {
     return current_game_;
   }
@@ -164,6 +171,10 @@ public:
 
   int cleardStageNum() {
     return int(stage_records_.size());
+  }
+
+  bool isContinuedGame() const {
+    return continued_game_;
   }
 
   void storeStageRecord(const double current_time) {

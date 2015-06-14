@@ -83,6 +83,7 @@ public:
     event_.connect("begin-gameover",
                    [this](const Connection& connection, EventParam& param) {
                      addController<GameoverController>(params_, timeline_, event_,
+                                                       param,
                                                        view_creator_.create("ui_gameover.json"));
                    });
 
