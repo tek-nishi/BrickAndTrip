@@ -175,6 +175,7 @@ public:
                      sound_.play("agree");
                    });
 
+    
     event_.connect("se-silent",
                    [this](const Connection& connection, EventParam& param) {
                      sound_.setBufferSilent(boost::any_cast<bool>(param["silent"]));

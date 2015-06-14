@@ -66,6 +66,24 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
+    connections_ += event.connect("gameover-continue",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    event_timeline_->add([this]() {
+                                        view_->startWidgetTween("tween-out");
+
+                                        event_timeline_->add([this]() {
+                                            event_.signal("continue-game", EventParam());
+                                            
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
+                                          },
+                                          event_timeline_->getCurrentTime() + event_delay_);
+                                      },
+                                      event_timeline_->getCurrentTime() + tween_delay_);
+                                  });
+
     view_->startWidgetTween("tween-in");
 
     if (params.hasChild("gameover.active_delay")) {

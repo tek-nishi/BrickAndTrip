@@ -87,20 +87,20 @@
   },
 
   {
-    "name": "agree",
+    "name": "continue",
     "disp": true,
 
     "model": "button",
-
+    
     "active": true,
-    "event_message": "gameover-agree",
-
-    "text": "õ",
+    "event_message": "gameover-continue",
+    
+    "text": "U",
     "font": "icon",
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, 0.2, 0 ],
+    "pos": [ 1.2, 0.2, 0 ],
     "origin": "bottom-center",
     "layout": "bottom-center",
     "base_color": [ 1, 1, 1 ],
@@ -129,7 +129,6 @@
           }
         ]
       },
-
       
       "tween-touch-in": {
         "body": [
@@ -173,6 +172,111 @@
             "type": "EaseOutExpo",
             "duration": 0.25,
             "end": [ 0.1, 0.1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-end": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutElastic",
+            "duration": 0.6,
+            "start": [ 0.3, 0.3, 0.3 ],
+            "end": [ 1.25, 1.25, 1.25 ]
+          }
+        ]
+      }
+    }
+  },
+  
+  {
+    "name": "agree",
+    "disp": true,
+
+    "model": "button",
+
+    "active": true,
+    "event_message": "gameover-agree",
+
+    "text": "Î",
+    "font": "icon",
+    "size": 1,
+    "spacing": 0.1,
+    "chara_split": 1,
+    "pos": [ -1.2, 0.2, 0 ],
+    "origin": "bottom-center",
+    "layout": "bottom-center",
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 1, 0.1, 0.1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutBack",
+            "duration": 0.3,
+            "delay": 1.8,
+            "start": [ 0, 0, 0 ]
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseInExpo",
+            "duration": 0.3,
+            "end": [ 0, 0, 0 ]
+          }
+        ]
+      },
+
+      
+      "tween-touch-in": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 0.9, 0.9, 0.9 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 1, 0.25, 0.25 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.4,
+            "end": [ 1, 1, 1 ]
+          }
+        ]
+      },
+
+      "tween-touch-out": {
+        "body": [
+          {
+            "target": "scale",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "base_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 1, 1 ]
+          },
+          {
+            "target": "text_color",
+            "type": "EaseOutExpo",
+            "duration": 0.25,
+            "end": [ 1, 0.1, 0.1 ]
           }
         ]
       },

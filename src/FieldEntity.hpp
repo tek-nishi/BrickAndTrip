@@ -48,6 +48,9 @@ class FieldEntity : private boost::noncopyable {
   int total_stage_num_;
   int regular_stage_num_;
   int stage_num_;
+  // 再開用情報
+  int  start_stage_num_;
+  
   Stage stage_;
 
   StageItems items_;
@@ -113,6 +116,7 @@ public:
     finish_stage_color_(0, 0, 0),
     finish_bg_color_(0, 0, 0),
     stage_num_(0),
+    start_stage_num_(0),
     stage_(params, timeline, event),
     items_(params, timeline, event),
     moving_cubes_(params, timeline, event),
@@ -138,6 +142,10 @@ public:
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
+
+#ifdef DEBUG
+    start_stage_num_ = params_["game.start_stage"].getValue<int>();
+#endif
   }
 
   ~FieldEntity() {
@@ -279,11 +287,7 @@ public:
       entry_random = true;
     }
 
-#ifdef DEBUG
-    stage_num_ = params_["game.start_stage"].getValue<int>();
-#else
-    stage_num_ = 0;
-#endif
+    stage_num_    = start_stage_num_;
     all_cleard_   = false;
     game_aborted_ = false;
 
@@ -443,7 +447,7 @@ public:
   }
   
   // リスタート前のClean-up
-  void cleanupField() {
+  void cleanupField(const bool continue_game = false) {
     event_timeline_->clear();
     items_.cleanup();
     moving_cubes_.cleanup();
@@ -455,6 +459,14 @@ public:
     stage_.stopBuildAndCollapse();
     stage_.collapseStage(next_start_line_z_, finish_rate_);
     mode_ = CLEANUP;
+
+    // 再開用情報
+    start_stage_num_ = continue_game ? (stage_num_ - 1)
+#ifdef DEBUG
+                                     : params_["game.start_stage"].getValue<int>();
+#else
+                                     : 0;
+#endif
   }
   
   void restart() {

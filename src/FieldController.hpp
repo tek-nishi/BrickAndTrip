@@ -218,6 +218,12 @@ public:
                                      entity_.cleanupField();
                                    });
 
+    connections_ += event_.connect("gameover-continue",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "gameover-continue" << std::endl;
+                                     entity_.cleanupField(true);
+                                   });
+
     connections_ += event_.connect("stage-all-collapsed",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "stage-all-collapsed" << std::endl;
@@ -236,6 +242,11 @@ public:
                                   [this](const Connection&, EventParam& param) {
                                     view_.enableTouchInput();
                                   });
+
+    connections_ += event_.connect("continue-game",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     view_.enableTouchInput();
+                                   });
                                   
 
     connections_ += event_.connect("pause-start",
