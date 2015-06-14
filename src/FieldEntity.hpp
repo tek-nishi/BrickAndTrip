@@ -260,7 +260,6 @@ public:
   void setupStartStage() {
     auto stage_info = addCubeStage("startline.json");
     next_start_line_z_ = stage_info.top_z - 1;
-    entry_packable_num_ = stage_info.entry_num;
 
     // bgの位置を決めるためにステージの中央座標を求める
     const auto& width = stage_.getStageWidth();
@@ -277,19 +276,21 @@ public:
     
     stage_.buildStage();
 
+    stage_num_    = start_stage_num_;
+    all_cleard_   = false;
+    game_aborted_ = false;
+    // entryするpickableは、直前のステージまでの合算
+    int entry_packable_num = calcEntryPickableCube(stage_num_);
+    
     ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
     float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
 
     // 2個目以降はrandom
     bool entry_random = false;
-    for (int i = 0; i < entry_packable_num_; ++i) {
+    for (int i = 0; i < entry_packable_num; ++i) {
       entryPickableCube(entry_pos, delay, entry_random, false);
       entry_random = true;
     }
-
-    stage_num_    = start_stage_num_;
-    all_cleard_   = false;
-    game_aborted_ = false;
 
     records_.prepareGameRecord();
   }
@@ -302,10 +303,7 @@ public:
     falling_cubes_.clear();
     switches_.clear();
     
-    std::ostringstream path;
-    // stage_num が 0 -> stage01.json 
-    path << "stage" << std::setw(2) << std::setfill('0') << (stage_num_ + 1) << ".json";
-    auto stage_info     = addCubeStage(path.str());
+    auto stage_info     = addCubeStage(getStagePath(stage_num_));
     finish_line_z_      = stage_info.top_z - 1;
     entry_packable_num_ = stage_info.entry_num;
     int entry_item_num  = stage_info.item_num;
@@ -926,7 +924,28 @@ private:
     return stage_num_ != 1;
 #endif
   }
+
   
+  static int calcEntryPickableCube(const int stage_num) {
+    int entry_num = getPickableCubeEntryNum("startline.json");
+    for (int i = 0; i < stage_num; ++i) {
+      entry_num += getPickableCubeEntryNum(getStagePath(i));
+    }
+    return entry_num;
+  }
+
+  
+  static int getPickableCubeEntryNum(const std::string& path) {
+    auto stage = Json::readFromFile(path)["stage"];
+    return Json::getValue(stage, "pickable", 0);
+  }
+
+  static std::string getStagePath(const int stage_num) {
+    std::ostringstream path;
+    // stage_num が 0 -> stage01.json 
+    path << "stage" << std::setw(2) << std::setfill('0') << (stage_num + 1) << ".json";
+    return path.str();
+  }
   
 };
 
