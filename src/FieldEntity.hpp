@@ -922,6 +922,9 @@ private:
   }
 
   bool canContinue() const {
+    // 最終ステージはcontinue不可
+    if (stage_num_ == total_stage_num_) return false;
+    
     // stage開始時にstage_num_は加算されている
 #ifdef DEBUG
     return stage_num_ != (params_["game.start_stage"].getValue<int>() + 1);

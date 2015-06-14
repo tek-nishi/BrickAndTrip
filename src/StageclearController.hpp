@@ -125,8 +125,10 @@ public:
       int comment_num = int(comment.getNumChildren());
 
       // item収集数でコメントを決める
-      int index = (item_num * (comment_num - 1)) / item_total_num;
-      view_->getWidget("comment").setText(comment[index].getValue<std::string>());
+      if (item_total_num > 0) {
+        int index = (item_num * (comment_num - 1)) / item_total_num;
+        view_->getWidget("comment").setText(comment[index].getValue<std::string>());
+      }
 
       // メッセージの演出をitemパーフェクトとそれ以外で変える
       view_->startWidgetTween((item_num == item_total_num) ? "tween-text-light-special"
