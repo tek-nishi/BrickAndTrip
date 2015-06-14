@@ -27,6 +27,11 @@
 namespace ngs {
 
 class FieldEntity : private boost::noncopyable {
+  enum {
+    START_STAGE_NUM = 0,
+  };
+
+  
   ci::JsonTree& params_;
   ci::TimelineRef timeline_;
   Event<EventParam>& event_;
@@ -47,9 +52,9 @@ class FieldEntity : private boost::noncopyable {
 
   int total_stage_num_;
   int regular_stage_num_;
-  int stage_num_;
   // 再開用情報
-  int  start_stage_num_;
+  int start_stage_num_;
+  int stage_num_;
   
   Stage stage_;
 
@@ -115,8 +120,8 @@ public:
     bg_color_(0, 0, 0),
     finish_stage_color_(0, 0, 0),
     finish_bg_color_(0, 0, 0),
-    stage_num_(0),
-    start_stage_num_(0),
+    start_stage_num_(START_STAGE_NUM),
+    stage_num_(start_stage_num_),
     stage_(params, timeline, event),
     items_(params, timeline, event),
     moving_cubes_(params, timeline, event),
@@ -464,7 +469,7 @@ public:
 #ifdef DEBUG
                                      : params_["game.start_stage"].getValue<int>();
 #else
-                                     : 0;
+                                     : START_STAGE_NUM;
 #endif
     records_.continuedGame(continue_game);
   }
