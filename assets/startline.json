@@ -1,5 +1,4 @@
 {
-   "stage" : {
       "bg_color" : [ 0.2980390, 0.2980390, 0.2980390 ],
       "body" : [
          [ 0, 0, 0, 0, 0, 0, 0, 0 ],
@@ -13,5 +12,4 @@
       "light_tween" : "default",
       "pickable" : 1,
       "x_offset" : 0
-   }
 }

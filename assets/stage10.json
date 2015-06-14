@@ -1,5 +1,4 @@
 {
-   "stage" : {
       "auto_collapse" : 10.0,
       "bg_color" : [ 0.5098040, 0.5098040, 0.5098040 ],
       "body" : [
@@ -28,7 +27,6 @@
       "collapse_speed" : 1.0,
       "color" : [ 0.9411770, 0.9411770, 0.9411770 ],
       "light_tween" : "default",
-      "pickable" : 1,
+      "pickable" : 0,
       "x_offset" : 0
-   }
 }

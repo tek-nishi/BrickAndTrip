@@ -679,7 +679,7 @@ private:
   }
   
   StageInfo addCubeStage(const std::string& path) {
-    auto stage = Json::readFromFile(path)["stage"];
+    auto stage = Json::readFromFile(path);
     int current_z = stage_.getTopZ();
 
     int x_offset = Json::getValue(stage, "x_offset", 0);
@@ -936,7 +936,7 @@ private:
 
   
   static int getPickableCubeEntryNum(const std::string& path) {
-    auto stage = Json::readFromFile(path)["stage"];
+    auto stage = Json::readFromFile(path);
     return Json::getValue(stage, "pickable", 0);
   }
 
