@@ -34,6 +34,9 @@ class Stage : private boost::noncopyable {
   float collapse_speed_;
   float auto_collapse_;
 
+  float build_speed_rate_;
+  float collapse_speed_rate_;
+  
   std::string build_ease_;
   float       build_duration_;
   ci::Vec2f   build_y_;
@@ -71,6 +74,8 @@ public:
     build_speed_(params["game.stage.build_speed"].getValue<float>()),
     collapse_speed_(params["game.stage.collapse_speed"].getValue<float>()),
     auto_collapse_(params["game.stage.auto_collapse"].getValue<float>()),
+    build_speed_rate_(1.0f),
+    collapse_speed_rate_(1.0f),
     build_ease_(params["game.stage.build_ease"].getValue<std::string>()),
     build_duration_(params["game.stage.build_duration"].getValue<float>()),
     build_y_(Json::getVec2<float>(params["game.stage.build_y"])),
@@ -104,89 +109,25 @@ public:
     animation_timeline_->removeSelf();
   }
 
+
+  // 生成開始
+  void startBuildStage(const float speed_rate = 1.0f) {
+    build_speed_rate_ = speed_rate;
+    buildStage();
+  }
+
+  // 生成速度の変更
+  void setBuildSpeedRate(const float speed_rate) {
+    build_speed_rate_ = speed_rate;
+  }
+
+  // 崩壊開始
+  void startCollapseStage(const int stop_z, const float speed_rate = 1.0f) {
+    collapse_speed_rate_ = speed_rate;
+    collapseStage(stop_z);
+  }
+
   
-
-
-  void buildStage(const float speed_rate = 1.0f) {
-    if (!canBuild()) {
-      finished_build_ = true;
-      return;
-    }
-    finished_build_ = false;
-    
-    event_timeline_->add([this, speed_rate]() {
-        buildOneLine();
-
-        {
-          // active_top_z_には次のzが入っている
-          EventParam params = {
-            { "active_top_z", active_top_z_ - 1 }
-          };
-          event_.signal("build-one-line", params);
-        }
-
-        // active_top_z_には次のzが入っている
-        if ((active_top_z_ - 1) == finish_line_z_) {
-          event_.signal("build-finish-line", EventParam());
-        }
-
-        // 生成演出
-        auto& cubes = topLine();
-        for (auto& cube : cubes) {
-          cube.can_ride = false;
-          
-          float y = ci::randFloat(build_y_.x, build_y_.y);
-          ci::Vec3f start_value(cube.position() + ci::Vec3f(0, y, 0));
-          ci::Vec3f end_value = cube.position();
-          auto options = animation_timeline_->apply(&cube.position,
-                                                    start_value, end_value,
-                                                    build_duration_, getEaseFunc(build_ease_));
-
-          // lambda内でcubeを書き換えるので、mutable指定
-          options.finishFn([&cube]() mutable {
-              cube.can_ride = true;
-            });
-
-          cube.position = start_value;
-        }
-        
-        buildStage(speed_rate);
-      },
-      event_timeline_->getCurrentTime() + build_speed_ * speed_rate);
-  }
-
-  void collapseStage(const int stop_z, const float speed_rate = 1.0f) {
-    int bottom_z = active_top_z_ - int(active_cubes_.size()) - 1;
-    
-    if (!canCollapse() || (bottom_z == stop_z)) {
-      finished_collapse_ = true;
-      return;
-    }
-    started_collapse_  = true;
-    finished_collapse_ = false;
-
-    // 落下開始
-    collapseStartOneLine();
-    event_.signal("collapse-one-line", EventParam());
-    auto& cubes = collapseLine();
-    for (auto& cube : cubes) {
-      cube.can_ride = false;
-
-      float y = ci::randFloat(collapse_y_.x, collapse_y_.y);
-      ci::Vec3f end_value(cube.position() + ci::Vec3f(0, y, 0));
-      animation_timeline_->apply(&cube.position, end_value,
-                                 collapse_duration_, getEaseFunc(collapse_ease_));
-    }
-
-    animation_timeline_->add([this]() {
-        collapseFinishOneLine();
-      },
-      animation_timeline_->getCurrentTime() + collapse_duration_);
-
-    event_timeline_->add(std::bind(&Stage::collapseStage, this, stop_z, speed_rate),
-                          event_timeline_->getCurrentTime() + collapse_speed_ * speed_rate);
-  }
-
   // 生成 & 崩壊を止める
   void stopBuildAndCollapse() {
     event_timeline_->clear();
@@ -257,7 +198,7 @@ public:
     event_timeline_->add([this, stop_z, speed_rate]() {
         if (!started_collapse_) {
           DOUT << "auto collapse" << std::endl;
-          collapseStage(stop_z, speed_rate);
+          startCollapseStage(stop_z, speed_rate);
         }
       },
       event_timeline_->getCurrentTime() + auto_collapse_);
@@ -271,6 +212,7 @@ public:
   
 
   int getTopZ() const { return top_z_; }
+  int getActiveTopZ() const { return active_top_z_; }
   int getActiveBottomZ() const { return active_top_z_ - int(active_cubes_.size()); }
 
   const ci::Vec2i& getStageWidth() const { return stage_width_; }
@@ -362,6 +304,88 @@ public:
 
 
 private:
+  // 生成(再帰)
+  void buildStage() {
+    if (!canBuild()) {
+      finished_build_ = true;
+      return;
+    }
+    finished_build_ = false;
+    
+    event_timeline_->add([this]() {
+        buildOneLine();
+
+        {
+          // active_top_z_には次のzが入っている
+          EventParam params = {
+            { "active_top_z", active_top_z_ - 1 }
+          };
+          event_.signal("build-one-line", params);
+        }
+
+        // active_top_z_には次のzが入っている
+        if ((active_top_z_ - 1) == finish_line_z_) {
+          event_.signal("build-finish-line", EventParam());
+        }
+
+        // 生成演出
+        auto& cubes = topLine();
+        for (auto& cube : cubes) {
+          cube.can_ride = false;
+          
+          float y = ci::randFloat(build_y_.x, build_y_.y);
+          ci::Vec3f start_value(cube.position() + ci::Vec3f(0, y, 0));
+          ci::Vec3f end_value = cube.position();
+          auto options = animation_timeline_->apply(&cube.position,
+                                                    start_value, end_value,
+                                                    build_duration_, getEaseFunc(build_ease_));
+
+          // lambda内でcubeを書き換えるので、mutable指定
+          options.finishFn([&cube]() mutable {
+              cube.can_ride = true;
+            });
+
+          cube.position = start_value;
+        }
+        
+        buildStage();
+      },
+      event_timeline_->getCurrentTime() + build_speed_ * build_speed_rate_);
+  }
+
+  // 崩壊(再帰)
+  void collapseStage(const int stop_z) {
+    int bottom_z = active_top_z_ - int(active_cubes_.size()) - 1;
+    
+    if (!canCollapse() || (bottom_z == stop_z)) {
+      finished_collapse_ = true;
+      return;
+    }
+    started_collapse_  = true;
+    finished_collapse_ = false;
+
+    // 落下開始
+    collapseStartOneLine();
+    event_.signal("collapse-one-line", EventParam());
+    auto& cubes = collapseLine();
+    for (auto& cube : cubes) {
+      cube.can_ride = false;
+
+      float y = ci::randFloat(collapse_y_.x, collapse_y_.y);
+      ci::Vec3f end_value(cube.position() + ci::Vec3f(0, y, 0));
+      animation_timeline_->apply(&cube.position, end_value,
+                                 collapse_duration_, getEaseFunc(collapse_ease_));
+    }
+
+    animation_timeline_->add([this]() {
+        collapseFinishOneLine();
+      },
+      animation_timeline_->getCurrentTime() + collapse_duration_);
+
+    event_timeline_->add(std::bind(&Stage::collapseStage, this, stop_z),
+                          event_timeline_->getCurrentTime() + collapse_speed_ * collapse_speed_rate_);
+  }
+  
   const StageCube* const getStageCube(const ci::Vec3i& block_pos) const {
     int top_z    = active_top_z_ - 1;
     int bottom_z = active_top_z_ - int(active_cubes_.size());

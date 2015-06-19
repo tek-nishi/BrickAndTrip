@@ -48,6 +48,8 @@ class FieldEntity : private boost::noncopyable {
   ci::Color finish_bg_color_;
   std::string finish_light_tween_;
 
+  float collapse_speed_rate_;
+  float collapse_speed_rate_min_;
   float finish_rate_;
 
   int total_stage_num_;
@@ -130,6 +132,8 @@ public:
     bg_(params, timeline, event),
     first_started_pickable_(false),
     first_fallen_pickable_(false),
+    collapse_speed_rate_(params["game.collapse_speed_rate"].getValue<float>()),
+    collapse_speed_rate_min_(params["game.collapse_speed_rate_min"].getValue<float>()),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
     total_stage_num_(params["game.total_stage_num"].getValue<int>()),
     regular_stage_num_(params["game.regular_stage_num"].getValue<int>()),
@@ -279,7 +283,7 @@ public:
       event_.signal("stage-color", params);
     }
     
-    stage_.buildStage();
+    stage_.startBuildStage();
 
     stage_num_    = start_stage_num_;
     all_cleard_   = false;
@@ -341,22 +345,22 @@ public:
 
     stage_num_ += 1;
 
-    stage_.buildStage();
+    stage_.startBuildStage();
     stage_.setupAutoCollapse(finish_line_z_ - 1);
   }
 
   // StageのFinishLineまでの崩壊を始める
   void startStageCollapse() {
     if (!stage_.isStartedCollapse()) {
-      stage_.collapseStage(finish_line_z_ - 1);
+      stage_.startCollapseStage(finish_line_z_ - 1);
     }
   }
   
   // FinishLineまで一気に崩壊 && FinishLineを一気に生成
   void completeBuildAndCollapseStage() {
     stage_.stopBuildAndCollapse();
-    stage_.buildStage(finish_rate_);
-    stage_.collapseStage(finish_line_z_ - 1, finish_rate_);
+    stage_.startBuildStage(finish_rate_);
+    stage_.startCollapseStage(finish_line_z_ - 1, finish_rate_);
 
     records_.storeStageRecord(event_timeline_->getCurrentTime());
 
@@ -442,7 +446,7 @@ public:
 
   // 強制崩壊
   void collapseStage() {
-    stage_.collapseStage(next_start_line_z_);
+    stage_.startCollapseStage(next_start_line_z_);
 
     first_started_pickable_ = true;
     first_fallen_pickable_  = true;
@@ -461,7 +465,7 @@ public:
     first_fallen_pickable_  = true;
     
     stage_.stopBuildAndCollapse();
-    stage_.collapseStage(next_start_line_z_, finish_rate_);
+    stage_.startCollapseStage(next_start_line_z_, finish_rate_);
     mode_ = CLEANUP;
 
     // 再開用情報
@@ -913,6 +917,26 @@ private:
     
     return finished;
   }
+
+
+#if 0
+  // stageの生成速度を調整
+  void controlStageBuildSpeed() {
+    int active_top_z = stage_.getActiveTopZ();
+    int pickable_top_z = 0;
+    for (const auto& cube : pickable_cubes_) {
+      const auto& pos = cube->blockPosition();
+      pickable_top_z = std::max(pos.z, pickable_top_z);
+    }
+
+    float speed_rate = std::min((active_top_z - pickable_top_z) * collapse_speed_rate_, 1.0f);
+    speed_rate = std::max(speed_rate, collapse_speed_rate_min_);
+
+    DOUT << speed_rate << std::endl;
+    
+    stage_.setBuildSpeedRate(speed_rate);
+  }
+#endif
 
 
   void startSwitchTargets(const std::vector<ci::Vec3i>& targets) {

@@ -53,6 +53,7 @@ public:
   
 private:
   CurrentGame current_game_;
+  int current_distane_;
 
   bool record_current_game_;
 
@@ -66,6 +67,7 @@ private:
   int    total_tumble_num_;
   int    total_item_num_;
   int    total_operation_num_;
+  int    total_distance_;
   int    total_clear_num_;
 
   int    current_stage_;
@@ -92,6 +94,7 @@ public:
     total_tumble_num_(0),
     total_item_num_(0),
     total_operation_num_(0),
+    total_distance_(0),
     total_clear_num_(0),
     current_stage_(0),
     current_play_time_(0.0),
@@ -163,6 +166,8 @@ public:
     current_game_ = CurrentGame();
     current_game_.start_time = current_time;
     current_game_.item_total_num = item_num;
+
+    current_distane_ = 0;
   }
   
   bool isFirstCleard() const {

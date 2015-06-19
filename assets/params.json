@@ -440,12 +440,13 @@
 
     "cube_line_color": [ 0.7, 0, 0 ],
 
+    "collapse_speed_rate": 0.2,
+    "collapse_speed_rate_min": 0.2,
     "finish_rate": 0.1,
 
     "total_stage_num": 11,
-    
     "regular_stage_num": 10,
-    "start_stage": 2,
+    "start_stage": 0,
     
     "stage": {
       "build_speed": 1,
