@@ -248,10 +248,11 @@ public:
       const auto& current_game = records_.currentGame();
       
       EventParam params = {
-        { "play-time", current_game.play_time },
-        { "tumble-num", current_game.tumble_num },
-        { "item-num", current_game.item_num },
+        { "play-time",     current_game.play_time },
+        { "tumble-num",    current_game.tumble_num },
+        { "item-num",      current_game.item_num },
         { "operation_num", current_game.operation_num },
+        { "distance",      current_game.distance },
       };
       event_.signal("update-record", params);
     }
@@ -371,13 +372,16 @@ public:
 
     if (stage_num_ == regular_stage_num_) {
       // 11stageが登場するか判定
-      all_cleard = !records_.isRegularStageCompleted();
-      if (all_cleard) regular_stage = true;
+      if (!records_.isRegularStageCompleted()) {
+        all_cleard    = true;
+        regular_stage = true;
+        records_.cleardRegularStages();
+      }
     }
     else if (stage_num_ == total_stage_num_) {
-      records_.cleardAllStage();
       all_cleard = true;
       all_stage  = true;
+      records_.cleardAllStages();
     }
     all_cleard_ = all_cleard;
     
@@ -503,7 +507,7 @@ public:
     records_.increaseOperationNumCurrentGame();
     
     if ((direction == PickableCube::MOVE_NONE) || !speed) {
-      cube->cancelRotationMove();
+      cube->calcelRotationMove();
       return;
     }
 
@@ -619,6 +623,11 @@ public:
     }
   }
 
+  // Pickableの距離を記録
+  void recordDistance() {
+    int distance = getPickableCubeTopZ() - stage_.getActiveBottomZ();
+    records_.recordDistance(distance);
+  }
   
   // 現在のFieldの状態を作成
   Field fieldData() {
@@ -919,16 +928,21 @@ private:
   }
 
 
+  int getPickableCubeTopZ() const {
+    int top_z = 0;
+    for (const auto& cube : pickable_cubes_) {
+      top_z = std::max(cube->blockPosition().z, top_z);
+    }
+
+    return top_z;
+  }
+
 #if 0
   // stageの生成速度を調整
   void controlStageBuildSpeed() {
     int active_top_z = stage_.getActiveTopZ();
-    int pickable_top_z = 0;
-    for (const auto& cube : pickable_cubes_) {
-      const auto& pos = cube->blockPosition();
-      pickable_top_z = std::max(pos.z, pickable_top_z);
-    }
-
+    int pickable_top_z = getPickableCubeTopZ();
+    
     float speed_rate = std::min((active_top_z - pickable_top_z) * collapse_speed_rate_, 1.0f);
     speed_rate = std::max(speed_rate, collapse_speed_rate_min_);
 

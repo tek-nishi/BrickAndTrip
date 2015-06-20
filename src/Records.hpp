@@ -40,20 +40,23 @@ public:
     int item_num;
     int item_total_num;
     int operation_num;
+    
+    int distance;
 
     CurrentGame() :
       start_time(0.0),
       play_time(0.0),
       tumble_num(0),
       item_num(0),
-      operation_num(0)
+      operation_num(0),
+      distance(0)
     {}
   };
 
   
 private:
   CurrentGame current_game_;
-  int current_distane_;
+  int current_game_distance_;
 
   bool record_current_game_;
 
@@ -144,6 +147,12 @@ public:
     current_game_.play_time += progressing_seconds;
   }
 
+  void recordDistance(const int distance) {
+    if (!record_current_game_) return;
+
+    current_game_.distance = distance;
+  }
+
   void continuedGame(const bool continued_game) {
     continued_game_ = continued_game;
   }
@@ -167,7 +176,7 @@ public:
     current_game_.start_time = current_time;
     current_game_.item_total_num = item_num;
 
-    current_distane_ = 0;
+    current_game_distance_ = 0;
   }
   
   bool isFirstCleard() const {
@@ -182,6 +191,7 @@ public:
     return continued_game_;
   }
 
+  // ステージクリア時の記録の保存
   void storeStageRecord(const double current_time) {
     StageRecord record;
 
@@ -191,7 +201,7 @@ public:
     record.item_num      = current_game_.item_num;
     record.all_item_get  = current_game_.item_num == current_game_.item_total_num;
     record.operation_num = current_game_.operation_num;
-
+    
     // TODO:score計算
     // record.score = 0;
     
@@ -201,22 +211,25 @@ public:
     else {
       updateStageRecord(stage_records_[current_stage_], record);
     }
-    
-    current_play_time_ += play_time;
+
+    current_play_time_     += play_time;
+    current_game_distance_ += current_game_.distance;
     
     total_play_time_     += record.clear_time;
     total_tumble_num_    += current_game_.tumble_num;
     total_item_num_      += current_game_.item_num;
     total_operation_num_ += current_game_.operation_num;
+    total_distance_      += current_game_distance_;
 
     record_current_game_ = false;
   }
 
-  
+  // GameOver時の記録の保存
   void storeRecord(const double current_time) {
     double play_time = current_time - current_game_.start_time;
 
-    current_play_time_ += play_time;
+    current_play_time_     += play_time;
+    current_game_distance_ += current_game_.distance;
 
     // TIPS:GameOverでも記録が伸びる親切設計
     total_play_time_     += play_time;
@@ -224,12 +237,20 @@ public:
     total_item_num_      += current_game_.item_num;
     total_operation_num_ += current_game_.operation_num;
     total_play_num_      += 1;
+    total_distance_      += current_game_distance_;
 
     record_current_game_ = false;
   }
 
-  // クリア回数
-  void cleardAllStage() {
+  
+  // 10ステージクリア
+  void cleardRegularStages() {
+    total_play_num_ += 1;
+  }
+  
+  // 全ステージクリア
+  void cleardAllStages() {
+    total_play_num_  += 1;
     total_clear_num_ += 1;
     checkAllItemCompleted();
   }
@@ -261,6 +282,7 @@ public:
     total_item_num_      = Json::getValue(record, "total_item_num", 0);
     total_operation_num_ = Json::getValue(record, "total_operation_num", 0);
     total_clear_num_     = Json::getValue(record, "total_clear_num", 0);
+    total_distance_      = Json::getValue(record, "total_distance", 0);
 
     all_item_completed_ = Json::getValue(record, "all_item_completed", false);
 
@@ -296,6 +318,7 @@ public:
       .addChild(ci::JsonTree("total_item_num", total_item_num_))
       .addChild(ci::JsonTree("total_operation_num", total_operation_num_))
       .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
+      .addChild(ci::JsonTree("total_distance", total_distance_))
       .addChild(ci::JsonTree("all_item_completed", all_item_completed_))
       .addChild(ci::JsonTree("se_on", se_on_))
       .addChild(ci::JsonTree("bgm_on", bgm_on_))
@@ -305,6 +328,7 @@ public:
       ci::JsonTree stage = ci::JsonTree::makeArray("stage");
       for (const auto& s : stage_records_) {
         ci::JsonTree sr;
+
         sr.addChild(ci::JsonTree("clear_time", s.clear_time))
           .addChild(ci::JsonTree("tumble_num", s.tumble_num))
           .addChild(ci::JsonTree("item_num", s.item_num))
@@ -331,12 +355,18 @@ public:
 
   double getCurrentGamePlayTime() const { return current_play_time_; }
 
+  // ステージ内での移動距離
+  int getCurrentGameDistance() const { return current_game_.distance; }
+  // プレイしたステージの合計移動距離
+  int getCurrentGameTotalDistance() const { return current_game_distance_; }
+
   int getTotalPlayNum() const { return total_play_num_; }
   double getTotalPlayTime() const { return total_play_time_; }
   int getTotalTumbleNum() const { return total_tumble_num_; }
   int getTotalItemNum() const { return total_item_num_; }
   int getTotalOperationNum() const { return total_operation_num_; }
   int getTotalClearNum() const { return total_clear_num_; }
+  int getTotalDistance() const { return total_distance_; }
 
   // 10stageまでのitemをcompleteしたか??
   bool isRegularStageCompleted() const {

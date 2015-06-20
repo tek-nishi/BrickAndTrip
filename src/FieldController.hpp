@@ -64,6 +64,8 @@ public:
 
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection&, EventParam& param) {
+                                     entity_.recordDistance();
+                                     
                                      const auto& block_pos = boost::any_cast<const ci::Vec3i&>(param["block_pos"]);
                                      const auto id = boost::any_cast<u_int>(param["id"]);
                                      entity_.movedPickableCube(id, block_pos);
