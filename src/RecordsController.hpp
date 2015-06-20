@@ -119,20 +119,10 @@ private:
       auto total_time = boost::any_cast<double>(records.at("total_time"));
       view_->getWidget("total_time").setText(toFormatedString(total_time, true));
     }
-    
+
     {
-      auto total_tumble = boost::any_cast<int>(records.at("total_tumble"));
-      view_->getWidget("total_tumble").setText(toFormatedString(total_tumble, 5));
-    }
-    
-    {
-      auto total_operation = boost::any_cast<int>(records.at("total_operation"));
-      view_->getWidget("total_operation").setText(toFormatedString(total_operation, 5));
-    }
-    
-    {
-      auto total_item = boost::any_cast<int>(records.at("total_item"));
-      view_->getWidget("total_item").setText(toFormatedString(total_item, 5));
+      auto total_score = boost::any_cast<int>(records.at("high_score"));
+      view_->getWidget("high_score").setText(toFormatedString(total_score, 5));
     }
     
     {

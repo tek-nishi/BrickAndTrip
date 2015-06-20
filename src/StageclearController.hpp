@@ -81,60 +81,8 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
-    {
-      // constなのでatを使っている
-      auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-      view_->getWidget("time-result").setText(toFormatedString(clear_time));
-    }
+    setupView(params, result);
 
-    {
-      auto tumble_num = boost::any_cast<int>(result.at("tumble_num"));
-
-      std::ostringstream str;
-      str << std::setw(5) << std::setfill('0') << tumble_num;
-
-      view_->getWidget("tumble-result").setText(str.str());
-    }
-
-    {
-      auto operation_num = boost::any_cast<int>(result.at("operation_num"));
-
-      std::ostringstream str;
-      str << std::setw(5) << std::setfill('0') << operation_num;
-
-      view_->getWidget("operation-result").setText(str.str());
-    }
-    
-    {
-      auto item_num = boost::any_cast<int>(result.at("item_num"));
-      auto& widget = view_->getWidget("item-result");
-      if (!item_num) {
-        widget.setDisp(false);
-      }
-      else {
-        std::string text(item_num, ' ');
-        widget.setText(text);
-      }
-    }
-
-    {
-      auto item_num       = boost::any_cast<int>(result.at("item_num"));
-      auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
-
-      auto comment = params["stageclear.comment"];
-      int comment_num = int(comment.getNumChildren());
-
-      // item収集数でコメントを決める
-      if (item_total_num > 0) {
-        int index = (item_num * (comment_num - 1)) / item_total_num;
-        view_->getWidget("comment").setText(comment[index].getValue<std::string>());
-      }
-
-      // メッセージの演出をitemパーフェクトとそれ以外で変える
-      view_->startWidgetTween((item_num == item_total_num) ? "tween-text-light-special"
-                                                           : "tween-text-light-normal");
-    }
-    
     view_->startWidgetTween("tween-in");
 
     if (params.hasChild("stageclear.active_delay")) {
@@ -157,6 +105,44 @@ public:
 
 
 private:
+  void setupView(ci::JsonTree& params,
+                 const EventParam& result) {
+    {
+      // constなのでatを使っている
+      auto clear_time = boost::any_cast<double>(result.at("clear_time"));
+      view_->getWidget("time-result").setText(toFormatedString(clear_time));
+    }
+
+    {
+      auto score = boost::any_cast<int>(result.at("score"));
+      view_->getWidget("score-result").setText(toFormatedString(score, 5));
+    }
+
+    {
+      auto item_num = boost::any_cast<int>(result.at("item_num"));
+      auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
+
+      if (item_total_num > 0) {
+        int item_rate = item_num * 100 / item_total_num;
+        view_->getWidget("item-result").setText(toFormatedString(item_rate, 3) + "%");
+      }
+      
+      auto comment = params["stageclear.comment"];
+      int comment_num = int(comment.getNumChildren());
+
+      // item収集数でコメントを決める
+      if (item_total_num > 0) {
+        int index = (item_num * (comment_num - 1)) / item_total_num;
+        view_->getWidget("comment").setText(comment[index].getValue<std::string>());
+      }
+
+      // メッセージの演出をitemパーフェクトとそれ以外で変える
+      view_->startWidgetTween((item_num == item_total_num) ? "tween-text-light-special"
+                              : "tween-text-light-normal");
+    }
+  }
+
+  
   bool isActive() const override {
     return active_;
   }

@@ -54,8 +54,8 @@
     "pos": [ 0, 2, 0 ],
     "origin": "center-right",
     "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
 
     "tween": {
       "tween-in": {
@@ -141,8 +141,8 @@
     "pos": [ 0, 1.5, 0 ],
     "origin": "center-right",
     "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
 
     "tween": {
       "tween-in": {
@@ -218,18 +218,18 @@
   },
 
   {
-    "name": "tumble",
+    "name": "score",
     "disp": true,
 
-    "text": "TUMBLES",
+    "text": "HI-SCORE",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
     "pos": [ 0, 1, 0 ],
     "origin": "center-right",
     "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
 
     "tween": {
       "tween-in": {
@@ -261,10 +261,10 @@
     }
   },
   {
-    "name": "total_tumble",
+    "name": "high_score",
     "disp": true,
 
-    "text": "00000",
+    "text": "0",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -305,180 +305,6 @@
   },
 
   {
-    "name": "operation",
-    "disp": true,
-
-    "text": "ACTIONS",
-    "size": 0.3,
-    "spacing": 0.03,
-    "chara_split": 1,
-    "pos": [ 0, 0.5, 0 ],
-    "origin": "center-right",
-    "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
-
-    "tween": {
-      "tween-in": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseOutElastic",
-            "duration": 1.2,
-            "delay": 0.3,
-            "interval": 0.05,
-            "start": -120,
-            "end": 0
-          }
-        ]
-      },
-      
-      "tween-out": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseInExpo",
-            "duration": 0.5,
-            "delay": 0.15,
-            "interval": 0.05,
-            "end": -120
-          }
-        ]
-      }
-    }
-  },
-  {
-    "name": "total_operation",
-    "disp": true,
-
-    "text": "00000",
-    "size": 0.3,
-    "spacing": 0.03,
-    "chara_split": 1,
-    "pos": [ 0.15, 0.5, 0 ],
-    "origin": "center-left",
-    "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
-
-    "tween": {
-      "tween-in": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseOutElastic",
-            "duration": 1.2,
-            "delay": 0.3,
-            "interval": 0.05,
-            "start": -120,
-            "end": 0
-          }
-        ]
-      },
-      
-      "tween-out": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseInExpo",
-            "duration": 0.5,
-            "delay": 0.15,
-            "interval": 0.05,
-            "end": -120
-          }
-        ]
-      }
-    }
-  },
-
-  {
-    "name": "item",
-    "disp": true,
-
-    "text": "ITEMS",
-    "size": 0.3,
-    "spacing": 0.03,
-    "chara_split": 1,
-    "pos": [ 0, 0, 0 ],
-    "origin": "center-right",
-    "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
-
-    "tween": {
-      "tween-in": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseOutElastic",
-            "duration": 1.2,
-            "delay": 0.35,
-            "interval": 0.05,
-            "start": -120,
-            "end": 0
-          }
-        ]
-      },
-      
-      "tween-out": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseInExpo",
-            "duration": 0.5,
-            "delay": 0.15,
-            "interval": 0.05,
-            "end": -120
-          }
-        ]
-      }
-    }
-  },
-  {
-    "name": "total_item",
-    "disp": true,
-
-    "text": "00000",
-    "size": 0.3,
-    "spacing": 0.03,
-    "chara_split": 1,
-    "pos": [ 0.15, 0, 0 ],
-    "origin": "center-left",
-    "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
-
-    "tween": {
-      "tween-in": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseOutElastic",
-            "duration": 1.2,
-            "delay": 0.35,
-            "interval": 0.05,
-            "start": -120,
-            "end": 0
-          }
-        ]
-      },
-      
-      "tween-out": {
-        "body": [
-          {
-            "target": "rotate",
-            "type": "EaseInExpo",
-            "duration": 0.5,
-            "delay": 0.15,
-            "interval": 0.05,
-            "end": -120
-          }
-        ]
-      }
-    }
-  },
-
-  {
     "name": "clear",
     "disp": true,
 
@@ -486,11 +312,11 @@
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
-    "pos": [ 0, -0.5, 0 ],
+    "pos": [ 0, 0.5, 0 ],
     "origin": "center-right",
     "layout": "center",
-    "base_color": [ 1, 1, 1 ],
-    "text_color": [ 0.1, 0.1, 0.1 ],
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
 
     "tween": {
       "tween-in": {
@@ -529,7 +355,7 @@
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
-    "pos": [ 0.15, -0.5, 0 ],
+    "pos": [ 0.15, 0.5, 0 ],
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
@@ -575,7 +401,7 @@
     "size": 0.4,
     "spacing": 0.04,
     "chara_split": 1,
-    "pos": [ -1.08, -1.0, 0 ],
+    "pos": [ -1.08, 0.0, 0 ],
     "origin": "left-center",
     "layout": "center",
     "hsv": true,
@@ -629,7 +455,7 @@
     "size": 0.4,
     "spacing": 0.04,
     "chara_split": 1,
-    "pos": [ -1.08, -1.44, 0 ],
+    "pos": [ -1.08, -0.44, 0 ],
     "origin": "left-center",
     "layout": "center",
     "hsv": true,

@@ -16,47 +16,50 @@ class Records : private boost::noncopyable {
 public:
   struct StageRecord {
     double clear_time;
-    int    tumble_num;
-    int    item_num;
     bool   all_item_get;
-    int    operation_num;
     int    score;
 
     StageRecord() :
       clear_time(0.0),
-      tumble_num(0),
-      item_num(0),
       all_item_get(false),
-      operation_num(0),
-      score()
+      score(0)
     {}
   };
-  
-  struct CurrentGame {
+
+  struct CurrentStage {
     double start_time;
     double play_time;
 
-    int tumble_num;
     int item_num;
     int item_total_num;
-    int operation_num;
-    
-    int distance;
+    int score;
 
-    CurrentGame() :
+    CurrentStage() :
       start_time(0.0),
       play_time(0.0),
-      tumble_num(0),
       item_num(0),
-      operation_num(0),
-      distance(0)
+      score(0)
+    {}
+  };
+
+  struct CurrentGame {
+    int    stage_num;
+    double play_time;
+    int    score;
+    bool   continued;
+    
+    CurrentGame() :
+      stage_num(0),
+      play_time(0.0),
+      score(0),
+      continued(false)
     {}
   };
 
   
 private:
   CurrentGame current_game_;
-  int current_game_distance_;
+  CurrentStage current_stage_;
 
   bool record_current_game_;
 
@@ -67,17 +70,9 @@ private:
   
   int    total_play_num_;
   double total_play_time_;
-  int    total_tumble_num_;
-  int    total_item_num_;
-  int    total_operation_num_;
-  int    total_distance_;
+  int    high_score_;
   int    total_clear_num_;
 
-  int    current_stage_;
-  double current_play_time_;
-
-  bool continued_game_;
-  
   std::vector<StageRecord> stage_records_;
 
   bool se_on_;
@@ -94,21 +89,16 @@ public:
     all_item_completed_(false),
     total_play_num_(0),
     total_play_time_(0.0),
-    total_tumble_num_(0),
-    total_item_num_(0),
-    total_operation_num_(0),
-    total_distance_(0),
+    high_score_(0),
     total_clear_num_(0),
-    current_stage_(0),
-    current_play_time_(0.0),
-    continued_game_(false),
     se_on_(true),
     bgm_on_(true),
     version_(version)
   { }
 
 
-  void setStageNum(const size_t regular_stage_num, const size_t total_stage_num) {
+  void setStageNum(const size_t regular_stage_num,
+                   const size_t total_stage_num) {
     regular_stage_num_ = regular_stage_num;
     total_stage_num_   = total_stage_num;
   }
@@ -122,85 +112,60 @@ public:
   void disableRecordCurrentGame() {
     record_current_game_ = false;
   }
-  
-  void increaseTumbleNumCurrentGame() {
-    if (!record_current_game_) return;
-
-    current_game_.tumble_num += 1;
-  }
 
   void increaseItemNumCurrentGame() {
     if (!record_current_game_) return;
 
-    current_game_.item_num += 1;
-  }
-
-  void increaseOperationNumCurrentGame() {
-    if (!record_current_game_) return;
-
-    current_game_.operation_num += 1;
+    current_stage_.item_num += 1;
   }
 
   void progressPlayTimeCurrntGame(const double progressing_seconds) {
     if (!record_current_game_) return;
 
-    current_game_.play_time += progressing_seconds;
-  }
-
-  void recordDistance(const int distance) {
-    if (!record_current_game_) return;
-
-    current_game_.distance = distance;
+    current_stage_.play_time += progressing_seconds;
   }
 
   void continuedGame(const bool continued_game) {
-    continued_game_ = continued_game;
+    current_game_.continued = continued_game;
   }
 
+  const CurrentStage& currentStage() const {
+    return current_stage_;
+  }
+  
   const CurrentGame& currentGame() const {
     return current_game_;
   }
   
   
-  // 最初のステージでのみ必要な初期化
+  // ゲーム開始時の初期化
   void prepareGameRecord() {
-    current_play_time_ = 0.0;
+    current_game_ = CurrentGame();
   }
-  
+
+  // ステージ開始時の初期化
   void prepareCurrentGameRecord(const int stage_num,
                                 const double current_time,
                                 const int item_num) {
-    current_stage_ = stage_num;
+    current_stage_ = CurrentStage();
 
-    current_game_ = CurrentGame();
-    current_game_.start_time = current_time;
-    current_game_.item_total_num = item_num;
+    current_stage_.start_time     = current_time;
+    current_stage_.item_total_num = item_num;
 
-    current_game_distance_ = 0;
-  }
-  
-  bool isFirstCleard() const {
-    return current_stage_ == stage_records_.size();
-  }
-
-  int cleardStageNum() {
-    return int(stage_records_.size());
+    current_game_.stage_num = stage_num;
   }
 
   bool isContinuedGame() const {
-    return continued_game_;
+    return current_game_.continued;
   }
 
   // ステージクリア時の記録の保存
   void storeStageRecord(const double current_time) {
     StageRecord record;
 
-    double play_time = current_time - current_game_.start_time;
-    record.clear_time    = play_time;
-    record.tumble_num    = current_game_.tumble_num;
-    record.item_num      = current_game_.item_num;
-    record.all_item_get  = current_game_.item_num == current_game_.item_total_num;
-    record.operation_num = current_game_.operation_num;
+    double play_time = current_time - current_stage_.start_time;
+    record.clear_time   = play_time;
+    record.all_item_get = current_stage_.item_num == current_stage_.item_total_num;
     
     // TODO:score計算
     // record.score = 0;
@@ -209,35 +174,21 @@ public:
       stage_records_.push_back(record);
     }
     else {
-      updateStageRecord(stage_records_[current_stage_], record);
+      updateStageRecord(stage_records_[current_game_.stage_num], record);
     }
 
-    current_play_time_     += play_time;
-    current_game_distance_ += current_game_.distance;
-    
-    total_play_time_     += record.clear_time;
-    total_tumble_num_    += current_game_.tumble_num;
-    total_item_num_      += current_game_.item_num;
-    total_operation_num_ += current_game_.operation_num;
-    total_distance_      += current_game_distance_;
+    current_game_.play_time += play_time;
 
     record_current_game_ = false;
   }
 
   // GameOver時の記録の保存
   void storeRecord(const double current_time) {
-    double play_time = current_time - current_game_.start_time;
+    double play_time = current_time - current_stage_.start_time;
+    current_game_.play_time += play_time;
 
-    current_play_time_     += play_time;
-    current_game_distance_ += current_game_.distance;
-
-    // TIPS:GameOverでも記録が伸びる親切設計
-    total_play_time_     += play_time;
-    total_tumble_num_    += current_game_.tumble_num;
-    total_item_num_      += current_game_.item_num;
-    total_operation_num_ += current_game_.operation_num;
-    total_play_num_      += 1;
-    total_distance_      += current_game_distance_;
+    total_play_time_ += current_game_.play_time;
+    total_play_num_  += 1;
 
     record_current_game_ = false;
   }
@@ -245,12 +196,15 @@ public:
   
   // 10ステージクリア
   void cleardRegularStages() {
-    total_play_num_ += 1;
+    total_play_time_ += current_game_.play_time;
+    total_play_num_  += 1;
   }
   
   // 全ステージクリア
   void cleardAllStages() {
+    total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
+
     total_clear_num_ += 1;
     checkAllItemCompleted();
   }
@@ -276,13 +230,10 @@ public:
     ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
 #endif
 
-    total_play_num_      = Json::getValue(record, "total_play_num", 0);
-    total_play_time_     = Json::getValue(record, "total_play_time", 0.0);
-    total_tumble_num_    = Json::getValue(record, "total_tumble_num", 0);
-    total_item_num_      = Json::getValue(record, "total_item_num", 0);
-    total_operation_num_ = Json::getValue(record, "total_operation_num", 0);
-    total_clear_num_     = Json::getValue(record, "total_clear_num", 0);
-    total_distance_      = Json::getValue(record, "total_distance", 0);
+    total_play_num_  = Json::getValue(record, "total_play_num", 0);
+    total_play_time_ = Json::getValue(record, "total_play_time", 0.0);
+    total_clear_num_ = Json::getValue(record, "total_clear_num", 0);
+    high_score_      = Json::getValue(record, "high_score", 0);
 
     all_item_completed_ = Json::getValue(record, "all_item_completed", false);
 
@@ -295,10 +246,7 @@ public:
         StageRecord s;
 
         s.clear_time    = Json::getValue(sr, "clear_time", 0.0);
-        s.tumble_num    = Json::getValue(sr, "tumble_num", 0);
-        s.item_num      = Json::getValue(sr, "item_num", 0);
         s.all_item_get  = Json::getValue(sr, "all_item_get", false);
-        s.operation_num = Json::getValue(sr, "operation_num", 0);
         s.score         = Json::getValue(sr, "score", 0);
 
         stage_records_.push_back(std::move(s));
@@ -314,11 +262,8 @@ public:
 
     record.addChild(ci::JsonTree("total_play_num", total_play_num_))
       .addChild(ci::JsonTree("total_play_time", total_play_time_))
-      .addChild(ci::JsonTree("total_tumble_num", total_tumble_num_))
-      .addChild(ci::JsonTree("total_item_num", total_item_num_))
-      .addChild(ci::JsonTree("total_operation_num", total_operation_num_))
       .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
-      .addChild(ci::JsonTree("total_distance", total_distance_))
+      .addChild(ci::JsonTree("high_score", high_score_))
       .addChild(ci::JsonTree("all_item_completed", all_item_completed_))
       .addChild(ci::JsonTree("se_on", se_on_))
       .addChild(ci::JsonTree("bgm_on", bgm_on_))
@@ -330,10 +275,7 @@ public:
         ci::JsonTree sr;
 
         sr.addChild(ci::JsonTree("clear_time", s.clear_time))
-          .addChild(ci::JsonTree("tumble_num", s.tumble_num))
-          .addChild(ci::JsonTree("item_num", s.item_num))
           .addChild(ci::JsonTree("all_item_get", s.all_item_get))
-          .addChild(ci::JsonTree("operation_num", s.operation_num))
           .addChild(ci::JsonTree("score", s.score));
 
         stage.pushBack(sr);
@@ -353,20 +295,10 @@ public:
          << full_path << std::endl;
   }
 
-  double getCurrentGamePlayTime() const { return current_play_time_; }
-
-  // ステージ内での移動距離
-  int getCurrentGameDistance() const { return current_game_.distance; }
-  // プレイしたステージの合計移動距離
-  int getCurrentGameTotalDistance() const { return current_game_distance_; }
-
   int getTotalPlayNum() const { return total_play_num_; }
   double getTotalPlayTime() const { return total_play_time_; }
-  int getTotalTumbleNum() const { return total_tumble_num_; }
-  int getTotalItemNum() const { return total_item_num_; }
-  int getTotalOperationNum() const { return total_operation_num_; }
   int getTotalClearNum() const { return total_clear_num_; }
-  int getTotalDistance() const { return total_distance_; }
+  int getHighScore() const { return high_score_; }
 
   // 10stageまでのitemをcompleteしたか??
   bool isRegularStageCompleted() const {
@@ -421,14 +353,15 @@ public:
   
 
 private:
+  bool isFirstCleard() const {
+    return current_game_.stage_num == stage_records_.size();
+  }
+  
   void updateStageRecord(StageRecord& record, const StageRecord& new_record) {
     record.clear_time = std::min(record.clear_time, new_record.clear_time);
-    record.tumble_num = std::min(record.tumble_num, new_record.tumble_num);
 
-    record.item_num = std::max(record.item_num, new_record.item_num);
-    if (new_record.all_item_get) record.all_item_get = true;
+    if (!record.all_item_get) record.all_item_get = new_record.all_item_get;
     
-    record.operation_num = std::min(record.operation_num, new_record.operation_num);
     record.score = std::max(record.score, new_record.score);
   }
 

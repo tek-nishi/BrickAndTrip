@@ -102,13 +102,11 @@ public:
     event_.connect("begin-records",
                    [this](const Connection& connection, EventParam& param) {
                      EventParam records = {
-                       { "total_play",      records_.getTotalPlayNum() },
-                       { "total_time",      records_.getTotalPlayTime() },
-                       { "total_tumble",    records_.getTotalTumbleNum() },
-                       { "total_operation", records_.getTotalOperationNum() },
-                       { "total_item",      records_.getTotalItemNum() },
-                       { "total_clear",     records_.getTotalClearNum() },
-                       { "item_completed",  records_.stageItemComplete() },
+                       { "total_play",     records_.getTotalPlayNum() },
+                       { "total_time",     records_.getTotalPlayTime() },
+                       { "high_score",     records_.getHighScore() },
+                       { "total_clear",    records_.getTotalClearNum() },
+                       { "item_completed", records_.stageItemComplete() },
                      };
                      
                      addController<RecordsController>(params_, timeline_, event_, records,

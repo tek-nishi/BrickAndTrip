@@ -245,14 +245,10 @@ public:
     }
 
     {
-      const auto& current_game = records_.currentGame();
+      const auto& current_stage = records_.currentStage();
       
       EventParam params = {
-        { "play-time",     current_game.play_time },
-        { "tumble-num",    current_game.tumble_num },
-        { "item-num",      current_game.item_num },
-        { "operation_num", current_game.operation_num },
-        { "distance",      current_game.distance },
+        { "play-time", current_stage.play_time },
       };
       event_.signal("update-record", params);
     }
@@ -388,19 +384,17 @@ public:
     records_.write(params_["game.records"].getValue<std::string>());
 
     {
-      const auto& current_game = records_.currentGame();
+      const auto& current_stage = records_.currentStage();
 
       // 次のステージ or 全ステージクリア
       EventParam params = {
-        { "clear_time", current_game.play_time },
-        { "tumble_num", current_game.tumble_num },
-        { "item_num", current_game.item_num },
-        { "item_total_num", current_game.item_total_num },
-        { "operation_num", current_game.operation_num },
-        { "play_time", records_.getCurrentGamePlayTime() },
-        { "all_cleared", all_cleard },
-        { "regular_stage", regular_stage },
-        { "all_stage", all_stage }
+        { "clear_time",     current_stage.play_time },
+        { "item_num",       current_stage.item_num },
+        { "item_total_num", current_stage.item_total_num },
+        { "score",          current_stage.score },
+        { "all_cleared",    all_cleard },
+        { "regular_stage",  regular_stage },
+        { "all_stage",      all_stage }
       };
 
       event_.signal("begin-stageclear", params);
@@ -422,13 +416,10 @@ public:
     records_.write(params_["game.records"].getValue<std::string>());
 
     {
-      const auto& current_game = records_.currentGame();
+      const auto& current_game  = records_.currentGame();
 
       EventParam params = {
-        { "clear_time", current_game.play_time },
-        { "tumble_num", current_game.tumble_num },
-        { "operation_num", current_game.operation_num },
-        { "play_time", records_.getCurrentGamePlayTime() },
+        { "total_score",  current_game.score },
         { "can_continue", canContinue() },
       };
       event_.signal("begin-gameover", params);
@@ -503,11 +494,8 @@ public:
 
     cube->endPickingColor();
 
-    // 動こうが動くまいが、操作はカウント
-    records_.increaseOperationNumCurrentGame();
-    
     if ((direction == PickableCube::MOVE_NONE) || !speed) {
-      cube->calcelRotationMove();
+      cube->cancelRotationMove();
       return;
     }
 
@@ -539,8 +527,6 @@ public:
     if (targets) {
       startSwitchTargets(*targets);
     }
-
-    records_.increaseTumbleNumCurrentGame();
   }
 
   // Ttile画面での画面遷移とゲーム開始操作が被るので用意した
@@ -621,12 +607,6 @@ public:
     for (auto& cube : pickable_cubes_) {
       cube->rise();
     }
-  }
-
-  // Pickableの距離を記録
-  void recordDistance() {
-    int distance = getPickableCubeTopZ() - stage_.getActiveBottomZ();
-    records_.recordDistance(distance);
   }
   
   // 現在のFieldの状態を作成
