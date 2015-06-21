@@ -41,6 +41,7 @@ public:
     int score;
     int rank;
 
+    bool complete_item;
     bool highest_score;
     bool highest_rank;
 
@@ -50,6 +51,7 @@ public:
       item_num(0),
       score(0),
       rank(RANK_DUMMY),
+      complete_item(false),
       highest_score(false),
       highest_rank(false)
     {}
@@ -201,6 +203,7 @@ public:
     double play_time = current_time - current_stage_.start_time;
     record.clear_time   = play_time;
     record.all_item_get = current_stage_.item_num == current_stage_.item_total_num;
+    current_stage_.complete_item = record.all_item_get;
 
     auto stage_score = game_score_(play_time, current_stage_.item_num);
     current_stage_.score = stage_score.first;

@@ -393,6 +393,7 @@ public:
         { "clear_time",     current_stage.play_time },
         { "item_num",       current_stage.item_num },
         { "item_total_num", current_stage.item_total_num },
+        { "complete_item",  current_stage.complete_item },
         { "score",          current_stage.score },
         { "rank",           current_stage.rank },
         { "highest_score",  current_stage.highest_score },
