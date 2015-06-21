@@ -404,8 +404,8 @@
     "pos": [ 0.1, -0.8, 0 ],
     "origin": "center-left",
     "layout": "center",
-    "base_color": [ 0, 0, 0.1 ],
-    "text_color": [ 0, 0, 1 ],
+    "base_color": [ 0, 0, 1 ],
+    "text_color": [ 0, 0, 0.1 ],
     "hsv": true,
     
     "tween": {

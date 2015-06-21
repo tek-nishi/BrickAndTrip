@@ -97,6 +97,10 @@ public:
       auto score = boost::any_cast<int>(event_params.at("score"));
       view_->getWidget("score-result").setText(toFormatedString(score, 5));
     }
+
+    if (boost::any_cast<bool>(event_params.at("hi_score"))) {
+      view_->startWidgetTween("tween-hi-score");
+    }
     
     view_->startWidgetTween("tween-in");
 

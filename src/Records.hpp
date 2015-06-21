@@ -59,13 +59,15 @@ public:
     int    stage_num;
     double play_time;
     int    score;
+    bool   highest_score;
     bool   continued;
     
     CurrentGame() :
       stage_num(0),
       play_time(0.0),
       score(0),
-      continued(false)
+      continued(false),
+      highest_score(false)
     {}
   };
 
@@ -232,6 +234,7 @@ public:
     total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
 
+    current_game_.highest_score = current_game_.score > high_score_;
     high_score_ = std::max(high_score_, current_game_.score);
     
     record_current_game_ = false;
@@ -243,6 +246,7 @@ public:
     total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
 
+    current_game_.highest_score = current_game_.score > high_score_;
     high_score_ = std::max(high_score_, current_game_.score);
   }
   
@@ -251,6 +255,7 @@ public:
     total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
 
+    current_game_.highest_score = current_game_.score > high_score_;
     high_score_ = std::max(high_score_, current_game_.score);
 
     total_clear_num_ += 1;

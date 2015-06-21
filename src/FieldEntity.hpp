@@ -423,6 +423,7 @@ public:
 
       EventParam params = {
         { "score",        current_game.score },
+        { "hi_score",     current_game.highest_score },
         { "can_continue", canContinue() },
       };
       event_.signal("begin-gameover", params);
