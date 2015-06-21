@@ -93,6 +93,11 @@ public:
       view_->getWidget("agree").setDisp(true);
     }
     
+    {
+      auto score = boost::any_cast<int>(event_params.at("score"));
+      view_->getWidget("score-result").setText(toFormatedString(score, 5));
+    }
+    
     view_->startWidgetTween("tween-in");
 
     if (params.hasChild("gameover.active_delay")) {

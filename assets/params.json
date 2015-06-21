@@ -759,13 +759,7 @@
     "event_delay": 1.0,
     "deactive_delay": 0.5,
 
-    "comment": [
-      "NOT TOO BAD",
-      "WAY TO GO!",
-      "GOOD FOR YOU!",
-      "COOL BEANS!",
-      "AWESOME!"
-    ]
+    "rank": [ "S", "A", "B", "C", "D", "E", "F" ]
   },
 
   "regular_stageclear": {

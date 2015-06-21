@@ -41,12 +41,17 @@ public:
     int score;
     int rank;
 
+    bool highest_score;
+    bool highest_rank;
+
     CurrentStage() :
       start_time(0.0),
       play_time(0.0),
       item_num(0),
       score(0),
-      rank(RANK_DUMMY)
+      rank(RANK_DUMMY),
+      highest_score(false),
+      highest_rank(false)
     {}
   };
 
@@ -209,7 +214,12 @@ public:
       updateStageRecord(stage_records_[current_game_.stage_num], record);
     }
 
+    // 記録更新判定
+    current_stage_.highest_score = current_stage_.score == stage_records_[current_game_.stage_num].score;
+    current_stage_.highest_rank  = current_stage_.rank == stage_records_[current_game_.stage_num].rank;
+
     current_game_.play_time += play_time;
+    current_game_.score += current_stage_.score;
 
     record_current_game_ = false;
   }
@@ -222,6 +232,8 @@ public:
     total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
 
+    high_score_ = std::max(high_score_, current_game_.score);
+    
     record_current_game_ = false;
   }
 
@@ -230,12 +242,16 @@ public:
   void cleardRegularStages() {
     total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
+
+    high_score_ = std::max(high_score_, current_game_.score);
   }
   
   // 全ステージクリア
   void cleardAllStages() {
     total_play_time_ += current_game_.play_time;
     total_play_num_  += 1;
+
+    high_score_ = std::max(high_score_, current_game_.score);
 
     total_clear_num_ += 1;
     checkAllItemCompleted();

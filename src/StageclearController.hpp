@@ -114,11 +114,6 @@ private:
     }
 
     {
-      auto score = boost::any_cast<int>(result.at("score"));
-      view_->getWidget("score-result").setText(toFormatedString(score, 4));
-    }
-
-    {
       auto item_num = boost::any_cast<int>(result.at("item_num"));
       auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
 
@@ -126,19 +121,22 @@ private:
         int item_rate = item_num * 100 / item_total_num;
         view_->getWidget("item-result").setText(toFormatedString(item_rate, 3) + "%");
       }
+    }
+
+    {
+      auto score = boost::any_cast<int>(result.at("score"));
+      view_->getWidget("score-result").setText(toFormatedString(score, 4));
+    }
+
+    {
+      auto rank_text = params["stageclear.rank"];
+      auto rank = boost::any_cast<int>(result.at("rank"));
       
-      auto comment = params["stageclear.comment"];
-      int comment_num = int(comment.getNumChildren());
-
-      // item収集数でコメントを決める
-      if (item_total_num > 0) {
-        int index = (item_num * (comment_num - 1)) / item_total_num;
-        view_->getWidget("comment").setText(comment[index].getValue<std::string>());
-      }
-
-      // メッセージの演出をitemパーフェクトとそれ以外で変える
-      view_->startWidgetTween((item_num == item_total_num) ? "tween-text-light-special"
-                              : "tween-text-light-normal");
+      view_->getWidget("rank-result").setText(rank_text[rank].getValue<std::string>());
+      
+      // メッセージの演出をrank S とそれ以外で変える
+      view_->startWidgetTween((rank == 0) ? "tween-text-light-special"
+                                          : "tween-text-light-normal");
     }
   }
 

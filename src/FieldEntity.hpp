@@ -394,6 +394,7 @@ public:
         { "item_num",       current_stage.item_num },
         { "item_total_num", current_stage.item_total_num },
         { "score",          current_stage.score },
+        { "rank",           current_stage.rank },
         { "all_cleared",    all_cleard },
         { "regular_stage",  regular_stage },
         { "all_stage",      all_stage }
@@ -421,7 +422,7 @@ public:
       const auto& current_game  = records_.currentGame();
 
       EventParam params = {
-        { "total_score",  current_game.score },
+        { "score",        current_game.score },
         { "can_continue", canContinue() },
       };
       event_.signal("begin-gameover", params);

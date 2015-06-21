@@ -350,17 +350,60 @@
   },
   
   {
-    "name": "comment",
+    "name": "rank",
 
     "disp": true,
 
-    "text": "WAY TO GO!",
-    "size": 0.5,
-    "spacing": 0.05,
+    "text": "RANK",
+    "size": 0.38,
+    "spacing": 0.038,
     "chara_split": 1,
-    "pos": [ 0, 1.5, 0 ],
-    "origin": "bottom-center",
-    "layout": "bottom-center",
+    "pos": [ -0.1, -0.8, 0 ],
+    "origin": "center-right",
+    "layout": "center",
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
+    
+    "tween": {
+      "tween-in": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseOutElastic",
+            "duration": 1.2,
+            "delay": 1.8,
+            "interval": 0.05,
+            "start": -120,
+            "end": 0
+          }
+        ]
+      },
+      
+      "tween-out": {
+        "body": [
+          {
+            "target": "rotate",
+            "type": "EaseInExpo",
+            "duration": 0.5,
+            "interval": 0.05,
+            "end": -120
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "rank-result",
+
+    "disp": true,
+
+    "text": " ",
+    "size": 0.38,
+    "spacing": 0.038,
+    "chara_split": 1,
+    "pos": [ 0.1, -0.8, 0 ],
+    "origin": "center-left",
+    "layout": "center",
     "base_color": [ 0, 0, 0.1 ],
     "text_color": [ 0, 0, 1 ],
     "hsv": true,
@@ -420,6 +463,7 @@
       }
     }
   },
+
   
   {
     "name": "agree",
