@@ -91,7 +91,7 @@ void draw(const CubeText& cube_text,
     ci::gl::pushModelView();
 
     // 立方体の左下を(0, 0)として位置を決める
-    ci::gl::translate(text_pos + ci::Vec3f(chara_size / 2, chara_size / 2, -chara_size / 2));
+    ci::gl::translate(text_pos + ci::Vec3f(chara_size / 2, chara_size / 2, 0.0f));
     if (!rotation.empty()) {
       float t = (i & 1) ? -chara_size / 2 : chara_size / 2;
 

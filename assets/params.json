@@ -707,7 +707,7 @@
     "active_delay": 1.0,
     "tween_delay": 0.6,
     "event_delay": 0.7,
-    "deactive_delay": 0.3
+    "deactive_delay": 0.8
   },
 
   "records": {
