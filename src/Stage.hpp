@@ -292,6 +292,8 @@ public:
     moveStageCube(*target);
   }
 
+
+  float buildSpeed() const { return build_speed_; }
   
   
   const std::deque<std::vector<StageCube> >& activeCubes() const {

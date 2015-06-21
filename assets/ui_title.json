@@ -309,8 +309,7 @@
     "active": true,
     "event_message": "credits-start",
 
-    "text": "=",
-    "font": "icon",
+    "text": "i",
     "size": 0.8,
     "spacing": 0.05,
     "chara_split": 1,

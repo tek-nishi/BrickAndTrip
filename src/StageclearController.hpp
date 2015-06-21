@@ -115,7 +115,7 @@ private:
 
     {
       auto score = boost::any_cast<int>(result.at("score"));
-      view_->getWidget("score-result").setText(toFormatedString(score, 5));
+      view_->getWidget("score-result").setText(toFormatedString(score, 4));
     }
 
     {

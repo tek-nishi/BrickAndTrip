@@ -337,6 +337,8 @@ public:
     first_fallen_pickable_  = false;
 
     records_.prepareCurrentGameRecord(stage_num_,
+                                      finish_line_z_ - start_line_z_,
+                                      stage_.buildSpeed(),
                                       event_timeline_->getCurrentTime(),
                                       entry_item_num);
 

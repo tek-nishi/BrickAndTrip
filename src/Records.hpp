@@ -8,21 +8,27 @@
 #include <boost/noncopyable.hpp>
 #include "FileUtil.hpp"
 #include "TextCodec.hpp"
+#include "GameScore.hpp"
 
 
 namespace ngs {
 
 class Records : private boost::noncopyable {
+  enum { RANK_DUMMY = 100 };
+
+  
 public:
   struct StageRecord {
     double clear_time;
     bool   all_item_get;
     int    score;
+    int    rank;
 
     StageRecord() :
       clear_time(0.0),
       all_item_get(false),
-      score(0)
+      score(0),
+      rank(RANK_DUMMY)
     {}
   };
 
@@ -33,12 +39,14 @@ public:
     int item_num;
     int item_total_num;
     int score;
+    int rank;
 
     CurrentStage() :
       start_time(0.0),
       play_time(0.0),
       item_num(0),
-      score(0)
+      score(0),
+      rank(RANK_DUMMY)
     {}
   };
 
@@ -79,6 +87,8 @@ private:
   bool bgm_on_;
 
   float version_;
+
+  GameScore game_score_;
   
 
 public:
@@ -101,6 +111,19 @@ public:
                    const size_t total_stage_num) {
     regular_stage_num_ = regular_stage_num;
     total_stage_num_   = total_stage_num;
+  }
+
+
+  // スコア計算に必要な情報を格納
+  void setScoreInfo(const int clear_time_score, const float clear_time_score_rate,
+                    const int item_score,
+                    const float stage_collect,
+                    const std::vector<int>& rank_rate_table) {
+
+    game_score_ = GameScore(clear_time_score, clear_time_score_rate,
+                            item_score,
+                            stage_collect,
+                            rank_rate_table);
   }
   
 
@@ -145,6 +168,7 @@ public:
 
   // ステージ開始時の初期化
   void prepareCurrentGameRecord(const int stage_num,
+                                const int stage_length, const float build_speed,
                                 const double current_time,
                                 const int item_num) {
     current_stage_ = CurrentStage();
@@ -153,6 +177,10 @@ public:
     current_stage_.item_total_num = item_num;
 
     current_game_.stage_num = stage_num;
+
+    game_score_.setStageInfo(stage_num,
+                             stage_length, build_speed,
+                             item_num);
   }
 
   bool isContinuedGame() const {
@@ -166,9 +194,13 @@ public:
     double play_time = current_time - current_stage_.start_time;
     record.clear_time   = play_time;
     record.all_item_get = current_stage_.item_num == current_stage_.item_total_num;
-    
-    // TODO:score計算
-    // record.score = 0;
+
+    auto stage_score = game_score_(play_time, current_stage_.item_num);
+    current_stage_.score = stage_score.first;
+    current_stage_.rank = stage_score.second;
+
+    record.score = current_stage_.score;
+    record.rank  = current_stage_.rank;
     
     if (isFirstCleard()) {
       stage_records_.push_back(record);
@@ -248,6 +280,7 @@ public:
         s.clear_time    = Json::getValue(sr, "clear_time", 0.0);
         s.all_item_get  = Json::getValue(sr, "all_item_get", false);
         s.score         = Json::getValue(sr, "score", 0);
+        s.rank          = Json::getValue(sr, "rank", int(RANK_DUMMY));
 
         stage_records_.push_back(std::move(s));
       }
@@ -276,7 +309,8 @@ public:
 
         sr.addChild(ci::JsonTree("clear_time", s.clear_time))
           .addChild(ci::JsonTree("all_item_get", s.all_item_get))
-          .addChild(ci::JsonTree("score", s.score));
+          .addChild(ci::JsonTree("score", s.score))
+          .addChild(ci::JsonTree("rank", s.rank));
 
         stage.pushBack(sr);
       }
@@ -363,6 +397,7 @@ private:
     if (!record.all_item_get) record.all_item_get = new_record.all_item_get;
     
     record.score = std::max(record.score, new_record.score);
+    record.rank  = std::min(record.rank, new_record.rank);
   }
 
   void checkAllItemCompleted() {

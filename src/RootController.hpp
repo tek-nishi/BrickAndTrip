@@ -196,10 +196,10 @@ public:
                      records_.cancelRegularStageComplated();
                    });
 #endif
-    
-    records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
-                         params["game.total_stage_num"].getValue<size_t>());
+
+    setupRecords();
     records_.load(params["game.records"].getValue<std::string>());
+    
     sound_.setBufferSilent(!records_.isSeOn());
     sound_.setFileSilent(!records_.isBgmOn());
       
@@ -225,6 +225,19 @@ public:
 
 
 private:
+  // FIXME:もっと適切な場所があるはずだ
+  void setupRecords() {
+    records_.setStageNum(params_["game.regular_stage_num"].getValue<size_t>(),
+                         params_["game.total_stage_num"].getValue<size_t>());
+    
+    records_.setScoreInfo(params_["game.score.clear_time_score"].getValue<int>(),
+                          params_["game.score.clear_time_score_rate"].getValue<float>(),
+                          params_["game.score.item_score"].getValue<int>(),
+                          params_["game.score.stage_collect"].getValue<float>(),
+                          Json::getArray<int>(params_["game.score.rank_rate_table"]));
+  }
+
+  
   void startTitle() {
     addController<TitleController>(params_, timeline_, event_, records_,
                                    view_creator_.create("ui_title.json"));
