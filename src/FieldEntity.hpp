@@ -94,7 +94,7 @@ class FieldEntity : private boost::noncopyable {
   bool game_aborted_;
 
   int stage_center_x_;
-  
+
   ci::TimelineRef event_timeline_;
 
 
@@ -469,7 +469,7 @@ public:
 
     first_started_pickable_ = true;
     first_fallen_pickable_  = true;
-    
+
     stage_.stopBuildAndCollapse();
     stage_.startCollapseStage(next_start_line_z_, finish_rate_);
     mode_ = CLEANUP;

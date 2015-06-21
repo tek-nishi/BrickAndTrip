@@ -31,7 +31,7 @@ struct Field {
   const std::vector<std::unique_ptr<Switch> >& switches;
 
   const std::vector<Bg::Cube>& bg_cubes;
-
+  
 #ifdef DEBUG
   ci::Vec3f bg_bbox_min;
   ci::Vec3f bg_bbox_max;

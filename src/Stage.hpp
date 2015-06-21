@@ -148,6 +148,7 @@ public:
   // 生成 & 崩壊を止める
   void stopBuildAndCollapse() {
     event_timeline_->clear();
+    build_speed_rate_.stop();
   }
 
   // BuildとCollapseが完了しているか判定

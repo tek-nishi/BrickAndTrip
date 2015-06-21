@@ -137,9 +137,17 @@ public:
   void setBaseColor(const ci::Color& color) {
     base_color_ = color;
   }
+  
+  void setBaseColor(const ci::Vec3f& color) {
+    base_color_hsv_ = color;
+  }
 
   void setTextColor(const ci::Color& color) {
     text_color_ = color;
+  }
+
+  void setTextColor(const ci::Vec3f& color) {
+    text_color_hsv_ = color;
   }
   
   
