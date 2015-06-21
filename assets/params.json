@@ -467,7 +467,11 @@
 
       "move_ease" : "EaseOutQuad",
       "move_duration": 0.5,
-      "move_delay": 0.25
+      "move_delay": 0.25,
+
+      "build_start_ease": "EaseNone",
+      "build_start_duration": 4.0,
+      "build_start_rate": 0.2
     },
 
     "pickable": {

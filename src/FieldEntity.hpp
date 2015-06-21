@@ -280,7 +280,7 @@ public:
       event_.signal("stage-color", params);
     }
     
-    stage_.startBuildStage();
+    stage_.startBuildStage(1.0f, false);
 
     stage_num_    = start_stage_num_;
     all_cleard_   = false;
@@ -344,7 +344,7 @@ public:
 
     stage_num_ += 1;
 
-    stage_.startBuildStage();
+    stage_.startBuildStage(1.0f, true);
     stage_.setupAutoCollapse(finish_line_z_ - 1);
   }
 
@@ -358,7 +358,7 @@ public:
   // FinishLineまで一気に崩壊 && FinishLineを一気に生成
   void completeBuildAndCollapseStage() {
     stage_.stopBuildAndCollapse();
-    stage_.startBuildStage(finish_rate_);
+    stage_.startBuildStage(finish_rate_, false);
     stage_.startCollapseStage(finish_line_z_ - 1, finish_rate_);
 
     records_.storeStageRecord(event_timeline_->getCurrentTime());

@@ -34,7 +34,7 @@ class Stage : private boost::noncopyable {
   float collapse_speed_;
   float auto_collapse_;
 
-  float build_speed_rate_;
+  ci::Anim<float> build_speed_rate_;
   float collapse_speed_rate_;
   
   std::string build_ease_;
@@ -53,6 +53,10 @@ class Stage : private boost::noncopyable {
   float       move_duration_;
   float       move_delay_;
 
+  std::string build_start_ease_;
+  float       build_start_duration_;
+  float       build_start_rate_;
+  
   bool started_collapse_;
   bool finished_build_;
   bool finished_collapse_;
@@ -88,6 +92,9 @@ public:
     move_ease_(params["game.stage.move_ease"].getValue<std::string>()),
     move_duration_(params["game.stage.move_duration"].getValue<float>()),
     move_delay_(params["game.stage.move_delay"].getValue<float>()),
+    build_start_ease_(params["game.stage.build_start_ease"].getValue<std::string>()),
+    build_start_duration_(params["game.stage.build_start_duration"].getValue<float>()),
+    build_start_rate_(params["game.stage.build_start_rate"].getValue<float>()),
     started_collapse_(false),
     finished_build_(false),
     finished_collapse_(false),
@@ -111,8 +118,18 @@ public:
 
 
   // 生成開始
-  void startBuildStage(const float speed_rate = 1.0f) {
-    build_speed_rate_ = speed_rate;
+  void startBuildStage(const float speed_rate, const bool start_speedup) {
+    if (start_speedup) {
+      animation_timeline_->apply(&build_speed_rate_,
+                                 speed_rate * build_start_rate_, speed_rate,
+                                 build_start_duration_,
+                                 getEaseFunc(build_start_ease_));
+    }
+    else {
+      build_speed_rate_.stop();
+      build_speed_rate_ = speed_rate;
+    }
+    
     buildStage();
   }
 
@@ -353,7 +370,7 @@ private:
         
         buildStage();
       },
-      event_timeline_->getCurrentTime() + build_speed_ * build_speed_rate_);
+      event_timeline_->getCurrentTime() + build_speed_ * build_speed_rate_());
   }
 
   // 崩壊(再帰)
