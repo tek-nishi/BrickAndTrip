@@ -395,6 +395,8 @@ public:
         { "item_total_num", current_stage.item_total_num },
         { "score",          current_stage.score },
         { "rank",           current_stage.rank },
+        { "highest_score",  current_stage.highest_score },
+        { "highest_rank",   current_stage.highest_rank },
         { "all_cleared",    all_cleard },
         { "regular_stage",  regular_stage },
         { "all_stage",      all_stage }

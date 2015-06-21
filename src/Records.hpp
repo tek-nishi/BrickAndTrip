@@ -217,6 +217,7 @@ public:
     }
 
     // 記録更新判定
+    // 同じ記録でもhighest扱い
     current_stage_.highest_score = current_stage_.score == stage_records_[current_game_.stage_num].score;
     current_stage_.highest_rank  = current_stage_.rank == stage_records_[current_game_.stage_num].rank;
 

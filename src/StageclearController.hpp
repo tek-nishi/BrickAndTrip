@@ -126,6 +126,10 @@ private:
     {
       auto score = boost::any_cast<int>(result.at("score"));
       view_->getWidget("score-result").setText(toFormatedString(score, 4));
+
+      if (boost::any_cast<bool>(result.at("highest_score"))) {
+        view_->startWidgetTween("tween-highest-score");
+      }
     }
 
     {
@@ -133,10 +137,10 @@ private:
       auto rank = boost::any_cast<int>(result.at("rank"));
       
       view_->getWidget("rank-result").setText(rank_text[rank].getValue<std::string>());
-      
-      // メッセージの演出をrank S とそれ以外で変える
-      view_->startWidgetTween((rank == 0) ? "tween-text-light-special"
-                                          : "tween-text-light-normal");
+
+      if (boost::any_cast<bool>(result.at("highest_rank"))) {
+        view_->startWidgetTween("tween-highest-rank");
+      }
     }
   }
 
