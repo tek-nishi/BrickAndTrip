@@ -20,7 +20,7 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
-            "delay": 0.5,
+            "delay": 1.5,
             "interval": 0.05,
             "start": -120,
             "end": 0
@@ -64,7 +64,7 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
-            "delay": 0.55,
+            "delay": 1.55,
             "interval": 0.05,
             "start": -120,
             "end": 0
@@ -93,10 +93,10 @@
     "disp": true,
 
     "text": "SCORE",
-    "size": 0.38,
-    "spacing": 0.038,
+    "size": 0.4,
+    "spacing": 0.04,
     "chara_split": 1,
-    "pos": [ -0.1, -0.2, 0 ],
+    "pos": [ -0.1, -0.3, 0 ],
     "origin": "center-right",
     "layout": "center",
     "base_color": [ 1, 1, 1 ],
@@ -109,7 +109,7 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
-            "delay": 0.3,
+            "delay": 1.8,
             "interval": 0.05,
             "start": -120,
             "end": 0
@@ -136,10 +136,10 @@
     "disp": true,
 
     "text": "0",
-    "size": 0.38,
-    "spacing": 0.038,
+    "size": 0.4,
+    "spacing": 0.04,
     "chara_split": 1,
-    "pos": [ 0.1, -0.2, 0 ],
+    "pos": [ 0.1, -0.3, 0 ],
     "origin": "center-left",
     "layout": "center",
     "base_color": [ 0, 0, 0.1 ],
@@ -153,7 +153,7 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
-            "delay": 0.3,
+            "delay": 1.8,
             "interval": 0.05,
             "start": -120,
             "end": 0
@@ -216,7 +216,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 1.8,
+            "delay": 2.3,
             "start": [ 0, 0, 0 ]
           }
         ]
@@ -320,7 +320,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 1.8,
+            "delay": 2.3,
             "start": [ 0, 0, 0 ]
           }
         ]
@@ -425,7 +425,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 1.8,
+            "delay": 2.3,
             "start": [ 0, 0, 0 ]
           }
         ]
