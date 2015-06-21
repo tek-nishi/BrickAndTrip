@@ -26,6 +26,9 @@ class StageclearController : public ControllerBase {
   bool regular_stage_;
   bool all_stage_;
 
+  int total_score_;
+  bool highest_score_;
+  
   ConnectionHolder connections_;
 
   ci::TimelineRef event_timeline_;
@@ -47,6 +50,8 @@ public:
     all_cleard_(boost::any_cast<bool>(result.at("all_cleared"))),
     regular_stage_(boost::any_cast<bool>(result.at("regular_stage"))),
     all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
+    total_score_(boost::any_cast<int>(result.at("total_score"))),
+    highest_score_(boost::any_cast<bool>(result.at("highest_total_score"))),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "StageclearController()" << std::endl;
@@ -69,7 +74,13 @@ public:
                                               if (regular_stage_)  msg = "begin-regulat-stageclear";
                                               else if (all_stage_) msg = "begin-all-stageclear";
                                             }
-                                            event_.signal(msg, EventParam());
+
+                                            EventParam params = {
+                                              { "total_score",   total_score_ },
+                                              { "highest_score", highest_score_ },
+                                            };
+                                            
+                                            event_.signal(msg, params);
 
                                             event_timeline_->add([this]() {
                                                 active_ = false;

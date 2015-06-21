@@ -133,12 +133,14 @@ public:
     event_.connect("begin-regulat-stageclear",
                    [this](const Connection& connection, EventParam& param) {
                      addController<AllStageClearController>(params_["regular_stageclear"], timeline_, event_,
+                                                            param,
                                                             view_creator_.create("ui_regularstageclear.json"));
                    });
 
     event_.connect("begin-all-stageclear",
                    [this](const Connection& connection, EventParam& param) {
                      addController<AllStageClearController>(params_["all_stageclear"], timeline_, event_,
+                                                            param,
                                                             view_creator_.create("ui_allstageclear.json"));
                    });
 

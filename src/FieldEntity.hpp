@@ -386,6 +386,7 @@ public:
     records_.write(params_["game.records"].getValue<std::string>());
 
     {
+      const auto& current_game  = records_.currentGame();
       const auto& current_stage = records_.currentStage();
 
       // 次のステージ or 全ステージクリア
@@ -400,7 +401,10 @@ public:
         { "highest_rank",   current_stage.highest_rank },
         { "all_cleared",    all_cleard },
         { "regular_stage",  regular_stage },
-        { "all_stage",      all_stage }
+        { "all_stage",      all_stage },
+        
+        { "total_score",         current_game.score },
+        { "highest_total_score", current_game.highest_score },
       };
 
       event_.signal("begin-stageclear", params);

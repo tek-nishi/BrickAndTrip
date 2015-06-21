@@ -36,6 +36,7 @@ public:
   AllStageClearController(ci::JsonTree& params,
                           ci::TimelineRef timeline,
                           Event<EventParam>& event,
+                          const EventParam& result,
                           std::unique_ptr<UIView>&& view) :
     event_(event),
     message_(params["message"].getValue<std::string>()),
@@ -91,6 +92,15 @@ public:
           event_timeline_->getCurrentTime() + collapse_delay_);
       },
       event_timeline_->getCurrentTime() + event_delay_);
+
+    {
+      auto score = boost::any_cast<int>(result.at("total_score"));
+      view_->getWidget("score-result").setText(toFormatedString(score, 4));
+
+      if (boost::any_cast<bool>(result.at("highest_score"))) {
+        view_->startWidgetTween("tween-highest-score");
+      }
+    }
     
     view_->setDisp(false);
   }

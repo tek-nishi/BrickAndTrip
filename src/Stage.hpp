@@ -197,7 +197,7 @@ public:
 
     event_timeline_->add([this, stop_z, speed_rate]() {
         if (!started_collapse_) {
-          DOUT << "auto collapse" << std::endl;
+          DOUT << "auto collapse:" << auto_collapse_ << std::endl;
           startCollapseStage(stop_z, speed_rate);
         }
       },
@@ -221,6 +221,7 @@ public:
                const int x_offset,
                const std::vector<ci::Color>& cube_color,
                const ci::Color& line_color) {
+    // FIXME:finishlineにはデータが入っていてはいけない
     build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
     auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
