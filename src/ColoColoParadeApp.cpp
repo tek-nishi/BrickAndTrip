@@ -76,6 +76,8 @@ class ColoColoParadeApp : public AppNative,
   }
   
 	void setup() {
+    Rand::randomize();
+    
     // Windowが表示された後の設定はここで処理
     // OpenGLのコンテキストも使える
 #if defined(CINDER_MAC)
