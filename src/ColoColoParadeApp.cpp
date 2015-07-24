@@ -64,6 +64,12 @@ class ColoColoParadeApp : public AppNative,
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
 
+#if defined(CINDER_MAC)
+    // FIXME:Windowモードの場合、これでFrame rateが安定する
+    //       が、複数cinderアプリを立ち上げると処理が劇重になる
+    // settings->disableFrameRate();
+#endif
+
     active_touch_ = ci::System::hasMultiTouch();
     if (active_touch_) {
       settings->enableMultiTouch();
@@ -75,6 +81,7 @@ class ColoColoParadeApp : public AppNative,
     setEasingParams(params_);
   }
   
+
 	void setup() {
     Rand::randomize();
     
