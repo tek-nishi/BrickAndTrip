@@ -6,6 +6,7 @@
 
 #include <codecvt>
 #include <sstream>
+#include <chrono>
 #include <sys/stat.h>
 
 
@@ -86,6 +87,23 @@ bool isValidPath(const std::string& path) {
 	int result = stat(path.c_str(), &info);
 	return (result == 0);
 	// TODO: ディレクトリかどうかも判定
+}
+
+std::string createUniquePath() {
+  static int unique_num = 0;
+    
+  auto now = std::chrono::system_clock::now();
+  std::time_t t = std::chrono::system_clock::to_time_t(now);
+
+  const tm* lt = std::localtime(&t);
+    
+  std::ostringstream path;
+  path << "." << std::put_time(lt, "%F-%T.")
+       << unique_num;
+
+  unique_num += 1;
+
+  return path.str();
 }
 
 }

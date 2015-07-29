@@ -197,6 +197,13 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      records_.cancelRegularStageComplated();
                    });
+
+    event_.connect("do-snapshot",
+                   [this](const Connection& connection, EventParam& param) {
+                     auto surface = ci::app::copyWindowSurface();
+                     auto full_path = getDocumentPath() / std::string("snapshot" + createUniquePath() + ".png");
+                     ci::writeImage(full_path, surface);
+                   });
 #endif
 
     setupRecords();

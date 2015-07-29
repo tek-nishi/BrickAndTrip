@@ -102,7 +102,8 @@
       "s": "stop-build-and-collapse",
       "i": "force-regular-completed",
       "I": "cancel-regular-completed",
-      "p": "entry-pickable"
+      "p": "entry-pickable",
+      "G": "do-snapshot"
     }
   },
 
