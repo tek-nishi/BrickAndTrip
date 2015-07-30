@@ -212,12 +212,18 @@ private:
         widget.setDisp(true);
         widget.setActive(true);
       }
+#if 0
+      // FIXME:iOS8.4 + iPhone6で、縦画面で出した投稿画面を横にして、
+      //       それからキャンセル。もう一度投稿しようとすると
+      //       投稿画面が表示されず進行できなくなってしまう。
+      //       原因が解明されるまでは連携しない
       if (Social::canPost(Social::Type::FACEBOOK)) {
         auto& widget = view_->getWidget("facebook");
         
         widget.setDisp(true);
         widget.setActive(true);
       }
+#endif
     }
 #endif
   }
