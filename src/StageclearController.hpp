@@ -7,6 +7,8 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "Social.h"
+#include "Capture.h"
 
 
 namespace ngs {
@@ -18,6 +20,7 @@ class StageclearController : public ControllerBase {
   float tween_delay_;
   float event_delay_;
   float deactive_delay_;
+  float sns_delay_;
 
   std::unique_ptr<UIView> view_;
   
@@ -28,6 +31,8 @@ class StageclearController : public ControllerBase {
 
   int total_score_;
   bool highest_score_;
+
+  std::string sns_text_;
   
   ConnectionHolder connections_;
 
@@ -45,6 +50,7 @@ public:
     tween_delay_(params["stageclear.tween_delay"].getValue<float>()),
     event_delay_(params["stageclear.event_delay"].getValue<float>()),
     deactive_delay_(params["stageclear.deactive_delay"].getValue<float>()),
+    sns_delay_(params["stageclear.sns_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
     all_cleard_(boost::any_cast<bool>(result.at("all_cleared"))),
@@ -52,6 +58,7 @@ public:
     all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
     total_score_(boost::any_cast<int>(result.at("total_score"))),
     highest_score_(boost::any_cast<bool>(result.at("highest_total_score"))),
+    sns_text_(params["stageclear.sns_text"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "StageclearController()" << std::endl;
@@ -92,6 +99,46 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
+#if defined(CINDER_COCOA_TOUCH)
+    connections_ += event.connect("selected-twitter",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    event_.signal("sns-post-begin", EventParam());
+                                    
+                                    event_timeline_->add([this]() {
+                                        DOUT << "post twitter" << std::endl;
+                                        
+                                        Social::post(Social::Type::TWITTER,
+                                                     sns_text_,
+                                                     captureTopView(),
+                                                     [this]() {
+                                                       event_.signal("sns-post-end", EventParam());
+                                                       view_->setActive(true);
+                                                     });
+                                      },
+                                      event_timeline_->getCurrentTime() + sns_delay_);
+                                  });
+    
+    connections_ += event.connect("selected-facebook",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    event_.signal("sns-post-begin", EventParam());
+                                    
+                                    event_timeline_->add([this]() {
+                                        DOUT << "post facebook" << std::endl;
+                                        
+                                        Social::post(Social::Type::FACEBOOK,
+                                                     sns_text_,
+                                                     captureTopView(),
+                                                     [this]() {
+                                                       event_.signal("sns-post-end", EventParam());
+                                                       view_->setActive(true);
+                                                     });
+                                      },
+                                      event_timeline_->getCurrentTime() + sns_delay_);
+                                  });
+#endif
+    
     setupView(params, result);
 
     view_->startWidgetTween("tween-in");
@@ -156,6 +203,23 @@ private:
         view_->startWidgetTween("tween-highest-rank");
       }
     }
+    
+#if defined(CINDER_COCOA_TOUCH)
+    if (canCaptureTopView()) {
+      if (Social::canPost(Social::Type::TWITTER)) {
+        auto& widget = view_->getWidget("twitter");
+        
+        widget.setDisp(true);
+        widget.setActive(true);
+      }
+      if (Social::canPost(Social::Type::FACEBOOK)) {
+        auto& widget = view_->getWidget("facebook");
+        
+        widget.setDisp(true);
+        widget.setActive(true);
+      }
+    }
+#endif
   }
 
   

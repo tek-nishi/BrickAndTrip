@@ -270,6 +270,18 @@ public:
                                      entity_.abortGame();
                                    });
 
+    
+    connections_ += event_.connect("sns-post-begin",
+                                   [this](const Connection&, EventParam& param) {
+                                     paused_ = true;
+                                   });
+
+    connections_ += event_.connect("sns-post-end",
+                                   [this](const Connection&, EventParam& param) {
+                                     paused_ = false;
+                                   });
+
+    
     connections_ += event_.connect("pickuped-item",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "pickuped-item" << std::endl;

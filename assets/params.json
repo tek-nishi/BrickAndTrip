@@ -30,6 +30,13 @@
         "offset": [ 0, 0.035, 0 ]
       },
       {
+        "name": "social-icon",
+        "path": "Grands.ttf",
+        "size": 64,
+        "scale": [ 1.6, 1.6, 1 ],
+        "offset": [ 0, -0.15, 0 ]
+      },
+      {
         "name": "logo",
         "path": "SGIEXB.ttf",
         "default": true,
@@ -488,7 +495,7 @@
 
       "rotate_ease": "EaseInQuad",
       "rotate_duration": 0.6,
-      "rotate_speed_rate": [ 1, 0.9, 0.8, 0.6, 0.4, 0.2 ],
+      "rotate_speed_rate": [ 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.5, 0.5, 0.5, 0.5 ],
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
@@ -763,8 +770,10 @@
     "tween_delay": 0.6,
     "event_delay": 1.0,
     "deactive_delay": 0.5,
+    "sns_delay": 0.1,
 
-    "rank": [ "S", "A", "B", "C", "D", "E", "F" ]
+    "rank": [ "S", "A", "B", "C", "D", "E", "F" ],
+    "sns_text": "Stage Clear!!"
   },
 
   "regular_stageclear": {
