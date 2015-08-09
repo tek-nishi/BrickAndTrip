@@ -10,6 +10,7 @@
 #include "cinder/gl/Texture.h"
 #include "cinder/ImageIo.h"
 #include <boost/range/algorithm_ext/erase.hpp>
+#include <boost/algorithm/clamp.hpp>
 #include <boost/noncopyable.hpp>
 #include <numeric>
 #include "Field.hpp"
@@ -59,7 +60,6 @@ class FieldView : private boost::noncopyable {
     u_int id;
     ci::Vec3f position;
     ci::Quatf rotation;
-    float size;
     ci::AxisAlignedBox3f bbox;
   };
 
@@ -67,16 +67,22 @@ class FieldView : private boost::noncopyable {
 
   struct Pick {
     u_int touch_id;
+    ci::Vec2f touch_begin_pos;
     double timestamp;
     u_int cube_id;
 
     ci::Vec3f picking_plane;
     ci::Vec3f picking_pos;
+
+    bool began_move;
   };
   std::vector<Pick> pickings_;
 
+  float move_begin_time_;
+  float move_begin_threshold_;
   float move_threshold_;
   float move_speed_rate_;
+  int   move_swipe_speed_;
   
   bool touch_input_;
 
@@ -120,8 +126,11 @@ public:
     lights_(params, timeline),
     quake_(params["game_view.quake"]),
     quake_value_(0.0f),
+    move_begin_time_(params["game_view.move_begin_time"].getValue<float>()),
+    move_begin_threshold_(params["game_view.move_begin_threshold"].getValue<float>()),
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
+    move_swipe_speed_(params["game_view.move_swipe_speed"].getValue<int>()),
     touch_input_(true),
     animation_timeline_(ci::Timeline::create()),
     progressing_seconds_(0.0),
@@ -157,8 +166,8 @@ public:
 
     connections_ += touch_event.connect("touches-began",
                                         std::bind(&FieldView::touchesBegan, this, std::placeholders::_1, std::placeholders::_2));
-    // connections_ += touch_event.connect("touches-moved",
-    //                                     std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
+    connections_ += touch_event.connect("touches-moved",
+                                        std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
     connections_ += touch_event.connect("touches-ended",
                                         std::bind(&FieldView::touchesEnded, this, std::placeholders::_1, std::placeholders::_2));
   }
@@ -278,6 +287,7 @@ public:
   
   // Touch入力の有効・無効
   void enableTouchInput(const bool input = true) {
+    DOUT << "enableTouchInput:" << input << std::endl;
     if (input != touch_input_) calcelAllPickings();
     touch_input_ = input;
   }
@@ -326,15 +336,17 @@ private:
         if (isPickedCube(cube.bbox, ray)) {
           // cubeの上平面との交点
           float cross_z;
-          auto origin = ci::Vec3f(0, (cube.position.y + 0.5f) * cube.size, 0);
+          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
           
           Pick pick = {
             touch.id,
+            touch.pos,
             touch.timestamp,
             cube.id,
             origin,
             ray.calcPosition(cross_z),
+            false,
           };
           pickings_.push_back(std::move(pick));
 
@@ -349,17 +361,73 @@ private:
     }
   }
   
-#if 0
   void touchesMoved(const Connection&, std::vector<Touch>& touches) {
-    if (!picking_) return;
+    if (!touch_input_) return;
 
     for (const auto& touch : touches) {
-      if (touch.id != picking_touch_id_) continue;
+      if (!isPicking(touch)) continue;
 
-      return;
+      auto pick = getPick(touch);
+      assert(pick);
+      if (pick->began_move) continue;
+
+      auto delta_time = touch.timestamp - pick->timestamp;
+      if (delta_time < move_begin_time_) continue;
+
+      for (auto& cube : touch_cubes_) {
+        if (cube.id == pick->cube_id) {
+          // cubeの上平面との交点
+          auto ray = generateRay(touch.pos);
+          float cross_z;
+          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
+          ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
+          // auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
+
+          float began_z;
+          auto began_ray = generateRay(pick->touch_begin_pos);
+          began_ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &began_z);
+          auto began_pos = began_ray.calcPosition(began_z);
+          auto picking_ofs = ray.calcPosition(cross_z) - began_pos;
+
+          float move_threshold = move_begin_threshold_;
+          int move_direction = PickableCube::MOVE_NONE;
+          if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
+            // 縦移動
+            if (picking_ofs.z < -move_threshold) {
+              move_direction = PickableCube::MOVE_DOWN;
+            }
+            else if (picking_ofs.z > move_threshold) {
+              move_direction = PickableCube::MOVE_UP;
+            }
+          }
+          else {
+            // 横移動
+            if (picking_ofs.x < -move_threshold) {
+              move_direction = PickableCube::MOVE_RIGHT;
+            }
+            else if (picking_ofs.x > move_threshold) {
+              move_direction = PickableCube::MOVE_LEFT;
+            }
+          }
+
+          if (move_direction != PickableCube::MOVE_NONE) {
+            EventParam params = {
+              { "cube_id",        pick->cube_id },
+              { "move_direction", move_direction },
+              { "move_speed",     1 },
+            };
+            event_.signal("move-pickable", params);
+
+            pick->began_move = true;
+            removePick(touch);
+
+            DOUT << "move:" << move_direction << std::endl;
+          }
+          break;
+        }
+      }      
     }
   }
-#endif
 
   void touchesEnded(const Connection&, std::vector<Touch>& touches) {
     if (!touch_input_) return;
@@ -377,12 +445,19 @@ private:
           // cubeの上平面との交点
           auto ray = generateRay(touch.pos);
           float cross_z;
-          auto origin = ci::Vec3f(0, (cube.position.y + 0.5f) * cube.size, 0);
+          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
+          // auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
+
+          float began_z;
+          auto began_ray = generateRay(pick->touch_begin_pos);
+          began_ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &began_z);
+          auto began_pos = began_ray.calcPosition(began_z);
+          auto picking_ofs = ray.calcPosition(cross_z) - began_pos;
+
           auto delta_time = touch.timestamp - pick->timestamp;
 
-          float move_threshold = cube.size * move_threshold_;
+          float move_threshold = move_threshold_;
           int move_direction = PickableCube::MOVE_NONE;
           int move_speed     = 0;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
@@ -414,6 +489,8 @@ private:
             { "move_speed",     move_speed },
           };
           event_.signal("move-pickable", params);
+
+          DOUT << "move:" << move_direction << " speed:" << move_speed << std::endl;
 
           removePick(touch);
           break;
@@ -471,7 +548,9 @@ private:
     if (delta_position < move_threshold) {
       return 1;
     }
-    return std::max(int(move_speed_rate_ * delta_position / delta_time), 1);
+    
+    int speed = int(move_speed_rate_ * delta_position / delta_time);
+    return boost::algorithm::clamp(speed, 1, move_swipe_speed_);
   }
 
   ci::Ray generateRay(const ci::Vec2f& pos) {
@@ -494,13 +573,12 @@ private:
       if (!cube->isActive() || !cube->isOnStage() || cube->isSleep() || cube->isPressed()) continue;
 
       const auto& pos = cube->position();
-      const auto size = cube->size();
+      ci::Vec3f half_size(0.5f, 0.5f, 0.5f);
       TouchCube touch_cube = {
         cube->id(),
         pos,
         cube->rotation(),
-        cube->cubeSize(),
-        { -size / 2 + pos, size / 2 + pos }
+        { pos - half_size, pos + half_size }
       };
       
       touch_cubes_.push_back(std::move(touch_cube));

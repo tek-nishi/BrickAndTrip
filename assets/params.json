@@ -366,9 +366,12 @@
     "stagecolor": [ 0.5, 0.5, 0.5 ],
     "stagecolor_ease": "EaseOutQuad",
     "stagecolor_duration": 2,
-    
-    "move_threshold": 0.75,
+
+    "move_begin_time": 0.3,
+    "move_begin_threshold": 0.75,
+    "move_threshold": 0.5,
     "move_speed_rate": 0.22,
+    "move_swipe_speed": 10,
   
     "materials": {
       "pickable_cube": {
@@ -493,9 +496,12 @@
 
       "color": [ 1, 1, 1 ],
 
-      "rotate_ease": "EaseInQuad",
+      "rotate_ease": "EaseNone",
+      "rotate_ease_end": "EaseInSine",
       "rotate_duration": 0.6,
-      "rotate_speed_rate": [ 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.5, 0.5, 0.5, 0.5 ],
+      "rotate_power": 0.4,
+      "rotate_remap": [ 0.3, 1.0 ],
+      "rotate_speed_max": 10,
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,

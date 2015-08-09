@@ -63,8 +63,12 @@ private:
   int       move_speed_;
   
   std::string rotate_ease_;
+  std::string rotate_ease_end_;
   float rotate_duration_;
-  std::vector<float> rotate_speed_rate_;
+  float rotate_power_;
+  ci::Vec2f rotate_remap_;
+  int rotate_speed_max_;
+  
   ci::Anim<ci::Quatf> move_rotation_;
   ci::Quatf move_start_rotation_;
   ci::Quatf move_end_rotation_;
@@ -119,7 +123,11 @@ public:
     move_vector_(ci::Vec3i::zero()),
     move_speed_(0),
     rotate_ease_(params["game.pickable.rotate_ease"].getValue<std::string>()),
+    rotate_ease_end_(params["game.pickable.rotate_ease_end"].getValue<std::string>()),
     rotate_duration_(params["game.pickable.rotate_duration"].getValue<float>()),
+    rotate_power_(params["game.pickable.rotate_power"].getValue<float>()),
+    rotate_remap_(Json::getVec2<float>(params["game.pickable.rotate_remap"])),
+    rotate_speed_max_(params["game.pickable.rotate_speed_max"].getValue<int>()),
     move_start_rotation_(rotation_()),
     move_end_rotation_(rotation_()),
     fall_ease_(params["game.pickable.fall_ease"].getValue<std::string>()),
@@ -149,10 +157,6 @@ public:
     position_ = ci::Vec3f(block_position_);
     // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
     position_().y += 1.0f;
-
-    for (const auto& param : params["game.pickable.rotate_speed_rate"]) {
-      rotate_speed_rate_.push_back(param.getValue<float>());
-    }
 
     // 登場演出
     auto entry_y = Json::getVec2<float>(params["game.pickable.entry_y"]);
@@ -198,7 +202,7 @@ public:
   void reserveRotationMove(const int direction, const ci::Vec3i& vector, const int speed) {
     move_direction_ = direction;
     move_vector_    = vector;
-    move_speed_     = std::min(speed, int(rotate_speed_rate_.size()));
+    move_speed_     = std::min(speed, rotate_speed_max_);
   }
   
   bool willRotationMove() const {
@@ -227,7 +231,14 @@ public:
     prev_block_position_ = block_position_;
     block_position_ += move_vector_;
 
-    float duration = rotate_duration_* rotate_speed_rate_[move_speed_ - 1];
+    float speed = std::pow(rotate_power_, float(move_speed_ - 1));
+    float speed_rate = remap(speed, ci::Vec2f(0.0f, 1.0f), rotate_remap_);
+
+    DOUT << "speed_rate:" << speed_rate << std::endl;
+    
+    float duration = rotate_duration_ * speed_rate;
+    
+    move_speed_ -= 1;
 
     auto angle = ci::toRadians(90.0f);
     ci::Quatf rotation_table[] = {
@@ -241,11 +252,13 @@ public:
     // easeで回転し続けると誤差が蓄積されるので
     // 正規化した回転後の向きをあらかじめ計算しておく
     move_end_rotation_ = (move_start_rotation_ * move_roation).normalized();
+
+    const auto& ease = move_speed_ ? rotate_ease_ : rotate_ease_end_;
     
     auto options = animation_timeline_->apply(&move_rotation_,
                                               ci::Quatf::identity(), move_roation,
                                               duration,
-                                              getEaseFunc(rotate_ease_));
+                                              getEaseFunc(ease));
     ci::Vec3f pivot_table[] = {
       ci::Vec3f(        0, -1.0f / 2,  1.0f / 2),
       ci::Vec3f(        0, -1.0f / 2, -1.0f / 2),
@@ -273,7 +286,7 @@ public:
         move_start_rotation_ = move_end_rotation_;
 
         moving_ = false;
-        move_speed_ -= 1;
+        // move_speed_ -= 1;
 
         if (!move_event_) return;
         

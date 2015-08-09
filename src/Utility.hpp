@@ -50,6 +50,19 @@ std::size_t elemsof(const T& t) {
   return std::distance(std::begin(t), std::end(t));
 }
 
+// 値を [min_value, max_value] にする
+template <typename T>
+T minmax(const T& value, const T& min_value, const T& max_value) {
+  return std::max(std::min(value, max_value), min_value);
+}
+
+// 入力値を出力値に変換
+template <typename T>
+T remap(const T value, const ci::Vec2<T>& current_range, const ci::Vec2<T>& target_range) {
+  T v = (value - current_range.x) / (current_range.y - current_range.x);
+  return (target_range.y - target_range.x) * v + target_range.x;
+}
+
 
 // 時間→書式指定時間
 std::string toFormatedString(const double progress_time, const bool has_hours = false) {
