@@ -111,7 +111,7 @@ public:
                                     view_->startWidgetTween("tween-in");
                                   });
 
-    connections_ += event_.connect("first-fallen-pickable",
+    connections_ += event_.connect("first-out-pickable",
                                   [this](const Connection& connection, EventParam& param) {
                                      deactivateView();
                                    });

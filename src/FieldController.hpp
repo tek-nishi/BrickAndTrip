@@ -174,10 +174,10 @@ public:
                                      // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
                                    });
 
-    // pickablecubeの1つがfallでgameover
-    connections_ += event_.connect("first-fallen-pickable",
+    // pickablecubeの1つがやられたらgameover
+    connections_ += event_.connect("first-out-pickable",
                                    [this](const Connection&, EventParam& param) {
-                                     DOUT << "first-fallen-pickable" << std::endl;
+                                     DOUT << "first-out-pickable" << std::endl;
                                      beginGameover();
                                    });
 
@@ -185,7 +185,6 @@ public:
     connections_ += event_.connect("pressed-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "pressed-pickable" << std::endl;
-                                     beginGameover();
                                    });
 
 #if 0

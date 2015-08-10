@@ -73,7 +73,7 @@ class FieldEntity : private boost::noncopyable {
   std::vector<PickableCubePtr> pickable_cubes_;
   
   bool first_started_pickable_;
-  bool first_fallen_pickable_;
+  bool first_out_pickable_;
   
   int start_line_z_;
   int finish_line_z_;
@@ -131,7 +131,7 @@ public:
     switches_(timeline, event),
     bg_(params, timeline, event),
     first_started_pickable_(false),
-    first_fallen_pickable_(false),
+    first_out_pickable_(false),
     collapse_speed_rate_(params["game.collapse_speed_rate"].getValue<float>()),
     collapse_speed_rate_min_(params["game.collapse_speed_rate_min"].getValue<float>()),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
@@ -334,7 +334,7 @@ public:
 
     mode_ = START;
     first_started_pickable_ = false;
-    first_fallen_pickable_  = false;
+    first_out_pickable_     = false;
 
     records_.prepareCurrentGameRecord(stage_num_,
                                       finish_line_z_ - start_line_z_,
@@ -455,7 +455,7 @@ public:
     stage_.startCollapseStage(next_start_line_z_);
 
     first_started_pickable_ = true;
-    first_fallen_pickable_  = true;
+    first_out_pickable_     = true;
 
     mode_ = NONE;
   }
@@ -468,7 +468,7 @@ public:
     falling_cubes_.cleanup();
 
     first_started_pickable_ = true;
-    first_fallen_pickable_  = true;
+    first_out_pickable_     = true;
 
     stage_.stopBuildAndCollapse();
     stage_.startCollapseStage(next_start_line_z_, finish_rate_);
@@ -793,9 +793,9 @@ private:
           };
           event_.signal("fall-pickable", params);
 
-          if (!first_fallen_pickable_) {
-            first_fallen_pickable_ = true;
-            event_.signal("first-fallen-pickable", EventParam());
+          if (!first_out_pickable_) {
+            first_out_pickable_ = true;
+            event_.signal("first-out-pickable", EventParam());
           }
         }
       }
@@ -817,6 +817,11 @@ private:
         };
         
         event_.signal("pressed-pickable", params);
+
+        if (!first_out_pickable_) {
+          first_out_pickable_ = true;
+          event_.signal("first-out-pickable", EventParam());
+        }
       }
     }
   }
