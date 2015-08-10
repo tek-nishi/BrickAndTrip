@@ -7,7 +7,6 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
-// #include "Social.h"
 #include "Share.h"
 #include "Capture.h"
 
@@ -118,47 +117,6 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + sns_delay_);
                                   });
-
-#if 0
-    connections_ += event.connect("selected-twitter",
-                                  [this](const Connection& connection, EventParam& param) {
-                                    view_->setActive(false);
-                                    event_.signal("sns-post-begin", EventParam());
-                                    
-                                    event_timeline_->add([this]() {
-                                        DOUT << "post twitter" << std::endl;
-                                        
-                                        Social::post(Social::Type::TWITTER,
-                                                     sns_text_,
-                                                     captureTopView(),
-                                                     [this]() {
-                                                       event_.signal("sns-post-end", EventParam());
-                                                       view_->setActive(true);
-                                                     });
-                                      },
-                                      event_timeline_->getCurrentTime() + sns_delay_);
-                                  });
-    
-    connections_ += event.connect("selected-facebook",
-                                  [this](const Connection& connection, EventParam& param) {
-                                    view_->setActive(false);
-                                    event_.signal("sns-post-begin", EventParam());
-                                    
-                                    event_timeline_->add([this]() {
-                                        DOUT << "post facebook" << std::endl;
-                                        
-                                        Social::post(Social::Type::FACEBOOK,
-                                                     sns_text_,
-                                                     captureTopView(),
-                                                     [this]() {
-                                                       event_.signal("sns-post-end", EventParam());
-                                                       view_->setActive(true);
-                                                     });
-                                      },
-                                      event_timeline_->getCurrentTime() + sns_delay_);
-                                  });
-#endif
-    
 #endif
     
     setupView(params, result);
@@ -227,7 +185,6 @@ private:
     }
     
 #if defined(CINDER_COCOA_TOUCH)
-
     if (canCaptureTopView()) {
       if (Share::canPost()) {
         auto& widget = view_->getWidget("share");
@@ -235,31 +192,8 @@ private:
         widget.setDisp(true);
         widget.setActive(true);
       }
-
-#if 0
-      if (Social::canPost(Social::Type::TWITTER)) {
-        auto& widget = view_->getWidget("twitter");
-        
-        widget.setDisp(true);
-        widget.setActive(true);
-      }
-#endif
-      
-#if 0
-      // FIXME:iOS8.4 + iPhone6で、縦画面で出した投稿画面を横にして、
-      //       それからキャンセル。もう一度投稿しようとすると
-      //       投稿画面が表示されず進行できなくなってしまう。
-      //       原因が解明されるまでは連携しない
-      if (Social::canPost(Social::Type::FACEBOOK)) {
-        auto& widget = view_->getWidget("facebook");
-        
-        widget.setDisp(true);
-        widget.setActive(true);
-      }
-#endif
-      
-#endif
     }
+#endif
   }
 
   
