@@ -692,7 +692,6 @@
         ]
       }
     },
-
     
     "score": {
       "clear_time_score": 500,
@@ -702,7 +701,10 @@
       "rank_rate_table": [ 90, 70, 50 ]
     },
     
-    "records": "records.data"
+    "records": "records.data",
+
+    "progress_start_delay": 1.0,
+    "progress_continue_delay": 3.0
   },
 
   

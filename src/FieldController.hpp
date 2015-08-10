@@ -22,6 +22,7 @@ class FieldController : public ControllerBase {
   bool paused_;
 
   ConnectionHolder connections_;
+  ConnectionHolder disposable_connections_;
   
   bool active_;
 
@@ -30,6 +31,9 @@ class FieldController : public ControllerBase {
 
   bool stage_cleard_;
   bool stageclear_agree_;
+
+  float progress_start_delay_;
+  float progress_continue_delay_;
   
 
 public:
@@ -46,7 +50,9 @@ public:
     view_(params, timeline_, event_, touch_event),
     entity_(params, timeline_, event_, records),
     stage_cleard_(false),
-    stageclear_agree_(false)
+    stageclear_agree_(false),
+    progress_start_delay_(params["game.progress_start_delay"].getValue<float>()),
+    progress_continue_delay_(params["game.progress_continue_delay"].getValue<float>())
   {
     DOUT << "FieldController()" << std::endl;
     
@@ -370,29 +376,31 @@ private:
 
   
   void setup() {
-    connections_ += event_.connect("pickable-moved",
-                                   [this](const Connection& connection, EventParam& param) {
-                                     entity_.startStageBuild();
-                                     connection.disconnect();
-                                   });
+    disposable_connections_.clear();
+    
+    disposable_connections_ += event_.connect("pickable-moved",
+                                              [this](const Connection& connection, EventParam& param) {
+                                                entity_.startStageBuild();
+                                                connection.disconnect();
+                                              });
 
     if (entity_.isContinuedGame()) {
       // Continue時はゲーム開始時にProgressを表示
       timeline_->add([this]() {
           event_.signal("begin-progress", EventParam());
         },
-        timeline_->getCurrentTime() + 1.0f);
+        timeline_->getCurrentTime() + progress_continue_delay_);
     }
     else {
       // 最初から始めた時はPickableを動かしたらProgressを表示
-      connections_ += event_.connect("pickable-moved",
-                                     [this](const Connection& connection, EventParam& param) {
-                                       timeline_->add([this]() {
-                                           event_.signal("begin-progress", EventParam());
-                                         },
-                                         timeline_->getCurrentTime() + 1.0f);
-                                       connection.disconnect();
-                                     });
+      disposable_connections_ += event_.connect("pickable-moved",
+                                                [this](const Connection& connection, EventParam& param) {
+                                                  timeline_->add([this]() {
+                                                      event_.signal("begin-progress", EventParam());
+                                                    },
+                                                    timeline_->getCurrentTime() + progress_start_delay_);
+                                                  connection.disconnect();
+                                                });
     }
     
     view_.enableTouchInput(false);

@@ -490,6 +490,7 @@ public:
   }
   
   void restart() {
+    stage_.cleanup();
     stage_.restart();
     mode_ = NONE;
   }

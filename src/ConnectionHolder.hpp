@@ -24,6 +24,15 @@ public:
     }
   }
 
+
+  void clear() {
+    for (auto& connection : connections_) {
+      connection.disconnect();
+    }
+    
+    connections_.clear();
+  }
+
   
   void operator += (Connection& connection) {
     connections_.push_back(connection);

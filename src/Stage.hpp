@@ -311,6 +311,10 @@ public:
     moveStageCube(*target);
   }
 
+  void cleanup() {
+    event_timeline_->clear();
+  }
+
 
   float buildSpeed() const { return build_speed_; }
   
