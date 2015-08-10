@@ -761,7 +761,9 @@
     "active_delay": 2.7,
     "tween_delay": 0.6,
     "event_delay": 1.5,
-    "deactive_delay": 0.1
+    "deactive_delay": 0.1,
+    "sns_delay": 0.1,
+    "sns_text": "Stage Clear!!"
   },
 
   "stageclear": {
