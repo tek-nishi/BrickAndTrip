@@ -727,7 +727,9 @@
     "active_delay": 0.8,
     "tween_delay": 0.6,
     "event_delay": 0.7,
-    "deactive_delay": 0.5
+    "deactive_delay": 0.5,
+    "sns_delay": 0.2,
+    "sns_text": "It's my records!!"
   },
 
   "settings": {
@@ -764,8 +766,8 @@
     "tween_delay": 0.6,
     "event_delay": 1.5,
     "deactive_delay": 0.1,
-    "sns_delay": 0.1,
-    "sns_text": "Stage Clear!!"
+    "sns_delay": 0.2,
+    "sns_text": "It's my result:D"
   },
 
   "stageclear": {
@@ -773,7 +775,7 @@
     "tween_delay": 0.6,
     "event_delay": 1.0,
     "deactive_delay": 0.5,
-    "sns_delay": 0.1,
+    "sns_delay": 0.2,
 
     "rank": [ "S", "A", "B", "C", "D", "E", "F" ],
     "sns_text": "Stage Clear!!"

@@ -7,6 +7,8 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "Share.h"
+#include "Capture.h"
 
 
 namespace ngs {
@@ -18,10 +20,13 @@ class RecordsController : public ControllerBase {
   float tween_delay_;
   float event_delay_;
   float deactive_delay_;
+  float sns_delay_;
 
   std::unique_ptr<UIView> view_;
   
   bool active_;
+
+  std::string sns_text_;
 
   ConnectionHolder connections_;
 
@@ -39,8 +44,10 @@ public:
     tween_delay_(params["records.tween_delay"].getValue<float>()),
     event_delay_(params["records.event_delay"].getValue<float>()),
     deactive_delay_(params["records.deactive_delay"].getValue<float>()),
+    sns_delay_(params["records.sns_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
+    sns_text_(params["records.sns_text"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "RecordsController()" << std::endl;
@@ -68,6 +75,26 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
+
+#if defined(CINDER_COCOA_TOUCH)
+    connections_ += event.connect("selected-share",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    event_.signal("sns-post-begin", EventParam());
+                                    
+                                    event_timeline_->add([this]() {
+                                        DOUT << "Share" << std::endl;
+                                        
+                                        Share::post(sns_text_,
+                                                    captureTopView(),
+                                                    [this]() {
+                                                      event_.signal("sns-post-end", EventParam());
+                                                      view_->setActive(true);
+                                                    });
+                                      },
+                                      event_timeline_->getCurrentTime() + sns_delay_);
+                                  });
+#endif
 
     setupView(records);
     
@@ -161,6 +188,17 @@ private:
         }
       }      
     }
+    
+#if defined(CINDER_COCOA_TOUCH)
+    if (canCaptureTopView()) {
+      if (Share::canPost()) {
+        auto& widget = view_->getWidget("share");
+        
+        widget.setDisp(true);
+        widget.setActive(true);
+      }
+    }
+#endif
   }
   
 };
