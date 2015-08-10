@@ -30,13 +30,6 @@
         "offset": [ 0, 0.035, 0 ]
       },
       {
-        "name": "social-icon",
-        "path": "Grands.ttf",
-        "size": 64,
-        "scale": [ 1.6, 1.6, 1 ],
-        "offset": [ 0, -0.15, 0 ]
-      },
-      {
         "name": "logo",
         "path": "SGIEXB.ttf",
         "default": true,

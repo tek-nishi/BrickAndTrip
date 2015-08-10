@@ -7,7 +7,8 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
-#include "Social.h"
+// #include "Social.h"
+#include "Share.h"
 #include "Capture.h"
 
 
@@ -100,6 +101,25 @@ public:
                                   });
 
 #if defined(CINDER_COCOA_TOUCH)
+    connections_ += event.connect("selected-share",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    event_.signal("sns-post-begin", EventParam());
+                                    
+                                    event_timeline_->add([this]() {
+                                        DOUT << "Share" << std::endl;
+                                        
+                                        Share::post(sns_text_,
+                                                    captureTopView(),
+                                                    [this]() {
+                                                      event_.signal("sns-post-end", EventParam());
+                                                      view_->setActive(true);
+                                                    });
+                                      },
+                                      event_timeline_->getCurrentTime() + sns_delay_);
+                                  });
+
+#if 0
     connections_ += event.connect("selected-twitter",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
@@ -137,6 +157,8 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + sns_delay_);
                                   });
+#endif
+    
 #endif
     
     setupView(params, result);
@@ -205,13 +227,24 @@ private:
     }
     
 #if defined(CINDER_COCOA_TOUCH)
+
     if (canCaptureTopView()) {
+      if (Share::canPost()) {
+        auto& widget = view_->getWidget("share");
+        
+        widget.setDisp(true);
+        widget.setActive(true);
+      }
+
+#if 0
       if (Social::canPost(Social::Type::TWITTER)) {
         auto& widget = view_->getWidget("twitter");
         
         widget.setDisp(true);
         widget.setActive(true);
       }
+#endif
+      
 #if 0
       // FIXME:iOS8.4 + iPhone6で、縦画面で出した投稿画面を横にして、
       //       それからキャンセル。もう一度投稿しようとすると
@@ -224,8 +257,9 @@ private:
         widget.setActive(true);
       }
 #endif
-    }
+      
 #endif
+    }
   }
 
   
