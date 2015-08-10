@@ -83,7 +83,7 @@ public:
                                      const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
                                      view_.setStageLightTween(light_tween);
 
-                                     entity_.startStageCollapse();
+                                     // entity_.startStageCollapse();
                                    });
     
     connections_ += event_.connect("all-pickable-started",
