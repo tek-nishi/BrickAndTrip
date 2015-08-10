@@ -244,13 +244,18 @@ public:
       break;
     }
 
-    {
-      const auto& current_stage = records_.currentStage();
+    switch (mode_) {
+    case START:
+    case FINISH:
+      {
+        const auto& current_stage = records_.currentStage();
       
-      EventParam params = {
-        { "play-time", current_stage.play_time },
-      };
-      event_.signal("update-record", params);
+        EventParam params = {
+          { "play-time", current_stage.play_time },
+        };
+        event_.signal("update-record", params);
+      }
+      break;
     }
 
     {
@@ -643,6 +648,10 @@ public:
     };
 
     return field;
+  }
+
+  bool isContinuedGame() const {
+    return records_.isContinuedGame();
   }
 
   

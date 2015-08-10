@@ -373,13 +373,28 @@ private:
     connections_ += event_.connect("pickable-moved",
                                    [this](const Connection& connection, EventParam& param) {
                                      entity_.startStageBuild();
-                                     timeline_->add([this]() {
-                                         event_.signal("begin-progress", EventParam());
-                                       },
-                                       timeline_->getCurrentTime() + 1.0f);
-                                       
                                      connection.disconnect();
                                    });
+
+    if (entity_.isContinuedGame()) {
+      // Continue時はゲーム開始時にProgressを表示
+      timeline_->add([this]() {
+          event_.signal("begin-progress", EventParam());
+        },
+        timeline_->getCurrentTime() + 1.0f);
+    }
+    else {
+      // 最初から始めた時はPickableを動かしたらProgressを表示
+      connections_ += event_.connect("pickable-moved",
+                                     [this](const Connection& connection, EventParam& param) {
+                                       timeline_->add([this]() {
+                                           event_.signal("begin-progress", EventParam());
+                                         },
+                                         timeline_->getCurrentTime() + 1.0f);
+                                       connection.disconnect();
+                                     });
+    }
+    
     view_.enableTouchInput(false);
     view_.resetCamera();
     view_.enableFollowCamera();
