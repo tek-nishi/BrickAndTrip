@@ -198,6 +198,11 @@ public:
                      records_.cancelRegularStageComplated();
                    });
 
+    event_.connect("clear-records",
+                   [this](const Connection& connection, EventParam& param) {
+                     records_.clear();
+                   });
+
     event_.connect("do-snapshot",
                    [this](const Connection& connection, EventParam& param) {
                      auto surface = ci::app::copyWindowSurface();
@@ -252,12 +257,7 @@ private:
       {
         int stage_num = params_["game.regular_stage_num"].getValue<int>();
         for (; i < stage_num; ++i) {
-          auto path = FieldEntity::getStagePath(i);
-          auto stage = Json::readFromFile(path);
-
-          if (!stage.hasChild("items")) continue;
-          
-          regular_item_num += int(stage["items"].getNumChildren());
+          regular_item_num += getStageItemNum(i);
         }
       }
 
@@ -265,12 +265,7 @@ private:
         int stage_num = params_["game.total_stage_num"].getValue<int>();
         // 全ステージの合計を求めるために、regular以降のステージの合計を求めている
         for (; i < stage_num; ++i) {
-          auto path = FieldEntity::getStagePath(i);
-          auto stage = Json::readFromFile(path);
-
-          if (!stage.hasChild("items")) continue;
-
-          all_item_num += int(stage["items"].getNumChildren());
+          all_item_num += getStageItemNum(i);
         }
         all_item_num += regular_item_num;
       }
@@ -365,6 +360,15 @@ private:
     camera.setEyePoint(Json::getVec3<float>(params["eye_point"]));
 
     return camera;
+  }
+
+  static int getStageItemNum(const int stage_index) {
+    auto path  = FieldEntity::getStagePath(stage_index);
+    auto stage = Json::readFromFile(path);
+
+    if (!stage.hasChild("items")) return 0;
+          
+    return int(stage["items"].getNumChildren());
   }
   
 };

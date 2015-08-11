@@ -103,6 +103,7 @@
       "i": "force-regular-completed",
       "I": "cancel-regular-completed",
       "p": "entry-pickable",
+      "n": "clear-records",
       "G": "do-snapshot"
     }
   },

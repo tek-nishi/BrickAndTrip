@@ -158,8 +158,22 @@ public:
     regular_item_num_ = regular_item_num;
     all_item_num_ = all_item_num;
   }
-  
 
+  
+#ifdef DEBUG
+  void clear() {
+    all_item_completed_ = false;
+    total_play_num_     = 0;
+    total_play_time_    = 0.0;
+    high_score_         = 0;
+    high_item_num_      = 0;
+    total_clear_num_    = 0;
+
+    stage_records_.clear();
+  }
+#endif
+
+  
   // ゲーム内記録はすべて関数経由で行う
   void enableRecordCurrentGame() {
     record_current_game_ = true;
@@ -329,10 +343,10 @@ public:
       for (const auto& sr : stage) {
         StageRecord s;
 
-        s.clear_time    = Json::getValue(sr, "clear_time", 0.0);
-        s.all_item_get  = Json::getValue(sr, "all_item_get", false);
-        s.score         = Json::getValue(sr, "score", 0);
-        s.rank          = Json::getValue(sr, "rank", int(RANK_DUMMY));
+        s.clear_time   = Json::getValue(sr, "clear_time", 0.0);
+        s.all_item_get = Json::getValue(sr, "all_item_get", false);
+        s.score        = Json::getValue(sr, "score", 0);
+        s.rank         = Json::getValue(sr, "rank", int(RANK_DUMMY));
 
         stage_records_.push_back(std::move(s));
       }
