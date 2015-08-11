@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8D1107260486CEB800E47090"
-               BuildableName = "ColoColoParade.app"
-               BlueprintName = "ColoColoParade"
-               ReferencedContainer = "container:ColoColoParade.xcodeproj">
+               BlueprintIdentifier = "00692BCE14FF149000D0A05E"
+               BuildableName = "BrickTrip.app"
+               BlueprintName = "BrickTrip"
+               ReferencedContainer = "container:BrickTrip.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "ColoColoParade.app"
-            BlueprintName = "ColoColoParade"
-            ReferencedContainer = "container:ColoColoParade.xcodeproj">
+            BlueprintIdentifier = "00692BCE14FF149000D0A05E"
+            BuildableName = "BrickTrip.app"
+            BlueprintName = "BrickTrip"
+            ReferencedContainer = "container:BrickTrip.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,10 +52,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "ColoColoParade.app"
-            BlueprintName = "ColoColoParade"
-            ReferencedContainer = "container:ColoColoParade.xcodeproj">
+            BlueprintIdentifier = "00692BCE14FF149000D0A05E"
+            BuildableName = "BrickTrip.app"
+            BlueprintName = "BrickTrip"
+            ReferencedContainer = "container:BrickTrip.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -71,10 +71,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "ColoColoParade.app"
-            BlueprintName = "ColoColoParade"
-            ReferencedContainer = "container:ColoColoParade.xcodeproj">
+            BlueprintIdentifier = "00692BCE14FF149000D0A05E"
+            BuildableName = "BrickTrip.app"
+            BlueprintName = "BrickTrip"
+            ReferencedContainer = "container:BrickTrip.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

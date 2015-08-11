@@ -15,10 +15,11 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		475C50E71ABBE93E00CFC3E1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 475C50E61ABBE93E00CFC3E1 /* Images.xcassets */; };
+		473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 473FFD121B7A0E7700EFDD9E /* Images.xcassets */; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47B62A291B6A263400ABF155 /* Capture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47B62A271B6A263400ABF155 /* Capture.mm */; };
 		47B62A2C1B6A264200ABF155 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47B62A2B1B6A264200ABF155 /* Social.framework */; };
+		47B8CD071B7A0D4900109D0E /* BrickTripApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47B8CD061B7A0D4900109D0E /* BrickTripApp.cpp */; };
 		47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2CE151AD5099E00C9FF09 /* Vbo.cpp */; };
 		47D342F51B78A03D007AF9E9 /* Share.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47D342F41B78A03D007AF9E9 /* Share.mm */; };
 		47EAFB6C1B2D4DE800703A45 /* DrawVboMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47F3CE631B287B250030D955 /* DrawVboMesh.cpp */; };
@@ -28,11 +29,10 @@
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */; };
 		DDDDE001121DAC8FFFFADDDD /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
-		EC43B19189734030A187325A /* ColoColoParadeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D94FCF0D83574B138433F88A /* ColoColoParadeApp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		00692BCF14FF149000D0A05E /* ColoColoParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColoColoParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00692BCF14FF149000D0A05E /* BrickTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrickTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00748057165D41390024B57A /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 		0087D25412CD809F002CD69F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		00A66A351965AC8800B17EB3 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -42,10 +42,11 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		475C50E61ABBE93E00CFC3E1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ColoColoParade/Images.xcassets; sourceTree = "<group>"; };
+		473FFD121B7A0E7700EFDD9E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		47A8C39D1ACC43C10009B7AD /* FileUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileUtil.mm; path = ../src/FileUtil.mm; sourceTree = "<group>"; };
 		47B62A271B6A263400ABF155 /* Capture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Capture.mm; path = ../src/Capture.mm; sourceTree = "<group>"; };
 		47B62A2B1B6A264200ABF155 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		47B8CD061B7A0D4900109D0E /* BrickTripApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BrickTripApp.cpp; path = ../src/BrickTripApp.cpp; sourceTree = "<group>"; };
 		47C2CE151AD5099E00C9FF09 /* Vbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vbo.cpp; path = ../src/Vbo.cpp; sourceTree = "<group>"; };
 		47D342F41B78A03D007AF9E9 /* Share.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Share.mm; path = ../src/Share.mm; sourceTree = "<group>"; };
 		47F3CE631B287B250030D955 /* DrawVboMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DrawVboMesh.cpp; path = ../src/DrawVboMesh.cpp; sourceTree = "<group>"; };
@@ -54,9 +55,8 @@
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		D94FCF0D83574B138433F88A /* ColoColoParadeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = ColoColoParadeApp.cpp; path = ../src/ColoColoParadeApp.cpp; sourceTree = "<group>"; };
 		DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		DFB970E9A0FE48F4BFBE0698 /* ColoColoParade_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = ColoColoParade_Prefix.pch; sourceTree = "<group>"; };
+		DFB970E9A0FE48F4BFBE0698 /* BrickTrip_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrickTrip_Prefix.pch; sourceTree = "<group>"; };
 		DFD1320E71DE4103895A99F7 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +100,7 @@
 		00692BD014FF149000D0A05E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00692BCF14FF149000D0A05E /* ColoColoParade.app */,
+				00692BCF14FF149000D0A05E /* BrickTrip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,10 +131,10 @@
 			children = (
 				47D342F41B78A03D007AF9E9 /* Share.mm */,
 				47B62A271B6A263400ABF155 /* Capture.mm */,
+				47A8C39D1ACC43C10009B7AD /* FileUtil.mm */,
 				47F3CE631B287B250030D955 /* DrawVboMesh.cpp */,
 				47C2CE151AD5099E00C9FF09 /* Vbo.cpp */,
-				47A8C39D1ACC43C10009B7AD /* FileUtil.mm */,
-				D94FCF0D83574B138433F88A /* ColoColoParadeApp.cpp */,
+				47B8CD061B7A0D4900109D0E /* BrickTripApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -142,7 +142,7 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				475C50E61ABBE93E00CFC3E1 /* Images.xcassets */,
+				473FFD121B7A0E7700EFDD9E /* Images.xcassets */,
 				00748057165D41390024B57A /* assets */,
 				5D5D9C573C0F4F1EBE1E6BFD /* Info.plist */,
 			);
@@ -153,7 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				DFD1320E71DE4103895A99F7 /* Resources.h */,
-				DFB970E9A0FE48F4BFBE0698 /* ColoColoParade_Prefix.pch */,
+				DFB970E9A0FE48F4BFBE0698 /* BrickTrip_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -168,9 +168,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00692BCE14FF149000D0A05E /* ColoColoParade */ = {
+		00692BCE14FF149000D0A05E /* BrickTrip */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "ColoColoParade" */;
+			buildConfigurationList = 00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "BrickTrip" */;
 			buildPhases = (
 				00692BCB14FF149000D0A05E /* Sources */,
 				00692BCC14FF149000D0A05E /* Frameworks */,
@@ -180,9 +180,9 @@
 			);
 			dependencies = (
 			);
-			name = ColoColoParade;
+			name = BrickTrip;
 			productName = ColoColoParade;
-			productReference = 00692BCF14FF149000D0A05E /* ColoColoParade.app */;
+			productReference = 00692BCF14FF149000D0A05E /* BrickTrip.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -197,7 +197,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "ColoColoParade" */;
+			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BrickTrip" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -209,7 +209,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				00692BCE14FF149000D0A05E /* ColoColoParade */,
+				00692BCE14FF149000D0A05E /* BrickTrip */,
 			);
 		};
 /* End PBXProject section */
@@ -220,7 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00748058165D41390024B57A /* assets in Resources */,
-				475C50E71ABBE93E00CFC3E1 /* Images.xcassets in Resources */,
+				473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,10 +232,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */,
-				EC43B19189734030A187325A /* ColoColoParadeApp.cpp in Sources */,
 				47B62A291B6A263400ABF155 /* Capture.mm in Sources */,
 				47D342F51B78A03D007AF9E9 /* Share.mm in Sources */,
 				47EAFB6C1B2D4DE800703A45 /* DrawVboMesh.cpp in Sources */,
+				47B8CD071B7A0D4900109D0E /* BrickTripApp.cpp in Sources */,
 				47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,7 +316,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ColoColoParade_Prefix.pch;
+				GCC_PREFIX_HEADER = BrickTrip_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
@@ -329,7 +329,7 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BrickTrip;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -343,7 +343,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ColoColoParade_Prefix.pch;
+				GCC_PREFIX_HEADER = BrickTrip_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
@@ -356,7 +356,7 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BrickTrip;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -365,7 +365,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00692BC914FF149000D0A05E /* Build configuration list for PBXProject "ColoColoParade" */ = {
+		00692BC914FF149000D0A05E /* Build configuration list for PBXProject "BrickTrip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00692BF314FF149000D0A05E /* Debug */,
@@ -374,7 +374,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "ColoColoParade" */ = {
+		00692BF514FF149000D0A05E /* Build configuration list for PBXNativeTarget "BrickTrip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00692BF614FF149000D0A05E /* Debug */,

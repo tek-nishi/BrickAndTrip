@@ -26,8 +26,8 @@ using namespace ci::app;
 
 namespace ngs {
 
-class ColoColoParadeApp : public AppNative,
-                          private boost::noncopyable {
+class BrickTripApp : public AppNative,
+                     private boost::noncopyable {
   JsonTree params_;
 
   double fast_speed_;
@@ -372,4 +372,4 @@ class ColoColoParadeApp : public AppNative,
 
 }
 
-CINDER_APP_NATIVE(ngs::ColoColoParadeApp, RendererGl(ngs::getAntiAliasingType()))
+CINDER_APP_NATIVE(ngs::BrickTripApp, RendererGl(ngs::getAntiAliasingType()))

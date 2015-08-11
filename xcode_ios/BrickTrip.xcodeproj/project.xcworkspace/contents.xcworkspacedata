@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ColoColoParade.xcodeproj">
+      location = "self:/Users/nishi/src/CinderProjects/ColoColoParade/xcode_ios/BrickTrip.xcodeproj">
    </FileRef>
 </Workspace>

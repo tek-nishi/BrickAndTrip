@@ -17,7 +17,7 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8C1FC4B7889544768E118AFC /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9534BDB9B93E477E8BDC9657 /* CinderApp.icns */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		970166FC64E241928EFE23FA /* ColoColoParadeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2E3C3BFD5AF34615BF2554EA /* ColoColoParadeApp.cpp */; };
+		970166FC64E241928EFE23FA /* BrickTripApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2E3C3BFD5AF34615BF2554EA /* BrickTripApp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,15 +29,15 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		2E3C3BFD5AF34615BF2554EA /* ColoColoParadeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = ColoColoParadeApp.cpp; path = ../src/ColoColoParadeApp.cpp; sourceTree = "<group>"; };
+		2E3C3BFD5AF34615BF2554EA /* BrickTripApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BrickTripApp.cpp; path = ../src/BrickTripApp.cpp; sourceTree = "<group>"; };
 		450D9852779747439722773C /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 		470D34A51ABBDFE300F51D76 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		88013F0599324B478E25E9F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* ColoColoParade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColoColoParade.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* BrickTrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrickTrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9534BDB9B93E477E8BDC9657 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
-		D0762E1928D74AD589624D2B /* ColoColoParade_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = ColoColoParade_Prefix.pch; sourceTree = "<group>"; };
+		D0762E1928D74AD589624D2B /* BrickTrip_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrickTrip_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +69,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				2E3C3BFD5AF34615BF2554EA /* ColoColoParadeApp.cpp */,
+				2E3C3BFD5AF34615BF2554EA /* BrickTripApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -101,7 +101,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* ColoColoParade.app */,
+				8D1107320486CEB800E47090 /* BrickTrip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -123,7 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				450D9852779747439722773C /* Resources.h */,
-				D0762E1928D74AD589624D2B /* ColoColoParade_Prefix.pch */,
+				D0762E1928D74AD589624D2B /* BrickTrip_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -150,9 +150,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* ColoColoParade */ = {
+		8D1107260486CEB800E47090 /* BrickTrip */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ColoColoParade" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "BrickTrip" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -162,10 +162,10 @@
 			);
 			dependencies = (
 			);
-			name = ColoColoParade;
+			name = BrickTrip;
 			productInstallPath = "$(HOME)/Applications";
 			productName = ColoColoParade;
-			productReference = 8D1107320486CEB800E47090 /* ColoColoParade.app */;
+			productReference = 8D1107320486CEB800E47090 /* BrickTrip.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -175,7 +175,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ColoColoParade" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BrickTrip" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -189,7 +189,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* ColoColoParade */,
+				8D1107260486CEB800E47090 /* BrickTrip */,
 			);
 		};
 /* End PBXProject section */
@@ -211,7 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				970166FC64E241928EFE23FA /* ColoColoParadeApp.cpp in Sources */,
+				970166FC64E241928EFE23FA /* BrickTripApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,7 +226,7 @@
 				DEAD_CODE_STRIPPING = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ColoColoParade_Prefix.pch;
+				GCC_PREFIX_HEADER = BrickTrip_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -239,7 +239,7 @@
 					"\"$(CINDER_PATH)/lib/macosx/libfreetype.a\"",
 					"-lz",
 				);
-				PRODUCT_NAME = ColoColoParade;
+				PRODUCT_NAME = BrickTrip;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
@@ -252,7 +252,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ColoColoParade_Prefix.pch;
+				GCC_PREFIX_HEADER = BrickTrip_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"$(inherited)",
@@ -265,7 +265,7 @@
 					"\"$(CINDER_PATH)/lib/macosx/libfreetype.a\"",
 					"-lz",
 				);
-				PRODUCT_NAME = ColoColoParade;
+				PRODUCT_NAME = BrickTrip;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -324,7 +324,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ColoColoParade" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "BrickTrip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -333,7 +333,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ColoColoParade" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BrickTrip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
