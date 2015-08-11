@@ -366,7 +366,7 @@ public:
     stage_.startBuildStage(finish_rate_, false);
     stage_.startCollapseStage(finish_line_z_ - 1, finish_rate_);
 
-    records_.storeStageRecord(event_timeline_->getCurrentTime());
+    records_.storeStageRecord();
 
     // 全ステージクリア判定
     bool all_cleard    = false;
@@ -408,8 +408,11 @@ public:
         { "regular_stage",  regular_stage },
         { "all_stage",      all_stage },
         
-        { "total_score",         current_game.score },
-        { "highest_total_score", current_game.highest_score },
+        { "total_score",             current_game.score },
+        { "highest_total_score",     current_game.highest_score },
+        { "play_item_num",           current_game.item_num },
+        { "play_item_total_num",     current_game.item_total_num },
+        { "highest_total_item_rate", current_game.highest_item_rate },
       };
 
       event_.signal("begin-stageclear", params);
@@ -427,7 +430,7 @@ public:
   // GameOver時の処理
   void gameover() {
     stopBuildAndCollapse();
-    records_.storeRecord(event_timeline_->getCurrentTime());
+    records_.storeRecord();
     records_.write(params_["game.records"].getValue<std::string>());
 
     {

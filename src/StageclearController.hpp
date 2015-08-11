@@ -29,8 +29,12 @@ class StageclearController : public ControllerBase {
   bool regular_stage_;
   bool all_stage_;
 
+  // FIXME:全ステージクリア時の情報を保持している
   int total_score_;
   bool highest_score_;
+  int item_num_;
+  int item_total_num_;
+  bool highest_item_rate_;
 
   std::string sns_text_;
   
@@ -58,6 +62,9 @@ public:
     all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
     total_score_(boost::any_cast<int>(result.at("total_score"))),
     highest_score_(boost::any_cast<bool>(result.at("highest_total_score"))),
+    item_num_(boost::any_cast<int>(result.at("play_item_num"))),
+    item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
+    highest_item_rate_(boost::any_cast<bool>(result.at("highest_total_item_rate"))),
     sns_text_(params["stageclear.sns_text"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
@@ -83,8 +90,11 @@ public:
                                             }
 
                                             EventParam params = {
-                                              { "total_score",   total_score_ },
-                                              { "highest_score", highest_score_ },
+                                              { "total_score",       total_score_ },
+                                              { "highest_score",     highest_score_ },
+                                              { "item_num",          item_num_ },
+                                              { "item_total_num",    item_total_num_ },
+                                              { "highest_item_rate", highest_item_rate_ },
                                             };
                                             
                                             event_.signal(msg, params);

@@ -785,8 +785,8 @@
     "message": "regular-stage-clear-out",
     "event_delay": 0.25,
     "collapse_delay": 3,
-    "tween_in_delay": 6,
-    "tween_out_delay": 4,
+    "tween_in_delay": 5,
+    "tween_out_delay": 0.6,
     "titleback_delay": 1,
     "deactive_delay": 1
   },
@@ -795,8 +795,8 @@
     "message": "all-stage-clear-out",
     "event_delay": 1.5,
     "collapse_delay": 0.25,
-    "tween_in_delay": 6,
-    "tween_out_delay": 4,
+    "tween_in_delay": 4,
+    "tween_out_delay": 0.6,
     "titleback_delay": 1,
     "deactive_delay": 1
   },

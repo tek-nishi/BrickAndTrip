@@ -7,6 +7,8 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "Share.h"
+#include "Capture.h"
 
 
 namespace ngs {
@@ -67,8 +69,10 @@ public:
             // text表示
             event_timeline_->add([this]() {
                 view_->setDisp(true);
+                view_->setActive(true);
                 view_->startWidgetTween("tween-in");
 
+#if 0
                 // text消去
                 event_timeline_->add([this]() {
                     view_->startWidgetTween("tween-out");
@@ -86,6 +90,7 @@ public:
                       event_timeline_->getCurrentTime() + titleback_delay_);
                   },
                   event_timeline_->getCurrentTime() + tween_out_delay_);
+#endif
               },
               event_timeline_->getCurrentTime() + tween_in_delay_);
           },
@@ -93,16 +98,50 @@ public:
       },
       event_timeline_->getCurrentTime() + event_delay_);
 
-    {
-      auto score = boost::any_cast<int>(result.at("total_score"));
-      view_->getWidget("score-result").setText(toFormatedString(score, 4));
+    connections_ += event.connect("selected-agree",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    
+                                    event_timeline_->add([this]() {
+                                        view_->startWidgetTween("tween-out");
 
-      if (boost::any_cast<bool>(result.at("highest_score"))) {
-        view_->startWidgetTween("tween-highest-score");
-      }
-    }
+                                        event_timeline_->add([this]() {
+                                            event_.signal("back-to-title", EventParam());
+
+                                            event_timeline_->add([this]() {
+                                                active_ = false;
+                                              },
+                                              event_timeline_->getCurrentTime() + deactive_delay_);
+                                          },
+                                          event_timeline_->getCurrentTime() + titleback_delay_);
+                                      },
+                                      event_timeline_->getCurrentTime() + tween_out_delay_);
+                                  });
+    
+#if defined(CINDER_COCOA_TOUCH)
+    connections_ += event.connect("selected-share",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    event_.signal("sns-post-begin", EventParam());
+                                    
+                                    event_timeline_->add([this]() {
+                                        DOUT << "Share" << std::endl;
+                                        
+                                        Share::post(sns_text_,
+                                                    captureTopView(),
+                                                    [this]() {
+                                                      event_.signal("sns-post-end", EventParam());
+                                                      view_->setActive(true);
+                                                    });
+                                      },
+                                      event_timeline_->getCurrentTime() + sns_delay_);
+                                  });
+#endif
+    
+    setup(result);
     
     view_->setDisp(false);
+    view_->setActive(false);
   }
 
   ~AllStageClearController() {
@@ -114,6 +153,31 @@ public:
 
 
 private:
+  void setup(const EventParam& result) {
+    {
+      auto item_num = boost::any_cast<int>(result.at("item_num"));
+      auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
+
+      if (item_total_num > 0) {
+        int item_rate = item_num * 100 / item_total_num;
+        view_->getWidget("item-result").setText(toFormatedString(item_rate, 3) + "%");
+      }
+      if (boost::any_cast<bool>(result.at("highest_item_rate"))) {
+        view_->startWidgetTween("tween-complete-item");
+      }
+    }
+    
+    {
+      auto score = boost::any_cast<int>(result.at("total_score"));
+      view_->getWidget("score-result").setText(toFormatedString(score, 4));
+
+      if (boost::any_cast<bool>(result.at("highest_score"))) {
+        view_->startWidgetTween("tween-highest-score");
+      }
+    }
+  }
+
+  
   bool isActive() const override {
     return active_;
   }

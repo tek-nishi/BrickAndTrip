@@ -33,7 +33,6 @@ public:
   };
 
   struct CurrentStage {
-    double start_time;
     double play_time;
 
     int item_num;
@@ -46,7 +45,6 @@ public:
     bool highest_rank;
 
     CurrentStage() :
-      start_time(0.0),
       play_time(0.0),
       item_num(0),
       score(0),
@@ -59,17 +57,21 @@ public:
 
   struct CurrentGame {
     int    stage_num;
-    double play_time;
     int    score;
+    int    item_num;
+    int    item_total_num;
     bool   highest_score;
+    bool   highest_item_rate;
     bool   continued;
     
     CurrentGame() :
       stage_num(0),
-      play_time(0.0),
       score(0),
-      continued(false),
-      highest_score(false)
+      item_num(0),
+      item_total_num(0),
+      highest_score(false),
+      highest_item_rate(false),
+      continued(false)
     {}
   };
 
@@ -88,6 +90,7 @@ private:
   int    total_play_num_;
   double total_play_time_;
   int    high_score_;
+  float  item_get_rate_;
   int    total_clear_num_;
 
   std::vector<StageRecord> stage_records_;
@@ -109,6 +112,7 @@ public:
     total_play_num_(0),
     total_play_time_(0.0),
     high_score_(0),
+    item_get_rate_(0.0f),
     total_clear_num_(0),
     se_on_(true),
     bgm_on_(true),
@@ -182,9 +186,7 @@ public:
                                 const int item_num) {
     current_stage_ = CurrentStage();
 
-    current_stage_.start_time     = current_time;
     current_stage_.item_total_num = item_num;
-
     current_game_.stage_num = stage_num;
 
     game_score_.setStageInfo(stage_num,
@@ -197,15 +199,14 @@ public:
   }
 
   // ステージクリア時の記録の保存
-  void storeStageRecord(const double current_time) {
+  void storeStageRecord() {
     StageRecord record;
 
-    double play_time = current_time - current_stage_.start_time;
-    record.clear_time   = play_time;
+    record.clear_time   = current_stage_.play_time;
     record.all_item_get = current_stage_.item_num == current_stage_.item_total_num;
     current_stage_.complete_item = record.all_item_get;
 
-    auto stage_score = game_score_(play_time, current_stage_.item_num);
+    auto stage_score = game_score_(current_stage_.play_time, current_stage_.item_num);
     current_stage_.score = stage_score.first;
     current_stage_.rank = stage_score.second;
 
@@ -224,18 +225,16 @@ public:
     current_stage_.highest_score = current_stage_.score == stage_records_[current_game_.stage_num].score;
     current_stage_.highest_rank  = current_stage_.rank == stage_records_[current_game_.stage_num].rank;
 
-    current_game_.play_time += play_time;
     current_game_.score += current_stage_.score;
+    current_game_.item_num += current_stage_.item_num;
+    current_game_.item_total_num += current_stage_.item_total_num;
 
     record_current_game_ = false;
   }
 
   // GameOver時の記録の保存
-  void storeRecord(const double current_time) {
-    double play_time = current_time - current_stage_.start_time;
-    current_game_.play_time += play_time;
-
-    total_play_time_ += current_game_.play_time;
+  void storeRecord() {
+    total_play_time_ += current_stage_.play_time;
     total_play_num_  += 1;
 
     current_game_.highest_score = current_game_.score > high_score_;
@@ -247,20 +246,28 @@ public:
   
   // 10ステージクリア
   void cleardRegularStages() {
-    total_play_time_ += current_game_.play_time;
+    total_play_time_ += current_stage_.play_time;
     total_play_num_  += 1;
 
     current_game_.highest_score = current_game_.score > high_score_;
     high_score_ = std::max(high_score_, current_game_.score);
+
+    float item_get_rate = current_game_.item_num / float(current_game_.item_total_num);
+    current_game_.highest_item_rate = item_get_rate > item_get_rate_;
+    item_get_rate_ = std::max(item_get_rate_, item_get_rate);
   }
   
   // 全ステージクリア
   void cleardAllStages() {
-    total_play_time_ += current_game_.play_time;
+    total_play_time_ += current_stage_.play_time;
     total_play_num_  += 1;
 
     current_game_.highest_score = current_game_.score > high_score_;
     high_score_ = std::max(high_score_, current_game_.score);
+
+    float item_get_rate = current_game_.item_num / float(current_game_.item_total_num);
+    current_game_.highest_item_rate = item_get_rate > item_get_rate_;
+    item_get_rate_ = std::max(item_get_rate_, item_get_rate);
 
     total_clear_num_ += 1;
     checkAllItemCompleted();
@@ -291,6 +298,7 @@ public:
     total_play_time_ = Json::getValue(record, "total_play_time", 0.0);
     total_clear_num_ = Json::getValue(record, "total_clear_num", 0);
     high_score_      = Json::getValue(record, "high_score", 0);
+    item_get_rate_   = Json::getValue(record, "item_get_rate", 0.0f);
 
     all_item_completed_ = Json::getValue(record, "all_item_completed", false);
 
@@ -322,6 +330,7 @@ public:
       .addChild(ci::JsonTree("total_play_time", total_play_time_))
       .addChild(ci::JsonTree("total_clear_num", total_clear_num_))
       .addChild(ci::JsonTree("high_score", high_score_))
+      .addChild(ci::JsonTree("item_get_rate", item_get_rate_))
       .addChild(ci::JsonTree("all_item_completed", all_item_completed_))
       .addChild(ci::JsonTree("se_on", se_on_))
       .addChild(ci::JsonTree("bgm_on", bgm_on_))
@@ -355,9 +364,14 @@ public:
   }
 
   int getTotalPlayNum() const { return total_play_num_; }
+
   double getTotalPlayTime() const { return total_play_time_; }
+
   int getTotalClearNum() const { return total_clear_num_; }
+
   int getHighScore() const { return high_score_; }
+
+  float getItemGetRate() const { return item_get_rate_; }
 
   // 10stageまでのitemをcompleteしたか??
   bool isRegularStageCompleted() const {
