@@ -124,10 +124,10 @@
       "far_z":  500,
 
       "eye_point": [ -7, 12, -8 ],
-      "interest_point": [ 0.5, 0.5, 0.5 ],
+      "interest_point": [ 0.25, 0.5, 0.5 ],
       "target_point": [ 3, 1, 1 ],
       "eye_distance": 15,
-      "eye_ry": -140,
+      "eye_ry": -145,
       "eye_rx": -40,
 
       "eye_distance_rate": 0.8,
@@ -491,9 +491,9 @@
 
       "rotate_ease": "EaseNone",
       "rotate_ease_end": "EaseInSine",
-      "rotate_duration": 0.6,
+      "rotate_duration": 0.5,
       "rotate_power": 0.4,
-      "rotate_remap": [ 0.3, 1.0 ],
+      "rotate_remap": [ 0.38, 1.0 ],
       "rotate_speed_max": 10,
 
       "fall_ease": "EaseInQuad",
