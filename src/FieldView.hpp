@@ -9,6 +9,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/ImageIo.h"
+#include "cinder/Frustum.h"
 #include <boost/range/algorithm_ext/erase.hpp>
 #include <boost/algorithm/clamp.hpp>
 #include <boost/noncopyable.hpp>
@@ -239,10 +240,13 @@ public:
     
     ci::gl::setMatrices(camera_);
 
+    // 視錐台(クリッピングに利用)
+    ci::Frustumf frustum(camera_);
+
     lights_.enableLights();
 
-    drawStageCubes(field.active_cubes, models);
-    drawStageCubes(field.collapse_cubes, models);
+    drawStageCubes(field.active_cubes, models, frustum);
+    drawStageCubes(field.collapse_cubes, models, frustum);
 
     drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
     drawCubes(field.item_cubes, models, "item_cube", "item_cube");
@@ -647,15 +651,18 @@ private:
 
   
   void drawStageCubes(const std::deque<std::vector<StageCube> >& cubes,
-                      ModelHolder& models) {
+                      ModelHolder& models,
+                      const ci::Frustumf& frustum) {
     auto& material = materials_.get("stage_cube");
     material.apply();
-
+    
     const auto& mesh = models.get("stage_cube").mesh();
     
     for (const auto& row : cubes) {
       for (const auto& cube : row) {
         if (!cube.active) continue;
+
+        if (!frustum.intersects(cube.position, ci::Vec3f::one())) continue;
         
         ci::gl::color(cube.color);
 
