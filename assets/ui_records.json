@@ -447,8 +447,8 @@
     "pos": [ -1.08, -0.44, 0 ],
     "origin": "left-center",
     "layout": "center",
-    "base_color": [ 0.1, 0.1, 0.1 ],
-    "text_color": [ 1, 1, 1 ],
+    "base_color": [ 1, 1, 1 ],
+    "text_color": [ 0.1, 0.1, 0.1 ],
     
     "tween": {
       "tween-in": {
