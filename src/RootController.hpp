@@ -102,11 +102,11 @@ public:
     event_.connect("begin-records",
                    [this](const Connection& connection, EventParam& param) {
                      EventParam records = {
-                       { "total_play",     records_.getTotalPlayNum() },
-                       { "total_time",     records_.getTotalPlayTime() },
-                       { "high_score",     records_.getHighScore() },
-                       { "total_clear",    records_.getTotalClearNum() },
-                       { "item_completed", records_.stageItemComplete() },
+                       { "total_play",  records_.getTotalPlayNum() },
+                       { "total_time",  records_.getTotalPlayTime() },
+                       { "high_score",  records_.getHighScore() },
+                       { "total_clear", records_.getTotalClearNum() },
+                       { "stage_ranks", records_.stageRanks() },
                      };
                      
                      addController<RecordsController>(params_, timeline_, event_, records,
@@ -271,10 +271,20 @@ private:
       }
     }
     records_.setItemNum(regular_item_num, all_item_num);
-
+    
     DOUT << "regular items:" << regular_item_num
          << " all items:" << all_item_num
          << std::endl;
+
+    {
+      int rank = params_["game.satisfy_rank"].getValue<int>();
+      records_.setSatisfyRank(rank);
+
+#ifdef DEBUG
+      auto& rank_text = params_["stageclear.rank"];
+      DOUT << "satisfy rank:" << rank_text[rank].getValue<std::string>() << std::endl;
+#endif
+    }
   }
 
   

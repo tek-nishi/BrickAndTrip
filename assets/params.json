@@ -451,6 +451,8 @@
 
     "total_stage_num": 11,
     "regular_stage_num": 10,
+    "satisfy_rank": 2,
+
     "start_stage": 0,
     
     "stage": {

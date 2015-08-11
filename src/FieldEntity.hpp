@@ -375,7 +375,7 @@ public:
 
     if (stage_num_ == regular_stage_num_) {
       // 11stageが登場するか判定
-      if (!records_.isRegularStageCompleted()) {
+      if (!records_.isSatisfyRegularStageRank()) {
         all_cleard    = true;
         regular_stage = true;
         records_.cleardRegularStages();

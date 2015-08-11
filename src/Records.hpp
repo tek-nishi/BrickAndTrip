@@ -14,10 +14,12 @@
 namespace ngs {
 
 class Records : private boost::noncopyable {
-  enum { RANK_DUMMY = 100 };
-
-  
 public:
+  enum {
+    RANK_SATISFY = 2,            // Rank B
+    RANK_DUMMY = 100
+  };
+  
   struct StageRecord {
     double clear_time;
     bool   all_item_get;
@@ -89,6 +91,7 @@ private:
   size_t regular_stage_num_;
   
   bool all_item_completed_;
+  bool all_rank_satisfy_;
   
   int    total_play_num_;
   double total_play_time_;
@@ -100,6 +103,8 @@ private:
 
   int regular_item_num_;
   int all_item_num_;
+
+  int rank_satisfy_;
   
   bool se_on_;
   bool bgm_on_;
@@ -115,6 +120,7 @@ public:
     total_stage_num_(0),
     regular_stage_num_(0),
     all_item_completed_(false),
+    all_rank_satisfy_(false),
     total_play_num_(0),
     total_play_time_(0.0),
     high_score_(0),
@@ -122,6 +128,7 @@ public:
     total_clear_num_(0),
     regular_item_num_(0),
     all_item_num_(0),
+    rank_satisfy_(RANK_SATISFY),
     se_on_(true),
     bgm_on_(true),
     version_(version)
@@ -159,10 +166,17 @@ public:
     all_item_num_ = all_item_num;
   }
 
+  // Stage11が登場するための要求ランク
+  void setSatisfyRank(const int rank) {
+    rank_satisfy_ = rank;
+  }
+
+
   
 #ifdef DEBUG
   void clear() {
     all_item_completed_ = false;
+    all_rank_satisfy_   = false;
     total_play_num_     = 0;
     total_play_time_    = 0.0;
     high_score_         = 0;
@@ -170,6 +184,7 @@ public:
     total_clear_num_    = 0;
 
     stage_records_.clear();
+    stage_records_.resize(total_stage_num_);
   }
 #endif
 
@@ -303,10 +318,12 @@ public:
     current_game_.item_total_num = all_item_num_;
 
     total_clear_num_ += 1;
+    
     checkAllItemCompleted();
+    checkAllRankSatisfied();
   }
 
-  std::deque<bool> stageItemComplete() {
+  std::deque<bool> stageItemComplete() const {
     std::deque<bool> item_completed;
     
     for (const auto& record : stage_records_) {
@@ -316,6 +333,15 @@ public:
     return item_completed;
   }
   
+  std::vector<int> stageRanks() const {
+    std::vector<int> ranks;
+    
+    for (const auto& record : stage_records_) {
+      ranks.push_back(record.rank);
+    }
+
+    return ranks;
+  }
   
   void load(const std::string& path) {
     auto full_path = getDocumentPath() / path;
@@ -334,10 +360,15 @@ public:
     high_item_num_   = Json::getValue(record, "high_item_num", 0);
 
     all_item_completed_ = Json::getValue(record, "all_item_completed", false);
+    all_rank_satisfy_   = Json::getValue(record, "all_rank_satisfy", false);
 
     se_on_  = Json::getValue(record, "se_on", true);
     bgm_on_ = Json::getValue(record, "bgm_on", true);
 
+#ifdef DEBUG
+    stage_records_.clear();
+#endif
+    
     if (record.hasChild("stage")) {
       const auto& stage = record["stage"];
       for (const auto& sr : stage) {
@@ -353,6 +384,7 @@ public:
     }
 
     DOUT << "record loaded." << std::endl
+         << "stage:" << stage_records_.size() << std::endl
          << full_path << std::endl;
   }
   
@@ -365,6 +397,7 @@ public:
       .addChild(ci::JsonTree("high_score", high_score_))
       .addChild(ci::JsonTree("high_item_num", high_item_num_))
       .addChild(ci::JsonTree("all_item_completed", all_item_completed_))
+      .addChild(ci::JsonTree("all_rank_satisfy", all_rank_satisfy_))
       .addChild(ci::JsonTree("se_on", se_on_))
       .addChild(ci::JsonTree("bgm_on", bgm_on_))
       .addChild(ci::JsonTree("version", version_));
@@ -393,6 +426,7 @@ public:
 #endif
 
     DOUT << "record writed. " << std::endl
+         << "stage:" << stage_records_.size() << std::endl
          << full_path << std::endl;
   }
 
@@ -415,8 +449,14 @@ public:
     return true;
   }
 
-  bool isAllItemCompleted() const {
-    return all_item_completed_;
+  // 10stageまでのrankが規定以上か??
+  bool isSatisfyRegularStageRank() {
+    if (stage_records_.size() < regular_stage_num_) return false;
+    
+    for (size_t i = 0; i < regular_stage_num_; ++i) {
+      if (stage_records_[i].rank > rank_satisfy_) return false;
+    }
+    return true;
   }
 
   
@@ -441,7 +481,7 @@ public:
     }
 
     for (auto& record : stage_records_) {
-      record.all_item_get = true;
+      record.rank = std::min(record.rank, rank_satisfy_);
     }
   }
 
@@ -451,7 +491,7 @@ public:
     }
     
     for (auto& record : stage_records_) {
-      record.all_item_get = false;
+      record.rank = std::max(record.rank, rank_satisfy_ + 1);
     }
   }
 #endif
@@ -481,6 +521,17 @@ private:
 
     // 全stageの記録でall_item_getならtrue
     all_item_completed_ = true;
+  }
+
+  void checkAllRankSatisfied() {
+    if (all_rank_satisfy_) return;
+    
+    for (size_t i = 0; i < total_stage_num_; ++i) {
+      auto& record = stage_records_[i];
+      if (record.rank > rank_satisfy_) return;
+    }
+
+    all_rank_satisfy_ = true;
   }
   
 };

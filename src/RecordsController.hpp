@@ -158,14 +158,21 @@ private:
     }
 
     {
-      const auto& item_completed = boost::any_cast<const std::deque<bool>& >(records.at("item_completed"));
+      const auto& stage_ranks = boost::any_cast<const std::vector<int>& >(records.at("stage_ranks"));
 
+      auto& rank_text = params_["stageclear.rank"];
+      
       {
-        size_t stage_item = std::min(item_completed.size(), static_cast<size_t>(5));
+        size_t stage_item = std::min(stage_ranks.size(), static_cast<size_t>(5));
         if (stage_item > 0) {
           std::string text;
           for (size_t i = 0; i < stage_item; ++i) {
-            text = text + (item_completed[i] ? "t" : " ");
+            if (stage_ranks[i] == Records::RANK_DUMMY) {
+              text += " ";
+            }
+            else {
+              text += rank_text[stage_ranks[i]].getValue<std::string>();
+            }
           }
 
           auto& widget = view_->getWidget("stage_item_1");
@@ -175,11 +182,16 @@ private:
       }
 
       {
-        size_t stage_item = std::max(item_completed.size(), static_cast<size_t>(5)) - 5;
+        size_t stage_item = std::max(stage_ranks.size(), static_cast<size_t>(5)) - 5;
         if (stage_item > 0) {
           std::string text;
           for (size_t i = 0; i < stage_item; ++i) {
-            text = text + (item_completed[i + 5] ? "t" : " ");
+            if (stage_ranks[i + 5] == Records::RANK_DUMMY) {
+              text += " ";
+            }
+            else {
+              text += rank_text[stage_ranks[i + 5]].getValue<std::string>();
+            }
           }
           
           auto& widget = view_->getWidget("stage_item_2");

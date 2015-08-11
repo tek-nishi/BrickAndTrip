@@ -184,7 +184,7 @@ private:
     }
 
     {
-      auto rank_text = params["stageclear.rank"];
+      auto& rank_text = params["stageclear.rank"];
       auto rank = boost::any_cast<int>(result.at("rank"));
       
       view_->getWidget("rank-result").setText(rank_text[rank].getValue<std::string>());

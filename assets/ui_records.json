@@ -396,17 +396,15 @@
     "name": "stage_item_1",
     "disp": false,
     
-    "text": "t    ",
-    "font": "icon",
+    "text": "     ",
     "size": 0.4,
     "spacing": 0.04,
     "chara_split": 1,
     "pos": [ -1.08, 0.0, 0 ],
     "origin": "left-center",
     "layout": "center",
-    "hsv": true,
-    "base_color": [ 1, 0, 0.1 ],
-    "text_color": [ 0, 0.7, 1 ],
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
     
     "tween": {
       "tween-in": {
@@ -419,13 +417,6 @@
             "interval": 0.05,
             "start": -120,
             "end": 0
-          },
-          {
-            "target": "text_color",
-            "type": "EaseNone",
-            "duration": 0.6,
-            "loop": true,
-            "end": [ 360, 0.7, 1 ]
           }
         ]
       },
@@ -448,19 +439,16 @@
   {
     "name": "stage_item_2",
     "disp": false,
-    "hsv": true,
     
     "text": "     ",
-    "font": "icon",
     "size": 0.4,
     "spacing": 0.04,
     "chara_split": 1,
     "pos": [ -1.08, -0.44, 0 ],
     "origin": "left-center",
     "layout": "center",
-    "hsv": true,
-    "base_color": [ 1, 0, 0.1 ],
-    "text_color": [ 0, 0.7, 1 ],
+    "base_color": [ 0.1, 0.1, 0.1 ],
+    "text_color": [ 1, 1, 1 ],
     
     "tween": {
       "tween-in": {
@@ -473,13 +461,6 @@
             "interval": 0.05,
             "start": -120,
             "end": 0
-          },
-          {
-            "target": "text_color",
-            "type": "EaseNone",
-            "duration": 0.6,
-            "loop": true,
-            "end": [ 360, 0.7, 1 ]
           }
         ]
       },
