@@ -408,11 +408,11 @@ public:
         { "regular_stage",  regular_stage },
         { "all_stage",      all_stage },
         
-        { "total_score",             current_game.score },
-        { "highest_total_score",     current_game.highest_score },
-        { "play_item_num",           current_game.item_num },
-        { "play_item_total_num",     current_game.item_total_num },
-        { "highest_total_item_rate", current_game.highest_item_rate },
+        { "total_score",         current_game.score },
+        { "highest_total_score", current_game.highest_score },
+        { "play_item_num",       current_game.item_num },
+        { "play_item_total_num", current_game.item_total_num },
+        { "highest_item_num",    current_game.highest_item_num },
       };
 
       event_.signal("begin-stageclear", params);
@@ -656,6 +656,14 @@ public:
 
   bool isContinuedGame() const {
     return records_.isContinuedGame();
+  }
+
+
+  static std::string getStagePath(const int stage_num) {
+    std::ostringstream path;
+    // stage_num が 0 -> stage01.json 
+    path << "stage" << std::setw(2) << std::setfill('0') << (stage_num + 1) << ".json";
+    return path.str();
   }
 
   
@@ -995,13 +1003,6 @@ private:
   static int getPickableCubeEntryNum(const std::string& path) {
     auto stage = Json::readFromFile(path);
     return Json::getValue(stage, "pickable", 0);
-  }
-
-  static std::string getStagePath(const int stage_num) {
-    std::ostringstream path;
-    // stage_num が 0 -> stage01.json 
-    path << "stage" << std::setw(2) << std::setfill('0') << (stage_num + 1) << ".json";
-    return path.str();
   }
   
 };

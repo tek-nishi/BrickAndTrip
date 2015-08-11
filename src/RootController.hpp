@@ -244,6 +244,42 @@ private:
                           params_["game.score.item_score"].getValue<int>(),
                           params_["game.score.stage_collect"].getValue<float>(),
                           Json::getArray<int>(params_["game.score.rank_rate_table"]));
+
+    int regular_item_num = 0;
+    int all_item_num     = 0;
+    {
+      int i = 0;
+      {
+        int stage_num = params_["game.regular_stage_num"].getValue<int>();
+        for (; i < stage_num; ++i) {
+          auto path = FieldEntity::getStagePath(i);
+          auto stage = Json::readFromFile(path);
+
+          if (!stage.hasChild("items")) continue;
+          
+          regular_item_num += int(stage["items"].getNumChildren());
+        }
+      }
+
+      {
+        int stage_num = params_["game.total_stage_num"].getValue<int>();
+        // 全ステージの合計を求めるために、regular以降のステージの合計を求めている
+        for (; i < stage_num; ++i) {
+          auto path = FieldEntity::getStagePath(i);
+          auto stage = Json::readFromFile(path);
+
+          if (!stage.hasChild("items")) continue;
+
+          all_item_num += int(stage["items"].getNumChildren());
+        }
+        all_item_num += regular_item_num;
+      }
+    }
+    records_.setItemNum(regular_item_num, all_item_num);
+
+    DOUT << "regular items:" << regular_item_num
+         << " all items:" << all_item_num
+         << std::endl;
   }
 
   

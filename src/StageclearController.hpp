@@ -34,7 +34,7 @@ class StageclearController : public ControllerBase {
   bool highest_score_;
   int item_num_;
   int item_total_num_;
-  bool highest_item_rate_;
+  bool highest_item_num_;
 
   std::string sns_text_;
   
@@ -64,7 +64,7 @@ public:
     highest_score_(boost::any_cast<bool>(result.at("highest_total_score"))),
     item_num_(boost::any_cast<int>(result.at("play_item_num"))),
     item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
-    highest_item_rate_(boost::any_cast<bool>(result.at("highest_total_item_rate"))),
+    highest_item_num_(boost::any_cast<bool>(result.at("highest_item_num"))),
     sns_text_(params["stageclear.sns_text"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
@@ -94,7 +94,7 @@ public:
                                               { "highest_score",     highest_score_ },
                                               { "item_num",          item_num_ },
                                               { "item_total_num",    item_total_num_ },
-                                              { "highest_item_rate", highest_item_rate_ },
+                                              { "highest_item_num",  highest_item_num_ },
                                             };
                                             
                                             event_.signal(msg, params);

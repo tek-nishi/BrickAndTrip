@@ -164,7 +164,7 @@ private:
         int item_rate = item_num * 100 / item_total_num;
         view_->getWidget("item-result").setText(toFormatedString(item_rate, 3) + "%");
       }
-      if (boost::any_cast<bool>(result.at("highest_item_rate"))) {
+      if (boost::any_cast<bool>(result.at("highest_item_num"))) {
         view_->startWidgetTween("tween-complete-item");
       }
     }
