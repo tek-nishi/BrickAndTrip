@@ -14,6 +14,7 @@
     <ProjectGuid>{0610B2F7-2091-435E-903F-3B9E4A98EEBF}</ProjectGuid>
     <RootNamespace>ColoColoParade</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>BrickTrip</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -108,10 +109,10 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ColoColoParadeApp.cpp" />
+    <ClInclude Include="..\include\Resources.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Resources.h" />
+    <ClCompile Include="..\src\BrickTripApp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
