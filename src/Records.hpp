@@ -124,6 +124,12 @@ public:
                    const size_t total_stage_num) {
     regular_stage_num_ = regular_stage_num;
     total_stage_num_   = total_stage_num;
+
+#ifdef DEBUG
+    if (stage_records_.size() < total_stage_num) {
+      stage_records_.resize(total_stage_num);
+    }
+#endif
   }
 
 

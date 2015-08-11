@@ -788,7 +788,10 @@
     "tween_in_delay": 5,
     "tween_out_delay": 0.6,
     "titleback_delay": 1,
-    "deactive_delay": 1
+    "deactive_delay": 1,
+    
+    "sns_delay": 0.2,
+    "sns_text": "Stage 10 Clear!!"
   },
 
   "all_stageclear": {
@@ -798,7 +801,10 @@
     "tween_in_delay": 4,
     "tween_out_delay": 0.6,
     "titleback_delay": 1,
-    "deactive_delay": 1
+    "deactive_delay": 1,
+    
+    "sns_delay": 0.2,
+    "sns_text": "Stage 11 Clear!!"
   },
   
 

@@ -24,6 +24,9 @@ class AllStageClearController : public ControllerBase {
   float tween_out_delay_;
   float titleback_delay_;
   float deactive_delay_;
+  float sns_delay_;
+
+  std::string sns_text_;
   
   std::unique_ptr<UIView> view_;
   
@@ -48,6 +51,8 @@ public:
     tween_out_delay_(params["tween_out_delay"].getValue<float>()),
     titleback_delay_(params["titleback_delay"].getValue<float>()),
     deactive_delay_(params["deactive_delay"].getValue<float>()),
+    sns_delay_(params["sns_delay"].getValue<float>()),
+    sns_text_(params["sns_text"].getValue<std::string>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -139,9 +144,6 @@ public:
 #endif
     
     setup(result);
-    
-    view_->setDisp(false);
-    view_->setActive(false);
   }
 
   ~AllStageClearController() {
@@ -175,6 +177,20 @@ private:
         view_->startWidgetTween("tween-highest-score");
       }
     }
+    
+    view_->setDisp(false);
+    view_->setActive(false);
+    
+#if defined(CINDER_COCOA_TOUCH)
+    if (canCaptureTopView()) {
+      if (Share::canPost()) {
+        auto& widget = view_->getWidget("share");
+        
+        widget.setDisp(true);
+        widget.setActive(true);
+      }
+    }
+#endif
   }
 
   
