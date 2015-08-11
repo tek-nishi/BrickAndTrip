@@ -55,7 +55,7 @@ class BrickTripApp : public AppNative,
   std::unique_ptr<ControllerBase> controller_;
 
   
-  void prepareSettings(Settings* settings) {
+  void prepareSettings(Settings* settings) override {
     // アプリ起動時の設定はここで処理する
     params_ = Json::readFromFile("params.json");
 
@@ -82,7 +82,7 @@ class BrickTripApp : public AppNative,
   }
   
 
-	void setup() {
+	void setup() override {
     Rand::randomize();
     
     // Windowが表示された後の設定はここで処理
@@ -133,10 +133,14 @@ class BrickTripApp : public AppNative,
       },
       timeline().getCurrentTime() + 1.0f);
   }
+  
+  void quit() override {
+    timeline_->clear();
+  }
 
   
   // FIXME:Windowsではtouchイベントとmouseイベントが同時に呼ばれる
-	void mouseDown(MouseEvent event) {
+	void mouseDown(MouseEvent event) override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -145,7 +149,7 @@ class BrickTripApp : public AppNative,
     touch_event_.signal("touches-began", touches);
   }
   
-	void mouseDrag(MouseEvent event) {
+	void mouseDrag(MouseEvent event) override {
     if (!event.isLeftDown()) return;
 
     mouse_pos_ = event.getPos();
@@ -154,7 +158,7 @@ class BrickTripApp : public AppNative,
     touch_event_.signal("touches-moved", touches);
   }
   
-	void mouseUp(MouseEvent event) {
+	void mouseUp(MouseEvent event) override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -164,24 +168,24 @@ class BrickTripApp : public AppNative,
   }
 
 
-  void touchesBegan(TouchEvent event) {
+  void touchesBegan(TouchEvent event) override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-began", touches);
   }
   
-  void touchesMoved(TouchEvent event) {
+  void touchesMoved(TouchEvent event) override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-moved", touches);
   }
   
-  void touchesEnded(TouchEvent event) {
+  void touchesEnded(TouchEvent event) override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-ended", touches);
   }
 
 
 #ifdef DEBUG
-  void keyDown(KeyEvent event) {
+  void keyDown(KeyEvent event) override {
     char chara = event.getChar();
     int  code  = event.getCode();
 
@@ -189,6 +193,7 @@ class BrickTripApp : public AppNative,
       // Soft Reset
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
       controller_.reset();
+      timeline_->clear();
 
       params_ = Json::readFromFile("params.json");
 
@@ -246,7 +251,7 @@ class BrickTripApp : public AppNative,
     }
   }
   
-  void keyUp(KeyEvent event) {
+  void keyUp(KeyEvent event) override {
     char chara = event.getChar();
     int  code  = event.getCode();
 
@@ -258,12 +263,12 @@ class BrickTripApp : public AppNative,
 #endif
 
 
-  void resize() {
+  void resize() override {
     controller_->resize();
   }
   
   
-	void update() {
+	void update() override {
     double elapsed_seconds = getElapsedSeconds();
 
     // 経過時間が大きな値になりすぎないよう調整
@@ -283,7 +288,7 @@ class BrickTripApp : public AppNative,
     elapsed_seconds_ = elapsed_seconds;
   }
   
-	void draw() {
+	void draw() override {
     controller_->draw(*fonts_, *models_);
   }
 
