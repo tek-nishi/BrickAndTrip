@@ -364,7 +364,7 @@
     "move_begin_time": 0.3,
     "move_begin_threshold": 0.75,
     "move_threshold": 0.5,
-    "move_speed_rate": 0.22,
+    "move_speed_rate": 0.25,
     "move_swipe_speed": 10,
   
     "materials": {
@@ -473,8 +473,8 @@
       "open_delay": 2.5,
 
       "move_ease" : "EaseOutQuad",
-      "move_duration": 0.5,
-      "move_delay": 0.25,
+      "move_duration": 0.25,
+      "move_delay": 0.1,
 
       "build_start_ease": "EaseNone",
       "build_start_duration": 3.0,
@@ -544,7 +544,7 @@
 
       "color": [ 0.1, 0.1, 0.1 ],
       
-      "rotate_ease": "EaseInQuad",
+      "rotate_ease": "EaseInSine",
       "rotate_duration": 0.5,
       "rotate_speed_rate": [ 1, 0.8, 0.6, 0.4, 0.2 ],
 
