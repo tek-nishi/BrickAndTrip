@@ -241,6 +241,10 @@ public:
     game_score_.setStageInfo(stage_num,
                              stage_length, build_speed,
                              item_num);
+
+    DOUT << "Records stage:" << stage_num << std::endl
+         << "       length:" << stage_length << std::endl
+         << "     item_num:" << item_num << std::endl;
   }
 
   bool isContinuedGame() const {

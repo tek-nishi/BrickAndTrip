@@ -57,6 +57,8 @@ class FieldEntity : private boost::noncopyable {
   // 再開用情報
   int start_stage_num_;
   int stage_num_;
+
+  int restart_z_;
   
   Stage stage_;
 
@@ -100,6 +102,7 @@ class FieldEntity : private boost::noncopyable {
 
   struct StageInfo {
     int top_z;
+    int bottom_z;
     int entry_num;
     int item_num;
     ci::Color stage_color;
@@ -124,6 +127,7 @@ public:
     finish_bg_color_(0, 0, 0),
     start_stage_num_(START_STAGE_NUM),
     stage_num_(start_stage_num_),
+    restart_z_(0),
     stage_(params, timeline, event),
     items_(params, timeline, event),
     moving_cubes_(params, timeline, event),
@@ -294,6 +298,7 @@ public:
     int entry_packable_num = calcEntryPickableCube(stage_num_);
     
     ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
+    entry_pos.y += stage_info.bottom_z;
     float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
 
     // 2個目以降はrandom
@@ -429,6 +434,8 @@ public:
 
   // GameOver時の処理
   void gameover() {
+    setRestartLine();
+    
     stopBuildAndCollapse();
     records_.storeRecord();
     records_.write(params_["game.records"].getValue<std::string>());
@@ -453,6 +460,8 @@ public:
 
   // 中断
   void abortGame() {
+    setRestartLine();
+    
     game_aborted_ = true;
     records_.disableRecordCurrentGame();
     cleanupField();
@@ -475,6 +484,11 @@ public:
     moving_cubes_.cleanup();
     falling_cubes_.cleanup();
 
+    items_.clear();
+    moving_cubes_.clear();
+    falling_cubes_.clear();
+    switches_.clear();
+    
     first_started_pickable_ = true;
     first_out_pickable_     = true;
 
@@ -494,7 +508,7 @@ public:
   
   void restart() {
     stage_.cleanup();
-    stage_.restart();
+    stage_.restart(restart_z_);
     mode_ = NONE;
   }
 
@@ -666,6 +680,15 @@ public:
     return path.str();
   }
 
+  int getStageTopZ() const {
+    return stage_.getTopZ();
+  }
+
+  
+  void setRestartLine() {
+    restart_z_ = std::max(stage_.getActiveBottomZ() - 5, 0);
+  }
+  
   
 private:
   // TODO:参照の無効値をあらわすためにboost::optionalを利用
@@ -726,6 +749,7 @@ private:
 
     StageInfo info = {
       top_z,
+      current_z,
       entry_num,
       item_num,
       Json::getColor<float>(stage["color"]),

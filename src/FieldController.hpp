@@ -321,6 +321,17 @@ public:
                                      float duration = boost::any_cast<float>(param["duration"]);
                                      view_.startQuake(duration);
                                    });
+
+    connections_ += event_.connect("begin-regulat-stageclear",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     entity_.setRestartLine();
+                                   });
+    
+    connections_ += event_.connect("begin-all-stageclear",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     entity_.setRestartLine();
+                                   });
+
     
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",
@@ -404,7 +415,7 @@ private:
     }
     
     view_.enableTouchInput(false);
-    view_.resetCamera();
+    view_.resetCamera(entity_.getStageTopZ());
     view_.enableFollowCamera();
     entity_.setupStartStage();
   }

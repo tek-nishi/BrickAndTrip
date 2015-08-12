@@ -76,26 +76,6 @@ public:
                 view_->setDisp(true);
                 view_->setActive(true);
                 view_->startWidgetTween("tween-in");
-
-#if 0
-                // text消去
-                event_timeline_->add([this]() {
-                    view_->startWidgetTween("tween-out");
-
-                    // title処理へ
-                    event_timeline_->add([this]() {
-                        event_.signal("back-to-title", EventParam());
-
-                        // 終了
-                        event_timeline_->add([this]() {
-                            active_ = false;
-                          },
-                          event_timeline_->getCurrentTime() + deactive_delay_);
-                      },
-                      event_timeline_->getCurrentTime() + titleback_delay_);
-                  },
-                  event_timeline_->getCurrentTime() + tween_out_delay_);
-#endif
               },
               event_timeline_->getCurrentTime() + tween_in_delay_);
           },

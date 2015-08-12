@@ -168,11 +168,11 @@ public:
     return active_cubes_.empty();
   }
 
-  void restart() {
+  void restart(const int restart_z) {
     stopBuildAndCollapse();
 
-    top_z_         = 0;
-    active_top_z_  = 0;
+    top_z_         = restart_z;
+    active_top_z_  = top_z_;
     finish_line_z_ = -1;
 
     started_collapse_  = false;

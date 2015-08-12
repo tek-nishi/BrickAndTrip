@@ -297,8 +297,9 @@ public:
   }
 
   
-  void resetCamera() {
+  void resetCamera(int offset_z) {
     new_target_point_ = Json::getVec3<float>(params_["game_view.camera.target_point"]);
+    new_target_point_.z += float(offset_z);
   }
 
   void setStageBgColor(const ci::Color& color) {
