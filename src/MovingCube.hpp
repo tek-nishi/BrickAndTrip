@@ -258,6 +258,12 @@ public:
         };
         event_.signal("moving-moved", params);
       });
+
+    animation_timeline_->add([this]() {
+        // 移動動作の途中で直前の位置を移動先と同じに
+        prev_block_position_ = block_position_;
+      },
+      animation_timeline_->getCurrentTime() + duration * 0.6f);
   }
 
   void fallFromStage() {

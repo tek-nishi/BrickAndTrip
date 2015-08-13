@@ -449,6 +449,8 @@
     "collapse_speed_rate_min": 0.2,
     "finish_rate": 0.1,
 
+    "continue_collapse_rate": 1.25,
+
     "total_stage_num": 11,
     "regular_stage_num": 10,
     "satisfy_rank": 2,

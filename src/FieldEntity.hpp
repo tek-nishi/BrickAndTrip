@@ -52,6 +52,9 @@ class FieldEntity : private boost::noncopyable {
   float collapse_speed_rate_min_;
   float finish_rate_;
 
+  bool  is_continued_;
+  float continue_collapse_rate_;
+
   int total_stage_num_;
   int regular_stage_num_;
   // 再開用情報
@@ -139,6 +142,8 @@ public:
     collapse_speed_rate_(params["game.collapse_speed_rate"].getValue<float>()),
     collapse_speed_rate_min_(params["game.collapse_speed_rate_min"].getValue<float>()),
     finish_rate_(params["game.finish_rate"].getValue<float>()),
+    is_continued_(false),
+    continue_collapse_rate_(params["game.continue_collapse_rate"].getValue<float>()),
     total_stage_num_(params["game.total_stage_num"].getValue<int>()),
     regular_stage_num_(params["game.regular_stage_num"].getValue<int>()),
     mode_(NONE),
@@ -345,7 +350,7 @@ public:
     mode_ = START;
     first_started_pickable_ = false;
     first_out_pickable_     = false;
-
+    
     records_.prepareCurrentGameRecord(stage_num_,
                                       finish_line_z_ - start_line_z_,
                                       stage_.buildSpeed(),
@@ -355,7 +360,11 @@ public:
     stage_num_ += 1;
 
     stage_.startBuildStage(1.0f, true);
-    stage_.setupAutoCollapse(finish_line_z_ - 1);
+    float collapse_rate = is_continued_ ? continue_collapse_rate_
+                                        : 1.0f;
+    stage_.setupAutoCollapse(finish_line_z_ - 1, collapse_rate);
+    
+    DOUT << "Continue game:" << is_continued_ << std::endl;
   }
 
   // StageのFinishLineまでの崩壊を始める
@@ -504,6 +513,7 @@ public:
                                      : START_STAGE_NUM;
 #endif
     records_.continuedGame(continue_game);
+    is_continued_ = continue_game;
   }
   
   void restart() {
