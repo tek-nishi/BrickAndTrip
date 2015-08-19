@@ -21,7 +21,6 @@
 #include "MaterialHolder.hpp"
 #include "FieldLights.hpp"
 #include "Quake.hpp"
-// #include "CameraEditor.hpp"
 
 
 namespace ngs {
@@ -43,6 +42,10 @@ class FieldView : private boost::noncopyable {
   float eye_distance_rate_;
   float eye_offset_rate_;
 
+  float eye_rx_;
+  float eye_ry_;
+  float eye_distance_;
+  
   ci::Vec3f new_target_point_;
   ci::Vec3f new_eye_point_;
   
@@ -89,8 +92,6 @@ class FieldView : private boost::noncopyable {
 
   ci::TimelineRef animation_timeline_;
   double progressing_seconds_;
-  
-  // CameraEditor camera_editor_;
 
   MaterialHolder materials_;
 
@@ -116,9 +117,6 @@ public:
     near_z_(params["game_view.camera.near_z"].getValue<float>()),
     far_z_(params["game_view.camera.far_z"].getValue<float>()),
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
-    interest_point_(Json::getVec3<float>(params["game_view.camera.interest_point"])),
-    target_point_(Json::getVec3<float>(params["game_view.camera.target_point"])),
-    new_target_point_(target_point_),
     target_radius_(0.0f),
     eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
@@ -141,23 +139,11 @@ public:
     fog_color_rate_(Json::getColorA<float>(params["game_view.fog_color"])),
     bg_color_(ci::Color(0, 0, 0)),
     fog_color_(ci::ColorA(0, 0, 0, 1))
-    // camera_editor_(camera_, interest_point_, eye_point_)
   {
-    // 注視点からの距離、角度でcamera位置を決めている
-    float eye_rx = params["game_view.camera.eye_rx"].getValue<float>();
-    float eye_ry = params["game_view.camera.eye_ry"].getValue<float>();
-    float eye_distance = params["game_view.camera.eye_distance"].getValue<float>();
-    
-    eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
-               * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
-               * ci::Vec3f(0, 0, eye_distance) + interest_point_;
+    setCameraParams(params["game_view.camera.start_camera"].getValue<std::string>());
     
     camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
     camera_.setEyePoint(eye_point_ + target_point_);
-
-    new_eye_point_ = eye_point_;
-
-    // camera_editor_.setParams(eye_rx, eye_ry, eye_distance);
 
     readMaterials(params["game_view.materials"]);
     
@@ -325,7 +311,24 @@ public:
   void startQuake(const float duration) {
     quake_.start(*animation_timeline_, &quake_value_, duration);
   }
-  
+
+
+  void setCameraParams(const std::string& name) {
+    auto params = params_["game_view.camera." + name];
+    
+    interest_point_   = Json::getVec3<float>(params["interest_point"]);
+    target_point_     = Json::getVec3<float>(params["target_point"]);
+    new_target_point_ = target_point_;
+
+    // 注視点からの距離、角度でcamera位置を決めている
+    eye_rx_ = params["eye_rx"].getValue<float>();
+    eye_ry_ = params["eye_ry"].getValue<float>();
+    eye_distance_ = params["eye_distance"].getValue<float>();
+
+    eye_point_ = calcEyePoint(0.0f);
+    new_eye_point_ = eye_point_;
+  }
+
   
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
@@ -623,13 +626,8 @@ private:
     }
     
     // 中心点から一番離れたpickable cubeへの距離に応じてカメラを引く
-    float eye_rx = params_["game_view.camera.eye_rx"].getValue<float>();
-    float eye_ry = params_["game_view.camera.eye_ry"].getValue<float>();
-    float eye_distance = params_["game_view.camera.eye_distance"].getValue<float>() + target_radius_ * eye_distance_rate_;
-      
-    new_eye_point_ = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx))
-      * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry))
-      * ci::Vec3f(0, 0, eye_distance) + interest_point_;
+    float offset = target_radius_ * eye_distance_rate_;
+    new_eye_point_ = calcEyePoint(offset);
   }
 
   void updateCamera(const double progressing_seconds) {
@@ -786,6 +784,15 @@ private:
     for (const auto& p : params) {
       materials_.add(p.getKey(), p);
     }
+  }
+
+  
+  ci::Vec3f calcEyePoint(const float distance_offset) {
+    ci::Vec3f pos = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx_))
+                  * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry_))
+                  * ci::Vec3f(0, 0, eye_distance_ + distance_offset) + interest_point_;
+
+    return pos;
   }
 
 };

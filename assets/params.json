@@ -124,8 +124,7 @@
       "near_z": 0.1,
       "far_z":  500,
 
-      "eye_point": [ -7, 12, -8 ],
-      "interest_point": [ 0.25, 0.5, 0.5 ],
+      "interest_point": [ 0.5, 0.5, 1.0 ],
       "target_point": [ 3, 1, 1 ],
       "eye_distance": 15,
       "eye_ry": -145,
@@ -134,7 +133,25 @@
       "eye_distance_rate": 0.8,
       "eye_offset_rate": 0.3,
       
-      "speed": 0.05
+      "speed": 0.04,
+
+      "start_camera": "normal",
+      
+      "normal": {
+        "interest_point": [ 0.5, 0.5, 1.0 ],
+        "target_point": [ 3, 1, 1 ],
+        "eye_distance": 15,
+        "eye_ry": -145,
+        "eye_rx": -40
+      },
+      
+      "reverse": {
+        "interest_point": [ -0.5, 0.5, 1.0 ],
+        "target_point": [ 3, 1, 1 ],
+        "eye_distance": 15,
+        "eye_ry": 145,
+        "eye_rx": -40
+      }
     },
 
     "lights": [
@@ -664,12 +681,12 @@
     },
 
     "bg": {
-      "cube_density": 0.25,
-      "cube_speed": [ 0.1, 1 ],
+      "cube_density": 0.3,
+      "cube_speed": [ 0.05, 1.2 ],
       "cube_lifetime": [ 10, 15 ],
       
-      "bbox_min": [  -7, -13,  -3 ],
-      "bbox_max": [  22,  -2,  30 ],
+      "bbox_min": [ -19, -13,  -3 ],
+      "bbox_max": [  20,  -2,  30 ],
 
       "revise_duration": 0.25,
 
