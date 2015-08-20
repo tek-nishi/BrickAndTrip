@@ -470,6 +470,20 @@
     "satisfy_rank": 2,
 
     "start_stage": 0,
+
+    "stage_path": [
+      "stage01.json",
+      "stage02.json",
+      "stage03.json",
+      "stage04.json",
+      "stage05.json",
+      "stage06.json",
+      "stage07.json",
+      "stage08.json",
+      "stage09.json",
+      "stage10.json",
+      "stage11.json"
+    ],
     
     "stage": {
       "build_speed": 1,

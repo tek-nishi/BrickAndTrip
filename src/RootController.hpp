@@ -24,7 +24,6 @@
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "Sound.hpp"
-// #include "TestPickController.hpp"
 
 
 namespace ngs {
@@ -211,21 +210,13 @@ public:
                    });
 #endif
 
-    setupRecords();
     records_.load(params["game.records"].getValue<std::string>());
     
     sound_.setBufferSilent(!records_.isSeOn());
     sound_.setFileSilent(!records_.isBgmOn());
       
-    // addController<TestPickController>(params, touch_event_, event_);
     addController<FieldController>(params, touch_event_, event_, records_);
 
-#if 0
-    timeline_->add([this]() {
-        startTitle();
-      },
-      timeline_->getCurrentTime() + params["app.start_title_delay"].getValue<float>());
-#endif
     addController<IntroController>(params_, timeline_, event_,
                                    records_.getTotalPlayNum(),
                                    view_creator_.create("ui_intro.json"));
@@ -239,55 +230,6 @@ public:
 
 
 private:
-  // FIXME:もっと適切な場所があるはずだ
-  void setupRecords() {
-    records_.setStageNum(params_["game.regular_stage_num"].getValue<size_t>(),
-                         params_["game.total_stage_num"].getValue<size_t>());
-    
-    records_.setScoreInfo(params_["game.score.clear_time_score"].getValue<int>(),
-                          params_["game.score.clear_time_score_rate"].getValue<float>(),
-                          params_["game.score.item_score"].getValue<int>(),
-                          params_["game.score.stage_collect"].getValue<float>(),
-                          Json::getArray<int>(params_["game.score.rank_rate_table"]));
-
-    int regular_item_num = 0;
-    int all_item_num     = 0;
-    {
-      int i = 0;
-      {
-        int stage_num = params_["game.regular_stage_num"].getValue<int>();
-        for (; i < stage_num; ++i) {
-          regular_item_num += getStageItemNum(i);
-        }
-      }
-
-      {
-        int stage_num = params_["game.total_stage_num"].getValue<int>();
-        // 全ステージの合計を求めるために、regular以降のステージの合計を求めている
-        for (; i < stage_num; ++i) {
-          all_item_num += getStageItemNum(i);
-        }
-        all_item_num += regular_item_num;
-      }
-    }
-    records_.setItemNum(regular_item_num, all_item_num);
-    
-    DOUT << "regular items:" << regular_item_num
-         << " all items:" << all_item_num
-         << std::endl;
-
-    {
-      int rank = params_["game.satisfy_rank"].getValue<int>();
-      records_.setSatisfyRank(rank);
-
-#ifdef DEBUG
-      auto& rank_text = params_["stageclear.rank"];
-      DOUT << "satisfy rank:" << rank_text[rank].getValue<std::string>() << std::endl;
-#endif
-    }
-  }
-
-  
   void startTitle() {
     addController<TitleController>(params_, timeline_, event_, records_,
                                    view_creator_.create("ui_title.json"));
@@ -370,15 +312,6 @@ private:
     camera.setEyePoint(Json::getVec3<float>(params["eye_point"]));
 
     return camera;
-  }
-
-  static int getStageItemNum(const int stage_index) {
-    auto path  = FieldEntity::getStagePath(stage_index);
-    auto stage = Json::readFromFile(path);
-
-    if (!stage.hasChild("items")) return 0;
-          
-    return int(stage["items"].getNumChildren());
   }
   
 };

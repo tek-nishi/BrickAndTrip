@@ -159,6 +159,8 @@ public:
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
 
+    setupRecords(params);
+    
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
@@ -699,18 +701,9 @@ public:
     return records_.isContinuedGame();
   }
 
-
-  static std::string getStagePath(const int stage_num) {
-    std::ostringstream path;
-    // stage_num が 0 -> stage01.json 
-    path << "stage" << std::setw(2) << std::setfill('0') << (stage_num + 1) << ".json";
-    return path.str();
-  }
-
   int getStageTopZ() const {
     return stage_.getTopZ();
   }
-
   
   void setRestartLine() {
     restart_z_ = std::max(stage_.getActiveBottomZ() - 5, 0);
@@ -1043,14 +1036,73 @@ private:
   }
 
   
-  static int calcEntryPickableCube(const int stage_num) {
+  void setupRecords(const ci::JsonTree& params) {
+    records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
+                         params["game.total_stage_num"].getValue<size_t>());
+    
+    records_.setScoreInfo(params["game.score.clear_time_score"].getValue<int>(),
+                          params["game.score.clear_time_score_rate"].getValue<float>(),
+                          params["game.score.item_score"].getValue<int>(),
+                          params["game.score.stage_collect"].getValue<float>(),
+                          Json::getArray<int>(params["game.score.rank_rate_table"]));
+
+    int regular_item_num = 0;
+    int all_item_num     = 0;
+    {
+      int i = 0;
+      {
+        int stage_num = params["game.regular_stage_num"].getValue<int>();
+        for (; i < stage_num; ++i) {
+          regular_item_num += getStageItemNum(i);
+        }
+      }
+
+      {
+        int stage_num = params["game.total_stage_num"].getValue<int>();
+        // 全ステージの合計を求めるために、regular以降のステージの合計を求めている
+        for (; i < stage_num; ++i) {
+          all_item_num += getStageItemNum(i);
+        }
+        all_item_num += regular_item_num;
+      }
+    }
+    records_.setItemNum(regular_item_num, all_item_num);
+    
+    DOUT << "regular items:" << regular_item_num
+         << " all items:" << all_item_num
+         << std::endl;
+
+    {
+      int rank = params["game.satisfy_rank"].getValue<int>();
+      records_.setSatisfyRank(rank);
+
+#ifdef DEBUG
+      auto& rank_text = params["stageclear.rank"];
+      DOUT << "satisfy rank:" << rank_text[rank].getValue<std::string>() << std::endl;
+#endif
+    }
+  }
+
+  std::string getStagePath(const int stage_num) {
+    return params_["game.stage_path"][stage_num].getValue<std::string>();
+  }
+
+  int getStageItemNum(const int stage_index) {
+    auto path  = getStagePath(stage_index);
+    auto stage = Json::readFromFile(path);
+
+    if (!stage.hasChild("items")) return 0;
+          
+    return int(stage["items"].getNumChildren());
+  }
+  
+  int calcEntryPickableCube(const int stage_num) {
     int entry_num = getPickableCubeEntryNum("startline.json");
     for (int i = 0; i < stage_num; ++i) {
       entry_num += getPickableCubeEntryNum(getStagePath(i));
     }
     return entry_num;
   }
-
   
   static int getPickableCubeEntryNum(const std::string& path) {
     auto stage = Json::readFromFile(path);
