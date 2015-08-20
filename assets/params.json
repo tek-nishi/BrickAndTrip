@@ -124,22 +124,20 @@
       "near_z": 0.1,
       "far_z":  500,
 
-      "interest_point": [ 0.5, 0.5, 1.0 ],
-      "target_point": [ 3, 1, 1 ],
-      "eye_distance": 15,
-      "eye_ry": -145,
-      "eye_rx": -40,
-
       "eye_distance_rate": 0.8,
       "eye_offset_rate": 0.3,
       
       "speed": 0.04,
 
+      "target_point": [ 3, 1, 1 ],
+
       "start_camera": "normal",
+
+      "ease_name": "EaseInOutQuart",
+      "ease_duration": 2.0,
       
       "normal": {
         "interest_point": [ 0.5, 0.5, 1.0 ],
-        "target_point": [ 3, 1, 1 ],
         "eye_distance": 15,
         "eye_ry": -145,
         "eye_rx": -40
@@ -147,9 +145,8 @@
       
       "reverse": {
         "interest_point": [ -0.5, 0.5, 1.0 ],
-        "target_point": [ 3, 1, 1 ],
         "eye_distance": 15,
-        "eye_ry": 145,
+        "eye_ry": -215,
         "eye_rx": -40
       }
     },

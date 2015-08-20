@@ -43,6 +43,7 @@ class FieldEntity : private boost::noncopyable {
   ci::Color stage_color_;
   ci::Color bg_color_;
   std::string light_tween_;
+  std::string camera_;
 
   ci::Color finish_stage_color_;
   ci::Color finish_bg_color_;
@@ -111,6 +112,7 @@ class FieldEntity : private boost::noncopyable {
     ci::Color stage_color;
     ci::Color bg_color;
     std::string light_tween;
+    std::string camera;
   };
   
   
@@ -313,6 +315,13 @@ public:
       entry_random = true;
     }
 
+    if (!is_continued_) {
+      EventParam params = {
+        { "name", stage_info.camera },
+      };
+      event_.signal("camera-change", params);
+    }
+
     records_.prepareGameRecord();
   }
 
@@ -334,6 +343,7 @@ public:
     stage_color_ = stage_info.stage_color;
     bg_color_    = stage_info.bg_color;
     light_tween_ = stage_info.light_tween;
+    camera_      = stage_info.camera;
 
     // bgの位置を決めるためにステージの中央座標を求める
     const auto& width = stage_.getStageWidth();
@@ -363,6 +373,13 @@ public:
     float collapse_rate = is_continued_ ? continue_collapse_rate_
                                         : 1.0f;
     stage_.setupAutoCollapse(finish_line_z_ - 1, collapse_rate);
+
+    {
+      EventParam params = {
+        { "name", camera_ },
+      };
+      event_.signal("camera-change", params);
+    }
     
     DOUT << "Continue game:" << is_continued_ << std::endl;
   }
@@ -765,6 +782,7 @@ private:
       Json::getColor<float>(stage["color"]),
       Json::getColor<float>(stage["bg_color"]),
       Json::getValue(stage, "light_tween", std::string("normal")),
+      Json::getValue(stage, "camera", std::string("normal")),
     };
     
     return info;

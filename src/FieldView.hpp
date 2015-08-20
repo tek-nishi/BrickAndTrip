@@ -34,20 +34,21 @@ class FieldView : private boost::noncopyable {
   float far_z_;
   ci::CameraPersp camera_;
 
-  ci::Vec3f interest_point_;
-  ci::Vec3f eye_point_;
-  ci::Vec3f target_point_;
-  float target_radius_;
+  ci::Anim<ci::Vec3f> interest_point_;
+  ci::Anim<float> eye_rx_;
+  ci::Anim<float> eye_ry_;
+  ci::Anim<float> eye_distance_;
 
   float eye_distance_rate_;
   float eye_offset_rate_;
 
-  float eye_rx_;
-  float eye_ry_;
-  float eye_distance_;
-  
+  float target_radius_;
+  float new_target_radius_;
+
+  ci::Vec3f target_point_;
   ci::Vec3f new_target_point_;
-  ci::Vec3f new_eye_point_;
+
+  ci::Vec3f eye_point_;
   
   float camera_speed_;
   bool camera_follow_target_;
@@ -117,9 +118,10 @@ public:
     near_z_(params["game_view.camera.near_z"].getValue<float>()),
     far_z_(params["game_view.camera.far_z"].getValue<float>()),
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
-    target_radius_(0.0f),
     eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
+    target_radius_(0.0f),
+    new_target_radius_(0.0f),
     camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
     camera_follow_target_(true),
     lights_(params, timeline),
@@ -142,8 +144,8 @@ public:
   {
     setCameraParams(params["game_view.camera.start_camera"].getValue<std::string>());
     
-    camera_.setCenterOfInterestPoint(interest_point_ + target_point_);
-    camera_.setEyePoint(eye_point_ + target_point_);
+    camera_.setCenterOfInterestPoint(target_point_ + interest_point_);
+    camera_.setEyePoint(target_point_ + eye_point_);
 
     readMaterials(params["game_view.materials"]);
     
@@ -315,10 +317,11 @@ public:
 
   void setCameraParams(const std::string& name) {
     auto params = params_["game_view.camera." + name];
-    
-    interest_point_   = Json::getVec3<float>(params["interest_point"]);
-    target_point_     = Json::getVec3<float>(params["target_point"]);
+
+    target_point_     = Json::getVec3<float>(params_["game_view.camera.target_point"]);
     new_target_point_ = target_point_;
+
+    interest_point_   = Json::getVec3<float>(params["interest_point"]);
 
     // 注視点からの距離、角度でcamera位置を決めている
     eye_rx_ = params["eye_rx"].getValue<float>();
@@ -326,7 +329,29 @@ public:
     eye_distance_ = params["eye_distance"].getValue<float>();
 
     eye_point_ = calcEyePoint(0.0f);
-    new_eye_point_ = eye_point_;
+  }
+
+  void changeCameraParams(const std::string& name) {
+    auto params    = params_["game_view.camera." + name];
+
+    auto ease_func     = getEaseFunc(params_["game_view.camera.ease_name"].getValue<std::string>());
+    auto ease_duration = params_["game_view.camera.ease_duration"].getValue<float>();
+
+    animation_timeline_->apply(&interest_point_,
+                               Json::getVec3<float>(params["interest_point"]),
+                               ease_duration, ease_func);
+
+    animation_timeline_->apply(&eye_rx_,
+                               params["eye_rx"].getValue<float>(),
+                               ease_duration, ease_func);
+
+    animation_timeline_->apply(&eye_ry_,
+                               params["eye_ry"].getValue<float>(),
+                               ease_duration, ease_func);
+
+    animation_timeline_->apply(&eye_distance_,
+                               params["eye_distance"].getValue<float>(),
+                               ease_duration, ease_func);
   }
 
   
@@ -613,9 +638,9 @@ private:
     
     // FIXME:とりあえず中間点
     new_target_point_ = std::accumulate(std::begin(cube_pos), std::end(cube_pos), ci::Vec3f::zero()) / cube_pos.size();
-    target_radius_ = 0.0f;
+    new_target_radius_ = 0.0f;
     for (const auto& pos : cube_pos) {
-      target_radius_ = std::max(new_target_point_.distance(pos), target_radius_);
+      new_target_radius_ = std::max(new_target_point_.distance(pos), new_target_radius_);
     }
 
     // 中心点から一番離れたpickable cubeへの距離に応じて注視点を移動
@@ -624,28 +649,25 @@ private:
       new_target_point_.x += d.x;
       new_target_point_.z += d.y;
     }
-    
-    // 中心点から一番離れたpickable cubeへの距離に応じてカメラを引く
-    float offset = target_radius_ * eye_distance_rate_;
-    new_eye_point_ = calcEyePoint(offset);
   }
 
   void updateCamera(const double progressing_seconds) {
     // 等加速運動の近似
     float speed_rate = std::pow(camera_speed_, progressing_seconds / (1 / 60.0));
+
+    target_point_ = new_target_point_ - (new_target_point_ - target_point_) * speed_rate;
+    target_radius_ = new_target_radius_ - (new_target_radius_ - target_radius_) * speed_rate;
+
+    // 中心点から一番離れたpickable cubeへの距離に応じてカメラを引く
     {
-      auto d = new_target_point_ - target_point_;
-      target_point_ = new_target_point_ - d * speed_rate;
-    }
-    {
-      auto d = new_eye_point_ - eye_point_;
-      eye_point_ = new_eye_point_ - d * speed_rate;
+      float offset = target_radius_ * eye_distance_rate_;
+      eye_point_ = calcEyePoint(offset);
     }
 
     auto offset = ci::Vec3f(0.0f, quake_value_, 0.0f);
     
-    camera_.setCenterOfInterestPoint(interest_point_ + target_point_ + offset);
-    camera_.setEyePoint(eye_point_ + target_point_ + offset);
+    camera_.setCenterOfInterestPoint(target_point_ + offset + interest_point_);
+    camera_.setEyePoint(target_point_ + offset + eye_point_);
   }
 
   

@@ -316,6 +316,14 @@ public:
                                      view_.setStageLightTween(light_tween);
                                    });
 
+    
+    connections_ += event_.connect("camera-change",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     const auto& name = boost::any_cast<const std::string&>(param["name"]);
+                                     view_.changeCameraParams(name);
+                                   });
+
+    
     connections_ += event_.connect("falling-down",
                                    [this](const Connection& connection, EventParam& param) {
                                      float duration = boost::any_cast<float>(param["duration"]);
