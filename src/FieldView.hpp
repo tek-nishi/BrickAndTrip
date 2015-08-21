@@ -241,6 +241,7 @@ public:
     drawCubes(field.moving_cubes, models, "pickable_cube", "moving_cube");
     drawCubes(field.falling_cubes, models, "pickable_cube", "falling_cube");
     drawCubes(field.switches, models, "switch", "switch");
+    drawCubes(field.oneways, models, "oneway", "oneway");
     
     // bgのfogは別設定
     glFogf(GL_FOG_START, params_["game_view.bg_fog_start"].getValue<float>());

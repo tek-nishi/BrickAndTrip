@@ -89,6 +89,13 @@
         "normals": true,
         "uvs": false,
         "indices": true
+      },
+      {
+        "name": "oneway",
+        "path": "oneway.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
       }
     ],
     
@@ -430,6 +437,14 @@
         "emission": [ 0, 0, 0, 1 ]
       },
 
+      "oneway": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
       "bg_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
@@ -681,6 +696,18 @@
 
     "switch": {
       "color": [0.5, 0.5, 0.5],
+      
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
+    },
+
+    "oneway": {
+      "color": [0.3, 0.3, 0.3],
       
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,

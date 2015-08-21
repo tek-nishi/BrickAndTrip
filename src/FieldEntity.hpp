@@ -18,6 +18,7 @@
 #include "StageItems.hpp"
 #include "StageMovingCubes.hpp"
 #include "StageSwitches.hpp"
+#include "StageOneways.hpp"
 #include "StageFallingCubes.hpp"
 #include "EventParam.hpp"
 #include "Records.hpp"
@@ -70,6 +71,7 @@ class FieldEntity : private boost::noncopyable {
   StageMovingCubes moving_cubes_;
   StageFallingCubes falling_cubes_;
   StageSwitches switches_;
+  StageOneways oneways_;
 
   Bg bg_;
   
@@ -138,6 +140,7 @@ public:
     moving_cubes_(params, timeline, event),
     falling_cubes_(params, timeline, event),
     switches_(timeline, event),
+    oneways_(timeline, event),
     bg_(params, timeline, event),
     first_started_pickable_(false),
     first_out_pickable_(false),
@@ -184,6 +187,7 @@ public:
                          stage_, gatherPickableCubePosition());
     falling_cubes_.update(progressing_seconds, stage_);
     switches_.update(progressing_seconds, stage_);
+    oneways_.update(progressing_seconds, stage_);
 
     decideEachPickableCubeFalling();
     decideEachPickableCubeAlive();
@@ -334,6 +338,7 @@ public:
     moving_cubes_.clear();
     falling_cubes_.clear();
     switches_.clear();
+    oneways_.clear();
     
     auto stage_info     = addCubeStage(getStagePath(stage_num_));
     finish_line_z_      = stage_info.top_z - 1;
@@ -516,6 +521,7 @@ public:
     moving_cubes_.clear();
     falling_cubes_.clear();
     switches_.clear();
+    oneways_.clear();
     
     first_started_pickable_ = true;
     first_out_pickable_     = true;
@@ -589,6 +595,21 @@ public:
     const auto* const targets = switches_.startSwitch(block_pos);
     if (targets) {
       startSwitchTargets(*targets);
+      return;
+    }
+
+    auto oneway = oneways_.startOneway(block_pos);
+    if (oneway.first != Oneway::NONE) {
+      static std::map<int, int> direction = {
+        { Oneway::UP,    PickableCube::MOVE_UP },
+        { Oneway::DOWN,  PickableCube::MOVE_DOWN },
+        { Oneway::LEFT,  PickableCube::MOVE_LEFT },
+        { Oneway::RIGHT, PickableCube::MOVE_RIGHT },
+      };
+      
+      movePickableCube(id, direction.at(oneway.first), oneway.second);
+      
+      return;
     }
   }
 
@@ -627,6 +648,7 @@ public:
     moving_cubes_.entryCube(active_z);
     falling_cubes_.entryCube(active_z);
     switches_.entrySwitches(active_z);
+    oneways_.entryOneways(active_z);
   }
 
   void pickupedItemCube() {
@@ -686,6 +708,7 @@ public:
       moving_cubes_.cubes(),
       falling_cubes_.cubes(),
       switches_.switches(),
+      oneways_.oneways(),
       bg_.cubes(),
 
 #ifdef DEBUG
@@ -766,6 +789,7 @@ private:
     moving_cubes_.addCubes(stage, current_z, x_offset);
     falling_cubes_.addCubes(stage, current_z, x_offset);
     switches_.addSwitches(params_, stage, current_z, x_offset);
+    oneways_.addOneways(params_, stage, current_z, x_offset);
 
     StageInfo info = {
       top_z,
