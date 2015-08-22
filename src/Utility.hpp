@@ -119,4 +119,11 @@ std::string createUniquePath() {
   return path.str();
 }
 
+// 拡張子を変更する
+// ex) hoge/fuga/piyo.txt -> hoge/fuga/piyo.data
+std::string replaceFilenameExt(const std::string& path, const std::string& ext) {
+	std::string::size_type pos(path.rfind('.'));
+  return (pos != std::string::npos) ? path.substr(0, path.rfind('.') + 1) + ext : path + "." + ext;
+}
+
 }

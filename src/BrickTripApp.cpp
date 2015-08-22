@@ -18,6 +18,7 @@
 #include "FontHolder.hpp"
 #include "RootController.hpp"
 #include "Model.hpp"
+#include "Params.hpp"
 
 
 using namespace ci;
@@ -57,7 +58,10 @@ class BrickTripApp : public AppNative,
   
   void prepareSettings(Settings* settings) override {
     // アプリ起動時の設定はここで処理する
-    params_ = Json::readFromFile("params.json");
+#if defined (OBFUSCATION_PARAMS) && defined (DEBUG)
+    Params::convert("params.json");
+#endif
+    params_ = Params::load("params.json");
 
     auto size = Json::getVec2<int>(params_["app.size"]);
     settings->setWindowSize(size);
@@ -195,7 +199,10 @@ class BrickTripApp : public AppNative,
       controller_.reset();
       timeline_->clear();
 
-      params_ = Json::readFromFile("params.json");
+#if defined (OBFUSCATION_PARAMS) && defined (DEBUG)
+      Params::convert("params.json");
+#endif
+      params_ = Params::load("params.json");
 
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
       // すぐさまresizeを呼んでCameraの調整
