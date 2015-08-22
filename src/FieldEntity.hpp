@@ -79,6 +79,9 @@ class FieldEntity : private boost::noncopyable {
   // std::vectorに格納するときに、copyやmoveコンストラクタが呼ばれる
   using PickableCubePtr = std::unique_ptr<PickableCube>;
   std::vector<PickableCubePtr> pickable_cubes_;
+
+  // ステージ開始時の位置(再開用)
+  std::vector<ci::Vec2i> start_pickable_entry_;
   
   bool first_started_pickable_;
   bool first_out_pickable_;
@@ -307,20 +310,28 @@ public:
     stage_num_    = start_stage_num_;
     all_cleard_   = false;
     game_aborted_ = false;
-    // entryするpickableは、直前のステージまでの合算
-    int entry_packable_num = calcEntryPickableCube(stage_num_);
-    
-    ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
-    entry_pos.y += stage_info.bottom_z;
-    float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
 
-    // 2個目以降はrandom
-    bool entry_random = false;
-    for (int i = 0; i < entry_packable_num; ++i) {
-      entryPickableCube(entry_pos, delay, entry_random, false);
-      entry_random = true;
+    if (is_continued_) {
+      // Game再開時は前回の位置を再現
+      entryContinuedPickableCube(stage_info.bottom_z);
     }
-
+    else {
+      // entryするpickableは、直前のステージまでの合算
+      int entry_packable_num = calcEntryPickableCube(stage_num_);
+      
+      ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
+      // entry_pos.y += stage_info.bottom_z;
+      float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
+      
+      // 2個目以降はrandom
+      bool entry_random = false;
+      for (int i = 0; i < entry_packable_num; ++i) {
+        entryPickableCube(entry_pos, stage_info.bottom_z,
+                          delay, entry_random, false);
+        entry_random = true;
+      }
+    }
+    
     if (!is_continued_) {
       EventParam params = {
         { "name", stage_info.camera },
@@ -341,7 +352,7 @@ public:
     oneways_.clear();
     
     auto stage_info     = addCubeStage(getStagePath(stage_num_));
-    finish_line_z_      = stage_info.top_z - 1;
+    finish_line_z_      = stage_info.top_z;
     entry_packable_num_ = stage_info.entry_num;
     int entry_item_num  = stage_info.item_num;
 
@@ -622,24 +633,30 @@ public:
   
   // finish-line上のPickableCubeを生成
   void entryPickableCubes() {
-    if (entry_packable_num_ == 0) return;
-
-    // Finish lineの次が(z = 0)として生成
-    ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
-    entry_pos.y += finish_line_z_ + 1;
-    float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
-    for (int i = 0; i < entry_packable_num_; ++i) {
-      entryPickableCube(entry_pos, delay, true, false);
+    // 再開用に位置を保存
+    storePickableCubePosition(finish_line_z_);
+    
+    if (entry_packable_num_ > 0) {
+      // Finish lineの次が(z = 0)として生成
+      ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
+      // entry_pos.y += finish_line_z_;
+      float delay = params_["game.pickable.entry_next_delay"].getValue<float>();
+      for (int i = 0; i < entry_packable_num_; ++i) {
+        entryPickableCube(entry_pos, finish_line_z_, delay, true, false);
+      }
     }
   }
 
+
+  
 #ifdef DEBUG
   // bottom lineに１つ召喚
   void entryPickableCube() {
     ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
-    entry_pos.y += stage_.getActiveBottomZ();
+    // entry_pos.y += stage_.getActiveBottomZ();
     
-    entryPickableCube(entry_pos, 0.0f, true, false);
+    entryPickableCube(entry_pos, stage_.getActiveBottomZ(),
+                      0.0f, true, false);
   }
 #endif
 
@@ -748,15 +765,15 @@ private:
 
 
   void entryPickableCube(const ci::Vec2i& entry_pos,
+                         const int offset_z,
                          const float delay,
                          const bool random, const bool sleep) {
-    event_timeline_->add([this, entry_pos, random, sleep]() {
+    event_timeline_->add([this, entry_pos, offset_z, random, sleep]() {
         const auto& stage_width = stage_.getStageWidth();
-        int entry_y = entry_pos.y;
+        int entry_y = entry_pos.y + offset_z;
         while (1) {
           // 何度か試してみて、ダメなら登場Z位置を変えて試す
           for (int i = 0; i < 10; ++i) {
-            // Stageは(x >= 0)を保証しているので手抜きできる
             int x = random ? ci::randInt(stage_width.x + 1, stage_width.y - 1)
                            : entry_pos.x;
             
@@ -766,6 +783,9 @@ private:
             auto cube = PickableCubePtr(new PickableCube(params_, timeline_, event_, pos,
                                                          (mode_ == CLEAR) ? false : sleep));
             pickable_cubes_.push_back(std::move(cube));
+
+            // 再開用の位置を保存
+            start_pickable_entry_.push_back(ci::Vec2i(pos.x, pos.z - offset_z));
             return;
           }
           entry_y += 1;
@@ -773,6 +793,27 @@ private:
         
       }, event_timeline_->getCurrentTime() + delay);
   }
+
+  void entryContinuedPickableCube(const int offset_z) {
+    assert((start_pickable_entry_.size() > 0) && "there is no continued PickableCube.");
+
+    float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
+
+    for (const auto& entry_pos : start_pickable_entry_) {
+      entryPickableCube(entry_pos, offset_z,
+                        delay, false, false);
+    }
+  }
+
+  void storePickableCubePosition(const int offset_z) {
+    start_pickable_entry_.clear();
+
+    for (const auto& cube : pickable_cubes_) {
+      const auto& pos = cube->blockPosition();
+      start_pickable_entry_.push_back(ci::Vec2i(pos.x, pos.z - offset_z));
+    }
+  }
+
   
   StageInfo addCubeStage(const std::string& path) {
     auto stage = Json::readFromFile(path);
