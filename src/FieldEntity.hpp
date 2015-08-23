@@ -331,6 +331,8 @@ public:
         entry_random = true;
       }
     }
+    // entry時に登録されるので、再開用の位置は一旦初期化
+    start_pickable_entry_.clear();
     
     if (!is_continued_) {
       EventParam params = {
@@ -380,7 +382,7 @@ public:
     first_out_pickable_     = false;
     
     records_.prepareCurrentGameRecord(stage_num_,
-                                      finish_line_z_ - start_line_z_,
+                                      finish_line_z_ - start_line_z_ + 1,
                                       stage_.buildSpeed(),
                                       event_timeline_->getCurrentTime(),
                                       entry_item_num);
@@ -647,7 +649,6 @@ public:
     }
   }
 
-
   
 #ifdef DEBUG
   // bottom lineに１つ召喚
@@ -809,6 +810,8 @@ private:
     start_pickable_entry_.clear();
 
     for (const auto& cube : pickable_cubes_) {
+      if (!cube->isOnStage()) continue;
+      
       const auto& pos = cube->blockPosition();
       start_pickable_entry_.push_back(ci::Vec2i(pos.x, pos.z - offset_z));
     }

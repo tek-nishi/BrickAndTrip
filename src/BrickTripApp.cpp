@@ -74,10 +74,13 @@ class BrickTripApp : public AppNative,
     // settings->disableFrameRate();
 #endif
 
+#if !defined(CINDER_MAC)
+    // FIXME:Macでだとマルチタッチが邪魔
     active_touch_ = ci::System::hasMultiTouch();
     if (active_touch_) {
       settings->enableMultiTouch();
     }
+#endif
 
     fast_speed_ = params_["app.fast_speed"].getValue<double>();
     slow_speed_ = params_["app.slow_speed"].getValue<double>();

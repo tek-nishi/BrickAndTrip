@@ -385,7 +385,7 @@
     "move_begin_time": 0.3,
     "move_begin_threshold": 0.75,
     "move_threshold": 0.5,
-    "move_speed_rate": 0.25,
+    "move_speed_rate": 0.27,
     "move_swipe_speed": 10,
   
     "materials": {
@@ -459,7 +459,7 @@
     "fog_color": [ 0.6, 0.6, 0.6, 1 ],
     
     "bg_fog_start": 23,
-    "bg_fog_end": 40,
+    "bg_fog_end": 42,
 
     "bg_tween_type": "EaseOutExpo",
     "bg_tween_duration": 1.5
@@ -541,7 +541,7 @@
       "rotate_ease_end": "EaseInSine",
       "rotate_duration": 0.5,
       "rotate_power": 0.4,
-      "rotate_remap": [ 0.38, 1.0 ],
+      "rotate_remap": [ 0.35, 1.0 ],
       "rotate_speed_max": 10,
 
       "fall_ease": "EaseInQuad",
@@ -723,7 +723,7 @@
       "cube_speed": [ 0.05, 1.2 ],
       "cube_lifetime": [ 10, 15 ],
       
-      "bbox_min": [ -19, -13,  -3 ],
+      "bbox_min": [ -19, -17,  -3 ],
       "bbox_max": [  20,  -2,  30 ],
 
       "revise_duration": 0.25,
