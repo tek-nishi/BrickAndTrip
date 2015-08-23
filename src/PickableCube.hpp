@@ -200,9 +200,16 @@ public:
   
 
   void reserveRotationMove(const int direction, const ci::Vec3i& vector, const int speed) {
-    move_direction_ = direction;
-    move_vector_    = vector;
-    move_speed_     = std::min(speed, rotate_speed_max_);
+    move_vector_ = vector;
+
+    if (move_direction_ == direction) {
+      // 同じ方向の時だけは加算
+      move_speed_ = std::min(speed + move_speed_, rotate_speed_max_);
+    }
+    else {
+      move_direction_ = direction;
+      move_speed_     = std::min(speed, rotate_speed_max_);
+    }
   }
   
   bool willRotationMove() const {
