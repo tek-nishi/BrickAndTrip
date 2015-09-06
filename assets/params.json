@@ -142,6 +142,11 @@
 
       "ease_name": "EaseInOutQuart",
       "ease_duration": 2.0,
+
+      "close_distance_rate": 0.85,
+
+      "distance_ease_name": "EaseInOutCubic",
+      "distance_ease_duration": 2.0,
       
       "normal": {
         "interest_point": [ 0.5, 0.5, 1.0 ],

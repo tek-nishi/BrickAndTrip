@@ -42,6 +42,9 @@ class FieldView : private boost::noncopyable {
   float eye_distance_rate_;
   float eye_offset_rate_;
 
+  float close_distance_rate_;
+  ci::Anim<float> distance_rate_;
+  
   float target_radius_;
   float new_target_radius_;
 
@@ -120,6 +123,8 @@ public:
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
     eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
+    close_distance_rate_(params["game_view.camera.close_distance_rate"].getValue<float>()),
+    distance_rate_(1.0f),
     target_radius_(0.0f),
     new_target_radius_(0.0f),
     camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
@@ -352,6 +357,25 @@ public:
 
     animation_timeline_->apply(&eye_distance_,
                                params["eye_distance"].getValue<float>(),
+                               ease_duration, ease_func);
+  }
+
+
+  void beginDistanceCloser() {
+    auto ease_func     = getEaseFunc(params_["game_view.camera.distance_ease_name"].getValue<std::string>());
+    auto ease_duration = params_["game_view.camera.distance_ease_duration"].getValue<float>();
+
+    animation_timeline_->apply(&distance_rate_,
+                               close_distance_rate_,
+                               ease_duration, ease_func);
+  }
+  
+  void endDistanceCloser() {
+    auto ease_func     = getEaseFunc(params_["game_view.camera.distance_ease_name"].getValue<std::string>());
+    auto ease_duration = params_["game_view.camera.distance_ease_duration"].getValue<float>();
+
+    animation_timeline_->apply(&distance_rate_,
+                               1.0f,
                                ease_duration, ease_func);
   }
 
@@ -813,7 +837,7 @@ private:
   ci::Vec3f calcEyePoint(const float distance_offset) {
     ci::Vec3f pos = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx_))
                   * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry_))
-                  * ci::Vec3f(0, 0, eye_distance_ + distance_offset) + interest_point_;
+                  * ci::Vec3f(0, 0, eye_distance_ + distance_offset) * distance_rate_() + interest_point_;
 
     return pos;
   }

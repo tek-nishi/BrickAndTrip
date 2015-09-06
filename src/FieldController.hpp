@@ -106,6 +106,7 @@ public:
                                      entity_.completeBuildAndCollapseStage();
                                      entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
+                                     view_.beginDistanceCloser();
                                    });
 
     // stage-clearedとstageclear-agreeの両方が発行されたら次のステージへ
@@ -439,6 +440,7 @@ private:
 
   void startNextStage() {
     view_.enableTouchInput();
+    view_.endDistanceCloser();
     entity_.entryPickableCubes();
     entity_.startStageBuild();
 
