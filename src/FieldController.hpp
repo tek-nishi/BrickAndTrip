@@ -34,6 +34,8 @@ class FieldController : public ControllerBase {
 
   float progress_start_delay_;
   float progress_continue_delay_;
+
+  float continued_start_delay_;
   
 
 public:
@@ -52,7 +54,8 @@ public:
     stage_cleard_(false),
     stageclear_agree_(false),
     progress_start_delay_(params["game.progress_start_delay"].getValue<float>()),
-    progress_continue_delay_(params["game.progress_continue_delay"].getValue<float>())
+    progress_continue_delay_(params["game.progress_continue_delay"].getValue<float>()),
+    continued_start_delay_(params["game.continued_start_delay"].getValue<float>())
   {
     DOUT << "FieldController()" << std::endl;
     
@@ -396,12 +399,6 @@ private:
   
   void setup() {
     disposable_connections_.clear();
-    
-    disposable_connections_ += event_.connect("pickable-moved",
-                                              [this](const Connection& connection, EventParam& param) {
-                                                entity_.startStageBuild();
-                                                connection.disconnect();
-                                              });
 
     if (entity_.isContinuedGame()) {
       // Continue時はゲーム開始時にProgressを表示
@@ -409,8 +406,20 @@ private:
           event_.signal("begin-progress", EventParam());
         },
         timeline_->getCurrentTime() + progress_continue_delay_);
+
+      // Stageは一定時間後に生成開始
+      timeline_->add([this]() {
+          entity_.startStageBuild();
+        },
+        timeline_->getCurrentTime() + continued_start_delay_);
     }
     else {
+      disposable_connections_ += event_.connect("pickable-moved",
+                                                [this](const Connection& connection, EventParam& param) {
+                                                  entity_.startStageBuild();
+                                                  connection.disconnect();
+                                                });
+      
       // 最初から始めた時はPickableを動かしたらProgressを表示
       disposable_connections_ += event_.connect("pickable-moved",
                                                 [this](const Connection& connection, EventParam& param) {

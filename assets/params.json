@@ -764,7 +764,9 @@
     "records": "records.data",
 
     "progress_start_delay": 1.0,
-    "progress_continue_delay": 3.0
+    "progress_continue_delay": 3.0,
+
+    "continued_start_delay": 3.5
   },
 
   
