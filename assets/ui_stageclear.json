@@ -399,7 +399,7 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
-            "delay": 1.8,
+            "delay": 2.2,
             "interval": 0.05,
             "start": -120,
             "end": 0
@@ -443,7 +443,7 @@
             "target": "rotate",
             "type": "EaseOutElastic",
             "duration": 1.2,
-            "delay": 2.15,
+            "delay": 2.5,
             "interval": 0.05,
             "start": -120,
             "end": 0
@@ -507,7 +507,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 2.4,
+            "delay": 2.9,
             "start": [ 0, 0, 0 ]
           }
         ]
@@ -628,7 +628,7 @@
             "target": "scale",
             "type": "EaseOutBack",
             "duration": 0.3,
-            "delay": 2.5,
+            "delay": 3.0,
             "start": [ 0, 0, 0 ]
           }
         ]
