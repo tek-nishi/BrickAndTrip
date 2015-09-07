@@ -55,6 +55,8 @@ class FieldView : private boost::noncopyable {
   
   float camera_speed_;
   bool camera_follow_target_;
+  bool camera_look_id_;
+  u_int looking_cube_id_;
 
   FieldLights lights_;
 
@@ -129,6 +131,7 @@ public:
     new_target_radius_(0.0f),
     camera_speed_(1.0 - params["game_view.camera.speed"].getValue<float>()),
     camera_follow_target_(true),
+    camera_look_id_(false),
     lights_(params, timeline),
     quake_(params["game_view.quake"]),
     quake_value_(0.0f),
@@ -377,6 +380,16 @@ public:
     animation_timeline_->apply(&distance_rate_,
                                1.0f,
                                ease_duration, ease_func);
+  }
+
+  // 指定のPickableCubeに寄る
+  void beginPickableCubeCloser(const u_int id) {
+    camera_look_id_  = true;
+    looking_cube_id_ = id;
+  }
+  
+  void endPickableCubeCloser() {
+    camera_look_id_ = false;
   }
 
   
@@ -653,10 +666,13 @@ private:
     if (!camera_follow_target_) return;
     
     std::vector<ci::Vec3f> cube_pos;
-    for (const auto& cube : cubes) {
-      if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
-
-      cube_pos.push_back(cube->position());
+    if (camera_look_id_) {
+      // 特定IDのCubeから注視点を決める
+      cube_pos = searchCubeFromId(cubes, looking_cube_id_);
+    }
+    else {
+      // 生きているすべてのCubeから注視点を決める
+      cube_pos = searchAliveCube(cubes);
     }
 
     if (cube_pos.empty()) return;
@@ -673,9 +689,38 @@ private:
       auto d = ci::Vec2f(eye_point_.x, eye_point_.z).normalized() * target_radius_ * eye_offset_rate_;
       new_target_point_.x += d.x;
       new_target_point_.z += d.y;
+      if (camera_look_id_) {
+        // 落下Cubeはそのまま追いかけないworkaround
+        new_target_point_.y = target_point_.y;
+      }
     }
   }
 
+  std::vector<ci::Vec3f> searchAliveCube(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+    std::vector<ci::Vec3f> cube_pos;
+    
+    for (const auto& cube : cubes) {
+      if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
+      
+      cube_pos.push_back(cube->position());
+    }
+    
+    return cube_pos;
+  }
+
+  std::vector<ci::Vec3f> searchCubeFromId(const std::vector<std::unique_ptr<PickableCube> >& cubes, const u_int id) {
+    std::vector<ci::Vec3f> cube_pos;
+
+    for (const auto& cube : cubes) {
+      if (cube->id() == id) {
+        cube_pos.push_back(cube->position());
+        break;
+      }
+    }
+    
+    return cube_pos;
+  }
+  
   void updateCamera(const double progressing_seconds) {
     // 等加速運動の近似
     float speed_rate = std::pow(camera_speed_, progressing_seconds / (1 / 60.0));

@@ -188,7 +188,7 @@ public:
     connections_ += event_.connect("first-out-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "first-out-pickable" << std::endl;
-                                     beginGameover();
+                                     beginGameover(param);
                                    });
 
     // ドッスンに踏まれた
@@ -435,6 +435,8 @@ private:
     view_.enableTouchInput(false);
     view_.resetCamera(entity_.getStageTopZ());
     view_.enableFollowCamera();
+    view_.endDistanceCloser();
+    view_.endPickableCubeCloser();
     entity_.setupStartStage();
   }
 
@@ -448,10 +450,15 @@ private:
     stageclear_agree_ = false;
   }
 
-  void beginGameover() {
+  void beginGameover(const EventParam& params) {
     entity_.cancelPickPickableCubes();
     view_.enableTouchInput(false);
-    view_.enableFollowCamera(false);
+
+    auto cube_id = boost::any_cast<u_int>(params.at("id"));
+    view_.beginPickableCubeCloser(cube_id);
+
+    view_.beginDistanceCloser();
+
     entity_.gameover();
   }
   

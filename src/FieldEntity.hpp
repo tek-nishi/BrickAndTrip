@@ -929,7 +929,7 @@ private:
 
           if (!first_out_pickable_) {
             first_out_pickable_ = true;
-            event_.signal("first-out-pickable", EventParam());
+            event_.signal("first-out-pickable", params);
           }
         }
       }
@@ -954,7 +954,7 @@ private:
 
         if (!first_out_pickable_) {
           first_out_pickable_ = true;
-          event_.signal("first-out-pickable", EventParam());
+          event_.signal("first-out-pickable", params);
         }
       }
     }

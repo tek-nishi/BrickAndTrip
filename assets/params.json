@@ -145,8 +145,8 @@
 
       "close_distance_rate": 0.85,
 
-      "distance_ease_name": "EaseInOutCubic",
-      "distance_ease_duration": 2.0,
+      "distance_ease_name": "EaseOutCubic",
+      "distance_ease_duration": 0.8,
       
       "normal": {
         "interest_point": [ 0.5, 0.5, 1.0 ],
