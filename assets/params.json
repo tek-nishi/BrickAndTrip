@@ -844,6 +844,13 @@
     "deactive_delay": 0.5,
     "sns_delay": 0.2,
 
+    "countup_ease_name": "EaseOutCubic",
+    "countup_ease_duration": 1.2,
+
+    "clear_time_delay": 0.2,
+    "item_rate_delay": 0.3,
+    "score_delay": 1.0,
+    
     "rank": [ "S", "A", "B", "C", "D", "E", "F" ],
     "sns_text": "Stage Clear!!"
   },

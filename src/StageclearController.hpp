@@ -37,6 +37,10 @@ class StageclearController : public ControllerBase {
   bool highest_item_num_;
 
   std::string sns_text_;
+
+  ci::Anim<double> clear_time_;
+  ci::Anim<int> item_rate_;
+  ci::Anim<int> score_;
   
   ConnectionHolder connections_;
 
@@ -66,6 +70,9 @@ public:
     item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
     highest_item_num_(boost::any_cast<bool>(result.at("highest_item_num"))),
     sns_text_(params["stageclear.sns_text"].getValue<std::string>()),
+    clear_time_(0.0),
+    item_rate_(0),
+    score_(0),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "StageclearController()" << std::endl;
@@ -155,10 +162,22 @@ public:
 private:
   void setupView(ci::JsonTree& params,
                  const EventParam& result) {
+    auto ease_func     = getEaseFunc(params_["stageclear.countup_ease_name"].getValue<std::string>());
+    auto ease_duration = params_["stageclear.countup_ease_duration"].getValue<float>();
+
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-      view_->getWidget("time-result").setText(toFormatedString(clear_time));
+      auto options = event_timeline_->apply(&clear_time_,
+                                            0.0, clear_time,
+                                            ease_duration, ease_func);
+
+      options.delay(params_["stageclear.clear_time_delay"].getValue<float>());
+
+      options.updateFn([this]() {
+          view_->getWidget("time-result").setText(toFormatedString(clear_time_()));
+        });
+      // TODO:最速タイム時の演出
     }
 
     {
@@ -167,19 +186,42 @@ private:
 
       if (item_total_num > 0) {
         int item_rate = item_num * 100 / item_total_num;
-        view_->getWidget("item-result").setText(toFormatedString(item_rate, 3) + "%");
-      }
-      if (boost::any_cast<bool>(result.at("complete_item"))) {
-        view_->startWidgetTween("tween-complete-item");
+
+        auto options = event_timeline_->apply(&item_rate_,
+                                              0, item_rate,
+                                              ease_duration, ease_func);
+
+        options.delay(params_["stageclear.item_rate_delay"].getValue<float>());
+
+        options.updateFn([this]() {
+            view_->getWidget("item-result").setText(toFormatedString(item_rate_(), 3) + "%", false);
+          });
+
+        if (boost::any_cast<bool>(result.at("complete_item"))) {
+          options.finishFn([this]() {
+              view_->startWidgetTween("tween-complete-item");
+            });
+        }
       }
     }
 
     {
       auto score = boost::any_cast<int>(result.at("score"));
-      view_->getWidget("score-result").setText(toFormatedString(score, 4));
+
+      auto options = event_timeline_->apply(&score_,
+                                            0, score,
+                                            ease_duration, ease_func);
+
+      options.delay(params_["stageclear.score_delay"].getValue<float>());
+
+      options.updateFn([this]() {
+          view_->getWidget("score-result").setText(toFormatedString(score_(), 4), false);
+        });
 
       if (boost::any_cast<bool>(result.at("highest_score"))) {
-        view_->startWidgetTween("tween-highest-score");
+          options.finishFn([this]() {
+              view_->startWidgetTween("tween-highest-score");
+            });
       }
     }
 

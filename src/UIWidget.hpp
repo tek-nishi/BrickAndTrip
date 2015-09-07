@@ -149,15 +149,17 @@ public:
   void setTextColor(const ci::Vec3f& color) {
     text_color_hsv_ = color;
   }
-  
+
   
   CubeText& getCubeText() { return text_; }
 
-  void setText(const std::string& text) {
+  void setText(const std::string& text, const bool resize = true) {
     size_t chara_num = text_.getNumCharactors();
     
     text_.setText(text);
 
+    if (!resize) return;
+    
     // 文字数が変わったら回転演出のバッファをレイアウトを更新
     size_t new_chara_num = text_.getNumCharactors();
     if (new_chara_num != chara_num) {
@@ -231,7 +233,7 @@ public:
     text_color_ = Json::getColor<float>(params_["text_color"]);
   }
 
-
+  
 private:
   void makeTween(const std::string& name, const ci::JsonTree& tween) {
     std::set<std::string> apply;
