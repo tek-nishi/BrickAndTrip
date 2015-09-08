@@ -29,6 +29,10 @@ class FieldView : private boost::noncopyable {
   const ci::JsonTree& params_;
   Event<EventParam>& event_;
 
+#ifdef DEBUG
+  bool debug_info_;
+#endif
+  
   float fov_;
   float near_z_;
   float far_z_;
@@ -119,6 +123,9 @@ public:
             Event<std::vector<Touch> >& touch_event) :
     params_(params),
     event_(event),
+#ifdef DEBUG
+    debug_info_(params["game_view.debug_info"].getValue<bool>()),
+#endif
     fov_(params["game_view.camera.fov"].getValue<float>()),
     near_z_(params["game_view.camera.near_z"].getValue<float>()),
     far_z_(params["game_view.camera.far_z"].getValue<float>()),
@@ -258,7 +265,10 @@ public:
     drawBgCubes(field.bg_cubes, models);
 
 #ifdef DEBUG
-    // drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
+    if (debug_info_) {
+      drawPickableCubesBBox(field.pickable_cubes);
+      drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
+    }
 #endif
 
     lights_.disableLights();
@@ -644,12 +654,15 @@ private:
       if (!cube->isActive() || !cube->isOnStage() || cube->isSleep() || cube->isPressed()) continue;
 
       const auto& pos = cube->position();
-      ci::Vec3f half_size(0.5f, 0.5f, 0.5f);
+      const auto& size = cube->size();
+      float padding_size = cube->getPaddingSize();
+      ci::Vec3f padding(padding_size, padding_size, padding_size);
+      
       TouchCube touch_cube = {
         cube->id(),
         pos,
         cube->rotation(),
-        { pos - half_size, pos + half_size }
+        { pos - size / 2 - padding, pos + size + padding }
       };
       
       touch_cubes_.push_back(std::move(touch_cube));
@@ -808,39 +821,26 @@ private:
       ci::gl::popModelView();
     }    
   }
-
-
-#if 0
-  void drawPickableCubes(const std::vector<std::unique_ptr<PickableCube> >& cubes,
-                         ModelHolder& models) {
-    auto& material = materials_.get("pickable_cube");
-    material.apply();
+  
+#ifdef DEBUG
+  void drawPickableCubesBBox(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+    ci::gl::color(0, 1, 0);
     
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
-      ci::gl::color(cube->color());
-      
-      ci::gl::pushModelView();
-      ci::gl::translate(cube->position());
-      ci::gl::rotate(cube->rotation());
-      ci::gl::scale(cube->size());
+      const auto& pos  = cube->position();
+      const auto& size = cube->size();
+      float padding_size = cube->getPaddingSize();
+      ci::Vec3f padding(padding_size, padding_size, padding_size);
+      ci::AxisAlignedBox3f bbox(pos - size / 2 - padding,
+                                pos + size / 2 + padding);
 
-      ci::gl::draw(models.get("pickable_cube").mesh());
-      
-      ci::gl::popModelView();
-
-#if 0
-      ci::AxisAlignedBox3f bbox(cube->position() - cube->size() / 2,
-                                cube->position() + cube->size() / 2);
-
-      ci::gl::color(0, 1, 0);
       ci::gl::drawStrokedCube(bbox);
+    }    
+  }  
 #endif
-    }
-  }
-#endif
-  
+
   void drawBgCubes(const std::vector<Bg::Cube>& cubes,
                    ModelHolder& models) {
     auto& material = materials_.get("bg_cube");

@@ -45,6 +45,7 @@ class StageclearController : public ControllerBase {
   ConnectionHolder connections_;
 
   ci::TimelineRef event_timeline_;
+  ci::TimelineRef animation_timeline_;
 
 
 public:
@@ -73,13 +74,17 @@ public:
     clear_time_(0.0),
     item_rate_(0),
     score_(0),
-    event_timeline_(ci::Timeline::create())
+    event_timeline_(ci::Timeline::create()),
+    animation_timeline_(ci::Timeline::create())
   {
     DOUT << "StageclearController()" << std::endl;
     
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
+
+    animation_timeline_->setStartTime(current_time);
+    timeline->apply(animation_timeline_);
 
     connections_ += event.connect("selected-agree",
                                   [this](const Connection& connection, EventParam& param) {
@@ -156,6 +161,7 @@ public:
 
     // 再生途中のものもあるので、手動で取り除く
     event_timeline_->removeSelf();
+    animation_timeline_->removeSelf();
   }
 
 
@@ -168,9 +174,11 @@ private:
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-      auto options = event_timeline_->apply(&clear_time_,
-                                            0.0, clear_time,
-                                            ease_duration, ease_func);
+
+      // カウントアップ演出
+      auto options = animation_timeline_->apply(&clear_time_,
+                                                0.0, clear_time,
+                                                ease_duration, ease_func);
 
       options.delay(params_["stageclear.clear_time_delay"].getValue<float>());
 
@@ -187,9 +195,10 @@ private:
       if (item_total_num > 0) {
         int item_rate = item_num * 100 / item_total_num;
 
-        auto options = event_timeline_->apply(&item_rate_,
-                                              0, item_rate,
-                                              ease_duration, ease_func);
+        // カウントアップ演出
+        auto options = animation_timeline_->apply(&item_rate_,
+                                                  0, item_rate,
+                                                  ease_duration, ease_func);
 
         options.delay(params_["stageclear.item_rate_delay"].getValue<float>());
 
@@ -197,6 +206,7 @@ private:
             view_->getWidget("item-result").setText(toFormatedString(item_rate_(), 3) + "%", false);
           });
 
+        // カウントアップ演出が終わったあとで100%達成演出
         if (boost::any_cast<bool>(result.at("complete_item"))) {
           options.finishFn([this]() {
               view_->startWidgetTween("tween-complete-item");
@@ -208,12 +218,14 @@ private:
     {
       auto score = boost::any_cast<int>(result.at("score"));
 
-      auto options = event_timeline_->apply(&score_,
-                                            0, score,
-                                            ease_duration, ease_func);
+        // カウントアップ演出
+      auto options = animation_timeline_->apply(&score_,
+                                                0, score,
+                                                ease_duration, ease_func);
 
       options.delay(params_["stageclear.score_delay"].getValue<float>());
 
+      // カウントアップ演出が終わったあとで最高得点演出
       options.updateFn([this]() {
           view_->getWidget("score-result").setText(toFormatedString(score_(), 4), false);
         });

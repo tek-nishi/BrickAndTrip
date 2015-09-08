@@ -467,7 +467,9 @@
     "bg_fog_end": 42,
 
     "bg_tween_type": "EaseOutExpo",
-    "bg_tween_duration": 1.5
+    "bg_tween_duration": 1.5,
+
+    "debug_info": false
   },
 
   
@@ -540,6 +542,8 @@
       "entry_duration": 1.5,
       "entry_y": [ 15, 18 ],
 
+      "padding_size": 0.1,
+      
       "color": [ 1, 1, 1 ],
 
       "rotate_ease": "EaseNone",

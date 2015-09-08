@@ -44,7 +44,10 @@ private:
   ci::Anim<ci::Vec3f> position_;
   ci::Anim<ci::Quatf> rotation_;
 
+  // ドッスンに潰された時用
   ci::Vec3f scale_;
+  // 操作時の"のりしろ"
+  float padding_size_;
   
   ci::TimelineRef animation_timeline_;
 
@@ -113,6 +116,7 @@ public:
     prev_block_position_(block_position_),
     rotation_(ci::Quatf::identity()),
     scale_(1, 1, 1),
+    padding_size_(params["game.pickable.padding_size"].getValue<float>()),
     animation_timeline_(ci::Timeline::create()),
     on_stage_(false),
     moving_(false),
@@ -476,7 +480,9 @@ public:
   const ci::Vec3i& prevBlockPosition() const { return prev_block_position_; }
   
   float cubeSize() const { return 1.0f; }
-  ci::Vec3f size() const { return scale_; }
+  const ci::Vec3f& size() const { return scale_; }
+
+  float getPaddingSize() const { return padding_size_; }
 
   const ci::Color& color() const { return color_(); }
 
