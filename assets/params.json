@@ -491,7 +491,7 @@
     "regular_stage_num": 10,
     "satisfy_rank": 2,
 
-    "start_stage": 0,
+    "start_stage": 2,
 
     "stage_path": [
       "stage01.json",

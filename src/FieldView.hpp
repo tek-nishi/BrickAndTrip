@@ -406,39 +406,52 @@ public:
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) {
     if (!touch_input_) return;
-
     for (const auto& touch : touches) {
       // if (isPicking(touch)) continue;
       
       auto ray = generateRay(touch.pos);
+      float near_z = std::numeric_limits<float>::max();
+      bool picked = false;
+      TouchCube* picked_cube = nullptr;
+      
       for (auto& cube : touch_cubes_) {
         if (isTouching(cube.id)) continue;
         
         if (isPickedCube(cube.bbox, ray)) {
-          // cubeの上平面との交点
-          float cross_z;
-          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
-          ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          
-          Pick pick = {
-            touch.id,
-            touch.pos,
-            touch.timestamp,
-            cube.id,
-            origin,
-            ray.calcPosition(cross_z),
-            false,
-          };
-          pickings_.push_back(std::move(pick));
-
-          EventParam params = {
-            { "cube_id", cube.id },
-          };
-          event_.signal("picking-start", params);
-          
-          break;
+          // 複数のCubeをPickする可能性がある
+          // その場合は一番手前のを選ぶ
+          float z = getPickedCubeZ(cube.bbox, ray);
+          if (z > near_z) continue;
+          near_z = z;
+          picked = true;
+          picked_cube = &cube;
         }
-      } 
+      }
+      
+      if (picked) {
+        assert(picked_cube);
+          
+        // cubeの上平面との交点
+        float cross_z;
+        auto origin = ci::Vec3f(0, picked_cube->position.y + 0.5f, 0);
+        ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
+          
+        Pick pick = {
+          touch.id,
+          touch.pos,
+          touch.timestamp,
+          picked_cube->id,
+          origin,
+          ray.calcPosition(cross_z),
+          false,
+        };
+        pickings_.push_back(std::move(pick));
+
+        EventParam params = {
+          { "cube_id", picked_cube->id },
+        };
+        event_.signal("picking-start", params);
+      }
     }
   }
   
@@ -646,6 +659,13 @@ private:
     return bbox.intersects(ray);
   }
 
+  float getPickedCubeZ(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) {
+    float intersections[3];
+    bbox.intersect(ray, intersections);
+
+    return std::min(intersections[0], intersections[1]);
+  }
+
   
   void makeTouchCubeInfo(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
     touch_cubes_.clear();
@@ -662,7 +682,7 @@ private:
         cube->id(),
         pos,
         cube->rotation(),
-        { pos - size / 2 - padding, pos + size + padding }
+        { pos - size / 2 - padding, pos + size / 2 + padding }
       };
       
       touch_cubes_.push_back(std::move(touch_cube));
