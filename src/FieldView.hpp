@@ -675,14 +675,19 @@ private:
 
       const auto& pos = cube->position();
       const auto& size = cube->size();
-      float padding_size = cube->getPaddingSize();
-      ci::Vec3f padding(padding_size, padding_size, padding_size);
+      ci::Vec3f half_size = size / 2;
+      
+      if (!cube->isAdjoinOther()) {
+        // 隣接がなければpaddingを加える
+        float padding_size = cube->getPaddingSize();
+        half_size += ci::Vec3f(padding_size, padding_size, padding_size);
+      }
       
       TouchCube touch_cube = {
         cube->id(),
         pos,
         cube->rotation(),
-        { pos - size / 2 - padding, pos + size / 2 + padding }
+        { pos - half_size, pos + half_size }
       };
       
       touch_cubes_.push_back(std::move(touch_cube));

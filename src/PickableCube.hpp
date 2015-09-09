@@ -97,6 +97,9 @@ private:
   float       pressed_ease_duration_;
   float       pressed_ease_scale_;
 
+  // 他のPickableと隣接している
+  bool adjoin_other_;
+  
   bool pressed_;
   ci::Anim<float> pressed_scale_;
   
@@ -149,6 +152,7 @@ public:
     pressed_ease_(params["game.pickable.pressed_ease"].getValue<std::string>()),
     pressed_ease_duration_(params["game.pickable.pressed_duration"].getValue<float>()),
     pressed_ease_scale_(params["game.pickable.pressed_scale"].getValue<float>()),
+    adjoin_other_(false),
     pressed_(false),
     pressed_scale_(1)
   {
@@ -486,7 +490,10 @@ public:
 
   const ci::Color& color() const { return color_(); }
 
+  bool isAdjoinOther() const { return adjoin_other_; }
+  void setAdjoinOther(const bool adjoin_other) { adjoin_other_ = adjoin_other; }
 
+  
   // std::findを利用するための定義
   bool operator==(const u_int rhs_id) const {
     return id_ == rhs_id;

@@ -201,6 +201,7 @@ public:
                            });
 
     decideEachPickableCubeMoving();
+    setAdjoinOtherPickableCube();
 
 #if 0
     // 全PickableCubeの落下判定は、毎フレーム判定を避けている
@@ -863,6 +864,29 @@ private:
           cube->cancelRotationMove();
         }
       }
+    }
+  }
+
+  // PickableCubeが隣接するか判定
+  void setAdjoinOtherPickableCube() {
+    for (auto& cube : pickable_cubes_) {
+      static ci::Vec3i offset_table[] = {
+        {  1, 0,  0 },
+        { -1, 0,  0 },
+        {  0, 0,  1 },
+        {  0, 0, -1 },
+      };
+
+      bool adjoint = false;
+      const auto pos = cube->blockPosition();
+      for (const auto& offset : offset_table) {
+        if (isPickableCube(pos + offset)) {
+          adjoint = true;
+          break;
+        }
+      }
+
+      cube->setAdjoinOther(adjoint);
     }
   }
 
