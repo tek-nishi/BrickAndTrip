@@ -330,8 +330,10 @@ public:
     
     connections_ += event_.connect("falling-down",
                                    [this](const Connection& connection, EventParam& param) {
-                                     float duration = boost::any_cast<float>(param["duration"]);
-                                     view_.startQuake(duration);
+                                     auto duration = boost::any_cast<float>(param["duration"]);
+                                     auto pos      = boost::any_cast<ci::Vec3f>(param["pos"]);
+                                     auto size     = boost::any_cast<ci::Vec3f>(param["size"]);
+                                     view_.startQuake(duration, pos, size);
                                    });
 
     connections_ += event_.connect("begin-regulat-stageclear",

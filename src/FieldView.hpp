@@ -37,6 +37,7 @@ class FieldView : private boost::noncopyable {
   float near_z_;
   float far_z_;
   ci::CameraPersp camera_;
+  ci::Frustumf frustum_;
 
   ci::Anim<ci::Vec3f> interest_point_;
   ci::Anim<float> eye_rx_;
@@ -130,6 +131,7 @@ public:
     near_z_(params["game_view.camera.near_z"].getValue<float>()),
     far_z_(params["game_view.camera.far_z"].getValue<float>()),
     camera_(ci::app::getWindowWidth(), ci::app::getWindowHeight(), fov_, near_z_, far_z_),
+    frustum_(camera_),
     eye_distance_rate_(params["game_view.camera.eye_distance_rate"].getValue<float>()),
     eye_offset_rate_(params["game_view.camera.eye_offset_rate"].getValue<float>()),
     close_distance_rate_(params["game_view.camera.close_distance_rate"].getValue<float>()),
@@ -244,12 +246,12 @@ public:
     ci::gl::setMatrices(camera_);
 
     // 視錐台(クリッピングに利用)
-    ci::Frustumf frustum(camera_);
+    frustum_.set(camera_);
 
     lights_.enableLights();
 
-    drawStageCubes(field.active_cubes, models, frustum);
-    drawStageCubes(field.collapse_cubes, models, frustum);
+    drawStageCubes(field.active_cubes, models, frustum_);
+    drawStageCubes(field.collapse_cubes, models, frustum_);
 
     drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
     drawCubes(field.item_cubes, models, "item_cube", "item_cube");
@@ -329,7 +331,10 @@ public:
     camera_follow_target_ = enable;
   }
 
-  void startQuake(const float duration) {
+  void startQuake(const float duration, const ci::Vec3f& pos, const ci::Vec3f& size) {
+    // 視錐台外は無視
+    if (!frustum_.intersects(pos, size)) return;
+    
     quake_.start(*animation_timeline_, &quake_value_, duration);
   }
 

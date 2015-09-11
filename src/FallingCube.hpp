@@ -211,7 +211,9 @@ private:
     options.delay(interval_);
     options.finishFn([this]() {
         EventParam params = {
-          { "duration", quake_duration_ }
+          { "duration", quake_duration_ },
+          { "pos", position() },
+          { "size", size() },
         };
         
         event_.signal("falling-down", params);
