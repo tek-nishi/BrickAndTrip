@@ -81,6 +81,8 @@ class BrickTripApp : public AppNative,
       settings->enableMultiTouch();
     }
 #endif
+    // Retina Display対応
+    settings->enableHighDensityDisplay();
 
     fast_speed_ = params_["app.fast_speed"].getValue<double>();
     slow_speed_ = params_["app.slow_speed"].getValue<double>();
