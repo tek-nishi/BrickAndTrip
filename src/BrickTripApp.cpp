@@ -19,6 +19,7 @@
 #include "RootController.hpp"
 #include "Model.hpp"
 #include "Params.hpp"
+#include "AudioSession.h"
 
 
 using namespace ci;
@@ -92,6 +93,8 @@ class BrickTripApp : public AppNative,
   
 
 	void setup() override {
+    beginAudioSession();
+    
     Rand::randomize();
     
     // Windowが表示された後の設定はここで処理
@@ -143,8 +146,11 @@ class BrickTripApp : public AppNative,
       timeline().getCurrentTime() + 1.0f);
   }
   
-  void quit() override {
+  void shutdown() override {
+    DOUT << "shutdown()" << std::endl;
+    
     timeline_->clear();
+    endAudioSession();
   }
 
   

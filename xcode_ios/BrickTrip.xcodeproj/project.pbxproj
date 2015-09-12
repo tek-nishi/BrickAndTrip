@@ -15,6 +15,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 471BAE9F1BA42303000BD01F /* AudioSession.mm */; };
 		473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 473FFD121B7A0E7700EFDD9E /* Images.xcassets */; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47B62A291B6A263400ABF155 /* Capture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47B62A271B6A263400ABF155 /* Capture.mm */; };
@@ -42,6 +43,7 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		471BAE9F1BA42303000BD01F /* AudioSession.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioSession.mm; path = ../src/AudioSession.mm; sourceTree = "<group>"; };
 		473FFD121B7A0E7700EFDD9E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		47A8C39D1ACC43C10009B7AD /* FileUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileUtil.mm; path = ../src/FileUtil.mm; sourceTree = "<group>"; };
 		47B62A271B6A263400ABF155 /* Capture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Capture.mm; path = ../src/Capture.mm; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				471BAE9F1BA42303000BD01F /* AudioSession.mm */,
 				47D342F41B78A03D007AF9E9 /* Share.mm */,
 				47B62A271B6A263400ABF155 /* Capture.mm */,
 				47A8C39D1ACC43C10009B7AD /* FileUtil.mm */,
@@ -235,6 +238,7 @@
 				47B62A291B6A263400ABF155 /* Capture.mm in Sources */,
 				47D342F51B78A03D007AF9E9 /* Share.mm in Sources */,
 				47EAFB6C1B2D4DE800703A45 /* DrawVboMesh.cpp in Sources */,
+				471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */,
 				47B8CD071B7A0D4900109D0E /* BrickTripApp.cpp in Sources */,
 				47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */,
 			);
