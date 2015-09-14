@@ -223,8 +223,14 @@ public:
 
 #if defined(CINDER_COCOA_TOUCH)
     // 自動PAUSE
-    ci::app::AppCocoaTouch::get()->getSignalDidEnterBackground().connect([this]() {
-        event_.signal("pause-agree", EventParam());
+    // getSignalDidEnterBackground(Backgroundになった直後)
+    // getSignalWillResignActive(アクティブでなくなる直前)
+    ci::app::AppCocoaTouch::get()->getSignalWillResignActive().connect([this]() {
+        DOUT << "SignalWillResignActive" << std::endl;
+        EventParam params = {
+          { "force", true }
+        };
+        event_.signal("pause-agree", params);
       });
 #endif
   }

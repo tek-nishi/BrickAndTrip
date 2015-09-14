@@ -57,24 +57,35 @@ public:
 
                                     view_->setActive(false);
                                     event_.signal("pause-start", EventParam());
-                                    
-                                    // 時間差tween
-                                    event_timeline_->add([this]() {
-                                        view_->startWidgetTween("tween-out");
 
-                                        // 時間差でsignal
-                                        event_timeline_->add([this]() {
-                                            event_.signal("begin-pause", EventParam());
+                                    if (hasKey(param, "force") && boost::any_cast<bool>(param.at("force"))) {
+                                      // 強制PAUSEはタイミングが違う
+                                      event_.signal("begin-pause", EventParam());
+                                      view_->startWidgetTween("tween-out");
+                                      event_timeline_->add([this]() {
+                                          view_->setDisp(false);
+                                        },
+                                        event_timeline_->getCurrentTime() + deactive_delay_);
+                                    }
+                                    else {
+                                      // 時間差tween
+                                      event_timeline_->add([this]() {
+                                          view_->startWidgetTween("tween-out");
 
-                                            event_timeline_->add([this]() {
-                                                // Viewは非表示に
-                                                view_->setDisp(false);
-                                              },
-                                              event_timeline_->getCurrentTime() + deactive_delay_);
-                                          },
-                                          event_timeline_->getCurrentTime() + event_delay_);
-                                      },
-                                      event_timeline_->getCurrentTime() + tween_delay_);
+                                          // 時間差でsignal
+                                          event_timeline_->add([this]() {
+                                              event_.signal("begin-pause", EventParam());
+
+                                              event_timeline_->add([this]() {
+                                                  // Viewは非表示に
+                                                  view_->setDisp(false);
+                                                },
+                                                event_timeline_->getCurrentTime() + deactive_delay_);
+                                            },
+                                            event_timeline_->getCurrentTime() + event_delay_);
+                                        },
+                                        event_timeline_->getCurrentTime() + tween_delay_);
+                                    }
                                   });
 
     connections_ += event.connect("game-continue",
