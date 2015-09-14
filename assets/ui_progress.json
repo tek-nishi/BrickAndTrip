@@ -6,7 +6,7 @@
     "model": "button",
 
     "active": true,
-    "event_message": "pause-start",
+    "event_message": "pause-agree",
 
     "text": "Ý",
     "font": "icon",

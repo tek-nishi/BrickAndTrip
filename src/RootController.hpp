@@ -220,6 +220,13 @@ public:
     addController<IntroController>(params_, timeline_, event_,
                                    records_.getTotalPlayNum(),
                                    view_creator_.create("ui_intro.json"));
+
+#if defined(CINDER_COCOA_TOUCH)
+    // 自動PAUSE
+    ci::app::AppCocoaTouch::get()->getSignalDidEnterBackground().connect([this]() {
+        event_.signal("pause-agree", EventParam());
+      });
+#endif
   }
 
   ~RootController() {

@@ -50,9 +50,13 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
-    connections_ += event.connect("pause-start",
+    connections_ += event.connect("pause-agree",
                                   [this](const Connection& connection, EventParam& param) {
+                                    // 自動PAUSEのための措置
+                                    if (!view_->isActive()) return;
+
                                     view_->setActive(false);
+                                    event_.signal("pause-start", EventParam());
                                     
                                     // 時間差tween
                                     event_timeline_->add([this]() {
