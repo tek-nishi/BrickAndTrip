@@ -208,6 +208,11 @@ public:
                      auto full_path = getDocumentPath() / std::string("snapshot" + createUniquePath() + ".png");
                      ci::writeImage(full_path, surface);
                    });
+    
+    event_.connect("reset-records",
+                   [this](const Connection& connection, EventParam& param) {
+                     records_ = Records(params_["version"].getValue<float>());
+                   });
 #endif
 
     records_.load(params["game.records"].getValue<std::string>());

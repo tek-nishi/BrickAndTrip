@@ -112,7 +112,8 @@
       "p": "entry-pickable",
       "n": "clear-records",
       "G": "do-snapshot",
-      "P": "pause-agree"
+      "P": "pause-agree",
+      "N": "reset-records"
     }
   },
 

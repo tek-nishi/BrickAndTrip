@@ -13,7 +13,7 @@
 
 namespace ngs {
 
-class Records : private boost::noncopyable {
+class Records {
 public:
   enum {
     RANK_SATISFY = 2,            // Rank B
