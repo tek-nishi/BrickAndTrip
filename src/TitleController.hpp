@@ -133,10 +133,19 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
+    // プレイ回数が0の場合はMenuをOFF
     if (records.getTotalPlayNum() == 0) {
-      auto& widget = view_->getWidget("records");
-      widget.setDisp(false);
-      widget.setActive(false);
+      std::string widget_names[] = {
+        "records",
+        "settings",
+        "credits",
+      };
+      
+      for (const auto& name : widget_names) {
+        auto& widget = view_->getWidget(name);
+        widget.setDisp(false);
+        widget.setActive(false);
+      }
     }
     
     view_->startWidgetTween("tween-in");
