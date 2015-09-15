@@ -144,7 +144,7 @@
       "ease_name": "EaseInOutQuart",
       "ease_duration": 2.0,
 
-      "close_distance_rate": 0.85,
+      "close_distance_rate": 0.8,
 
       "distance_ease_name": "EaseOutCubic",
       "distance_ease_duration": 0.8,
