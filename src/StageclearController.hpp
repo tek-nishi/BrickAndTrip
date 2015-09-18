@@ -9,6 +9,7 @@
 #include "ConnectionHolder.hpp"
 #include "Share.h"
 #include "Capture.h"
+#include "Localize.h"
 
 
 namespace ngs {
@@ -70,7 +71,6 @@ public:
     item_num_(boost::any_cast<int>(result.at("play_item_num"))),
     item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
     highest_item_num_(boost::any_cast<bool>(result.at("highest_item_num"))),
-    sns_text_(params["stageclear.sns_text"].getValue<std::string>()),
     clear_time_(0.0),
     item_rate_(0),
     score_(0),
@@ -129,7 +129,7 @@ public:
                                     
                                     event_timeline_->add([this]() {
                                         DOUT << "Share" << std::endl;
-                                        
+
                                         Share::post(sns_text_,
                                                     captureTopView(),
                                                     [this]() {
@@ -188,12 +188,14 @@ private:
       // TODO:最速タイム時の演出
     }
 
+    // SNS投稿で使うのでここで定義
+    int item_rate = 0;
     {
       auto item_num = boost::any_cast<int>(result.at("item_num"));
       auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
 
       if (item_total_num > 0) {
-        int item_rate = item_num * 100 / item_total_num;
+        item_rate = item_num * 100 / item_total_num;
 
         // カウントアップ演出
         auto options = animation_timeline_->apply(&item_rate_,
@@ -215,12 +217,12 @@ private:
       }
     }
 
+    // SNS投稿テキストでも使うのでblockの外で定義
+    auto game_score = boost::any_cast<int>(result.at("score"));
     {
-      auto score = boost::any_cast<int>(result.at("score"));
-
-        // カウントアップ演出
+      // カウントアップ演出
       auto options = animation_timeline_->apply(&score_,
-                                                0, score,
+                                                0, game_score,
                                                 ease_duration, ease_func);
 
       options.delay(params_["stageclear.score_delay"].getValue<float>());
@@ -237,11 +239,15 @@ private:
       }
     }
 
+    // SNS投稿テキストでも使うのでblockの外で定義
+    std::string game_rank;
     {
       auto& rank_text = params["stageclear.rank"];
       auto rank = boost::any_cast<int>(result.at("rank"));
-      
-      view_->getWidget("rank-result").setText(rank_text[rank].getValue<std::string>());
+
+      game_rank = rank_text[rank].getValue<std::string>();
+
+      view_->getWidget("rank-result").setText(game_rank);
 
       if (boost::any_cast<bool>(result.at("highest_rank"))) {
         view_->startWidgetTween("tween-highest-rank");
@@ -257,6 +263,20 @@ private:
         widget.setActive(true);
       }
     }
+
+    {
+      // SNSへの投稿テキストはローカライズされたものを使う
+      auto text = params["stageclear.sns_text"].getValue<std::string>();
+      
+      sns_text_ = localizedString(text);
+      replaceString(sns_text_, "%1", std::to_string(game_score));
+      replaceString(sns_text_, "%2", game_rank);
+      replaceString(sns_text_, "%3", std::to_string(item_rate));
+      
+      auto stage_num = boost::any_cast<int>(result.at("current_stage"));
+      replaceString(sns_text_, "%4", std::to_string(stage_num));
+    }
+    
 #endif
   }
 

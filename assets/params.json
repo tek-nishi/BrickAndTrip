@@ -840,7 +840,7 @@
     "event_delay": 1.5,
     "deactive_delay": 0.1,
     "sns_delay": 0.2,
-    "sns_text": "It's my result:D"
+    "sns_text": "gameover"
   },
 
   "stageclear": {
@@ -858,7 +858,7 @@
     "score_delay": 1.0,
     
     "rank": [ "S", "A", "B", "C", "D", "E", "F" ],
-    "sns_text": "Stage Clear!!"
+    "sns_text": "stageclear"
   },
 
   "regular_stageclear": {
@@ -871,7 +871,7 @@
     "deactive_delay": 1,
     
     "sns_delay": 0.2,
-    "sns_text": "Stage 10 Clear!!"
+    "sns_text": "regular_stageclear"
   },
 
   "all_stageclear": {
@@ -884,7 +884,7 @@
     "deactive_delay": 1,
     
     "sns_delay": 0.2,
-    "sns_text": "Stage 11 Clear!!"
+    "sns_text": "all_stageclear"
   },
   
 

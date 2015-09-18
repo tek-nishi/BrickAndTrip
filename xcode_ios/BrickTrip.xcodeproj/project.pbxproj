@@ -17,6 +17,9 @@
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 471BAE9F1BA42303000BD01F /* AudioSession.mm */; };
 		473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 473FFD121B7A0E7700EFDD9E /* Images.xcassets */; };
+		474560051BABD1E400310BBD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 474560071BABD1E400310BBD /* InfoPlist.strings */; };
+		474560081BABD1EE00310BBD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4745600A1BABD1EE00310BBD /* Localizable.strings */; };
+		4745600E1BABD57800310BBD /* Localize.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4745600D1BABD57800310BBD /* Localize.mm */; settings = {ASSET_TAGS = (); }; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47B62A291B6A263400ABF155 /* Capture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47B62A271B6A263400ABF155 /* Capture.mm */; };
 		47B62A2C1B6A264200ABF155 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47B62A2B1B6A264200ABF155 /* Social.framework */; };
@@ -45,6 +48,11 @@
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		471BAE9F1BA42303000BD01F /* AudioSession.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioSession.mm; path = ../src/AudioSession.mm; sourceTree = "<group>"; };
 		473FFD121B7A0E7700EFDD9E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		474560061BABD1E400310BBD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		474560091BABD1EE00310BBD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4745600B1BABD20000310BBD /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4745600C1BABD20000310BBD /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4745600D1BABD57800310BBD /* Localize.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Localize.mm; path = ../src/Localize.mm; sourceTree = "<group>"; };
 		47A8C39D1ACC43C10009B7AD /* FileUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileUtil.mm; path = ../src/FileUtil.mm; sourceTree = "<group>"; };
 		47B62A271B6A263400ABF155 /* Capture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Capture.mm; path = ../src/Capture.mm; sourceTree = "<group>"; };
 		47B62A2B1B6A264200ABF155 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -131,6 +139,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4745600D1BABD57800310BBD /* Localize.mm */,
 				471BAE9F1BA42303000BD01F /* AudioSession.mm */,
 				47D342F41B78A03D007AF9E9 /* Share.mm */,
 				47B62A271B6A263400ABF155 /* Capture.mm */,
@@ -145,6 +154,8 @@
 		00692BD914FF149000D0FFFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				474560071BABD1E400310BBD /* InfoPlist.strings */,
+				4745600A1BABD1EE00310BBD /* Localizable.strings */,
 				473FFD121B7A0E7700EFDD9E /* Images.xcassets */,
 				00748057165D41390024B57A /* assets */,
 				5D5D9C573C0F4F1EBE1E6BFD /* Info.plist */,
@@ -206,6 +217,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ja,
 			);
 			mainGroup = 00692BC414FF149000D0A05E;
 			productRefGroup = 00692BD014FF149000D0A05E /* Products */;
@@ -223,6 +235,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				00748058165D41390024B57A /* assets in Resources */,
+				474560081BABD1EE00310BBD /* Localizable.strings in Resources */,
+				474560051BABD1E400310BBD /* InfoPlist.strings in Resources */,
 				473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,11 +254,33 @@
 				47EAFB6C1B2D4DE800703A45 /* DrawVboMesh.cpp in Sources */,
 				471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */,
 				47B8CD071B7A0D4900109D0E /* BrickTripApp.cpp in Sources */,
+				4745600E1BABD57800310BBD /* Localize.mm in Sources */,
 				47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		474560071BABD1E400310BBD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				474560061BABD1E400310BBD /* en */,
+				4745600B1BABD20000310BBD /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4745600A1BABD1EE00310BBD /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				474560091BABD1EE00310BBD /* en */,
+				4745600C1BABD20000310BBD /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00692BF314FF149000D0A05E /* Debug */ = {

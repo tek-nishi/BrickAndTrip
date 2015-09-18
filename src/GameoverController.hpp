@@ -9,6 +9,7 @@
 #include "ConnectionHolder.hpp"
 #include "Share.h"
 #include "Capture.h"
+#include "Localize.h"
 
 
 namespace ngs {
@@ -47,7 +48,6 @@ public:
     sns_delay_(params["gameover.sns_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
-    sns_text_(params["gameover.sns_text"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "GameoverController()" << std::endl;
@@ -126,11 +126,10 @@ public:
       view_->getWidget("agree").setDisp(false);
       view_->getWidget("agree").setActive(false);
     }
+
     
-    {
-      auto score = boost::any_cast<int>(event_params.at("score"));
-      view_->getWidget("score-result").setText(toFormatedString(score, 5));
-    }
+    auto game_score = boost::any_cast<int>(event_params.at("score"));
+    view_->getWidget("score-result").setText(toFormatedString(game_score, 5));
 
     if (boost::any_cast<bool>(event_params.at("hi_score"))) {
       view_->startWidgetTween("tween-hi-score");
@@ -156,6 +155,14 @@ public:
         widget.setDisp(true);
         widget.setActive(true);
       }
+    }
+
+    {
+      // SNSへの投稿テキストはローカライズされたものを使う
+      auto text = params["gameover.sns_text"].getValue<std::string>();
+      
+      sns_text_ = localizedString(text);
+      replaceString(sns_text_, "%1", std::to_string(game_score));
     }
 #endif
   }

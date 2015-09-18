@@ -37,6 +37,15 @@ char32_t getCharactor(const std::string& s, const size_t pos) {
   return u32string[pos];
 }
 
+// キーワード置換
+void replaceString(std::string& text, const std::string& src, const std::string& dst) {
+	std::string::size_type pos = 0;
+	while ((pos = text.find(src, pos)) != std::string::npos) {
+		text.replace(pos, src.length(), dst);
+		pos += dst.length();
+	}
+}
+
 // 重複しないidを生成
 u_int getUniqueNumber() {
   static u_int unique_number = 0;

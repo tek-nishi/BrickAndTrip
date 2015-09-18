@@ -9,6 +9,7 @@
 #include "ConnectionHolder.hpp"
 #include "Share.h"
 #include "Capture.h"
+#include "Localize.h"
 
 
 namespace ngs {
@@ -52,7 +53,6 @@ public:
     titleback_delay_(params["titleback_delay"].getValue<float>()),
     deactive_delay_(params["deactive_delay"].getValue<float>()),
     sns_delay_(params["sns_delay"].getValue<float>()),
-    sns_text_(params["sns_text"].getValue<std::string>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -123,7 +123,7 @@ public:
                                   });
 #endif
     
-    setup(result);
+    setup(params, result);
   }
 
   ~AllStageClearController() {
@@ -135,13 +135,16 @@ public:
 
 
 private:
-  void setup(const EventParam& result) {
+  void setup(const ci::JsonTree& params, const EventParam& result) {
+
+    // SNS投稿で使うのでここで定義
+    int item_rate = 0;
     {
       auto item_num = boost::any_cast<int>(result.at("item_num"));
       auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
 
       if (item_total_num > 0) {
-        int item_rate = item_num * 100 / item_total_num;
+        item_rate = item_num * 100 / item_total_num;
         view_->getWidget("item-result").setText(toFormatedString(item_rate, 3) + "%");
       }
       if (boost::any_cast<bool>(result.at("highest_item_num"))) {
@@ -149,13 +152,11 @@ private:
       }
     }
     
-    {
-      auto score = boost::any_cast<int>(result.at("total_score"));
-      view_->getWidget("score-result").setText(toFormatedString(score, 4));
+    auto game_score = boost::any_cast<int>(result.at("total_score"));
+    view_->getWidget("score-result").setText(toFormatedString(game_score, 5));
 
-      if (boost::any_cast<bool>(result.at("highest_score"))) {
-        view_->startWidgetTween("tween-highest-score");
-      }
+    if (boost::any_cast<bool>(result.at("highest_score"))) {
+      view_->startWidgetTween("tween-highest-score");
     }
     
     view_->setDisp(false);
@@ -169,6 +170,18 @@ private:
         widget.setDisp(true);
         widget.setActive(true);
       }
+    }
+    
+    {
+      // SNSへの投稿テキストはローカライズされたものを使う
+      auto text = params["sns_text"].getValue<std::string>();
+      
+      sns_text_ = localizedString(text);
+      replaceString(sns_text_, "%1", std::to_string(game_score));
+      replaceString(sns_text_, "%3", std::to_string(item_rate));
+
+      auto stage_num = boost::any_cast<int>(result.at("current_stage"));
+      replaceString(sns_text_, "%4", std::to_string(stage_num));
     }
 #endif
   }

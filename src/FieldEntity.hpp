@@ -465,6 +465,8 @@ public:
         { "play_item_num",       current_game.item_num },
         { "play_item_total_num", current_game.item_total_num },
         { "highest_item_num",    current_game.highest_item_num },
+
+        { "current_stage", stage_num_ }
       };
 
       event_.signal("begin-stageclear", params);
