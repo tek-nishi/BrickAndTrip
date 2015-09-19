@@ -16,7 +16,7 @@ namespace ngs {
 class Records {
 public:
   enum {
-    RANK_SATISFY = 2,            // Rank B
+    RANK_SATISFY = 1,            // Rank A
     RANK_DUMMY = 100
   };
   
