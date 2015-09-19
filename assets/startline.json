@@ -9,7 +9,7 @@
    ],
    "build_speed" : 0.2000000029802322,
    "camera" : "normal",
-   "color" : [ 0.6235290, 0.6274510, 0.6274510 ],
+   "color" : [ 0.6274510, 0.6274510, 0.6274510 ],
    "light_tween" : "default",
    "pickable" : 1,
    "x_offset" : 0
