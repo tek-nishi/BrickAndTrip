@@ -1,9 +1,0 @@
-#!/bin/sh
-sips -Z 57 icon.png --out icon57.png
-sips -Z 114 icon.png --out icon57@2x.png
-sips -Z 120 icon.png --out icon60@2x.png
-sips -Z 180 icon.png --out icon60@3x.png
-sips -Z 72 icon.png --out icon72.png
-sips -Z 144 icon.png --out icon72@2x.png
-sips -Z 76 icon.png --out icon76.png
-sips -Z 152 icon.png --out icon76@2x.png
