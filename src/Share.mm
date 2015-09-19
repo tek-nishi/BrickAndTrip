@@ -31,6 +31,12 @@ void post(const std::string& text, UIImage* image,
   view_controller.completionHandler = completion;
   
   UIViewController* app_vc = ci::app::getWindow()->getNativeViewController();
+
+  if ([view_controller respondsToSelector:@selector(popoverPresentationController)]) {
+    // iPadではpopoverとして表示
+    view_controller.popoverPresentationController.sourceView = app_vc.view;
+  }
+  
   [app_vc presentViewController:view_controller animated:YES completion:nil];
 }
 
