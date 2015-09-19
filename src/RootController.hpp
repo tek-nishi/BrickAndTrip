@@ -23,7 +23,7 @@
 #include "Records.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
-#include "Sound.hpp"
+#include "SoundPlayer.hpp"
 
 
 namespace ngs {
@@ -43,7 +43,7 @@ class RootController : public ControllerBase {
   Autolayout autolayout_;
   UIViewCreator view_creator_;
 
-  Sound sound_;
+  SoundPlayer sound_;
   
   ci::Color background_;
 
@@ -178,12 +178,12 @@ public:
     
     event_.connect("se-silent",
                    [this](const Connection& connection, EventParam& param) {
-                     sound_.setBufferSilent(boost::any_cast<bool>(param["silent"]));
+                     sound_.get().setBufferSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
     event_.connect("bgm-silent",
                    [this](const Connection& connection, EventParam& param) {
-                     sound_.setFileSilent(boost::any_cast<bool>(param["silent"]));
+                     sound_.get().setFileSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
 #ifdef DEBUG
@@ -217,8 +217,8 @@ public:
 
     records_.load(params["game.records"].getValue<std::string>());
     
-    sound_.setBufferSilent(!records_.isSeOn());
-    sound_.setFileSilent(!records_.isBgmOn());
+    sound_.get().setBufferSilent(!records_.isSeOn());
+    sound_.get().setFileSilent(!records_.isBgmOn());
       
     addController<FieldController>(params, touch_event_, event_, records_);
 
@@ -262,7 +262,7 @@ private:
 
   Event<EventParam>& event() override { return event_; }
 
-  void resize() {
+  void resize() override {
     float aspect = ci::app::getWindowAspectRatio();
     ui_camera_.setAspectRatio(aspect);
     
