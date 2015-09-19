@@ -35,7 +35,7 @@
 // Recordsの難読化
 #define OBFUSCATION_RECORD
 // params.jsonの難読化
-#define OBFUSCATION_PARAMS
+// #define OBFUSCATION_PARAMS
 
 namespace ngs {
 

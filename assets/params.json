@@ -168,13 +168,13 @@
     "lights": [
       {
         "type": "point",
-        "position": [ 3, 10, 1 ],
+        "position": [ 3, 10, 2 ],
         
         "constant_attenuation":  0,
         "linear_attenuation":    0,
         "quadratic_attenuation": 0.015,
         
-        "diffuse": [ 0.84, 0.84, 0.84 ],
+        "diffuse": [ 0.9, 0.9, 0.9 ],
         "ambient": [ 0.13, 0.13, 0.13 ],
         "specular": [ 1, 1, 1 ],
 
@@ -225,19 +225,19 @@
             {
               "target": "quadratic_attenuation",
               "type": "EaseOutExpo",
-              "end": 0.015,
+              "end": 0.008,
               "duration": 1
             },
             {
               "target": "diffuse",
               "type": "EaseOutExpo",
-              "end": [ 0.84, 0.84, 0.84 ],
+              "end": [ 0.5, 0.5, 0.5 ],
               "duration": 1
             },
             {
               "target": "ambient",
               "type": "EaseOutExpo",
-              "end": [ 0.13, 0.13, 0.13 ],
+              "end": [ 0.1, 0.1, 0.1 ],
               "duration": 1
             },
             {
@@ -407,7 +407,7 @@
       "moving_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "specular": [ 0.8, 0.8, 0.8, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
@@ -415,7 +415,7 @@
       "falling_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "specular": [ 0.8, 0.8, 0.8, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
