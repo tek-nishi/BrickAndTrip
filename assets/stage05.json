@@ -1,5 +1,5 @@
 {
-   "auto_collapse" : 5.0,
+   "auto_collapse" : 6.0,
    "bg_color" : [ 0.5098040, 0.5098040, 0.5098040 ],
    "body" : [
       [ -1, -1, 0, -1, -1, 0, -1, -1 ],
@@ -44,6 +44,7 @@
       [ -1, -1, 0, -1, -1, 0, -1, -1 ]
    ],
    "build_speed" : 0.50,
+   "camera" : "normal",
    "collapse_speed" : 0.50,
    "color" : [ 0.9529410, 0.5960780, 0 ],
    "falling" : [

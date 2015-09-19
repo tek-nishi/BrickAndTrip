@@ -37,7 +37,6 @@
 // params.jsonの難読化
 #define OBFUSCATION_PARAMS
 
-
 namespace ngs {
 
 // 符号無し整数の別名定義
