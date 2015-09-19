@@ -7,6 +7,7 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "SoundRequest.hpp"
 
 
 namespace ngs {
@@ -77,6 +78,7 @@ public:
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
                                     records_.write(params_["game.records"].getValue<std::string>());
+                                    requestSound(event_, "agree");
 
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");

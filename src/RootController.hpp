@@ -159,7 +159,16 @@ public:
                      sound_.play("start");
                    });
 
+
+    // サウンド再生
+    event_.connect("sound-play",
+                   [this](const Connection& connection, EventParam& param) {
+                     auto& name = boost::any_cast<const std::string&>(param.at("sound"));
+                     sound_.play(name);
+                   });
     
+
+#if 0
     event_.connect("pause-start",
                    [this](const Connection& connection, EventParam& param) {
                      sound_.play("agree");
@@ -174,6 +183,7 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      sound_.play("agree");
                    });
+#endif
 
     
     event_.connect("se-silent",
@@ -300,6 +310,9 @@ private:
                            [](ControllerPtr& child) {
                              return !child->isActive();
                            });
+
+    // 予約されたサウンドを再生
+    sound_.update();
   }
   
   void draw(FontHolder& fonts, ModelHolder& models) override {

@@ -929,11 +929,28 @@
       "gain": 1,
       "loop": false
     },
+    
     {
       "name": "agree",
       "type": "buffer",
       "category": "ui-se",
-      "path": "agree.mp4",
+      "path": "agree.m4a",
+      "gain": 0.8,
+      "loop": false
+    },
+    {
+      "name": "select",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "select.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pause",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "pause.m4a",
       "gain": 1,
       "loop": false
     }

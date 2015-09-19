@@ -7,6 +7,7 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "SoundRequest.hpp"
 
 
 namespace ngs {
@@ -57,6 +58,7 @@ public:
 
                                     view_->setActive(false);
                                     event_.signal("pause-start", EventParam());
+                                    requestSound(event_, "pause");
 
                                     if (hasKey(param, "force") && boost::any_cast<bool>(param.at("force"))) {
                                       // 強制PAUSEはタイミングが違う

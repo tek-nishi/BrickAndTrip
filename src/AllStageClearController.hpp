@@ -10,6 +10,7 @@
 #include "Share.h"
 #include "Capture.h"
 #include "Localize.h"
+#include "SoundRequest.hpp"
 
 
 namespace ngs {
@@ -86,6 +87,7 @@ public:
     connections_ += event.connect("selected-agree",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
+                                    requestSound(event_, "agree");
                                     
                                     event_timeline_->add([this]() {
                                         view_->startWidgetTween("tween-out");
@@ -108,6 +110,7 @@ public:
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
                                     event_.signal("sns-post-begin", EventParam());
+                                    requestSound(event_, "select");
                                     
                                     event_timeline_->add([this]() {
                                         DOUT << "Share" << std::endl;
