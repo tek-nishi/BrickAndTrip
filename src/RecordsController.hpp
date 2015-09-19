@@ -9,6 +9,7 @@
 #include "ConnectionHolder.hpp"
 #include "Share.h"
 #include "Capture.h"
+#include "Localize.h"
 
 
 namespace ngs {
@@ -47,7 +48,6 @@ public:
     sns_delay_(params["records.sns_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
-    sns_text_(params["records.sns_text"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "RecordsController()" << std::endl;
@@ -96,7 +96,7 @@ public:
                                   });
 #endif
 
-    setupView(records);
+    setupView(params, records);
     
     view_->startWidgetTween("tween-in");
 
@@ -135,7 +135,7 @@ private:
   }
 
 
-  void setupView(const EventParam& records) {
+  void setupView(const ci::JsonTree& params, const EventParam& records) {
     {
       // constなのでatを使っている
       auto total_play = boost::any_cast<int>(records.at("total_play"));
@@ -209,6 +209,11 @@ private:
         widget.setDisp(true);
         widget.setActive(true);
       }
+    }
+
+    {
+      auto text = params["records.sns_text"].getValue<std::string>();
+      sns_text_ = localizedString(text);
     }
 #endif
   }
