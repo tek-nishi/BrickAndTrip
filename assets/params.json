@@ -113,7 +113,8 @@
       "n": "clear-records",
       "G": "do-snapshot",
       "P": "pause-agree",
-      "N": "reset-records"
+      "N": "reset-records",
+      "U": "toggle-ui-hide"
     }
   },
 

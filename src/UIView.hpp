@@ -25,6 +25,9 @@ namespace ngs {
 class UIView : private boost::noncopyable {
   bool disp_;
   bool active_;
+#ifdef DEBUG
+  bool hide_;
+#endif
 
   ci::Camera& camera_;
 
@@ -50,6 +53,9 @@ public:
                   Event<std::vector<Touch> >& touch_event) :
     disp_(true),
     active_(true),
+#ifdef DEBUG
+    hide_(false),
+#endif
     camera_(camera),
     event_(event),
     touching_(false)
@@ -72,6 +78,13 @@ public:
     connections_ += touch_event.connect("touches-ended",
                                         std::bind(&UIView::touchesEnded, 
                                                   this, std::placeholders::_1, std::placeholders::_2));
+
+#ifdef DEBUG
+    connections_ += event_.connect("toggle-ui-hide",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     hide_ = !hide_;
+                                   });
+#endif
   }
 
 
@@ -91,6 +104,9 @@ public:
   
   
   void draw(FontHolder& fonts, ModelHolder& models) {
+#ifdef DEBUG
+    if (hide_) return;
+#endif
     if (!disp_) return;
 
     ci::gl::disableDepthRead();
