@@ -51,6 +51,8 @@ class UIWidget : private boost::noncopyable {
   
   bool touch_event_;
   std::string event_message_;
+  bool touch_sound_;
+  std::string sound_message_;
 
   
 public:
@@ -71,7 +73,8 @@ public:
     timeline_(ci::Timeline::create()),
     disp_(true),
     active_(false),
-    touch_event_(false)
+    touch_event_(false),
+    touch_sound_(false)
   {
     std::fill(std::begin(rotate_), std::end(rotate_), 0.0f);
     
@@ -83,6 +86,10 @@ public:
     if (params.hasChild("event_message")) {
       event_message_ = params["event_message"].getValue<std::string>();
       touch_event_   = true;
+    }
+    if (params.hasChild("sound_message")) {
+      sound_message_ = params["sound_message"].getValue<std::string>();
+      touch_sound_   = true;
     }
 
     disp_ = Json::getValue(params, "disp", disp_);
@@ -182,6 +189,10 @@ public:
 
   bool isTouchEvent() const { return touch_event_; }
   const std::string& eventMessage() const { return event_message_; }
+
+  bool isTouchSound() const { return touch_sound_; }
+  const std::string& soundMessage() const { return sound_message_; }
+
   
   bool intersects(const ci::Ray& ray) const {
     auto pos = pos_() + layout_->getPos();

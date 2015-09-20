@@ -141,6 +141,7 @@
     
     "active": true,
     "event_message": "records-start",
+    "sound_message": "select",
 
     "text": "m",
     "font": "icon",
@@ -246,6 +247,7 @@
     
     "active": true,
     "event_message": "settings-start",
+    "sound_message": "select",
 
     "text": "^",
     "font": "icon",
@@ -352,6 +354,7 @@
     
     "active": true,
     "event_message": "credits-start",
+    "sound_message": "select",
 
     "text": "i",
     "size": 0.8,

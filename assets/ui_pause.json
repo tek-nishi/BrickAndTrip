@@ -49,6 +49,7 @@
 
     "active": true,
     "event_message": "pause-cancel",
+    "sound_message": "agree",
 
     "text": "Ú",
     "font": "icon",
@@ -154,6 +155,7 @@
 
     "active": true,
     "event_message": "pause-abort",
+    "sound_message": "agree",
 
     "text": "à",
     "font": "icon",

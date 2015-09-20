@@ -7,6 +7,7 @@
 
     "active": true,
     "event_message": "pause-agree",
+    "sound_message": "pause",
 
     "text": "Ý",
     "font": "icon",

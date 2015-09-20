@@ -613,6 +613,7 @@
 
     "active": true,
     "event_message": "credits-agree",
+    "sound_message": "agree",
 
     "text": "õ",
     "font": "icon",

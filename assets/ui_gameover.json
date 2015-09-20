@@ -197,6 +197,7 @@
 
     "active": false,
     "event_message": "selected-share",
+    "sound_message": "select",
 
     "text": "@",
     "font": "icon",
@@ -317,6 +318,7 @@
     
     "active": false,
     "event_message": "gameover-continue",
+    "sound_message": "agree",
     
     "text": "U",
     "font": "icon",
@@ -421,6 +423,7 @@
 
     "active": false,
     "event_message": "gameover-agree",
+    "sound_message": "agree",
 
     "text": "õ",
     "font": "icon",
@@ -527,6 +530,7 @@
 
     "active": true,
     "event_message": "gameover-agree",
+    "sound_message": "agree",
 
     "text": "õ",
     "font": "icon",

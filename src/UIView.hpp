@@ -18,6 +18,7 @@
 #include "ConnectionHolder.hpp"
 #include "FontHolder.hpp"
 #include "ModelHolder.hpp"
+#include "SoundRequest.hpp"
 
 
 namespace ngs {
@@ -157,7 +158,7 @@ private:
       auto ray = camera_.generateRay(u, 1.0f - v, camera_.getAspectRatio());
     
       for (auto& widget : widgets_) {
-        if (!widget->isActive()) continue;
+        if (!widget->isActive() || !widget->isTouchEvent()) continue;
 
         if (widget->intersects(ray)) {
           touching_        = true;
@@ -213,6 +214,10 @@ private:
         { "widget", touching_widget_->getName() },
       };
       event_.signal(touching_widget_->eventMessage(), params);
+
+      if (touching_widget_->isTouchSound()) {
+        requestSound(event_, touching_widget_->soundMessage());
+      }
     }
   }
   

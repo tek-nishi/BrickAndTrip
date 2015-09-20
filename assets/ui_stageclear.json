@@ -488,6 +488,7 @@
 
     "active": false,
     "event_message": "selected-share",
+    "sound_message": "select",
 
     "text": "@",
     "font": "icon",
@@ -609,6 +610,7 @@
 
     "active": true,
     "event_message": "selected-agree",
+    "sound_message": "agree",
 
     "text": "õ",
     "font": "icon",

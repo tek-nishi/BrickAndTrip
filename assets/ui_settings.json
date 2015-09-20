@@ -373,6 +373,7 @@
 
     "active": true,
     "event_message": "settings-agree",
+    "sound_message": "agree",
 
     "text": "õ",
     "font": "icon",
