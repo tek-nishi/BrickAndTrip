@@ -143,22 +143,6 @@ public:
                                                             view_creator_.create("ui_allstageclear.json"));
                    });
 
-    
-    event_.connect("sound-title-start",
-                   [this](const Connection& connection, EventParam& param) {
-                     sound_.play("title");
-                   });
-
-    event_.connect("pickable-moved",
-                   [this](const Connection& connection, EventParam& param) {
-                     sound_.play("cube-moved");
-                   });
-    
-    event_.connect("startline-will-open",
-                   [this](const Connection& connection, EventParam& param) {
-                     sound_.play("start");
-                   });
-
 
     // サウンド再生
     event_.connect("sound-play",
@@ -166,24 +150,6 @@ public:
                      auto& name = boost::any_cast<const std::string&>(param.at("sound"));
                      sound_.play(name);
                    });
-    
-
-#if 0
-    event_.connect("pause-start",
-                   [this](const Connection& connection, EventParam& param) {
-                     sound_.play("agree");
-                   });
-  
-    event_.connect("pause-cancel",
-                   [this](const Connection& connection, EventParam& param) {
-                     sound_.play("agree");
-                   });
-
-    event_.connect("pause-abort",
-                   [this](const Connection& connection, EventParam& param) {
-                     sound_.play("agree");
-                   });
-#endif
 
     
     event_.connect("se-silent",
