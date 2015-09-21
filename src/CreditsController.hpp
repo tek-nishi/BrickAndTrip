@@ -69,6 +69,7 @@ public:
                                   });
 
     view_->startWidgetTween("tween-in");
+    requestSound(event_, params["credits.jingle-se"].getValue<std::string>());
 
     if (params.hasChild("credits.active_delay")) {
       view_->setActive(false);

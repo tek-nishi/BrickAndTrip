@@ -99,6 +99,7 @@ public:
     setupView(params, records);
     
     view_->startWidgetTween("tween-in");
+    requestSound(event_, params["records.jingle-se"].getValue<std::string>());
 
     if (params.hasChild("records.active_delay")) {
       view_->setActive(false);

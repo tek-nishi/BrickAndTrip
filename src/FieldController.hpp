@@ -9,6 +9,7 @@
 #include "FieldEntity.hpp"
 #include "EventParam.hpp"
 #include "ConnectionHolder.hpp"
+#include "SoundRequest.hpp"
 
 
 namespace ngs {
@@ -212,7 +213,12 @@ public:
                                      u_int id = boost::any_cast<u_int>(param["id"]);
                                      entity_.startIdlePickableCube(id);
                                    });
-
+    
+    connections_ += event_.connect("startline-will-open",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "startline-will-open" << std::endl;
+                                     requestSound(event_, "start");
+                                   });
     
     connections_ += event_.connect("startline-opened",
                                    [this](const Connection&, EventParam& param) {
@@ -331,8 +337,8 @@ public:
     connections_ += event_.connect("falling-down",
                                    [this](const Connection& connection, EventParam& param) {
                                      auto duration = boost::any_cast<float>(param["duration"]);
-                                     auto pos      = boost::any_cast<ci::Vec3f>(param["pos"]);
-                                     auto size     = boost::any_cast<ci::Vec3f>(param["size"]);
+                                     const auto& pos      = boost::any_cast<const ci::Vec3f&>(param["pos"]);
+                                     const auto& size     = boost::any_cast<const ci::Vec3f&>(param["size"]);
                                      view_.startQuake(duration, pos, size);
                                    });
 
@@ -346,6 +352,15 @@ public:
                                      entity_.setRestartLine();
                                    });
 
+
+    // 効果音系
+    connections_ += event_.connect("view-sound",
+                                   [this](const Connection& connection, EventParam& param) {
+                                     const auto& sound = boost::any_cast<const std::string&>(param["sound"]);
+                                     const auto& pos  = boost::any_cast<const ci::Vec3f&>(param["pos"]);
+                                     const auto& size = boost::any_cast<const ci::Vec3f&>(param["size"]);
+                                     view_.startViewSound(sound, pos, size);
+                                   });
     
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",

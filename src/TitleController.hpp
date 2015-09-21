@@ -149,6 +149,7 @@ public:
     }
     
     view_->startWidgetTween("tween-in");
+    requestSound(event_, params["title.jingle-se"].getValue<std::string>());
     
     event_.signal("field-input-start", EventParam());
     event_.signal("sound-title-start", EventParam());

@@ -149,6 +149,13 @@ public:
         active_ = false;
       },
       animation_timeline_->getCurrentTime() + params_["game.item.pickup_duration"].getValue<float>());
+
+    EventParam params = {
+      { "pos",      position() },
+      { "size",     size() },
+      { "sound",    std::string("item-pickup") },
+    };
+    event_.signal("view-sound", params);
   }
 
   void moveDown() {

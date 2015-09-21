@@ -144,6 +144,7 @@ public:
     setupView(params, result);
 
     view_->startWidgetTween("tween-in");
+    requestSound(event_, params["stageclear.jingle-se"].getValue<std::string>());
 
     if (params.hasChild("stageclear.active_delay")) {
       view_->setActive(false);

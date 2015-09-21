@@ -136,6 +136,7 @@ public:
     }
     
     view_->startWidgetTween("tween-in");
+    requestSound(event_, params["gameover.jingle-se"].getValue<std::string>());
 
     if (params.hasChild("gameover.active_delay")) {
       view_->setActive(false);

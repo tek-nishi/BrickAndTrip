@@ -233,6 +233,7 @@ public:
     auto pivot_rotation = pivot_table[move_direction_];
     auto rotation = rotation_();
     auto position = position_();
+    
     options.updateFn([this, pivot_rotation, rotation, position]() {
         rotation_ = rotation * move_rotation_();
 
@@ -252,11 +253,22 @@ public:
         moving_    = false;
         stop_time_ = 0.0f;
 
+        std::string sound_tbl[] = {
+          "moving-up",
+          "moving-down",
+          "moving-left",
+          "moving-right",
+        };
+        
         EventParam params = {
-          { "id", id_ },
+          { "id",        id_ },
           { "block_pos", block_position_ },
+          { "pos",       position_() },
+          { "size",      size() },
+          { "sound",     sound_tbl[move_direction_] },
         };
         event_.signal("moving-moved", params);
+        event_.signal("view-sound", params);
       });
 
     animation_timeline_->add([this]() {

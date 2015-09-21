@@ -98,6 +98,7 @@ public:
     setSoundIcon("bgm-setting", records_.isBgmOn());
 
     view_->startWidgetTween("tween-in");
+    requestSound(event_, params["settings.jingle-se"].getValue<std::string>());
 
     if (params.hasChild("settings.active_delay")) {
       view_->setActive(false);

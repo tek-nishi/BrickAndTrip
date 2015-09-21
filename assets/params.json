@@ -783,6 +783,8 @@
 
   
   "intro": {
+    "jingle-se": "intro",
+    
     "tween_in_delay": 0.5,
     "tween_out_delay": 4,
     "tween_out_delay_rate": [ 2, 5 ],
@@ -791,6 +793,8 @@
   },
   
   "title": {
+    "jingle-se": "title",
+    
     "active_delay": 1.0,
     "tween_delay": 0.6,
     "event_delay": 0.7,
@@ -798,6 +802,8 @@
   },
 
   "records": {
+    "jingle-se": "menu-jingle",
+    
     "active_delay": 0.8,
     "tween_delay": 0.6,
     "event_delay": 0.7,
@@ -807,6 +813,8 @@
   },
 
   "settings": {
+    "jingle-se": "menu-jingle",
+    
     "active_delay": 0.8,
     "tween_delay": 0.6,
     "event_delay": 0.7,
@@ -814,6 +822,8 @@
   },
 
   "credits": {
+    "jingle-se": "menu-jingle",
+    
     "active_delay": 1.7,
     "tween_delay": 0.6,
     "event_delay": 0.9,
@@ -836,6 +846,8 @@
   },
 
   "gameover": {
+    "jingle-se": "gameover",
+
     "active_delay": 2.7,
     "tween_delay": 0.6,
     "event_delay": 1.5,
@@ -845,6 +857,8 @@
   },
 
   "stageclear": {
+    "jingle-se": "stageclear",
+    
     "active_delay": 2.7,
     "tween_delay": 0.6,
     "event_delay": 1.0,
@@ -863,6 +877,8 @@
   },
 
   "regular_stageclear": {
+    "jingle-se": "regular-stageclear",
+
     "message": "regular-stage-clear-out",
     "event_delay": 0.25,
     "collapse_delay": 3,
@@ -876,6 +892,8 @@
   },
 
   "all_stageclear": {
+    "jingle-se": "all-stageclear",
+
     "message": "all-stage-clear-out",
     "event_delay": 1.5,
     "collapse_delay": 0.25,
@@ -906,26 +924,79 @@
   
   "sounds": [
     {
-      "name": "title",
-      "type": "buffer",
-      "category": "se",
-      "path": "title.mp4",
-      "gain": 1,
-      "loop": false
-    },
-    {
       "name": "cube-moved",
       "type": "buffer",
       "category": "cube-se",
-      "path": "cube_rotate.mp4",
+      "path": "cube-rotate.m4a",
+      "gain": 1,
+      "loop": false
+    },
+
+    {
+      "name": "moving-up",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-up.m4a",
       "gain": 1,
       "loop": false
     },
     {
+      "name": "moving-down",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-down.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "moving-left",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-left.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "moving-right",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-right.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "falling",
+      "type": "buffer",
+      "category": "falling",
+      "path": "falling.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "item-pickup",
+      "type": "buffer",
+      "category": "item",
+      "path": "item-pickup.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
       "name": "start",
       "type": "buffer",
-      "category": "stage-se",
-      "path": "start.mp4",
+      "category": "jingle",
+      "path": "start.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "menu-jingle",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "menu-jingle.m4a",
       "gain": 1,
       "loop": false
     },
@@ -935,7 +1006,7 @@
       "type": "buffer",
       "category": "ui-se",
       "path": "agree.m4a",
-      "gain": 0.9,
+      "gain": 0.85,
       "loop": false
     },
     {
@@ -951,6 +1022,55 @@
       "type": "buffer",
       "category": "ui-se",
       "path": "pause.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "intro",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "intro.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "title",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "title.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "gameover",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "gameover.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "stageclear",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "stageclear.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "regular-stageclear",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "regular-stageclear.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "all-stageclear",
+      "type": "buffer",
+      "category": "jingle",
+      "path": "all-stageclear.m4a",
       "gain": 1,
       "loop": false
     }

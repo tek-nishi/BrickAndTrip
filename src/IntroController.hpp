@@ -20,6 +20,7 @@ class IntroController : public ControllerBase {
   bool active_;
 
   float tween_out_delay_;
+  std::string jingle_se_;
   
   ci::TimelineRef event_timeline_;
   
@@ -35,6 +36,7 @@ public:
     view_(std::move(view)),
     active_(true),
     tween_out_delay_(params["intro.tween_out_delay"].getValue<float>()),
+    jingle_se_(params["intro.jingle-se"].getValue<std::string>()),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "IntroController()" << std::endl;
@@ -51,6 +53,7 @@ public:
     event_timeline_->add([this]() {
         view_->setDisp(true);
         view_->startWidgetTween("tween-in");
+        requestSound(event_, jingle_se_);
     
         event_timeline_->add([this]() {
             view_->startWidgetTween("tween-out");

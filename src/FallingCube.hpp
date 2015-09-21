@@ -212,11 +212,13 @@ private:
     options.finishFn([this]() {
         EventParam params = {
           { "duration", quake_duration_ },
-          { "pos", position() },
-          { "size", size() },
+          { "pos",      position() },
+          { "size",     size() },
+          { "sound",    std::string("falling") },
         };
         
         event_.signal("falling-down", params);
+        event_.signal("view-sound", params);
         startUpEase();
       });
   }

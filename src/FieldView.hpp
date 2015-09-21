@@ -21,6 +21,7 @@
 #include "MaterialHolder.hpp"
 #include "FieldLights.hpp"
 #include "Quake.hpp"
+#include "SoundRequest.hpp"
 
 
 namespace ngs {
@@ -337,6 +338,14 @@ public:
     
     quake_.start(*animation_timeline_, &quake_value_, duration);
   }
+
+  void startViewSound(const std::string& sound, const ci::Vec3f& pos, const ci::Vec3f& size) {
+    // 視錐台外は無視
+    if (!frustum_.intersects(pos, size)) return;
+
+    requestSound(event_, sound);
+  }
+  
 
 
   void setCameraParams(const std::string& name) {

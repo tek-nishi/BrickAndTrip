@@ -27,6 +27,8 @@ class AllStageClearController : public ControllerBase {
   float deactive_delay_;
   float sns_delay_;
 
+  std::string jingle_se_;
+  
   std::string sns_text_;
   
   std::unique_ptr<UIView> view_;
@@ -53,6 +55,7 @@ public:
     titleback_delay_(params["titleback_delay"].getValue<float>()),
     deactive_delay_(params["deactive_delay"].getValue<float>()),
     sns_delay_(params["sns_delay"].getValue<float>()),
+    jingle_se_(params["jingle-se"].getValue<std::string>()),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -76,6 +79,7 @@ public:
                 view_->setDisp(true);
                 view_->setActive(true);
                 view_->startWidgetTween("tween-in");
+                requestSound(event_, jingle_se_);
               },
               event_timeline_->getCurrentTime() + tween_in_delay_);
           },
