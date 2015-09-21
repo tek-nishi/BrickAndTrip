@@ -611,6 +611,7 @@ public:
     const auto* const targets = switches_.startSwitch(block_pos);
     if (targets) {
       startSwitchTargets(*targets);
+      requestSound(event_, "switch");
       return;
     }
 
@@ -624,6 +625,7 @@ public:
       };
       
       movePickableCube(id, direction.at(oneway.first), oneway.second);
+      requestSound(event_, "oneway");
       
       return;
     }

@@ -64,6 +64,10 @@ private:
   int       move_direction_;
   ci::Vec3i move_vector_;
   int       move_speed_;
+  // 操作しないで移動した量
+  int       move_step_;
+
+  std::vector<std::string> move_sounds_;
   
   std::string rotate_ease_;
   std::string rotate_ease_end_;
@@ -129,6 +133,8 @@ public:
     move_direction_(MOVE_NONE),
     move_vector_(ci::Vec3i::zero()),
     move_speed_(0),
+    move_step_(0),
+    move_sounds_(Json::getArray<std::string>(params["game.pickable.move_sounds"])),
     rotate_ease_(params["game.pickable.rotate_ease"].getValue<std::string>()),
     rotate_ease_end_(params["game.pickable.rotate_ease_end"].getValue<std::string>()),
     rotate_duration_(params["game.pickable.rotate_duration"].getValue<float>()),
@@ -226,6 +232,7 @@ public:
 
   void cancelRotationMove() {
     move_speed_ = 0;
+    move_step_  = 0;
   }
 
   const ci::Vec3i& moveVector() const { return move_vector_; }
@@ -252,6 +259,10 @@ public:
     DOUT << "speed_rate:" << speed_rate << std::endl;
     
     float duration = rotate_duration_ * speed_rate;
+
+    int index = ci::randInt(4) + move_step_;
+    const auto& move_sound = move_sounds_[index];
+    move_step_ = std::min(move_step_ + 1, int(move_sounds_.size() - 4));
     
     move_speed_ -= 1;
 
@@ -293,7 +304,7 @@ public:
         position_ = position - pivot_pos + pivot_rotation;
       });
     
-    options.finishFn([this]() {
+    options.finishFn([this, move_sound]() {
         // 移動後に正確な位置を設定
         position_ = ci::Vec3f(block_position_);
         position_().y += 1.0f;
@@ -302,14 +313,21 @@ public:
 
         moving_ = false;
         // move_speed_ -= 1;
+        if (!move_speed_) {
+          move_step_ = 0;
+        }
 
-        if (!move_event_) return;
-        
         EventParam params = {
           { "id", id_ },
           { "block_pos", block_position_ },
+          { "pos",       position_() },
+          { "size",      size() },
+          { "sound",     move_sound },
         };
-        event_.signal("pickable-moved", params);
+        if (move_event_) {
+          event_.signal("pickable-moved", params);
+        }
+        event_.signal("view-sound", params);
       });
   }
 
