@@ -83,10 +83,13 @@ public:
     return std::make_pair(Oneway::NONE, 0);
   }
 
-  // FIXME:stageの崩壊とともに全てのswitchが落下するので
-  //       明示的にclearする必要はなさそう
   void clear() {
-    // objects_.clear();
+    // 待機中のonewayをすべて削除
+    for (auto& cube : objects_) {
+      if (cube->isAlive() && !cube->isActive()) {
+        cube->alive(false);
+      }
+    }
   }
 
 

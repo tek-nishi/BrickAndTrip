@@ -133,7 +133,7 @@ public:
 
     options.finishFn([this]() {
         active_ = false;
-        alive_ = false;
+        alive_  = false;
       });
   }
 
@@ -145,7 +145,7 @@ public:
 
   void start() {
     started_ = true;
-    active_ = false;
+    active_  = false;
   }
 
   
@@ -166,6 +166,7 @@ public:
   bool isOnStage() const { return on_stage_; }
   bool isAlive() const { return alive_; }
 
+  void alive(const bool live = true) { alive_ = live; }
   
   const ci::Color& color() const { return color_; }
   
