@@ -1200,6 +1200,14 @@
       "gain": 1,
       "loop": false
     },
+    {
+      "name": "toggle-se",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "toggle-se.m4a",
+      "gain": 1,
+      "loop": false
+    },
     
     {
       "name": "intro",
