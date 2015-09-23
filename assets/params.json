@@ -814,7 +814,8 @@
   },
   
   "title": {
-    "jingle-se": "title",
+    "jingle-full": "title",
+    "jingle-short": "menu-jingle",
     
     "active_delay": 1.0,
     "tween_delay": 0.6,
@@ -1161,15 +1162,31 @@
     {
       "name": "start",
       "type": "buffer",
-      "category": "jingle",
+      "category": "start",
       "path": "start.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "build-start",
+      "type": "buffer",
+      "category": "build-start",
+      "path": "build-start.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "stage-collapse",
+      "type": "buffer",
+      "category": "stage-collapse",
+      "path": "stage-collapse.m4a",
       "gain": 1,
       "loop": false
     },
     
     {
       "name": "menu-jingle",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "menu-jingle.m4a",
       "gain": 1,
@@ -1201,6 +1218,14 @@
       "loop": false
     },
     {
+      "name": "toggle-bgm",
+      "type": "file",
+      "category": "ui-bgm",
+      "path": "toggle-se.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
       "name": "toggle-se",
       "type": "buffer",
       "category": "ui-se",
@@ -1211,7 +1236,7 @@
     
     {
       "name": "intro",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "intro.m4a",
       "gain": 1,
@@ -1219,7 +1244,7 @@
     },
     {
       "name": "title",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "title.m4a",
       "gain": 1,
@@ -1227,7 +1252,7 @@
     },
     {
       "name": "gameover",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "gameover.m4a",
       "gain": 1,
@@ -1235,7 +1260,7 @@
     },
     {
       "name": "stageclear",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "stageclear.m4a",
       "gain": 1,
@@ -1243,7 +1268,7 @@
     },
     {
       "name": "regular-stageclear",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "regular-stageclear.m4a",
       "gain": 1,
@@ -1251,7 +1276,7 @@
     },
     {
       "name": "all-stageclear",
-      "type": "buffer",
+      "type": "file",
       "category": "jingle",
       "path": "all-stageclear.m4a",
       "gain": 1,

@@ -401,6 +401,7 @@ public:
       };
       event_.signal("camera-change", params);
     }
+    requestSound(event_, "build-start");
     
     DOUT << "Continue game:" << is_continued_ << std::endl;
   }
@@ -545,6 +546,8 @@ public:
     stage_.stopBuildAndCollapse();
     stage_.startCollapseStage(next_start_line_z_, finish_rate_);
     mode_ = CLEANUP;
+    
+    requestSound(event_, "stage-collapse");
 
     // 再開用情報
     start_stage_num_ = continue_game ? (stage_num_ - 1)

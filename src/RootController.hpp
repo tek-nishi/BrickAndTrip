@@ -120,7 +120,7 @@ public:
 
     event_.connect("begin-title",
                    [this](const Connection& connection, EventParam& param) {
-                     startTitle();
+                     startTitle(param);
                    });
 
     event_.connect("begin-settings",
@@ -224,8 +224,8 @@ public:
 
 
 private:
-  void startTitle() {
-    addController<TitleController>(params_, timeline_, event_, records_,
+  void startTitle(const EventParam& exec_params) {
+    addController<TitleController>(params_, timeline_, event_, exec_params, records_,
                                    view_creator_.create("ui_title.json"));
 
     // Title画面は時間差で起動する

@@ -33,6 +33,7 @@ public:
   TitleController(ci::JsonTree& params,
                   ci::TimelineRef timeline,
                   Event<EventParam>& event,
+                  const EventParam& exec_params,
                   Records& records,
                   std::unique_ptr<UIView>&& view) :
     params_(params),
@@ -51,6 +52,12 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
+    // アプリ起動直後のタイトル画面か??
+    bool startup = false;
+    if (hasKey(exec_params, "title-startup")) {
+      startup = boost::any_cast<bool>(exec_params.at("title-startup"));
+    }
+    
     connections_ += event.connect("pickable-moved",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
@@ -149,7 +156,11 @@ public:
     }
     
     view_->startWidgetTween("tween-in");
-    requestSound(event_, params["title.jingle-se"].getValue<std::string>());
+
+    {
+      std::string jingle_name = startup ? "title.jingle-full" : "title.jingle-short";
+      requestSound(event_, params[jingle_name].getValue<std::string>());
+    }
     
     event_.signal("field-input-start", EventParam());
     event_.signal("sound-title-start", EventParam());

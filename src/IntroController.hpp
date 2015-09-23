@@ -59,7 +59,12 @@ public:
             view_->startWidgetTween("tween-out");
 
             event_timeline_->add([this]() {
-                event_.signal("begin-title", EventParam());
+                // 初回起動
+                EventParam params = {
+                  { "title-startup", true }
+                };
+                
+                event_.signal("begin-title", params);
 
                 event_timeline_->add([this]() {
                     active_ = false;
