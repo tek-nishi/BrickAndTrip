@@ -149,6 +149,8 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      auto& name = boost::any_cast<const std::string&>(param.at("sound"));
                      sound_.play(name);
+
+                     DOUT << "sound:" << name << std::endl;
                    });
 
     

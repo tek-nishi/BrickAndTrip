@@ -506,8 +506,8 @@
       "stage07.json",
       "stage08.json",
       "stage09.json",
-      "stage10.json",
-      "stage11.json"
+      "sandbox.json",
+      "sandbox.json"
     ],
     
     "stage": {
@@ -1180,6 +1180,14 @@
       "type": "buffer",
       "category": "stage-collapse",
       "path": "stage-collapse.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "all-stage-collapse",
+      "type": "buffer",
+      "category": "all-stage-collapse",
+      "path": "all-stage-collapse.m4a",
       "gain": 1,
       "loop": false
     },

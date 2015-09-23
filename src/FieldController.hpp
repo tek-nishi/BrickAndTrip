@@ -249,7 +249,10 @@ public:
                                      bool all_cleard = boost::any_cast<bool>(param.at("all_cleard"));
                                      bool aborted = boost::any_cast<bool>(param.at("game_aborted"));
                                      if (all_cleard || aborted) {
-                                       event_.signal("begin-title", EventParam());
+                                       EventParam params = {
+                                         { "title-startup", all_cleard },
+                                       };
+                                       event_.signal("begin-title", params);
                                      }
                                    });
 

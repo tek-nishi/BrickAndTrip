@@ -73,6 +73,8 @@ public:
         // stage崩壊
         event_timeline_->add([this]() {
             event_.signal("collapse-stage", EventParam());
+            requestSound(event_, "all-stage-collapse");
+            
 
             // text表示
             event_timeline_->add([this]() {
