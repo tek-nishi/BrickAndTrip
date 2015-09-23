@@ -36,6 +36,7 @@ class StageclearController : public ControllerBase {
   int item_num_;
   int item_total_num_;
   bool highest_item_num_;
+  int current_stage_;
 
   std::string sns_text_;
 
@@ -71,6 +72,7 @@ public:
     item_num_(boost::any_cast<int>(result.at("play_item_num"))),
     item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
     highest_item_num_(boost::any_cast<bool>(result.at("highest_item_num"))),
+    current_stage_(boost::any_cast<int>(result.at("current_stage"))),
     clear_time_(0.0),
     item_rate_(0),
     score_(0),
@@ -107,6 +109,7 @@ public:
                                               { "item_num",          item_num_ },
                                               { "item_total_num",    item_total_num_ },
                                               { "highest_item_num",  highest_item_num_ },
+                                              { "current_stage",     current_stage_ },
                                             };
                                             
                                             event_.signal(msg, params);
@@ -273,11 +276,8 @@ private:
       replaceString(sns_text_, "%1", std::to_string(game_score));
       replaceString(sns_text_, "%2", game_rank);
       replaceString(sns_text_, "%3", std::to_string(item_rate));
-      
-      auto stage_num = boost::any_cast<int>(result.at("current_stage"));
-      replaceString(sns_text_, "%4", std::to_string(stage_num));
+      replaceString(sns_text_, "%4", std::to_string(current_stage_));
     }
-    
 #endif
   }
 
