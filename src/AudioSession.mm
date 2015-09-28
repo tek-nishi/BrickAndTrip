@@ -31,7 +31,9 @@ NSString *const AVAudioSessionCategoryMultiRoute;
 */
 
 #import <AVFoundation/AVFoundation.h>
+#include "cinder/audio/Context.h"
 
+id observer = nullptr;
 
 void beginAudioSession() {
   // AVFoundationのインスタンス
@@ -42,9 +44,39 @@ void beginAudioSession() {
 
   // AudioSession利用開始
   [audioSession setActive:YES error:nil];
+
+  // blockを使って通知を受け取る
+  observer = [[NSNotificationCenter defaultCenter] addObserverForName:AVAudioSessionRouteChangeNotification
+                 object: nil
+                 queue: nil
+                 usingBlock: ^(NSNotification* note) {
+      // ヘッドフォンの抜き差しでMONO/STEREOを切り替える
+      auto ctx    = ci::audio::master();
+      auto output = ctx->getOutput();
+      auto device = ci::audio::Device::getDefaultOutput();
+
+      if (device->getNumOutputChannels() != output->getNumChannels()) {
+        ci::audio::Node::Format format;
+        format.channelMode(ci::audio::Node::ChannelMode::MATCHES_OUTPUT);
+        
+        auto new_output = ctx->createOutputDeviceNode(device, format);
+        ctx->setOutput(new_output);
+
+        // 再生中のNodeを繋ぎ直す
+        for (auto node : output->getInputs()) {
+          if (node->isEnabled()) node >> new_output;
+        }
+        
+        new_output->enable();
+      }
+    }];
 }
 
 void endAudioSession() {
   AVAudioSession* audioSession = [AVAudioSession sharedInstance];
   [audioSession setActive:NO error:nil];
+
+  if (observer) {
+    [[NSNotificationCenter defaultCenter] removeObserver:observer];
+  }
 }

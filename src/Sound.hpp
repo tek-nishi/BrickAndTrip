@@ -28,10 +28,6 @@ class Sound : private boost::noncopyable {
 
   // 効果音用の定義
   struct BufferNode {
-    ~BufferNode() {
-      node->stop();
-    }
-    
     ci::audio::BufferPlayerNodeRef node;
     ci::audio::GainNodeRef gain;
   };
@@ -42,10 +38,6 @@ class Sound : private boost::noncopyable {
   
   // ストリーミング再生用の定義
   struct FileNode {
-    ~FileNode() {
-      node->stop();
-    }
-    
     ci::audio::FilePlayerNodeRef node;
     ci::audio::GainNodeRef gain;
   };
@@ -67,23 +59,30 @@ public:
   {
     auto* ctx = ci::audio::Context::master();
     ctx->enable();
-
+    
     // TIPS:文字列による処理の分岐をstd::mapとラムダ式で実装
     std::map<std::string,
              std::function<void (ci::audio::Context*, const ci::JsonTree&)> > creator = {
       { "file", 
         [this](ci::audio::Context* ctx, const ci::JsonTree& param) {
-          source_.insert({ param["name"].getValue<std::string>(),
-                ci::audio::load(ci::app::loadAsset(param["path"].getValue<std::string>())) });
+          auto path = param["path"].getValue<std::string>();
+          auto source = ci::audio::load(ci::app::loadAsset(path));
+          DOUT << "source:" << path << " ch:" << source->getNumChannels() << std::endl;
+          
+          source_.insert({ param["name"].getValue<std::string>(), source });
 
           const auto& category = param["category"].getValue<std::string>();
           if (file_node_.find(category) == file_node_.end()) {
+            // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
+            ci::audio::Node::Format format;
+            format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
+            
             FileNode node = {
-              ctx->makeNode(new ci::audio::FilePlayerNode()),
+              ctx->makeNode(new ci::audio::FilePlayerNode(format)),
               ctx->makeNode(new ci::audio::GainNode(1.0f)),
             };
+            
             file_node_.insert({ category, node });
-
             category_node_.insert({ category, node.node });
           }
         }
@@ -91,18 +90,24 @@ public:
 
       { "buffer",
         [this](ci::audio::Context* ctx, const ci::JsonTree& param) {
-          auto source = ci::audio::load(ci::app::loadAsset(param["path"].getValue<std::string>()));
-          buffer_.insert({ param["name"].getValue<std::string>(),
-                source->loadBuffer() });
+          auto path = param["path"].getValue<std::string>();
+          auto source = ci::audio::load(ci::app::loadAsset(path));
+          DOUT << "source:" << path << " ch:" << source->getNumChannels() << std::endl;
+
+          buffer_.insert({ param["name"].getValue<std::string>(), source->loadBuffer() });
 
           const auto& category = param["category"].getValue<std::string>();
           if (buffer_node_.find(category) == buffer_node_.end()) {
+            // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
+            ci::audio::Node::Format format;
+            format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
+            
             BufferNode node = {
-              ctx->makeNode(new ci::audio::BufferPlayerNode()),
-              ctx->makeNode(new ci::audio::GainNode(1.0f))
+              ctx->makeNode(new ci::audio::BufferPlayerNode(format)),
+              ctx->makeNode(new ci::audio::GainNode(1.0f)),
             };
+            
             buffer_node_.insert({ category, node });
-
             category_node_.insert({ category, node.node });
           }
         }
@@ -132,29 +137,30 @@ public:
   
 
   void play(const std::string& name, const float gain = 1.0f) {
+    disconnectInactiveNode();
+    
     // TIPS:文字列による分岐をstd::mapとラムダ式で実装
     std::map<std::string,
              std::function<void (const std::string&, const Object&, const float)> > assign = {
       { "file",
         [this](const std::string& name, const Object& object, const float gain) {
           if (file_silent_) return;
-
-          auto* ctx = ci::audio::Context::master();
           
           auto& source = source_.at(name);
-          auto& node = file_node_.at(object.category);
-
-          if (node.node->isConnectedToOutput(node.gain)) {
+          auto& node   = file_node_.at(object.category);
+          
+          if (node.node->isEnabled()) {
             node.node->stop();
           }
-          
+          auto* ctx = ci::audio::Context::master();
+          // node.node->disconnect(ctx->getOutput());
+
           node.node->setSourceFile(source);
           node.node->setLoopEnabled(object.loop);
-          node.gain->setValue(object.gain * gain);
+          // node.gain->setValue(object.gain * gain);
 
-          node.node->enable();                      // FIXME:必要か??
-          
-          node.node >> node.gain >> ctx->getOutput();
+          node.node >> ctx->getOutput();
+          node.node->start();
         }
       },
 
@@ -162,42 +168,49 @@ public:
         [this](const std::string& name, const Object& object, const float gain) {
           if (buffer_silent_) return;
 
-          auto* ctx = ci::audio::Context::master();
-
           auto& buffer = buffer_.at(name);
-          auto& node = buffer_node_.at(object.category);
+          auto& node   = buffer_node_.at(object.category);
 
-          if (node.node->isConnectedToOutput(node.gain)) {
+          if (node.node->isEnabled()) {
             node.node->stop();
           }
           
+          auto* ctx = ci::audio::Context::master();
+          // node.node->disconnect(ctx->getOutput());
+
           node.node->setBuffer(buffer);
           node.node->setLoopEnabled(object.loop);
-          node.gain->setValue(object.gain * gain);
-
-          node.node->enable();                      // FIXME:必要か??
-
-          node.node >> node.gain >> ctx->getOutput();
+          // node.gain->setValue(object.gain * gain);
+          
+          node.node >> ctx->getOutput();
+          node.node->start();
         }
       }
     };
 
     const auto& object = objects_[name];
     assign[object.type](name, object, gain);
-    // node >> ctx->getOutput();
   }
 
   void stop(const std::string& category) {
     if (category_node_.find(category) != category_node_.end()) {
       auto node = category_node_.at(category);
-      node->stop();
+      if (node->isEnabled()) {
+        node->stop();
+      }
     }
+    
+    disconnectInactiveNode();
   }
 
   void stopAll() {
     for (auto& it : category_node_) {
-      it.second->stop();
+      if (it.second->isEnabled()) {
+        it.second->stop();
+      }
     }
+
+    disconnectInactiveNode();
   }
 
   
@@ -207,8 +220,12 @@ public:
     // 無音モードになった瞬間から音を止める
     if (value) {
       for (auto& it : buffer_node_) {
-        it.second.node->stop();
+        if (it.second.node->isEnabled()) {
+          it.second.node->stop();
+        }
       }
+
+      disconnectInactiveNode();
     }
   }
 
@@ -218,8 +235,24 @@ public:
     // 無音モードになった瞬間から音を止める
     if (value) {
       for (auto& it : file_node_) {
-        it.second.node->stop();
+        if (it.second.node->isEnabled()) {
+          it.second.node->stop();
+        }
       }
+
+      disconnectInactiveNode();
+    }
+  }
+
+private:
+  // FIXME:iOSではNodeをOutputにたくさん繋げると、音量が小さくなる
+  void disconnectInactiveNode() {
+    auto output = ci::audio::Context::master()->getOutput();
+    DOUT << "active nodes:" << output->getNumConnectedInputs() << std::endl;
+
+    std::set<ci::audio::NodeRef> nodes = output->getInputs();
+    for (auto node : nodes) {
+      if (!node->isEnabled()) node->disconnect(output);
     }
   }
 
