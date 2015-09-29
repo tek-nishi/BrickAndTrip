@@ -58,6 +58,18 @@ public:
     file_silent_(false)
   {
     auto* ctx = ci::audio::Context::master();
+
+    {
+      // フレームあたりの処理数を増やす(標準は512)
+      auto device = ci::audio::Device::getDefaultOutput();
+      auto device_manager = ci::audio::Context::deviceManager();
+
+      size_t frames_per_block = device_manager->getFramesPerBlock(device);
+      DOUT << "FramesPerBlock:" << frames_per_block << std::endl;
+
+      device_manager->setFramesPerBlock(device, frames_per_block * 2);
+    }
+
     ctx->enable();
     
     // TIPS:文字列による処理の分岐をstd::mapとラムダ式で実装
