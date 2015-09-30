@@ -150,12 +150,12 @@ public:
 
   // スコア計算に必要な情報を格納
   void setScoreInfo(const int clear_time_score, const float clear_time_score_rate,
-                    const int item_score,
+                    const int item_score, const int item_perfect_score,
                     const float stage_collect,
                     const std::vector<int>& rank_rate_table) {
 
     game_score_ = GameScore(clear_time_score, clear_time_score_rate,
-                            item_score,
+                            item_score, item_perfect_score,
                             stage_collect,
                             rank_rate_table);
   }

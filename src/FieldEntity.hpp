@@ -1142,6 +1142,7 @@ private:
     records_.setScoreInfo(params["game.score.clear_time_score"].getValue<int>(),
                           params["game.score.clear_time_score_rate"].getValue<float>(),
                           params["game.score.item_score"].getValue<int>(),
+                          params["game.score.item_perfect_score"].getValue<int>(),
                           params["game.score.stage_collect"].getValue<float>(),
                           Json::getArray<int>(params["game.score.rank_rate_table"]));
 

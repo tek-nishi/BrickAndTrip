@@ -13,6 +13,7 @@ class GameScore {
 
   // 取得アイテムに関する情報
   int item_score_;
+  int item_perfect_score_;
 
   // ステージ補正
   float stage_collect_;
@@ -31,12 +32,13 @@ public:
   GameScore() = default;
   
   GameScore(const int clear_time_score, const float clear_time_score_rate,
-            const int item_score,
+            const int item_score, const int item_perfect_score,
             const float stage_collect,
             const std::vector<int>& rank_rate_table) :
     clear_time_score_(clear_time_score),
     clear_time_score_rate_(clear_time_score_rate),
     item_score_(item_score),
+    item_perfect_score_(item_perfect_score),
     stage_collect_(stage_collect),
     rank_rate_table_(rank_rate_table)
   {}
@@ -114,6 +116,9 @@ public:
         rank += 1;
       }
     }
+
+    // アイテム100% BONUS(ランク判定に寄与しない)
+    if (item_num == item_total_num_) total_score += item_perfect_score_;
 
     DOUT << "SCORE:" << total_score
          << " RANK:" << rank
