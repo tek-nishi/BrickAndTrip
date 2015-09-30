@@ -175,6 +175,8 @@ private:
     auto ease_func     = getEaseFunc(params_["stageclear.countup_ease_name"].getValue<std::string>());
     auto ease_duration = params_["stageclear.countup_ease_duration"].getValue<float>();
 
+    view_->getWidget("current-stage-num").setText(toFormatedString(current_stage_, 2), false);
+    
     {
       // constなのでatを使っている
       auto clear_time = boost::any_cast<double>(result.at("clear_time"));
