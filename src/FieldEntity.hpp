@@ -253,7 +253,7 @@ public:
 
     case CLEANUP:
       // gameover後、stage崩壊の完了判定
-      if (stage_.isFinishedCollapse()) {
+      if (stage_.isFinishedCollapse() && !isPickableCubeOnStage()) {
         mode_ = NONE;
 
         EventParam params = {
