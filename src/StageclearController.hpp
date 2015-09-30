@@ -233,7 +233,7 @@ private:
 
       // カウントアップ演出が終わったあとで最高得点演出
       options.updateFn([this]() {
-          view_->getWidget("score-result").setText(toFormatedString(score_(), 4), false);
+          view_->getWidget("score-result").setText(toFormatedString(score_(), 5), false);
         });
 
       if (boost::any_cast<bool>(result.at("highest_score"))) {
