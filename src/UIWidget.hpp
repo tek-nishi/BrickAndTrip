@@ -117,9 +117,9 @@ public:
   }
 
   
-  const std::string& getName() const { return name_; }
+  const std::string& getName() const noexcept { return name_; }
 
-  ci::Color getBaseColor() const {
+  ci::Color getBaseColor() const noexcept {
     if (hsv_) {
       const auto& v = base_color_hsv_();
       auto color = ci::Vec3f(std::fmod(v.x, 1.0f), v.y, v.z);
@@ -130,7 +130,7 @@ public:
     }
   }
   
-  ci::Color getTextColor() const {
+  ci::Color getTextColor() const noexcept {
     if (hsv_) {
       const auto& v = text_color_hsv_();
       auto color = ci::Vec3f(std::fmod(v.x, 1.0f), v.y, v.z);
@@ -141,26 +141,26 @@ public:
     }
   }
 
-  void setBaseColor(const ci::Color& color) {
+  void setBaseColor(const ci::Color& color) noexcept {
     base_color_ = color;
   }
   
-  void setBaseColor(const ci::Vec3f& color) {
+  void setBaseColor(const ci::Vec3f& color) noexcept {
     base_color_hsv_ = color;
   }
 
-  void setTextColor(const ci::Color& color) {
+  void setTextColor(const ci::Color& color) noexcept {
     text_color_ = color;
   }
 
-  void setTextColor(const ci::Vec3f& color) {
+  void setTextColor(const ci::Vec3f& color) noexcept {
     text_color_hsv_ = color;
   }
 
   
-  CubeText& getCubeText() { return text_; }
+  CubeText& getCubeText() noexcept { return text_; }
 
-  void setText(const std::string& text, const bool resize = true) {
+  void setText(const std::string& text, const bool resize = true) noexcept {
     size_t chara_num = text_.getNumCharactors();
     
     text_.setText(text);
@@ -178,23 +178,23 @@ public:
   }
   
 
-  bool isDisp() const { return disp_; }
-  void setDisp(const bool value) { disp_ = value; }
+  bool isDisp() const noexcept { return disp_; }
+  void setDisp(const bool value) noexcept { disp_ = value; }
   
-  bool isActive() const { return active_; }
-  void setActive(const bool value) {
+  bool isActive() const noexcept { return active_; }
+  void setActive(const bool value) noexcept {
     // touch_eventがない場合は常にfalse
     active_ = touch_event_ ? value : false;
   }
 
-  bool isTouchEvent() const { return touch_event_; }
-  const std::string& eventMessage() const { return event_message_; }
+  bool isTouchEvent() const noexcept { return touch_event_; }
+  const std::string& eventMessage() const noexcept { return event_message_; }
 
-  bool isTouchSound() const { return touch_sound_; }
-  const std::string& soundMessage() const { return sound_message_; }
+  bool isTouchSound() const noexcept { return touch_sound_; }
+  const std::string& soundMessage() const noexcept { return sound_message_; }
 
   
-  bool intersects(const ci::Ray& ray) const {
+  bool intersects(const ci::Ray& ray) const noexcept {
     auto pos = pos_() + layout_->getPos();
     auto bbox = ci::AxisAlignedBox3f(pos + text_.minPos(), pos + text_.maxPos());
 
@@ -202,7 +202,7 @@ public:
   }
 
 
-  void draw(FontHolder& fonts, ModelHolder& models) {
+  void draw(FontHolder& fonts, ModelHolder& models) noexcept {
     CubeTextDrawer::draw(text_, fonts.getFont(font_name_),
                          models.get(model_),
                          pos_() + layout_->getPos(), scale_(),
@@ -219,14 +219,14 @@ public:
   }
 
 
-  void startTween(const std::string& name) {
+  void startTween(const std::string& name) noexcept {
     if (!params_.hasChild("tween." + name)) return;
     
     const auto& tween = params_["tween." + name];
     makeTween(name, tween);
   }
 
-  void resetTweens() {
+  void resetTweens() noexcept {
     pos_.stop();
     scale_.stop();
     for (auto& r : rotate_) {
@@ -246,7 +246,7 @@ public:
 
   
 private:
-  void makeTween(const std::string& name, const ci::JsonTree& tween) {
+  void makeTween(const std::string& name, const ci::JsonTree& tween) noexcept {
     std::set<std::string> apply;
     
     const auto& body = tween["body"];
@@ -305,7 +305,8 @@ private:
   }
 
   static void setRotationTween(ci::Timeline& timeline,
-                               std::vector<ci::Anim<float> >& values, const ci::JsonTree& param, const bool is_first) {
+                               std::vector<ci::Anim<float> >& values, const ci::JsonTree& param,
+                               const bool is_first) noexcept {
     float delta_interval = Json::getValue(param, "interval", 0.0f);
     float interval       = 0.0f;
     

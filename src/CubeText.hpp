@@ -42,33 +42,33 @@ public:
   }
 
 
-  void setText(const std::string& text) {
+  void setText(const std::string& text) noexcept {
     text_.clear();
     makeText(text);
   }
   
-  const std::vector<std::string>& text() const { return text_; }
+  const std::vector<std::string>& text() const noexcept { return text_; }
 
-  float size() const { return size_; }
-  float spacing() const { return spacing_; }
+  float size() const noexcept { return size_; }
+  float spacing() const noexcept { return spacing_; }
 
-  size_t getNumCharactors() const { return text_.size(); }
+  size_t getNumCharactors() const noexcept { return text_.size(); }
   
-  ci::Vec3f textSize() const {
+  ci::Vec3f textSize() const noexcept {
     return max_pos_ - min_pos_;
   }
 
-  float textWidth() const {
+  float textWidth() const noexcept {
     return max_pos_.x - min_pos_.x; 
   }
 
 
-  const ci::Vec3f& minPos() const { return min_pos_; }
-  const ci::Vec3f& maxPos() const { return max_pos_; }
+  const ci::Vec3f& minPos() const noexcept { return min_pos_; }
+  const ci::Vec3f& maxPos() const noexcept { return max_pos_; }
   
   
 private:
-  void makeText(const std::string& text) {
+  void makeText(const std::string& text) noexcept {
     // 文字列を分解
     size_t text_length = strlen(text);
     for (size_t it = 0; it < text_length; it += chara_num_) {

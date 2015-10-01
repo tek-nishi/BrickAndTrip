@@ -8,11 +8,11 @@
 
 namespace ngs {
 
-bool canCaptureTopView();
-bool canCapture(UIView* view);
+bool canCaptureTopView() noexcept;
+bool canCapture(UIView* view) noexcept;
 
-UIImage* captureTopView();
-UIImage* captureView(UIView* view);
+UIImage* captureTopView() noexcept;
+UIImage* captureView(UIView* view) noexcept;
 
 }
 

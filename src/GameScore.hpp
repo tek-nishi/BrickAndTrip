@@ -46,7 +46,7 @@ public:
   
   void setStageInfo(const int stage_num,
                     const int stage_length, const float build_speed,
-                    const int item_total_num) {
+                    const int item_total_num) noexcept {
     stage_num_      = stage_num;
     stage_length_   = stage_length;
     build_speed_    = build_speed;
@@ -57,7 +57,7 @@ public:
 
 
   std::pair<int, int> operator() (const double clear_time,
-                                  const int item_num) {
+                                  const int item_num) noexcept {
     int total_score = 0;
     // 最高スコア(理論値)
     int highest_total_score = 0;

@@ -10,7 +10,7 @@
 namespace cinder {
 namespace gl {
 
-void drawRange( const VboMesh &vbo, const GLsizei indexCount) {
+void drawRange( const VboMesh &vbo, const GLsizei indexCount) noexcept {
 	vbo.enableClientStates();
 	vbo.bindAllData();
 	
@@ -20,7 +20,7 @@ void drawRange( const VboMesh &vbo, const GLsizei indexCount) {
 	vbo.disableClientStates();
 }
 
-void drawArrays( const VboMesh &vbo, const GLsizei count ) {
+void drawArrays( const VboMesh &vbo, const GLsizei count ) noexcept {
 	vbo.enableClientStates();
 	vbo.bindAllData();
   
@@ -30,7 +30,7 @@ void drawArrays( const VboMesh &vbo, const GLsizei count ) {
 	vbo.disableClientStates();
 }
 
-void draw(const VboMesh &vbo) {
+void draw(const VboMesh &vbo) noexcept {
 	if( vbo.getNumIndices() > 0 )
 		drawRange( vbo, (GLsizei)vbo.getNumIndices() );
 	else

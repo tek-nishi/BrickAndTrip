@@ -53,7 +53,7 @@ public:
   }
 
 
-  FT_Library handle() { return library_; }
+  FT_Library handle() noexcept { return library_; }
   
 };
 
@@ -90,7 +90,7 @@ public:
     FT_Done_Face(face_);
   }
 
-  void setSize(const int size) {
+  void setSize(const int size) noexcept {
     size_ = size;
 
     // FT_Set_Pixel_Sizesは横サイズ基準でサイズを決めるので、
@@ -117,7 +117,7 @@ public:
 
     
   // 一文字レンダリング
-  ci::Surface8u rendering(const char32_t chara) {
+  ci::Surface8u rendering(const char32_t chara) noexcept {
     FT_Load_Char(face_, chara, FT_LOAD_RENDER);
     FT_GlyphSlot slot = face_->glyph;
     auto bitmap = slot->bitmap;
@@ -143,7 +143,7 @@ public:
   }
 
   // 文字列をレンダリング
-  ci::Surface8u rendering(const std::string& text) {
+  ci::Surface8u rendering(const std::string& text) noexcept {
     int chara_num = int(strlen(text));
 
     ci::Surface8u surface(size_ * chara_num, size_, true);

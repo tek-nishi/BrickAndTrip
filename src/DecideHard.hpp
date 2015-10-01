@@ -14,7 +14,7 @@ namespace ngs {
 
 #if defined(CINDER_COCOA_TOUCH)
 
-std::string decideHard() {
+std::string decideHard() noexcept {
   utsname system_info;
   uname(&system_info);
 
@@ -23,19 +23,19 @@ std::string decideHard() {
 
 #elif defined(CINDER_MAC)
 
-std::string decideHard() {
+std::string decideHard() noexcept {
   return std::string("OSX");
 }
 
 #elif defined(CINDER_MSW)
 
-std::string decideHard() {
+std::string decideHard() noexcept {
   return std::string("Windows");
 }
 
 #else
 
-std::string decideHard() {
+std::string decideHard() noexcept {
   return std::string("unknown");
 }
 

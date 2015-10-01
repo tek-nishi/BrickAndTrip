@@ -22,7 +22,7 @@ public:
   { }
 
   // FIXME:constにしたいが、Cinder側で付け忘れている:D
-  float operator()(float t) {
+  float operator()(float t) noexcept {
     t *= 2.0f;
     if (t > 1.0f) t = 2.0f - t;
     return ease_(t);
@@ -41,7 +41,7 @@ float ease_outin_elastic_a = 2;
 float ease_outin_elastic_b = 1;
 
 
-ci::EaseFn getEaseFunc(const std::string& name) {
+ci::EaseFn getEaseFunc(const std::string& name) noexcept {
   static std::map<std::string, ci::EaseFn> tbl = {
     { "EaseInQuad", ci::EaseInQuad() },
     { "EaseOutQuad", ci::EaseOutQuad() },

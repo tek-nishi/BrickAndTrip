@@ -119,14 +119,14 @@ public:
   }
   
 
-  void setCenterPosition(const ci::Vec3i& pos) {
+  void setCenterPosition(const ci::Vec3i& pos) noexcept {
     
     bbox_min_ = bbox_min_orig_ + ci::Vec3f(pos);
     bbox_max_ = bbox_max_orig_ + ci::Vec3f(pos);
   }
 
 
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
     for (auto& cube : cubes_) {
       if (cube.is_tween) continue;
 
@@ -182,15 +182,15 @@ public:
   }
 
 
-  const std::vector<Cube>& cubes() const { return cubes_; }
+  const std::vector<Cube>& cubes() const noexcept { return cubes_; }
 
-  std::pair<ci::Vec3f, ci::Vec3f> getBbox() const {
+  std::pair<ci::Vec3f, ci::Vec3f> getBbox() const noexcept {
     return std::make_pair(bbox_min_, bbox_max_);
   }
   
 
 private:
-  void startTween(const std::string& name, Cube& cube) {
+  void startTween(const std::string& name, Cube& cube) noexcept {
     auto tween_params = params_["game.bg.tween." + name];
 
     std::set<std::string> applyed_targets;

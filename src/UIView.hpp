@@ -89,11 +89,11 @@ public:
   }
 
 
-  bool isDisp() const { return disp_; }
-  void setDisp(const bool value) { disp_ = value; }
+  bool isDisp() const noexcept { return disp_; }
+  void setDisp(const bool value) noexcept { disp_ = value; }
   
-  bool isActive() const { return active_; }
-  void setActive(const bool active) {
+  bool isActive() const noexcept { return active_; }
+  void setActive(const bool active) noexcept {
     active_ = active;
 
     // OFFにする時はタッチ中のWidgetの後処理を
@@ -104,7 +104,7 @@ public:
   }
   
   
-  void draw(FontHolder& fonts, ModelHolder& models) {
+  void draw(FontHolder& fonts, ModelHolder& models) noexcept {
 #ifdef DEBUG
     if (hide_) return;
 #endif
@@ -124,14 +124,14 @@ public:
   }
 
   
-  void startWidgetTween(const std::string& name) {
+  void startWidgetTween(const std::string& name) noexcept {
     for (auto& widget : widgets_) {
       widget->startTween(name);
     }
   }
 
   
-  UIWidget& getWidget(const std::string& name) {
+  UIWidget& getWidget(const std::string& name) noexcept {
     auto it = std::find_if(std::begin(widgets_), std::end(widgets_),
                            [name](const std::unique_ptr<UIWidget>& w) {
                              return w->getName() == name;
@@ -140,7 +140,7 @@ public:
     return *(*it);
   }
 
-  void resetWidgetTween() {
+  void resetWidgetTween() noexcept {
     for (auto& widget : widgets_) {
       widget->resetTweens();
     }
@@ -148,7 +148,7 @@ public:
 
   
 private:
-  void touchesBegan(const Connection&, std::vector<Touch>& touches) {
+  void touchesBegan(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!active_ || touching_) return;
 
     for (const auto& touch : touches) {
@@ -174,7 +174,7 @@ private:
     }
   }
   
-  void touchesMoved(const Connection&, std::vector<Touch>& touches) {
+  void touchesMoved(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!touching_) return;
 
     auto it = std::find(std::begin(touches), std::end(touches), touching_id_);
@@ -191,7 +191,7 @@ private:
     }
   }
   
-  void touchesEnded(const Connection&, std::vector<Touch>& touches) {
+  void touchesEnded(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!touching_) return;
     
     auto it = std::find(std::begin(touches), std::end(touches), touching_id_);

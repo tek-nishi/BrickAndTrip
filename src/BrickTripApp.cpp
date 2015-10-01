@@ -57,7 +57,7 @@ class BrickTripApp : public AppNative,
   std::unique_ptr<ControllerBase> controller_;
 
   
-  void prepareSettings(Settings* settings) override {
+  void prepareSettings(Settings* settings) noexcept override {
     // アプリ起動時の設定はここで処理する
 #if defined (OBFUSCATION_PARAMS) && defined (DEBUG)
     Params::convert("params.json");
@@ -92,7 +92,7 @@ class BrickTripApp : public AppNative,
   }
   
 
-	void setup() override {
+	void setup() noexcept override {
     beginAudioSession();
     
     Rand::randomize();
@@ -146,7 +146,7 @@ class BrickTripApp : public AppNative,
       timeline().getCurrentTime() + 1.0f);
   }
   
-  void shutdown() override {
+  void shutdown() noexcept override {
     DOUT << "shutdown()" << std::endl;
     
     timeline_->clear();
@@ -155,7 +155,7 @@ class BrickTripApp : public AppNative,
 
   
   // FIXME:Windowsではtouchイベントとmouseイベントが同時に呼ばれる
-	void mouseDown(MouseEvent event) override {
+	void mouseDown(MouseEvent event) noexcept override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -164,7 +164,7 @@ class BrickTripApp : public AppNative,
     touch_event_.signal("touches-began", touches);
   }
   
-	void mouseDrag(MouseEvent event) override {
+	void mouseDrag(MouseEvent event) noexcept override {
     if (!event.isLeftDown()) return;
 
     mouse_pos_ = event.getPos();
@@ -173,7 +173,7 @@ class BrickTripApp : public AppNative,
     touch_event_.signal("touches-moved", touches);
   }
   
-	void mouseUp(MouseEvent event) override {
+	void mouseUp(MouseEvent event) noexcept override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -183,24 +183,24 @@ class BrickTripApp : public AppNative,
   }
 
 
-  void touchesBegan(TouchEvent event) override {
+  void touchesBegan(TouchEvent event) noexcept override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-began", touches);
   }
   
-  void touchesMoved(TouchEvent event) override {
+  void touchesMoved(TouchEvent event) noexcept override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-moved", touches);
   }
   
-  void touchesEnded(TouchEvent event) override {
+  void touchesEnded(TouchEvent event) noexcept override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-ended", touches);
   }
 
 
 #ifdef DEBUG
-  void keyDown(KeyEvent event) override {
+  void keyDown(KeyEvent event) noexcept override {
     char chara = event.getChar();
     int  code  = event.getCode();
 
@@ -269,7 +269,7 @@ class BrickTripApp : public AppNative,
     }
   }
   
-  void keyUp(KeyEvent event) override {
+  void keyUp(KeyEvent event) noexcept override {
     char chara = event.getChar();
     int  code  = event.getCode();
 
@@ -281,12 +281,12 @@ class BrickTripApp : public AppNative,
 #endif
 
 
-  void resize() override {
+  void resize() noexcept override {
     controller_->resize();
   }
   
   
-	void update() override {
+	void update() noexcept override {
     double elapsed_seconds = getElapsedSeconds();
 
     // 経過時間が大きな値になりすぎないよう調整
@@ -306,12 +306,12 @@ class BrickTripApp : public AppNative,
     elapsed_seconds_ = elapsed_seconds;
   }
   
-	void draw() override {
+	void draw() noexcept override {
     controller_->draw(*fonts_, *models_);
   }
 
 
-  void setupFonts() {
+  void setupFonts() noexcept {
     fonts_ = std::unique_ptr<FontHolder>(new FontHolder);
 
     const auto& fonts_params = params_["app.fonts"];
@@ -330,7 +330,7 @@ class BrickTripApp : public AppNative,
     }
   }
 
-  void setupModels() {
+  void setupModels() noexcept {
     models_ = std::unique_ptr<ModelHolder>(new ModelHolder);
 
     for(const auto& p : params_["app.models"]) {
@@ -345,7 +345,7 @@ class BrickTripApp : public AppNative,
   }
 
   
-  std::vector<ngs::Touch> createTouchInfo(const MouseEvent& event) {
+  std::vector<ngs::Touch> createTouchInfo(const MouseEvent& event) noexcept {
     // TouchEvent同様、直前の位置も取れるように
     mouse_prev_pos_ = mouse_pos_;
     mouse_pos_ = event.getPos();
@@ -360,7 +360,7 @@ class BrickTripApp : public AppNative,
     return t;
   }
   
-  static std::vector<ngs::Touch> createTouchInfo(const TouchEvent& event) {
+  static std::vector<ngs::Touch> createTouchInfo(const TouchEvent& event) noexcept {
     std::vector<ngs::Touch> touches;
     
     const auto& event_touches = event.getTouches();
@@ -377,7 +377,7 @@ class BrickTripApp : public AppNative,
     return touches;
   }
 
-  static void setEasingParams(const JsonTree& params) {
+  static void setEasingParams(const JsonTree& params) noexcept {
     ease_in_elastic_a = params["easing.ease_in_elastic_a"].getValue<float>();
     ease_in_elastic_b = params["easing.ease_in_elastic_b"].getValue<float>();
 

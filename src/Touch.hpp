@@ -21,11 +21,11 @@ struct Touch {
 
 
   // std::findを利用するための定義
-  bool operator== (const Touch& rhs) const {
+  bool operator== (const Touch& rhs) const noexcept {
     return id == rhs.id;
   }
 
-  bool operator== (const u_int rhs_id) const {
+  bool operator== (const u_int rhs_id) const noexcept {
     return id == rhs_id;
   }
   

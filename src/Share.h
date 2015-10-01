@@ -12,13 +12,13 @@ namespace Share {
 
 #if defined(CINDER_COCOA_TOUCH)
 
-bool canPost();
-void post(const std::string& text, UIImage* image, std::function<void()> complete_callback);
+bool canPost() noexcept;
+void post(const std::string& text, UIImage* image, std::function<void()> complete_callback) noexcept;
 
 #else
 
 template<typename T>
-bool canPost(const T) { return false; }
+bool canPost(const T) noexcept { return false; }
 
 #endif
 

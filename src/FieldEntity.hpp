@@ -182,7 +182,7 @@ public:
   }
 
 
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
     records_.progressPlayTimeCurrntGame(progressing_seconds);
 
     items_.update(progressing_seconds, stage_);
@@ -289,7 +289,7 @@ public:
 
 
   // 最初のStageとStartLine、PickableCubeを準備
-  void setupStartStage() {
+  void setupStartStage() noexcept {
     auto stage_info = addCubeStage("startline.json");
     next_start_line_z_ = stage_info.top_z - 1;
 
@@ -346,7 +346,7 @@ public:
   }
 
   // Stageの全Buildを始める
-  void startStageBuild() {
+  void startStageBuild() noexcept {
     stage_.openStartLine();
     items_.clear();
     moving_cubes_.clear();
@@ -407,14 +407,14 @@ public:
   }
 
   // StageのFinishLineまでの崩壊を始める
-  void startStageCollapse() {
+  void startStageCollapse() noexcept {
     if (!stage_.isStartedCollapse()) {
       stage_.startCollapseStage(finish_line_z_ - 1);
     }
   }
   
   // FinishLineまで一気に崩壊 && FinishLineを一気に生成
-  void completeBuildAndCollapseStage() {
+  void completeBuildAndCollapseStage() noexcept {
     stage_.stopBuildAndCollapse();
     stage_.startBuildStage(finish_rate_, false);
     stage_.startCollapseStage(finish_line_z_ - 1, finish_rate_);
@@ -483,7 +483,7 @@ public:
   }
 
   // GameOver時の処理
-  void gameover() {
+  void gameover() noexcept {
     setRestartLine();
     
     stopBuildAndCollapse();
@@ -503,13 +503,13 @@ public:
   }
 
   // GameOver時などで生成&崩壊を止める
-  void stopBuildAndCollapse() {
+  void stopBuildAndCollapse() noexcept {
     stage_.stopBuildAndCollapse();
     mode_ = NONE;
   }
 
   // 中断
-  void abortGame() {
+  void abortGame() noexcept {
     setRestartLine();
     
     game_aborted_ = true;
@@ -518,7 +518,7 @@ public:
   }
 
   // 強制崩壊
-  void collapseStage() {
+  void collapseStage() noexcept {
     stage_.startCollapseStage(next_start_line_z_);
 
     first_started_pickable_ = true;
@@ -528,7 +528,7 @@ public:
   }
   
   // リスタート前のClean-up
-  void cleanupField(const bool continue_game = false) {
+  void cleanupField(const bool continue_game = false) noexcept {
     event_timeline_->clear();
     items_.cleanup();
     moving_cubes_.cleanup();
@@ -560,14 +560,14 @@ public:
     is_continued_ = continue_game;
   }
   
-  void restart() {
+  void restart() noexcept {
     stage_.cleanup();
     stage_.restart(restart_z_);
     mode_ = NONE;
   }
 
 
-  void pickPickableCube(const u_int id) {
+  void pickPickableCube(const u_int id) noexcept {
     auto it = findPickableCube(id);
     assert(it);
     auto& cube = *it;
@@ -575,7 +575,7 @@ public:
     cube->startPickingColor();
   }
 
-  void movePickableCube(const u_int id, const int direction, const int speed) {
+  void movePickableCube(const u_int id, const int direction, const int speed) noexcept {
     auto it = findPickableCube(id);
     assert(it);
     auto& cube = *it;
@@ -603,13 +603,13 @@ public:
     }
   }
 
-  void cancelPickPickableCubes() {
+  void cancelPickPickableCubes() noexcept {
     for (auto& cube : pickable_cubes_) {
       cube->endPickingColor();
     }
   }
 
-  void movedPickableCube(const u_int id, const ci::Vec3i& block_pos) {
+  void movedPickableCube(const u_int id, const ci::Vec3i& block_pos) noexcept {
     // switch踏んだ処理
     const auto* const targets = switches_.startSwitch(block_pos);
     if (targets) {
@@ -635,14 +635,14 @@ public:
   }
 
   // Ttile画面での画面遷移とゲーム開始操作が被るので用意した
-  void enablePickableCubeMovedEvent(const bool enable = true) {
+  void enablePickableCubeMovedEvent(const bool enable = true) noexcept {
     for (auto& cube : pickable_cubes_) {
       cube->enableMovedEvent(enable);
     }
   }
   
   // finish-line上のPickableCubeを生成
-  void entryPickableCubes() {
+  void entryPickableCubes() noexcept {
     // 再開用に位置を保存
     storePickableCubePosition(finish_line_z_);
     
@@ -660,7 +660,7 @@ public:
   
 #ifdef DEBUG
   // bottom lineに１つ召喚
-  void entryPickableCube() {
+  void entryPickableCube() noexcept {
     ci::Vec2i entry_pos = Json::getVec2<int>(params_["game.pickable.entry_pos"]);
     // entry_pos.y += stage_.getActiveBottomZ();
     
@@ -669,7 +669,7 @@ public:
   }
 #endif
 
-  void entryStageObjects(const int active_z) {
+  void entryStageObjects(const int active_z) noexcept {
     items_.entryItemCube(active_z);
     moving_cubes_.entryCube(active_z);
     falling_cubes_.entryCube(active_z);
@@ -677,12 +677,12 @@ public:
     oneways_.entryOneways(active_z);
   }
 
-  void pickupedItemCube() {
+  void pickupedItemCube() noexcept {
     records_.increaseItemNumCurrentGame();
   }
 
   // PickableCubeのIdle
-  void startIdlePickableCube(const u_int id) {
+  void startIdlePickableCube(const u_int id) noexcept {
     auto it = findPickableCube(id);
     if (!it) return;
 
@@ -709,19 +709,19 @@ public:
     cube->startIdleMotion(directions);
   }
 
-  void enableRecordPlay() {
+  void enableRecordPlay() noexcept {
     records_.enableRecordCurrentGame();
   }
 
   // すべてのPickableCubeを昇天
-  void riseAllPickableCube() {
+  void riseAllPickableCube() noexcept {
     for (auto& cube : pickable_cubes_) {
       cube->rise();
     }
   }
   
   // 現在のFieldの状態を作成
-  Field fieldData() {
+  Field fieldData() noexcept {
 #ifdef DEBUG
     auto bg_bbox = bg_.getBbox();
 #endif
@@ -746,22 +746,22 @@ public:
     return field;
   }
 
-  bool isContinuedGame() const {
+  bool isContinuedGame() const noexcept {
     return records_.isContinuedGame();
   }
 
-  int getStageTopZ() const {
+  int getStageTopZ() const noexcept {
     return stage_.getTopZ();
   }
   
-  void setRestartLine() {
+  void setRestartLine() noexcept {
     restart_z_ = std::max(stage_.getActiveBottomZ() - 5, 0);
   }
   
   
 private:
   // TODO:参照の無効値をあらわすためにboost::optionalを利用
-  boost::optional<PickableCubePtr&> findPickableCube(const u_int id) {
+  boost::optional<PickableCubePtr&> findPickableCube(const u_int id) noexcept {
     auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
                            [id](const PickableCubePtr& obj) {
                              return *obj == id;
@@ -776,7 +776,7 @@ private:
   void entryPickableCube(const ci::Vec2i& entry_pos,
                          const int offset_z,
                          const float delay,
-                         const bool random, const bool sleep) {
+                         const bool random, const bool sleep) noexcept {
     event_timeline_->add([this, entry_pos, offset_z, random, sleep]() {
         const auto& stage_width = stage_.getStageWidth();
         int entry_y = entry_pos.y + offset_z;
@@ -803,7 +803,7 @@ private:
       }, event_timeline_->getCurrentTime() + delay);
   }
 
-  void entryContinuedPickableCube(const int offset_z) {
+  void entryContinuedPickableCube(const int offset_z) noexcept {
     assert((start_pickable_entry_.size() > 0) && "there is no continued PickableCube.");
 
     float delay = params_["game.pickable.entry_start_delay"].getValue<float>();
@@ -814,7 +814,7 @@ private:
     }
   }
 
-  void storePickableCubePosition(const int offset_z) {
+  void storePickableCubePosition(const int offset_z) noexcept {
     start_pickable_entry_.clear();
 
     for (const auto& cube : pickable_cubes_) {
@@ -826,7 +826,7 @@ private:
   }
 
   
-  StageInfo addCubeStage(const std::string& path) {
+  StageInfo addCubeStage(const std::string& path) noexcept {
     auto stage = Json::readFromFile(path);
     int current_z = stage_.getTopZ();
 
@@ -859,7 +859,7 @@ private:
 
 
   // 全てのPickableCubeの移動開始
-  void decideEachPickableCubeMoving() {
+  void decideEachPickableCubeMoving() noexcept {
     for (auto& cube : pickable_cubes_) {
       if (cube->willRotationMove()) {
         if (canPickableCubeMove(cube, cube->blockPosition() + cube->moveVector())) {
@@ -875,7 +875,7 @@ private:
   }
 
   // PickableCubeが隣接するか判定
-  void setAdjoinOtherPickableCube() {
+  void setAdjoinOtherPickableCube() noexcept {
     for (auto& cube : pickable_cubes_) {
       static ci::Vec3i offset_table[] = {
         {  1, 0,  0 },
@@ -897,14 +897,14 @@ private:
     }
   }
 
-  void pickupStageItems(const PickableCubePtr& cube) {
+  void pickupStageItems(const PickableCubePtr& cube) noexcept {
     auto result = items_.canGetItemCube(cube->blockPosition());
     if (result.first) {
       items_.pickupItemCube(result.second);
     }
   }
 
-  bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) const {
+  bool canPickableCubeMove(const PickableCubePtr& cube, const ci::Vec3i& block_pos) const noexcept {
     // 移動先に他のPickableCubeがいたら移動できない
     for (const auto& other_cube : pickable_cubes_) {
       // 自分自身との判定はスキップ
@@ -931,7 +931,7 @@ private:
     return height.first && (height.second == block_pos.y);
   }
 
-  bool isPickableCube(const ci::Vec3i& block_pos) const {
+  bool isPickableCube(const ci::Vec3i& block_pos) const noexcept {
     for (auto& cube : pickable_cubes_) {
       const auto& pos = cube->blockPosition();
       
@@ -943,7 +943,7 @@ private:
   }
   
   // PickableCubeの落下判定
-  void decideEachPickableCubeFalling() {
+  void decideEachPickableCubeFalling() noexcept {
     for (auto& cube : pickable_cubes_) {
       if (!cube->isOnStage() || cube->isMoving()) continue;
       
@@ -968,7 +968,7 @@ private:
   }
 
   // ドッスンに踏まれてないか判定
-  void decideEachPickableCubeAlive() {
+  void decideEachPickableCubeAlive() noexcept {
     for (auto& cube : pickable_cubes_) {
       if (!cube->isOnStage() || cube->isPressed()) continue;
 
@@ -993,7 +993,7 @@ private:
 
   
   // １つでもPickableCubeがStage上にいるか判定
-  bool isPickableCubeOnStage() const {
+  bool isPickableCubeOnStage() const noexcept {
     for (auto& cube : pickable_cubes_) {
       // sleep中や潰されたのは勘定しない
       if (cube->isSleep() || cube->isPressed()) continue;
@@ -1007,7 +1007,7 @@ private:
   }
 
   
-  bool isPickableCubeStarted() const {
+  bool isPickableCubeStarted() const noexcept {
     if (first_started_pickable_ || pickable_cubes_.empty()) return false;
 
     for (const auto& cube : pickable_cubes_) {
@@ -1025,7 +1025,7 @@ private:
   }
 
 
-  std::vector<ci::Vec3i> gatherPickableCubePosition() const {
+  std::vector<ci::Vec3i> gatherPickableCubePosition() const noexcept {
     std::vector<ci::Vec3i> pos;
     
     for (const auto& cube : pickable_cubes_) {
@@ -1039,7 +1039,7 @@ private:
   
 #if 0
   // すべてのPickableCubeがStartしたか判定
-  bool isAllPickableCubesStarted() {
+  bool isAllPickableCubesStarted() noexcept {
     if (pickable_cubes_.empty()) return false;
 
     bool started = true;
@@ -1062,7 +1062,7 @@ private:
 #endif
 
   // すべてのPickableCubeがFinishしたか判定
-  bool isAllPickableCubesFinished() {
+  bool isAllPickableCubesFinished() noexcept {
     if (pickable_cubes_.empty()) return false;
 
     bool finished = true;
@@ -1089,7 +1089,7 @@ private:
   }
 
 
-  int getPickableCubeTopZ() const {
+  int getPickableCubeTopZ() const noexcept {
     int top_z = 0;
     for (const auto& cube : pickable_cubes_) {
       top_z = std::max(cube->blockPosition().z, top_z);
@@ -1100,7 +1100,7 @@ private:
 
 #if 0
   // stageの生成速度を調整
-  void controlStageBuildSpeed() {
+  void controlStageBuildSpeed() noexcept {
     int active_top_z = stage_.getActiveTopZ();
     int pickable_top_z = getPickableCubeTopZ();
     
@@ -1114,7 +1114,7 @@ private:
 #endif
 
 
-  void startSwitchTargets(const std::vector<ci::Vec3i>& targets) {
+  void startSwitchTargets(const std::vector<ci::Vec3i>& targets) noexcept {
     for (const auto& target : targets) {
       stage_.moveStageCube(target);
       moving_cubes_.moveCube(target);
@@ -1122,7 +1122,7 @@ private:
     }
   }
 
-  bool canContinue() const {
+  bool canContinue() const noexcept {
     // 最終ステージはcontinue不可
     // if (stage_num_ == total_stage_num_) return false;
     
@@ -1135,7 +1135,7 @@ private:
   }
 
   
-  void setupRecords(const ci::JsonTree& params) {
+  void setupRecords(const ci::JsonTree& params) noexcept {
     records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
                          params["game.total_stage_num"].getValue<size_t>());
     
@@ -1183,11 +1183,11 @@ private:
     }
   }
 
-  std::string getStagePath(const int stage_num) {
+  std::string getStagePath(const int stage_num) noexcept {
     return params_["game.stage_path"][stage_num].getValue<std::string>();
   }
 
-  int getStageItemNum(const int stage_index) {
+  int getStageItemNum(const int stage_index) noexcept {
     auto path  = getStagePath(stage_index);
     auto stage = Json::readFromFile(path);
 
@@ -1196,7 +1196,7 @@ private:
     return int(stage["items"].getNumChildren());
   }
   
-  int calcEntryPickableCube(const int stage_num) {
+  int calcEntryPickableCube(const int stage_num) noexcept {
     int entry_num = getPickableCubeEntryNum("startline.json");
     for (int i = 0; i < stage_num; ++i) {
       entry_num += getPickableCubeEntryNum(getStagePath(i));
@@ -1204,7 +1204,7 @@ private:
     return entry_num;
   }
   
-  static int getPickableCubeEntryNum(const std::string& path) {
+  static int getPickableCubeEntryNum(const std::string& path) noexcept {
     auto stage = Json::readFromFile(path);
     return Json::getValue(stage, "pickable", 0);
   }

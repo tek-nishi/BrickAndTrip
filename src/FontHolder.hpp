@@ -23,7 +23,7 @@ public:
   FontHolder() = default;
 
   
-  TextureFont& getFont(const std::string& name) {
+  TextureFont& getFont(const std::string& name) noexcept {
     auto it = fonts_.find(name);
     if (it == std::end(fonts_)) {
       // 見つからなかった場合は標準名のFontを探す
@@ -37,13 +37,13 @@ public:
   
   void addFont(const std::string& name, const std::string& path,
                const int size,
-               const ci::Vec3f& scale, const ci::Vec3f& offset) {
+               const ci::Vec3f& scale, const ci::Vec3f& offset) noexcept {
     fonts_.emplace(std::piecewise_construct,
                    std::forward_as_tuple(name),
                    std::forward_as_tuple(path, font_creator_, size, scale, offset));
   }
 
-  void setDefaultFont(const std::string& name) {
+  void setDefaultFont(const std::string& name) noexcept {
     // TIPS:名前が見つからない場合は例外で止まる
     fonts_.at(name);
     default_font_name_ = name;

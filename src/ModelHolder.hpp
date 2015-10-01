@@ -21,14 +21,14 @@ public:
 
   void add(const std::string& name, const std::string& path,
            const bool has_normals = true, const bool has_uvs = true,
-           const bool has_indices = true) {
+           const bool has_indices = true) noexcept {
     models_.emplace(std::piecewise_construct,
                     std::forward_as_tuple(name),
                     std::forward_as_tuple(path, has_normals, has_uvs, has_indices));
   }
 
   
-  const Model& get(const std::string& name) const {
+  const Model& get(const std::string& name) const noexcept {
     return models_.at(name);
   }
 

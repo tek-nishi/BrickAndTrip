@@ -185,7 +185,7 @@ public:
   }
 
   
-  void resize() {
+  void resize() noexcept {
     float aspect = ci::app::getWindowAspectRatio();
     camera_.setAspectRatio(aspect);
     if (aspect < 1.0) {
@@ -208,14 +208,14 @@ public:
 
 
   // 時間経過での計算が必要なもの
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
     // 経過時間だけ記録しておいて、drawで計算する
     progressing_seconds_ = progressing_seconds;
   }
 
   
   // Fieldの表示
-  void draw(const Field& field, ModelHolder& models) {
+  void draw(const Field& field, ModelHolder& models) noexcept {
     // FIXME:drawの中で、PikableCubeからTouch情報を生成している
     makeTouchCubeInfo(field.pickable_cubes);
     updateCameraTarget(field.pickable_cubes);
@@ -287,32 +287,32 @@ public:
   }
 
 
-  void cancelPicking(const u_int cube_id) {
+  void cancelPicking(const u_int cube_id) noexcept {
     boost::remove_erase_if(pickings_,
                            [cube_id](const Pick& pick) {
                              return pick.cube_id == cube_id;
                            });
   }
 
-  void calcelAllPickings() {
+  void calcelAllPickings() noexcept {
     pickings_.clear();
   }
 
   
   // Touch入力の有効・無効
-  void enableTouchInput(const bool input = true) {
+  void enableTouchInput(const bool input = true) noexcept {
     DOUT << "enableTouchInput:" << input << std::endl;
     if (input != touch_input_) calcelAllPickings();
     touch_input_ = input;
   }
 
   
-  void resetCamera(int offset_z) {
+  void resetCamera(int offset_z) noexcept {
     new_target_point_ = Json::getVec3<float>(params_["game_view.camera.target_point"]);
     new_target_point_.z += float(offset_z);
   }
 
-  void setStageBgColor(const ci::Color& color) {
+  void setStageBgColor(const ci::Color& color) noexcept {
     animation_timeline_->apply(&bg_color_,
                                color,
                                bg_tween_duration_, getEaseFunc(bg_tween_type_));
@@ -324,22 +324,22 @@ public:
                                bg_tween_duration_, getEaseFunc(bg_tween_type_));
   }
 
-  void setStageLightTween(const std::string& tween_name) {
+  void setStageLightTween(const std::string& tween_name) noexcept {
     lights_.startLightTween(tween_name);
   }
 
-  void enableFollowCamera(const bool enable = true) {
+  void enableFollowCamera(const bool enable = true) noexcept {
     camera_follow_target_ = enable;
   }
 
-  void startQuake(const float duration, const ci::Vec3f& pos, const ci::Vec3f& size) {
+  void startQuake(const float duration, const ci::Vec3f& pos, const ci::Vec3f& size) noexcept {
     // 視錐台外は無視
     if (!frustum_.intersects(pos, size)) return;
     
     quake_.start(*animation_timeline_, &quake_value_, duration);
   }
 
-  void startViewSound(const std::string& sound, const ci::Vec3f& pos, const ci::Vec3f& size) {
+  void startViewSound(const std::string& sound, const ci::Vec3f& pos, const ci::Vec3f& size) noexcept {
     // 視錐台外は無視
     if (!frustum_.intersects(pos, size)) return;
 
@@ -348,7 +348,7 @@ public:
   
 
 
-  void setCameraParams(const std::string& name) {
+  void setCameraParams(const std::string& name) noexcept {
     auto params = params_["game_view.camera." + name];
 
     target_point_     = Json::getVec3<float>(params_["game_view.camera.target_point"]);
@@ -364,7 +364,7 @@ public:
     eye_point_ = calcEyePoint(0.0f);
   }
 
-  void changeCameraParams(const std::string& name) {
+  void changeCameraParams(const std::string& name) noexcept {
     auto params    = params_["game_view.camera." + name];
 
     auto ease_func     = getEaseFunc(params_["game_view.camera.ease_name"].getValue<std::string>());
@@ -388,7 +388,7 @@ public:
   }
 
 
-  void beginDistanceCloser() {
+  void beginDistanceCloser() noexcept {
     auto ease_func     = getEaseFunc(params_["game_view.camera.distance_ease_name"].getValue<std::string>());
     auto ease_duration = params_["game_view.camera.distance_ease_duration"].getValue<float>();
 
@@ -397,7 +397,7 @@ public:
                                ease_duration, ease_func);
   }
   
-  void endDistanceCloser() {
+  void endDistanceCloser() noexcept {
     auto ease_func     = getEaseFunc(params_["game_view.camera.distance_ease_name"].getValue<std::string>());
     auto ease_duration = params_["game_view.camera.distance_ease_duration"].getValue<float>();
 
@@ -407,18 +407,18 @@ public:
   }
 
   // 指定のPickableCubeに寄る
-  void beginPickableCubeCloser(const u_int id) {
+  void beginPickableCubeCloser(const u_int id) noexcept {
     camera_look_id_  = true;
     looking_cube_id_ = id;
   }
   
-  void endPickableCubeCloser() {
+  void endPickableCubeCloser() noexcept {
     camera_look_id_ = false;
   }
 
   
 private:
-  void touchesBegan(const Connection&, std::vector<Touch>& touches) {
+  void touchesBegan(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!touch_input_) return;
     for (const auto& touch : touches) {
       // if (isPicking(touch)) continue;
@@ -469,7 +469,7 @@ private:
     }
   }
   
-  void touchesMoved(const Connection&, std::vector<Touch>& touches) {
+  void touchesMoved(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!touch_input_) return;
 
     for (const auto& touch : touches) {
@@ -537,7 +537,7 @@ private:
     }
   }
 
-  void touchesEnded(const Connection&, std::vector<Touch>& touches) {
+  void touchesEnded(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!touch_input_) return;
     
     for (const auto& touch : touches) {
@@ -608,28 +608,28 @@ private:
   }
 
   
-  bool isPicking(const Touch& touch) {
+  bool isPicking(const Touch& touch) noexcept {
     for (const auto& pick : pickings_) {
       if (touch.id == pick.touch_id) return true;
     }
     return false;
   }
 
-  bool isTouching(const u_int cube_id) {
+  bool isTouching(const u_int cube_id) noexcept {
     for (const auto& pick : pickings_) {
       if (cube_id == pick.cube_id) return true;
     }
     return false;
   }
 
-  boost::optional<Pick&> getPick(const Touch& touch) {
+  boost::optional<Pick&> getPick(const Touch& touch) noexcept {
     for (auto& pick : pickings_) {
       if (touch.id == pick.touch_id) return boost::optional<Pick&>(pick);
     }
     return boost::optional<Pick&>();
   }
   
-  boost::optional<Pick&> getTouching(const u_int cube_id) {
+  boost::optional<Pick&> getTouching(const u_int cube_id) noexcept {
     for (auto& pick : pickings_) {
       if (cube_id == pick.cube_id) return boost::optional<Pick&>(pick);
     }
@@ -637,14 +637,14 @@ private:
   }
 
   
-  void removePick(const Touch& touch) {
+  void removePick(const Touch& touch) noexcept {
     boost::remove_erase_if(pickings_,
                            [touch](const Pick& pick) {
                              return pick.touch_id == touch.id;
                            });
   }
 
-  bool isCubeExists(const u_int id) {
+  bool isCubeExists(const u_int id) noexcept {
     for (const auto& cube : touch_cubes_) {
       if (cube.id == id) return true;
     }
@@ -652,7 +652,7 @@ private:
   }
   
 
-  int calcMoveSpeed(const double delta_time, const float delta_position, const float move_threshold) {
+  int calcMoveSpeed(const double delta_time, const float delta_position, const float move_threshold) noexcept {
     if (delta_position < move_threshold) {
       return 1;
     }
@@ -661,7 +661,7 @@ private:
     return boost::algorithm::clamp(speed, 1, move_swipe_speed_);
   }
 
-  ci::Ray generateRay(const ci::Vec2f& pos) {
+  ci::Ray generateRay(const ci::Vec2f& pos) noexcept {
     float u = pos.x / (float) ci::app::getWindowWidth();
     float v = pos.y / (float) ci::app::getWindowHeight();
     // because OpenGL and Cinder use a coordinate system
@@ -669,11 +669,11 @@ private:
     return camera_.generateRay(u, 1.0f - v, camera_.getAspectRatio());
   }
 
-  bool isPickedCube(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) {
+  bool isPickedCube(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) noexcept {
     return bbox.intersects(ray);
   }
 
-  float getPickedCubeZ(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) {
+  float getPickedCubeZ(ci::AxisAlignedBox3f& bbox, const ci::Ray& ray) noexcept {
     float intersections[3];
     bbox.intersect(ray, intersections);
 
@@ -681,7 +681,7 @@ private:
   }
 
   
-  void makeTouchCubeInfo(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+  void makeTouchCubeInfo(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
     touch_cubes_.clear();
     
     for (const auto& cube : cubes) {
@@ -714,7 +714,7 @@ private:
                            });
   }
 
-  void updateCameraTarget(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+  void updateCameraTarget(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
     if (!camera_follow_target_) return;
     
     std::vector<ci::Vec3f> cube_pos;
@@ -748,7 +748,7 @@ private:
     }
   }
 
-  std::vector<ci::Vec3f> searchAliveCube(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+  std::vector<ci::Vec3f> searchAliveCube(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
     std::vector<ci::Vec3f> cube_pos;
     
     for (const auto& cube : cubes) {
@@ -760,7 +760,7 @@ private:
     return cube_pos;
   }
 
-  std::vector<ci::Vec3f> searchCubeFromId(const std::vector<std::unique_ptr<PickableCube> >& cubes, const u_int id) {
+  std::vector<ci::Vec3f> searchCubeFromId(const std::vector<std::unique_ptr<PickableCube> >& cubes, const u_int id) noexcept {
     std::vector<ci::Vec3f> cube_pos;
 
     for (const auto& cube : cubes) {
@@ -773,7 +773,7 @@ private:
     return cube_pos;
   }
   
-  void updateCamera(const double progressing_seconds) {
+  void updateCamera(const double progressing_seconds) noexcept {
     // 等加速運動の近似
     float speed_rate = std::pow(camera_speed_, progressing_seconds / (1 / 60.0));
 
@@ -795,7 +795,7 @@ private:
   
   void drawStageCubes(const std::deque<std::vector<StageCube> >& cubes,
                       ModelHolder& models,
-                      const ci::Frustumf& frustum) {
+                      const ci::Frustumf& frustum) noexcept {
     auto& material = materials_.get("stage_cube");
     material.apply();
     
@@ -833,7 +833,7 @@ private:
   template<typename T>
   void drawCubes(const std::vector<T>& cubes,
                  ModelHolder& models,
-                 const std::string& model_name, const std::string& material_name) {
+                 const std::string& model_name, const std::string& material_name) noexcept {
     auto& material = materials_.get(material_name);
     material.apply();
 
@@ -862,7 +862,7 @@ private:
   }
   
 #ifdef DEBUG
-  void drawPickableCubesBBox(const std::vector<std::unique_ptr<PickableCube> >& cubes) {
+  void drawPickableCubesBBox(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
     ci::gl::color(0, 1, 0);
     
     for (const auto& cube : cubes) {
@@ -881,7 +881,7 @@ private:
 #endif
 
   void drawBgCubes(const std::vector<Bg::Cube>& cubes,
-                   ModelHolder& models) {
+                   ModelHolder& models) noexcept {
     auto& material = materials_.get("bg_cube");
     material.apply();
 
@@ -902,7 +902,7 @@ private:
 
 
 #ifdef DEBUG
-  void drawBgBbox(const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) {
+  void drawBgBbox(const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) noexcept {
     ci::AxisAlignedBox3f bbox(bbox_min, bbox_max);
     
     ci::gl::color(0, 1, 0);
@@ -911,14 +911,14 @@ private:
 #endif
   
 
-  void readMaterials(const ci::JsonTree& params) {
+  void readMaterials(const ci::JsonTree& params) noexcept {
     for (const auto& p : params) {
       materials_.add(p.getKey(), p);
     }
   }
 
   
-  ci::Vec3f calcEyePoint(const float distance_offset) {
+  ci::Vec3f calcEyePoint(const float distance_offset) noexcept {
     ci::Vec3f pos = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx_))
                   * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry_))
                   * ci::Vec3f(0, 0, eye_distance_ + distance_offset) * distance_rate_() + interest_point_;

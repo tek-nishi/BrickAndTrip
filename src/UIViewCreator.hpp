@@ -39,7 +39,7 @@ public:
   {  }
 
 
-  std::unique_ptr<UIView> create(const std::string& path) {
+  std::unique_ptr<UIView> create(const std::string& path) noexcept {
     // ちょくちょくAutolayoutのお掃除 
     autolayout_.eraseInvalid();
 

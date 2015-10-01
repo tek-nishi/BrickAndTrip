@@ -35,7 +35,7 @@ public:
 
   
   // 文字列から生成したテクスチャを取得
-  ci::gl::TextureRef getTextureFromString(const std::string& str) {
+  ci::gl::TextureRef getTextureFromString(const std::string& str) noexcept {
     // キャッシュ済みなら、それを返却
     auto cached = isCachedTexture(str);
     if (cached.first) {
@@ -55,13 +55,13 @@ public:
     return inserted.first->second;
   }
 
-  const ci::Vec3f& scale() const { return scale_; }
-  const ci::Vec3f& offset() const { return offset_; }
+  const ci::Vec3f& scale() const noexcept { return scale_; }
+  const ci::Vec3f& offset() const noexcept { return offset_; }
 
   
 private:
   // キャッシュされている文字テクスチャを返却
-  std::pair<bool, std::map<std::string, ci::gl::TextureRef>::iterator> isCachedTexture(const std::string& str) {
+  std::pair<bool, std::map<std::string, ci::gl::TextureRef>::iterator> isCachedTexture(const std::string& str) noexcept {
     auto it = texture_cache_.find(str);
     return std::make_pair(it != std::end(texture_cache_), it);
   }

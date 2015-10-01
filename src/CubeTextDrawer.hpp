@@ -21,7 +21,7 @@ namespace CubeTextDrawer {
 void drawCubeAndText(ci::gl::TextureRef texture,
                      const Model& model,
                      const ci::Color& color, const ci::Color& text_color,
-                     const ci::Vec3f& scale, const ci::Vec3f& offset) {
+                     const ci::Vec3f& scale, const ci::Vec3f& offset) noexcept {
   ci::gl::color(color);
 
   const auto& mesh = model.mesh();
@@ -71,7 +71,7 @@ void draw(const CubeText& cube_text,
           const ci::Vec3f& scale,
           const ci::Color& text_color,
           const ci::Color& base_color,
-          const std::vector<ci::Anim<float> >& rotation = std::vector<ci::Anim<float> >()) {
+          const std::vector<ci::Anim<float> >& rotation = std::vector<ci::Anim<float> >()) noexcept {
   auto text_pos = pos;
 
   const float chara_size = cube_text.size();

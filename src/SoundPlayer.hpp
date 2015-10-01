@@ -26,10 +26,10 @@ public:
 
 
   // FIXME:せっかく隠蔽しているのを...
-  Sound& get() { return sound_; }
+  Sound& get() noexcept { return sound_; }
   
 
-  void play(const std::string& name, const float gain = 1.0f) {
+  void play(const std::string& name, const float gain = 1.0f) noexcept {
     auto it = reserved_.find(name);
     if (it == std::end(reserved_)) {
       reserved_.insert({ name, gain });
@@ -40,7 +40,7 @@ public:
     }
   }  
   
-  void update() {
+  void update() noexcept {
     if (reserved_.empty()) return;
 
     for (auto& p : reserved_) {

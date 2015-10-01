@@ -12,17 +12,17 @@ namespace ngs {
 // Fileを書き出すpathを取得
 #if defined(CINDER_COCOA_TOUCH)
 
-ci::fs::path getDocumentPath();
+ci::fs::path getDocumentPath() noexcept;
 
 #elif defined(CINDER_MAC)
 
-ci::fs::path getDocumentPath() {
+ci::fs::path getDocumentPath() noexcept {
   return ci::app::getAppPath() / "Contents/Resources";
 }
 
 #else
 
-ci::fs::path getDocumentPath() {
+ci::fs::path getDocumentPath() noexcept {
   return ci::app::getAppPath();
 }
 

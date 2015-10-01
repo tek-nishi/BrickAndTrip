@@ -11,12 +11,12 @@ namespace ngs {
 
 #ifdef CINDER_COCOA_TOUCH
   
-std::string localizedString(const std::string& key);
+std::string localizedString(const std::string& key) noexcept;
 
 #else
 
 template<typename T>
-T localizedString(const T& key) {
+T localizedString(const T& key) noexcept {
   return key;
 }
 

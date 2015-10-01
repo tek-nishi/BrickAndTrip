@@ -25,7 +25,7 @@ public:
   }
 
 
-  void clear() {
+  void clear() noexcept {
     for (auto& connection : connections_) {
       connection.disconnect();
     }
@@ -34,11 +34,11 @@ public:
   }
 
   
-  void operator += (Connection& connection) {
+  void operator += (Connection& connection) noexcept {
     connections_.push_back(connection);
   }
 
-  void operator += (Connection&& connection) {
+  void operator += (Connection&& connection) noexcept {
     connections_.push_back(connection);
   }
   

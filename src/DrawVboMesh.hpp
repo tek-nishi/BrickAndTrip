@@ -13,7 +13,7 @@
 namespace cinder {
 namespace gl {
 
-void draw(const VboMesh &vbo);
+void draw(const VboMesh &vbo) noexcept;
 
 }
 }

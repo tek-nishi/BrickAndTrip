@@ -25,13 +25,13 @@ public:
 
 
   template<typename F>
-  Connection connect(const std::string& msg, F callback) {
+  Connection connect(const std::string& msg, F callback) noexcept {
     return signals_[msg].connect_extended(callback);
   }  
 
   
   template <typename... Args2>
-  void signal(const std::string& msg, Args2&&... args) {
+  void signal(const std::string& msg, Args2&&... args) noexcept {
     // signals_[msg](std::forward<Args2>(args)...);
     signals_[msg](args...);
   }

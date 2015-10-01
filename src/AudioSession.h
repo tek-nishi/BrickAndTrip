@@ -7,8 +7,8 @@
 
 #if defined(CINDER_COCOA_TOUCH)
 
-void beginAudioSession();
-void endAudioSession();
+void beginAudioSession() noexcept;
+void endAudioSession() noexcept;
 
 #else
 

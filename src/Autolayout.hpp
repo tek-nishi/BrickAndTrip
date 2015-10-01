@@ -14,7 +14,7 @@ namespace ngs {
 
 using ViewRect = std::pair<ci::Ray, ci::Ray>;
 
-ViewRect createViewRect(ci::Camera& camera) {
+ViewRect createViewRect(ci::Camera& camera) noexcept {
   float aspect_ratio = camera.getAspectRatio();
 
   auto top_left     = camera.generateRay(0.0f, 1.0f, aspect_ratio);
@@ -26,7 +26,7 @@ ViewRect createViewRect(ci::Camera& camera) {
 
 using WorldRect = std::pair<ci::Vec3f, ci::Vec3f>;
 
-WorldRect createWorldRect(const ViewRect& view_rect, const float z) {
+WorldRect createWorldRect(const ViewRect& view_rect, const float z) noexcept {
   // origin + t * direction = z
   // から、tを求める
   const auto& origin    = view_rect.first.getOrigin();
@@ -81,9 +81,9 @@ public:
     { }
 
 
-    const ci::Vec3f& getPos() const { return layouted_pos_; }
+    const ci::Vec3f& getPos() const noexcept { return layouted_pos_; }
 
-    void doLayout(const ViewRect& view_rect) {
+    void doLayout(const ViewRect& view_rect) noexcept {
       auto world_rect = createWorldRect(view_rect, pos_.z);
 
       ci::Vec3f pos = pos_;
@@ -181,7 +181,7 @@ public:
       layouted_pos_ = pos;
     }
 
-    void resizeWidget(const ci::Vec3f& size) {
+    void resizeWidget(const ci::Vec3f& size) noexcept {
       size_ = size;
       auto pos = layout_pos_;
 
@@ -253,7 +253,7 @@ public:
   // このメソッドを使って生成する事
   WidgetRef makeWidget(const ci::Vec3f& pos, const ci::Vec3f& size,
                        const Widget::Type origin = Widget::Type::CENTER,
-                       const Widget::Type layout = Widget::Type::CENTER) {
+                       const Widget::Type layout = Widget::Type::CENTER) noexcept {
 
     auto widget = std::make_shared<Widget>(origin, layout, pos, size);
     widget->doLayout(view_rect_);
@@ -265,7 +265,7 @@ public:
   }
 
   // 保持しているWidgetの位置を再計算する
-  void resize(ci::Camera& camera) {
+  void resize(ci::Camera& camera) noexcept {
     view_rect_ = createViewRect(camera);
 
     // doLayoutのついでに無効なオブジェクトを削除している
@@ -280,7 +280,7 @@ public:
   }
 
   // 無効なオブジェクトを取り除く
-  void eraseInvalid() {
+  void eraseInvalid() noexcept {
     boost::remove_erase_if(widgets_,
                            [this](std::weak_ptr<Widget> widget) {
                              return widget.expired();

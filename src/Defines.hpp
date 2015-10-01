@@ -46,3 +46,12 @@ using u_int   = unsigned int;
 using u_long  = unsigned long;
 
 }
+
+
+#if defined(_MSC_VER)
+#include <xkeycheck.h>
+
+// VS2013では未実装...
+#undef noexcept
+#define noexcept
+#endif

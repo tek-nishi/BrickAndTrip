@@ -122,11 +122,11 @@ public:
   }
 
 
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
   }
   
 
-  void fallFromStage() {
+  void fallFromStage() noexcept {
     on_stage_ = false;
 
     ci::Vec3f end_value(block_position_ + ci::Vec3f(0, fall_y_, 0));
@@ -140,22 +140,22 @@ public:
       });
   }
 
-  u_int id() const { return id_; }
+  u_int id() const noexcept { return id_; }
   
-  bool isActive() const { return active_; }
-  bool isOnStage() const { return on_stage_; }
+  bool isActive() const noexcept { return active_; }
+  bool isOnStage() const noexcept { return on_stage_; }
 
-  const ci::Vec3f& position() const { return position_(); }
-  const ci::Quatf& rotation() const { return rotation_; }
+  const ci::Vec3f& position() const noexcept { return position_(); }
+  const ci::Quatf& rotation() const noexcept { return rotation_; }
 
-  const ci::Vec3i& blockPosition() const { return block_position_; }
+  const ci::Vec3i& blockPosition() const noexcept { return block_position_; }
   
-  ci::Vec3f size() const { return ci::Vec3f::one(); }
+  ci::Vec3f size() const noexcept { return ci::Vec3f::one(); }
 
-  const ci::Color& color() const { return color_; }
+  const ci::Color& color() const noexcept { return color_; }
 
   // Pickableを通せんぼする状態か??
-  bool canBlock() const {
+  bool canBlock() const noexcept {
     if (status_ == Status::IDLE) return true;
     
     float y = position_().y - (block_position_.y + 1.5f);
@@ -163,24 +163,24 @@ public:
   }
 
   // Pickableを踏める状態か??
-  bool canPress() const {
+  bool canPress() const noexcept {
     float y = position_().y - (block_position_.y + 1.5f);
     return (status_ == Status::DOWN) && (y < 1.0f);
   }
   
 
   // std::findを利用するための定義
-  bool operator==(const u_int rhs_id) const {
+  bool operator==(const u_int rhs_id) const noexcept {
     return id_ == rhs_id;
   }
 
-  bool operator==(const FallingCube& rhs) const {
+  bool operator==(const FallingCube& rhs) const noexcept {
     return id_ == rhs.id_;
   }
 
 
 private:
-  void startUpEase(const float delay = 0.0f) {
+  void startUpEase(const float delay = 0.0f) noexcept {
     status_ = Status::UP;
 
     auto up_pos = ci::Vec3f(block_position_);
@@ -197,7 +197,7 @@ private:
       });
   }
 
-  void startDownEase() {
+  void startDownEase() noexcept {
     status_ = Status::DOWN;
 
     auto down_pos = ci::Vec3f(block_position_);

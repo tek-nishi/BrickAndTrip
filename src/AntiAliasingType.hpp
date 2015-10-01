@@ -14,7 +14,7 @@ namespace ngs {
 
 #if defined(CINDER_COCOA_TOUCH)
 
-int getAntiAliasingType() {
+int getAntiAliasingType() noexcept {
   using namespace ci::app;
   
   auto hard_type = decideHard();
@@ -51,7 +51,7 @@ int getAntiAliasingType() {
 
 #else
 
-int getAntiAliasingType() {
+int getAntiAliasingType() noexcept {
   using namespace ci::app;
 
   // OSXとWindowsは初期値

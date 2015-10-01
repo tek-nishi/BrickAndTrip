@@ -30,7 +30,7 @@ public:
   }
   
 
-  void start(ci::Timeline& timeline, float* target, const float duration) {
+  void start(ci::Timeline& timeline, float* target, const float duration) noexcept {
     if (tween_) tween_->removeSelf();
     target_ = target;
     
@@ -44,7 +44,7 @@ public:
       duration);
   }
 
-  void stop() {
+  void stop() noexcept {
     if (tween_) tween_->removeSelf();
   }
   

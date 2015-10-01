@@ -11,20 +11,20 @@
 namespace ngs {
 
 
-bool canCaptureTopView() {
+bool canCaptureTopView() noexcept {
   return canCapture((UIView*)ci::app::getWindow()->getNative());
 }
   
-bool canCapture(UIView* view) {
+bool canCapture(UIView* view) noexcept {
   return [view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)] ? true : false;
 }
 
   
-UIImage* captureTopView() {
+UIImage* captureTopView() noexcept {
   return captureView((UIView*)ci::app::getWindow()->getNative());
 }
   
-UIImage* captureView(UIView* view) {
+UIImage* captureView(UIView* view) noexcept {
   if ([view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
     // iOS7以降はOpenGLの描画も手軽にキャプチャできる
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);

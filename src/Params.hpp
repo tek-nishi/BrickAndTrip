@@ -13,7 +13,7 @@
 namespace ngs {
 namespace Params {
 
-ci::JsonTree load(const std::string& path) {
+ci::JsonTree load(const std::string& path) noexcept {
 #if defined (OBFUSCATION_PARAMS)
 #if defined (DEBUG) && defined (CINDER_MAC)
   // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
@@ -32,7 +32,7 @@ ci::JsonTree load(const std::string& path) {
 
 #ifdef DEBUG
 
-void write(const std::string& path, const ci::JsonTree& params) {
+void write(const std::string& path, const ci::JsonTree& params) noexcept {
 #if defined (CINDER_MAC)
   boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + path);
 #else
@@ -41,7 +41,7 @@ void write(const std::string& path, const ci::JsonTree& params) {
   TextCodec::write(full_path.string(), params.serialize());
 }
 
-void convert(const std::string& path) {
+void convert(const std::string& path) noexcept {
 #if !defined (CINDER_COCOA_TOUCH)
   auto params = Json::readFromFile(path);
 

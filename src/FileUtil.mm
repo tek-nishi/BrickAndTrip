@@ -9,7 +9,7 @@
 
 namespace ngs {
 
-ci::fs::path getDocumentPath() {
+ci::fs::path getDocumentPath() noexcept {
   NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   return ci::fs::path([[paths objectAtIndex:0] UTF8String]);
 }

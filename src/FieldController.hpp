@@ -394,17 +394,17 @@ public:
 
 
 private:
-  bool isActive() const override { return active_; }
+  bool isActive() const noexcept override { return active_; }
 
-  Event<EventParam>& event() override { return event_; }
+  Event<EventParam>& event() noexcept override { return event_; }
 
   
-  void resize() override {
+  void resize() noexcept override {
     view_.resize();
   }
 
   
-  void update(const double progressing_seconds) override {
+  void update(const double progressing_seconds) noexcept override {
     if (paused_) return;
     
     timeline_->step(progressing_seconds);
@@ -412,13 +412,13 @@ private:
     view_.update(progressing_seconds);
   }
 
-  void draw(FontHolder& fonts, ModelHolder& models) override {
+  void draw(FontHolder& fonts, ModelHolder& models) noexcept override {
     const auto field = entity_.fieldData();
     view_.draw(field, models);
   }
 
   
-  void setup() {
+  void setup() noexcept {
     disposable_connections_.clear();
 
     if (entity_.isContinuedGame()) {
@@ -460,7 +460,7 @@ private:
     entity_.setupStartStage();
   }
 
-  void startNextStage() {
+  void startNextStage() noexcept {
     view_.enableTouchInput();
     view_.endDistanceCloser();
     entity_.entryPickableCubes();
@@ -470,7 +470,7 @@ private:
     stageclear_agree_ = false;
   }
 
-  void beginGameover(const EventParam& params) {
+  void beginGameover(const EventParam& params) noexcept {
     entity_.cancelPickPickableCubes();
     view_.enableTouchInput(false);
 

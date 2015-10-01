@@ -59,6 +59,7 @@ public:
   {
     auto* ctx = ci::audio::Context::master();
 
+#if 0
     {
       // フレームあたりの処理数を増やす(標準は512)
       auto device = ci::audio::Device::getDefaultOutput();
@@ -66,14 +67,8 @@ public:
       ci::audio::Device::Format format;
       format.framesPerBlock(frames_per_block * 2);
       device->updateFormat(format);
-      
-      // auto device_manager = ci::audio::Context::deviceManager();
-
-      // size_t frames_per_block = device_manager->getFramesPerBlock(device);
-      // DOUT << "FramesPerBlock:" << frames_per_block << std::endl;
-
-      // device_manager->setFramesPerBlock(device, frames_per_block / 2);
     }
+#endif
 
     ctx->enable();
     
@@ -153,7 +148,7 @@ public:
   }
   
 
-  void play(const std::string& name, const float gain = 1.0f) {
+  void play(const std::string& name, const float gain = 1.0f) noexcept {
     disconnectInactiveNode();
     
     // TIPS:文字列による分岐をstd::mapとラムダ式で実装
@@ -209,7 +204,7 @@ public:
     assign[object.type](name, object, gain);
   }
 
-  void stop(const std::string& category) {
+  void stop(const std::string& category) noexcept {
     if (category_node_.find(category) != category_node_.end()) {
       auto node = category_node_.at(category);
       if (node->isEnabled()) {
@@ -220,7 +215,7 @@ public:
     disconnectInactiveNode();
   }
 
-  void stopAll() {
+  void stopAll() noexcept {
     for (auto& it : category_node_) {
       if (it.second->isEnabled()) {
         it.second->stop();
@@ -231,7 +226,7 @@ public:
   }
 
   
-  void setBufferSilent(const bool value) {
+  void setBufferSilent(const bool value) noexcept {
     buffer_silent_ = value;
 
     // 無音モードになった瞬間から音を止める
@@ -246,7 +241,7 @@ public:
     }
   }
 
-  void setFileSilent(const bool value) {
+  void setFileSilent(const bool value) noexcept {
     file_silent_ = value;
 
     // 無音モードになった瞬間から音を止める
@@ -263,7 +258,7 @@ public:
 
 private:
   // FIXME:iOSではNodeをOutputにたくさん繋げると、音量が小さくなる
-  void disconnectInactiveNode() {
+  void disconnectInactiveNode() noexcept {
     auto output = ci::audio::Context::master()->getOutput();
     DOUT << "active nodes:" << output->getNumConnectedInputs() << std::endl;
 
