@@ -96,6 +96,28 @@
         "normals": true,
         "uvs": false,
         "indices": true
+      },
+
+      {
+        "name": "oneway-1",
+        "path": "oneway-1.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "oneway-2",
+        "path": "oneway-2.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "oneway-3",
+        "path": "oneway-3.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
       }
     ],
     
@@ -462,6 +484,14 @@
       }
     },
 
+    "oneway": {
+      "model": [ "oneway-1", "oneway-2", "oneway-3" ],
+      "easing": {
+        "name": "EaseNone",
+        "duration": 0.7
+      }
+    },
+
     "fog_start": 22,
     "fog_end": 26,
     "fog_color": [ 0.6, 0.6, 0.6, 1 ],
@@ -740,7 +770,7 @@
     },
 
     "oneway": {
-      "color": [0.3, 0.3, 0.3],
+      "color": [0.1, 0.1, 0.1],
       
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,

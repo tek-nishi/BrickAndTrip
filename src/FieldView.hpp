@@ -116,6 +116,9 @@ class FieldView : private boost::noncopyable {
 
   ci::Anim<ci::Color> bg_color_;
   ci::Anim<ci::ColorA> fog_color_;
+
+  std::vector<std::string> oneway_models_;
+  ci::Anim<int> oneway_index_;
   
   
 public:
@@ -158,7 +161,8 @@ public:
     bg_tween_duration_(params["game_view.bg_tween_duration"].getValue<float>()),
     fog_color_rate_(Json::getColorA<float>(params["game_view.fog_color"])),
     bg_color_(ci::Color(0, 0, 0)),
-    fog_color_(ci::ColorA(0, 0, 0, 1))
+    fog_color_(ci::ColorA(0, 0, 0, 1)),
+    oneway_models_(Json::getArray<std::string>(params["game_view.oneway.model"]))
   {
     setCameraParams(params["game_view.camera.start_camera"].getValue<std::string>());
     
@@ -177,6 +181,8 @@ public:
                                         std::bind(&FieldView::touchesMoved, this, std::placeholders::_1, std::placeholders::_2));
     connections_ += touch_event.connect("touches-ended",
                                         std::bind(&FieldView::touchesEnded, this, std::placeholders::_1, std::placeholders::_2));
+
+    setupOneway(params);
   }
   
   ~FieldView() {
@@ -253,13 +259,13 @@ public:
 
     drawStageCubes(field.active_cubes, models, frustum_);
     drawStageCubes(field.collapse_cubes, models, frustum_);
-
+    
     drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
     drawCubes(field.item_cubes, models, "item_cube", "item_cube");
     drawCubes(field.moving_cubes, models, "pickable_cube", "moving_cube");
     drawCubes(field.falling_cubes, models, "pickable_cube", "falling_cube");
     drawCubes(field.switches, models, "switch", "switch");
-    drawCubes(field.oneways, models, "oneway", "oneway");
+    drawCubes(field.oneways, models, oneway_models_[oneway_index_()], "oneway");
     
     // bgのfogは別設定
     glFogf(GL_FOG_START, params_["game_view.bg_fog_start"].getValue<float>());
@@ -924,6 +930,16 @@ private:
                   * ci::Vec3f(0, 0, eye_distance_ + distance_offset) * distance_rate_() + interest_point_;
 
     return pos;
+  }
+
+  
+  void setupOneway(const ci::JsonTree& params) noexcept {
+    auto option = animation_timeline_->apply(&oneway_index_,
+                                             int(oneway_models_.size()),
+                                             params["game_view.oneway.easing.duration"].getValue<float>(),
+                                             getEaseFunc(params["game_view.oneway.easing.name"].getValue<std::string>()));
+
+    option.loop(true);
   }
 
 };
