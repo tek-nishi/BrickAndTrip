@@ -62,12 +62,17 @@ public:
     {
       // フレームあたりの処理数を増やす(標準は512)
       auto device = ci::audio::Device::getDefaultOutput();
-      auto device_manager = ci::audio::Context::deviceManager();
+      size_t frames_per_block = device->getFramesPerBlock();
+      ci::audio::Device::Format format;
+      format.framesPerBlock(frames_per_block * 2);
+      device->updateFormat(format);
+      
+      // auto device_manager = ci::audio::Context::deviceManager();
 
-      size_t frames_per_block = device_manager->getFramesPerBlock(device);
-      DOUT << "FramesPerBlock:" << frames_per_block << std::endl;
+      // size_t frames_per_block = device_manager->getFramesPerBlock(device);
+      // DOUT << "FramesPerBlock:" << frames_per_block << std::endl;
 
-      device_manager->setFramesPerBlock(device, frames_per_block * 2);
+      // device_manager->setFramesPerBlock(device, frames_per_block / 2);
     }
 
     ctx->enable();
