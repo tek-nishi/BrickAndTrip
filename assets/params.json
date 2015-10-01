@@ -424,7 +424,7 @@
       "item_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.5, 0.5, 0.5, 1 ],
+        "specular": [ 0.8, 0.8, 0.8, 1 ],
         "shininess": 60,
         "emission": [ 0.15, 0.15, 0.15, 1 ]
       },
@@ -432,7 +432,7 @@
       "stage_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "specular": [ 0.3, 0.3, 0.3, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
@@ -440,7 +440,7 @@
       "switch": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "specular": [ 0.7, 0.7, 0.7, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
@@ -448,7 +448,7 @@
       "oneway": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "specular": [ 0.7, 0.7, 0.7, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
@@ -728,7 +728,7 @@
     },
 
     "switch": {
-      "color": [0.5, 0.5, 0.5],
+      "color": [0.15, 0.15, 0.15],
       
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,
