@@ -935,7 +935,7 @@ private:
   
   void setupOneway(const ci::JsonTree& params) noexcept {
     auto option = animation_timeline_->apply(&oneway_index_,
-                                             int(oneway_models_.size()),
+                                             0, int(oneway_models_.size()),
                                              params["game_view.oneway.easing.duration"].getValue<float>(),
                                              getEaseFunc(params["game_view.oneway.easing.name"].getValue<std::string>()));
 
