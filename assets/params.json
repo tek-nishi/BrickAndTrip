@@ -979,7 +979,7 @@
     {
       "name": "pickable-1",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-1.m4a",
       "gain": 1,
       "loop": false
@@ -987,7 +987,7 @@
     {
       "name": "pickable-2",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-2.m4a",
       "gain": 1,
       "loop": false
@@ -995,7 +995,7 @@
     {
       "name": "pickable-3",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-4.m4a",
       "gain": 1,
       "loop": false
@@ -1003,7 +1003,7 @@
     {
       "name": "pickable-4",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-4.m4a",
       "gain": 1,
       "loop": false
@@ -1011,7 +1011,7 @@
     {
       "name": "pickable-5",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-5.m4a",
       "gain": 1,
       "loop": false
@@ -1019,7 +1019,7 @@
     {
       "name": "pickable-6",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-6.m4a",
       "gain": 1,
       "loop": false
@@ -1027,7 +1027,7 @@
     {
       "name": "pickable-7",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-7.m4a",
       "gain": 1,
       "loop": false
@@ -1035,7 +1035,7 @@
     {
       "name": "pickable-8",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-8.m4a",
       "gain": 1,
       "loop": false
@@ -1043,7 +1043,7 @@
     {
       "name": "pickable-9",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-9.m4a",
       "gain": 1,
       "loop": false
@@ -1051,7 +1051,7 @@
     {
       "name": "pickable-10",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-10.m4a",
       "gain": 1,
       "loop": false
@@ -1059,7 +1059,7 @@
     {
       "name": "pickable-11",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-11.m4a",
       "gain": 1,
       "loop": false
@@ -1067,7 +1067,7 @@
     {
       "name": "pickable-12",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-12.m4a",
       "gain": 1,
       "loop": false
@@ -1075,7 +1075,7 @@
     {
       "name": "pickable-13",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-13.m4a",
       "gain": 1,
       "loop": false
@@ -1083,7 +1083,7 @@
     {
       "name": "pickable-14",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-14.m4a",
       "gain": 1,
       "loop": false
@@ -1091,7 +1091,7 @@
     {
       "name": "pickable-15",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-15.m4a",
       "gain": 1,
       "loop": false
@@ -1099,7 +1099,7 @@
     {
       "name": "pickable-16",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-16.m4a",
       "gain": 1,
       "loop": false
@@ -1107,7 +1107,7 @@
     {
       "name": "pickable-17",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-17.m4a",
       "gain": 1,
       "loop": false
@@ -1115,7 +1115,7 @@
     {
       "name": "pickable-18",
       "type": "buffer",
-      "category": "pickable",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
       "path": "pickable-18.m4a",
       "gain": 1,
       "loop": false
@@ -1125,6 +1125,7 @@
       "name": "moving-up",
       "type": "buffer",
       "category": "moving",
+      "poly": 3,
       "path": "moving-up.m4a",
       "gain": 1,
       "loop": false

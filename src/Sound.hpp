@@ -20,31 +20,36 @@ class Sound : private boost::noncopyable {
   struct Object {
     std::string type;
     std::string category;
+    
+    std::vector<std::string> poly_category;
+    size_t category_index;
+
     bool loop;
     float gain;
   };
 
   std::map<std::string, Object> objects_;
 
+  
   // 効果音用の定義
   struct BufferNode {
     ci::audio::BufferPlayerNodeRef node;
     ci::audio::GainNodeRef gain;
   };
 
-  std::map<std::string, ci::audio::SourceFileRef> source_;
+  std::map<std::string, ci::audio::BufferRef> buffer_;
   std::map<std::string, BufferNode> buffer_node_;
 
-  
   // ストリーミング再生用の定義
   struct FileNode {
     ci::audio::FilePlayerNodeRef node;
     ci::audio::GainNodeRef gain;
   };
-
-  std::map<std::string, ci::audio::BufferRef> buffer_;
+  
+  std::map<std::string, ci::audio::SourceFileRef> source_;
   std::map<std::string, FileNode> file_node_;
 
+  
   // 停止用
   std::map<std::string, ci::audio::SamplePlayerNodeRef> category_node_;
 
@@ -108,28 +113,36 @@ public:
 
           buffer_.insert({ param["name"].getValue<std::string>(), source->loadBuffer() });
 
-          const auto& category = param["category"].getValue<std::string>();
-          if (buffer_node_.find(category) == buffer_node_.end()) {
-            // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
-            ci::audio::Node::Format format;
-            format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
-            
-            BufferNode node = {
-              ctx->makeNode(new ci::audio::BufferPlayerNode(format)),
-              ctx->makeNode(new ci::audio::GainNode(1.0f)),
-            };
-            
-            buffer_node_.insert({ category, node });
-            category_node_.insert({ category, node.node });
+          if (param.hasChild("poly-category")) {
+            auto categories = Json::getArray<std::string>(param["poly-category"]);
+            for (const auto& category : categories) {
+              makeBufferNode(ctx, category);
+            }
+          }
+          else {
+            const auto& category = param["category"].getValue<std::string>();
+            makeBufferNode(ctx, category);
           }
         }
       }
     };
 
     for (const auto& it : params) {
+      std::string category;
+      std::vector<std::string> poly_category;
+      
+      if (it.hasChild("poly-category")) {
+        poly_category = Json::getArray<std::string>(it["poly-category"]);
+      }
+      else {
+        category = it["category"].getValue<std::string>();
+      }
+      
       Object object = {
         it["type"].getValue<std::string>(),
-        it["category"].getValue<std::string>(),
+        category,
+        poly_category,
+        0,
         it["loop"].getValue<bool>(),
         it["gain"].getValue<float>()
       };
@@ -153,9 +166,9 @@ public:
     
     // TIPS:文字列による分岐をstd::mapとラムダ式で実装
     std::map<std::string,
-             std::function<void (const std::string&, const Object&, const float)> > assign = {
+             std::function<void (const std::string&, Object&, const float)> > assign = {
       { "file",
-        [this](const std::string& name, const Object& object, const float gain) {
+        [this](const std::string& name, Object& object, const float gain) {
           if (file_silent_) return;
           
           auto& source = source_.at(name);
@@ -177,11 +190,11 @@ public:
       },
 
       { "buffer",
-        [this](const std::string& name, const Object& object, const float gain) {
+        [this](const std::string& name, Object& object, const float gain) {
           if (buffer_silent_) return;
 
           auto& buffer = buffer_.at(name);
-          auto& node   = buffer_node_.at(object.category);
+          auto& node   = buffer_node_.at(getCategory(object));
 
           if (node.node->isEnabled()) {
             node.node->stop();
@@ -200,7 +213,7 @@ public:
       }
     };
 
-    const auto& object = objects_[name];
+    auto& object = objects_[name];
     assign[object.type](name, object, gain);
   }
 
@@ -257,6 +270,33 @@ public:
   }
 
 private:
+  void makeBufferNode(ci::audio::Context* ctx, const std::string& category) noexcept {
+    if (buffer_node_.find(category) == buffer_node_.end()) {
+      // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
+      ci::audio::Node::Format format;
+      format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
+
+      BufferNode node = {
+        ctx->makeNode(new ci::audio::BufferPlayerNode(format)),
+        ctx->makeNode(new ci::audio::GainNode(1.0f)),
+      };
+            
+      buffer_node_.insert({ category, node });
+      category_node_.insert({ category, node.node });
+    }
+  }
+
+  
+  const std::string& getCategory(Object& object) noexcept {
+    if (object.poly_category.empty()) {
+      return object.category;
+    }
+    else {
+      object.category_index = (object.category_index + 1) % object.poly_category.size();
+      return object.poly_category[object.category_index];
+    }
+  }
+  
   // FIXME:iOSではNodeをOutputにたくさん繋げると、音量が小さくなる
   void disconnectInactiveNode() noexcept {
     auto output = ci::audio::Context::master()->getOutput();
