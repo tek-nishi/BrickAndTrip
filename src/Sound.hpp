@@ -3,7 +3,6 @@
 //
 // BGM処理
 // TODO:fade in/out
-// TODO:同じ音を複数同時再生
 // TODO:Pan
 //
 

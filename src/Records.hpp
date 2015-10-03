@@ -307,6 +307,8 @@ public:
     current_game_.highest_item_num = current_game_.item_num > high_item_num_;
     high_item_num_ = std::max(current_game_.item_num, high_item_num_);
     current_game_.item_total_num = regular_item_num_;
+
+    total_clear_num_ += 1;
   }
   
   // 全ステージクリア

@@ -191,7 +191,7 @@
     "lights": [
       {
         "type": "point",
-        "position": [ 3, 10, 2 ],
+        "position": [ 3, 12, 1 ],
         
         "constant_attenuation":  0,
         "linear_attenuation":    0,
@@ -204,70 +204,61 @@
         "tween": {
           "start": [
             {
-              "target": "diffuse",
-              "type": "EaseOutQuint",
-              "start": [ 0, 0, 0 ],
-              "duration": 3,
-              "delay": 3
+              "target": "position",
+              "type": "EaseNone",
+              "end": [ 3, 6, 1 ],
+              "duration": 3
             },
             {
-              "target": "ambient",
-              "type": "EaseOutQuint",
-              "start": [ 0, 0, 0 ],
-              "duration": 3,
-              "delay": 3
-            },
-            {
-              "target": "specular",
-              "type": "EaseOutQuint",
-              "start": [ 0, 0, 0 ],
-              "duration": 3,
-              "delay": 3
+              "target": "quadratic_attenuation",
+              "type": "EaseNone",
+              "end": 0.02,
+              "duration": 3
             }
           ],
           
           "default": [
             {
               "target": "position",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": [ 3, 10, 1 ],
-              "duration": 1
+              "duration": 1.5
             },
             {
               "target": "constant_attenuation",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": 0.0,
-              "duration": 1
+              "duration": 1.5
             },
             {
               "target": "linear_attenuation",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": 0.0,
-              "duration": 1
+              "duration": 1.5
             },
             {
               "target": "quadratic_attenuation",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": 0.008,
-              "duration": 1
+              "duration": 1.5
             },
             {
               "target": "diffuse",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": [ 0.65, 0.65, 0.65 ],
-              "duration": 1
+              "duration": 1.5
             },
             {
               "target": "ambient",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": [ 0.1, 0.1, 0.1 ],
-              "duration": 1
+              "duration": 1.5
             },
             {
               "target": "specular",
-              "type": "EaseOutExpo",
+              "type": "EaseNone",
               "end": [ 1, 1, 1 ],
-              "duration": 1
+              "duration": 1.5
             }
           ],
           
