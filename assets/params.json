@@ -5,6 +5,9 @@
     "size": [ 960, 640 ],
     "background": [ 0.4, 0.4, 0.4 ],
 
+    "max_elapsed_seconds": [ 30, 15 ],
+    "startup_frame": 0.5,
+    
     "fixed_size": [
       [  960, 640 ],
       [  560, 840 ],

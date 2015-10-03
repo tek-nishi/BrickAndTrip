@@ -138,12 +138,13 @@ class BrickTripApp : public AppNative,
     elapsed_seconds_ = getElapsedSeconds();
 
     // 起動後安定するまでは経過時間の許容を少なく
-    max_elapsed_seconds_ = 1.0 / 30;
+    auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
+    max_elapsed_seconds_ = 1.0 / v.x;
 
-    timeline().add([this]() {
-        max_elapsed_seconds_ = 1.0 / 20;
+    timeline().add([this, v]() {
+        max_elapsed_seconds_ = 1.0 / v.y;
       },
-      timeline().getCurrentTime() + 1.0f);
+      timeline().getCurrentTime() + params_["app.startup_frame"].getValue<float>());
   }
   
   void shutdown() noexcept override {
