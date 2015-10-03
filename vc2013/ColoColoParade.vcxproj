@@ -64,7 +64,7 @@
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>"..\..\cinder_0.8.6\include";..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"$(CINDER_PATH)\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder-$(PlatformToolset)_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -90,7 +90,7 @@
     </ClCompile>
     <ProjectReference />
     <ResourceCompile>
-      <AdditionalIncludeDirectories>"..\..\cinder_0.8.6\include";..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>"$(CINDER_PATH)\include";..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder-$(PlatformToolset).lib;%(AdditionalDependencies)</AdditionalDependencies>
