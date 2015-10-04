@@ -192,6 +192,7 @@ public:
     switches_.update(progressing_seconds, stage_);
     oneways_.update(progressing_seconds, stage_);
 
+    // Pickableの死亡判定
     decideEachPickableCubeFalling();
     decideEachPickableCubeAlive();
     
@@ -199,16 +200,6 @@ public:
                            [](const PickableCubePtr& cube) {
                              return !cube->isActive();
                            });
-
-    decideEachPickableCubeMoving();
-    setAdjoinOtherPickableCube();
-
-#if 0
-    // 全PickableCubeの落下判定は、毎フレーム判定を避けている
-    if (did_fall && !isPickableCubeOnStage()) {
-      event_.signal("fall-all-pickable", EventParam());
-    }
-#endif
 
     switch (mode_) {
     case START:
@@ -230,6 +221,8 @@ public:
       // 全PickableCubeのfinish判定
       // FIXME:event処理で判定できる
       if (isAllPickableCubesFinished()) {
+        controlFinishedPickableCubes();
+        
         mode_ = CLEAR;
         event_.signal("all-pickable-finished", EventParam());
         {
@@ -264,6 +257,18 @@ public:
       }
       break;
     }
+
+    // Finish判定の後に、移動判定を行わないと、
+    // 「Finishした直後にFinish-Lineを割って落下」が起きる
+    decideEachPickableCubeMoving();
+    setAdjoinOtherPickableCube();
+
+#if 0
+    // 全PickableCubeの落下判定は、毎フレーム判定を避けている
+    if (did_fall && !isPickableCubeOnStage()) {
+      event_.signal("fall-all-pickable", EventParam());
+    }
+#endif
 
     switch (mode_) {
     case START:
@@ -1074,11 +1079,12 @@ private:
         break;
       }
 
-      // 移動中の場合は移動前の位置で判定
-      const auto& position = cube->isMoving() ? cube->prevBlockPosition()
-                                              : cube->blockPosition();
-
-      if (position.z < finish_line_z_) {
+      int z = cube->blockPosition().z;
+      if (cube->isMoving()) {
+        z = std::min(cube->prevBlockPosition().z, z);
+      }
+      
+      if (z < finish_line_z_) {
         // FinishできていないPickableCubeが1つでもあればfalse
         finished = false;
         break;
@@ -1088,6 +1094,18 @@ private:
     return finished;
   }
 
+  // Finish時、ラインをまたいで戻ろうとするPickableの動きを止める
+  void controlFinishedPickableCubes() {
+    for (auto& cube : pickable_cubes_) {
+      if (cube->isSleep()) continue;
+
+      if (!cube->isOnStage() || cube->isPressed()) {
+        continue;
+      }
+      
+      cube->controlFinishedMove();
+    }
+  }
 
   int getPickableCubeTopZ() const noexcept {
     int top_z = 0;

@@ -66,6 +66,8 @@ private:
   int       move_speed_;
   // 操作しないで移動した量
   int       move_step_;
+  // 移動予約を受け付けた
+  bool      move_requested_;
 
   std::vector<std::string> move_sounds_;
   
@@ -134,6 +136,7 @@ public:
     move_vector_(ci::Vec3i::zero()),
     move_speed_(0),
     move_step_(0),
+    move_requested_(false),
     move_sounds_(Json::getArray<std::string>(params["game.pickable.move_sounds"])),
     rotate_ease_(params["game.pickable.rotate_ease"].getValue<std::string>()),
     rotate_ease_end_(params["game.pickable.rotate_ease_end"].getValue<std::string>()),
@@ -224,6 +227,7 @@ public:
       move_direction_ = direction;
       move_speed_     = std::min(speed, rotate_speed_max_);
     }
+    move_requested_ = true;
   }
   
   bool willRotationMove() const {
@@ -231,8 +235,20 @@ public:
   }
 
   void cancelRotationMove() {
-    move_speed_ = 0;
-    move_step_  = 0;
+    move_speed_     = 0;
+    move_step_      = 0;
+    move_requested_ = false;
+  }
+
+  void controlFinishedMove() {
+    // Finish時、予約された移動なら中断
+    if (move_requested_) {
+      cancelRotationMove();
+    }
+  }
+
+  int getMoveDirection() const noexcept {
+    return move_direction_;
   }
 
   const ci::Vec3i& moveVector() const { return move_vector_; }
@@ -242,8 +258,9 @@ public:
   }
   
   void startRotationMove() {
-    moving_ = true;
-    first_moved_ = true;
+    moving_         = true;
+    first_moved_    = true;
+    move_requested_ = false;
     
     // idle演出中に操作されてもよいように
     position_ = ci::Vec3f(block_position_);
