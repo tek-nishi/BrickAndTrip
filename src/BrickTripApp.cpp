@@ -323,10 +323,19 @@ class BrickTripApp : public AppNative,
       int size = p["size"].getValue<int>();
       ci::Vec3f scale = Json::getVec3<float>(p["scale"]);
       ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
-      fonts_->addFont(name, path, size, scale, offset);
+      
+      auto& font = fonts_->addFont(name, path, size, scale, offset);
 
       if (Json::getValue(p, "default", false)) {
         fonts_->setDefaultFont(name);
+      }
+
+      if (Json::getValue(p, "pre_render", false)) {
+        auto text = p["pre_render_text"].getValue<std::string>();
+        auto text_length = strlen(text);
+        for (size_t it = 0; it < text_length; ++it) {
+          font.getTextureFromString(substr(text, 1));
+        }
       }
     }
   }

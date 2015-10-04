@@ -23,7 +23,10 @@
         "default": true,
         "size": 64,
         "scale": [ 0.95, 0.95, 1 ],
-        "offset": [ 0, 0.085, 0 ]
+        "offset": [ 0, 0.085, 0 ],
+        
+        "pre_render": true,
+        "pre_render_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
       },
       {
         "name": "icon",
@@ -35,7 +38,6 @@
       {
         "name": "logo",
         "path": "SGIEXB.ttf",
-        "default": true,
         "size": 128,
         "scale": [ 1.0, 1.0, 1 ],
         "offset": [ 0, 0.09, 0 ]
