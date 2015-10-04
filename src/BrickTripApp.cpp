@@ -330,6 +330,8 @@ class BrickTripApp : public AppNative,
         fonts_->setDefaultFont(name);
       }
 
+      // アプリ起動時に事前に文字をレンダリングしてキャッシュに入れておく
+      // iOS:処理の引っ掛かりを減らす
       if (Json::getValue(p, "pre_render", false)) {
         auto text = p["pre_render_text"].getValue<std::string>();
         auto text_length = strlen(text);
