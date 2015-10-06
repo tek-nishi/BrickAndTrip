@@ -3,10 +3,10 @@
   
   "app": {
     "size": [ 960, 640 ],
-    "frame_rate": 600,
+    "frame_rate": 180,
     "background": [ 0.4, 0.4, 0.4 ],
 
-    "max_elapsed_seconds": [ 30, 15 ],
+    "max_elapsed_seconds": [ 30, 20 ],
     "startup_frame": 0.5,
     
     "fixed_size": [

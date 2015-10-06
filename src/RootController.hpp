@@ -208,7 +208,7 @@ public:
     // 自動PAUSE
     // getSignalDidEnterBackground(Backgroundになった直後)
     // getSignalWillResignActive(アクティブでなくなる直前)
-    ci::app::get()->getSignalWillResignActive().connect([this]() {
+    ci::app::App::get()->getSignalWillResignActive().connect([this]() {
         DOUT << "SignalWillResignActive" << std::endl;
         EventParam params = {
           { "force", true }

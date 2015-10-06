@@ -68,13 +68,6 @@ class BrickTripApp : public AppNative,
     settings->setWindowSize(size);
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
-
-#if defined(CINDER_MAC)
-    // FIXME:Windowモードの場合、これでFrame rateが安定する
-    //       が、複数cinderアプリを立ち上げると処理が劇重になる
-    // settings->disableFrameRate();
-#endif
-
     settings->setFrameRate(params_["app.frame_rate"].getValue<float>());
     
 #if !defined(CINDER_MAC)
@@ -84,6 +77,7 @@ class BrickTripApp : public AppNative,
       settings->enableMultiTouch();
     }
 #endif
+    
     // Retina Display対応
     settings->enableHighDensityDisplay();
 
@@ -288,8 +282,13 @@ class BrickTripApp : public AppNative,
     controller_->resize();
   }
   
+
+  // FIXME:updateで更新処理を書くと色々問題がある(主にWindows)
+	// void update() noexcept override {
+  // }
+
   
-	void update() noexcept override {
+	void draw() noexcept override {
     double elapsed_seconds = getElapsedSeconds();
 
     // 経過時間が大きな値になりすぎないよう調整
@@ -307,9 +306,7 @@ class BrickTripApp : public AppNative,
     controller_->update(progressing_seconds);
     
     elapsed_seconds_ = elapsed_seconds;
-  }
-  
-	void draw() noexcept override {
+    
     controller_->draw(*fonts_, *models_);
   }
 
