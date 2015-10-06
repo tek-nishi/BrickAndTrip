@@ -75,6 +75,8 @@ class BrickTripApp : public AppNative,
     // settings->disableFrameRate();
 #endif
 
+    settings->setFrameRate(params_["app.frame_rate"].getValue<float>());
+    
 #if !defined(CINDER_MAC)
     // FIXME:Macでだとマルチタッチが邪魔
     active_touch_ = ci::System::hasMultiTouch();
@@ -103,7 +105,7 @@ class BrickTripApp : public AppNative,
     // OSXでタイトルバーにアプリ名を表示するworkaround
     getWindow()->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
 #endif
-
+    
 #if defined(CINDER_COCOA_TOUCH)
     // 縦横画面両対応
     getSignalSupportedOrientations().connect([](){ return InterfaceOrientation::All; });
@@ -136,7 +138,7 @@ class BrickTripApp : public AppNative,
     gl::enable(GL_COLOR_MATERIAL);
 
     elapsed_seconds_ = getElapsedSeconds();
-
+    
     // 起動後安定するまでは経過時間の許容を少なく
     auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
     max_elapsed_seconds_ = 1.0 / v.x;
