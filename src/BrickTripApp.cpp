@@ -68,7 +68,9 @@ class BrickTripApp : public AppNative,
     settings->setWindowSize(size);
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
-    settings->setFrameRate(params_["app.frame_rate"].getValue<float>());
+    if (!params_["app.framerate_limit"].getValue<bool>() && gl::isVerticalSyncEnabled()) {
+      settings->disableFrameRate();
+    }
     
 #if !defined(CINDER_MAC)
     // FIXME:Macでだとマルチタッチが邪魔
@@ -281,14 +283,9 @@ class BrickTripApp : public AppNative,
   void resize() noexcept override {
     controller_->resize();
   }
-  
 
-  // FIXME:updateで更新処理を書くと色々問題がある(主にWindows)
-	// void update() noexcept override {
-  // }
 
-  
-	void draw() noexcept override {
+  void updateApp() {
     double elapsed_seconds = getElapsedSeconds();
 
     // 経過時間が大きな値になりすぎないよう調整
@@ -306,7 +303,20 @@ class BrickTripApp : public AppNative,
     controller_->update(progressing_seconds);
     
     elapsed_seconds_ = elapsed_seconds;
-    
+  }
+
+  
+#if !defined(CINDER_MSW)
+  // FIXME:更新処理をここでおこなうとWindowsでフレームレートが安定しない
+	void update() noexcept override {
+    updateApp();
+  }
+#endif
+  
+	void draw() noexcept override {
+#if defined(CINDER_MSW)
+    updateApp();
+#endif
     controller_->draw(*fonts_, *models_);
   }
 

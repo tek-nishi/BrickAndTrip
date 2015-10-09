@@ -3,8 +3,7 @@
   
   "app": {
     "size": [ 960, 640 ],
-    "frame_rate": 180,
-    "background": [ 0.4, 0.4, 0.4 ],
+    "framerate_limit": false,
 
     "max_elapsed_seconds": [ 30, 20 ],
     "startup_frame": 0.5,
@@ -16,6 +15,8 @@
       [  630, 840 ],
       [ 1024, 768 ]
     ],
+
+    "background": [ 0.4, 0.4, 0.4 ],
 
     "fonts": [
       {
