@@ -83,18 +83,20 @@ public:
                                    [this](const Connection& connection, EventParam& param) {
                                    });
 
+#if 0
     // pickablecubeの1つがstartlineを越えたらcollapse開始
     connections_ += event_.connect("first-pickable-started",
                                    [this](const Connection& connection, EventParam& param) {
                                      DOUT << "first-pickable-started" << std::endl;
-                                     const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
-                                     view_.setStageBgColor(color);
+                                     // const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
+                                     // view_.setStageBgColor(color);
                                      
-                                     const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
-                                     view_.setStageLightTween(light_tween);
+                                     // const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
+                                     // view_.setStageLightTween(light_tween);
 
                                      // entity_.startStageCollapse();
                                    });
+#endif
     
     connections_ += event_.connect("all-pickable-started",
                                    [this](const Connection& connection, EventParam& param) {
@@ -430,7 +432,7 @@ private:
 
       // Stageは一定時間後に生成開始
       timeline_->add([this]() {
-          entity_.startStageBuild();
+          entity_.startStageBuild();          
         },
         timeline_->getCurrentTime() + continued_start_delay_);
     }
@@ -438,9 +440,21 @@ private:
       disposable_connections_ += event_.connect("pickable-moved",
                                                 [this](const Connection& connection, EventParam& param) {
                                                   entity_.startStageBuild();
+
+                                                  // このタイミングで光源設定を変更
+                                                  view_.setStageBgColor(entity_.bgColor());
+                                                  view_.setStageLightTween(entity_.lightTween());
+
+                                                  // 最初から始めた時はPickableを動かしたらProgressを表示
+                                                  timeline_->add([this]() {
+                                                      event_.signal("begin-progress", EventParam());
+                                                    },
+                                                    timeline_->getCurrentTime() + progress_start_delay_);
+                                                  
                                                   connection.disconnect();
                                                 });
-      
+
+#if 0
       // 最初から始めた時はPickableを動かしたらProgressを表示
       disposable_connections_ += event_.connect("pickable-moved",
                                                 [this](const Connection& connection, EventParam& param) {
@@ -450,6 +464,7 @@ private:
                                                     timeline_->getCurrentTime() + progress_start_delay_);
                                                   connection.disconnect();
                                                 });
+#endif
     }
     
     view_.enableTouchInput(false);
@@ -465,6 +480,13 @@ private:
     view_.endDistanceCloser();
     entity_.entryPickableCubes();
     entity_.startStageBuild();
+
+    disposable_connections_ += event_.connect("pickable-moved",
+                                              [this](const Connection& connection, EventParam& param) {
+                                                // このタイミングで光源設定を変更
+                                                view_.setStageBgColor(entity_.bgColor());
+                                                view_.setStageLightTween(entity_.lightTween());
+                                              });
 
     stage_cleard_     = false;
     stageclear_agree_ = false;

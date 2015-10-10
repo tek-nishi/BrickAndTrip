@@ -762,6 +762,12 @@ public:
   void setRestartLine() noexcept {
     restart_z_ = std::max(stage_.getActiveBottomZ() - 5, 0);
   }
+
+  
+  const ci::Color& bgColor() const noexcept { return bg_color_; }
+
+  const std::string& lightTween() const noexcept { return light_tween_; }
+  
   
   
 private:
