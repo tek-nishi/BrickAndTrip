@@ -26,23 +26,26 @@
         "size": 64,
         "scale": [ 0.95, 0.95, 1 ],
         "offset": [ 0, 0.085, 0 ],
+        "mipmap": false,
         
         "pre_render": true,
-        "pre_render_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        "pre_render_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       },
       {
         "name": "icon",
         "path": "websymbolsligaregular.ttf",
         "size": 64,
         "scale": [ 1.16, 1.16, 1 ],
-        "offset": [ 0, 0.035, 0 ]
+        "offset": [ 0, 0.035, 0 ],
+        "mipmap": false
       },
       {
         "name": "logo",
         "path": "SGIEXB.ttf",
         "size": 128,
         "scale": [ 1.0, 1.0, 1 ],
-        "offset": [ 0, 0.09, 0 ]
+        "offset": [ 0, 0.09, 0 ],
+        "mipmap": false
       }
     ],
 

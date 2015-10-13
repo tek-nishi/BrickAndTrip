@@ -18,6 +18,7 @@ class TextureFont : private boost::noncopyable {
 
   ci::Vec3f scale_;
   ci::Vec3f offset_;
+  bool mipmap_;
   
   std::map<std::string, ci::gl::TextureRef> texture_cache_;
 
@@ -25,10 +26,12 @@ class TextureFont : private boost::noncopyable {
 public:
   explicit TextureFont(const std::string& path, FontCreator& creator,
                        const int size,
-                       const ci::Vec3f& scale, const ci::Vec3f& offset) :
+                       const ci::Vec3f& scale, const ci::Vec3f& offset,
+                       const bool mipmap) :
     font_(path, creator),
     scale_(scale),
-    offset_(offset)
+    offset_(offset),
+    mipmap_(mipmap)
   {
     font_.setSize(size);
   }
@@ -42,13 +45,21 @@ public:
       return cached.second->second;
     }
 
-    // TIPS:文字はmipmapを利用(縮小時の見栄えが良くなる)
     ci::gl::Texture::Format format;
-    format.enableMipmapping();
+    if (mipmap_) {
+      // TIPS:文字はmipmapを利用(縮小時の見栄えが良くなる)
+      format.enableMipmapping();
+    }
     
     auto texture  = ci::gl::Texture::create(font_.rendering(str), format);
-    texture->setMinFilter(GL_LINEAR_MIPMAP_NEAREST);
-    texture->setMagFilter(GL_LINEAR);
+    if (mipmap_) {
+      texture->setMinFilter(GL_LINEAR_MIPMAP_NEAREST);
+      texture->setMagFilter(GL_LINEAR);
+    }
+    else {
+      texture->setMinFilter(GL_LINEAR);
+      texture->setMagFilter(GL_LINEAR);
+    }
     
     auto inserted = texture_cache_.emplace(str, std::move(texture));
 

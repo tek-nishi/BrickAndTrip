@@ -332,8 +332,9 @@ class BrickTripApp : public AppNative,
       int size = p["size"].getValue<int>();
       ci::Vec3f scale = Json::getVec3<float>(p["scale"]);
       ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
+      bool mipmap = p["mipmap"].getValue<bool>();
       
-      auto& font = fonts_->addFont(name, path, size, scale, offset);
+      auto& font = fonts_->addFont(name, path, size, scale, offset, mipmap);
 
       if (Json::getValue(p, "default", false)) {
         fonts_->setDefaultFont(name);
