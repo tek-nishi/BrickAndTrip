@@ -327,8 +327,8 @@ class BrickTripApp : public AppNative,
     const auto& fonts_params = params_["app.fonts"];
 
     bool do_mipmap = true;
-    if (ngs::getAntiAliasingType() == RendererGl::AA_NONE) {
-      // AA無しの実行環境ではFontのmipmapを強制OFF
+    if (ngs::LowEfficiencyDevice::determine()) {
+      // 低性能の実行環境ではFontのmipmapを強制OFF
       do_mipmap = false;
     }
     
@@ -423,4 +423,4 @@ class BrickTripApp : public AppNative,
 
 }
 
-CINDER_APP_NATIVE(ngs::BrickTripApp, RendererGl(ngs::getAntiAliasingType()))
+CINDER_APP_NATIVE(ngs::BrickTripApp, RendererGl(ngs::AntiAliasingType::get()))
