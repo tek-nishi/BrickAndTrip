@@ -26,7 +26,7 @@
         "size": 64,
         "scale": [ 0.95, 0.95, 1 ],
         "offset": [ 0, 0.085, 0 ],
-        "mipmap": false,
+        "mipmap": true,
         
         "pre_render": true,
         "pre_render_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -45,7 +45,7 @@
         "size": 128,
         "scale": [ 1.0, 1.0, 1 ],
         "offset": [ 0, 0.09, 0 ],
-        "mipmap": false
+        "mipmap": true
       }
     ],
 

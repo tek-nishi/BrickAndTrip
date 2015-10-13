@@ -326,13 +326,19 @@ class BrickTripApp : public AppNative,
 
     const auto& fonts_params = params_["app.fonts"];
 
+    bool do_mipmap = true;
+    if (ngs::getAntiAliasingType() == RendererGl::AA_NONE) {
+      // AA無しの実行環境ではFontのmipmapを強制OFF
+      do_mipmap = false;
+    }
+    
     for(const auto& p : fonts_params) {
       const auto& name = p["name"].getValue<std::string>();
       const auto& path = p["path"].getValue<std::string>();
       int size = p["size"].getValue<int>();
-      ci::Vec3f scale = Json::getVec3<float>(p["scale"]);
+      ci::Vec3f scale  = Json::getVec3<float>(p["scale"]);
       ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
-      bool mipmap = p["mipmap"].getValue<bool>();
+      bool mipmap = p["mipmap"].getValue<bool>() && do_mipmap;
       
       auto& font = fonts_->addFont(name, path, size, scale, offset, mipmap);
 
