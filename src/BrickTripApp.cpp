@@ -64,6 +64,10 @@ class BrickTripApp : public AppNative,
 #endif
     params_ = Params::load("params.json");
 
+    // 低性能環境を調べて設定に追加
+    params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device",
+                                                        ngs::LowEfficiencyDevice::determine());
+
     auto size = Json::getVec2<int>(params_["app.size"]);
     settings->setWindowSize(size);
 
@@ -327,9 +331,11 @@ class BrickTripApp : public AppNative,
     const auto& fonts_params = params_["app.fonts"];
 
     bool do_mipmap = true;
-    if (ngs::LowEfficiencyDevice::determine()) {
+    if (params_["app.low_efficiency_device"].getValue<bool>()) {
       // 低性能の実行環境ではFontのmipmapを強制OFF
       do_mipmap = false;
+
+      DOUT << "Font:no mipmap." << std::endl;
     }
     
     for(const auto& p : fonts_params) {

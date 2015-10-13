@@ -16,6 +16,8 @@
       [ 1024, 768 ]
     ],
 
+    "low_efficiency_device": false,
+    
     "background": [ 0.4, 0.4, 0.4 ],
 
     "fonts": [
