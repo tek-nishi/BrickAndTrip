@@ -17,6 +17,7 @@
     ],
 
     "low_efficiency_device": false,
+    "force_low_efficiency": true,
     
     "background": [ 0.4, 0.4, 0.4 ],
 
@@ -69,28 +70,32 @@
 
       {
         "name": "pickable_cube",
-        "path": "pickable_cube.obj",
+        "path":     "pickable_cube.obj",
+        "path_low": "pickable_cube_low.obj",
         "normals": true,
         "uvs": false,
         "indices": true
       },
       {
         "name": "item_cube",
-        "path": "item_cube.obj",
+        "path":     "item_cube.obj",
+        "path_low": "item_cube_low.obj",
         "normals": true,
         "uvs": false,
         "indices": true
       },
       {
         "name": "stage_cube",
-        "path": "stage_cube.obj",
+        "path":     "stage_cube.obj",
+        "path_low": "stage_cube_low.obj",
         "normals": true,
         "uvs": false,
         "indices": true
       },
       {
         "name": "bg_cube",
-        "path": "bg_cube.obj",
+        "path":     "bg_cube.obj",
+        "path_low": "bg_cube_low.obj",
         "normals": true,
         "uvs": false,
         "indices": true

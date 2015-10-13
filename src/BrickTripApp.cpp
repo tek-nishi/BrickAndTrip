@@ -67,6 +67,12 @@ class BrickTripApp : public AppNative,
     // 低性能環境を調べて設定に追加
     params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device",
                                                         ngs::LowEfficiencyDevice::determine());
+#ifdef DEBUG
+    // 強制的に低性能環境
+    if (params_["app.force_low_efficiency"].getValue<bool>()) {
+      params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device", true);
+    }
+#endif
 
     auto size = Json::getVec2<int>(params_["app.size"]);
     settings->setWindowSize(size);
@@ -367,9 +373,14 @@ class BrickTripApp : public AppNative,
   void setupModels() noexcept {
     models_ = std::unique_ptr<ModelHolder>(new ModelHolder);
 
+    // 低性能環境はポリゴン数の少ないモデルを使う
+    auto model_path = params_["app.low_efficiency_device"].getValue<bool>() ? "path_low"
+                                                                            : "path";
+    
     for(const auto& p : params_["app.models"]) {
       const auto& name = p["name"].getValue<std::string>();
-      const auto& path = p["path"].getValue<std::string>();
+      const auto& path = p.hasChild(model_path) ? p[model_path].getValue<std::string>()
+                                                : p["path"].getValue<std::string>();
       bool has_normals = p["normals"].getValue<bool>();
       bool has_uvs = p["uvs"].getValue<bool>();
       bool has_indices = p["indices"].getValue<bool>();
