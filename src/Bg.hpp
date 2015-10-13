@@ -58,7 +58,10 @@ public:
     timeline->apply(animation_timeline_);
 
     auto cube_speed = Json::getVec2<float>(params["game.bg.cube_speed"]);
-    auto cube_density = params["game.bg.cube_density"].getValue<float>();
+    auto cube_density = params["app.low_efficiency_device"].getValue<bool>() ? params["game.bg.cube_density_low"].getValue<float>()
+                                                                             : params["game.bg.cube_density"].getValue<float>();
+
+    
     auto color_range = Json::getVec2<float>(params["game.bg.color_range"]);
 
     int max_y = bbox_max_.y;

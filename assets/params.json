@@ -17,7 +17,7 @@
     ],
 
     "low_efficiency_device": false,
-    "force_low_efficiency": true,
+    "force_low_efficiency": false,
     
     "background": [ 0.4, 0.4, 0.4 ],
 
@@ -794,7 +794,9 @@
     },
 
     "bg": {
-      "cube_density": 0.25,
+      "cube_density":     0.3,
+      "cube_density_low": 0.2,
+      
       "cube_speed": [ 0.05, 1.2 ],
       "cube_lifetime": [ 10, 15 ],
       
