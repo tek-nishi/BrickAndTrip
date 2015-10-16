@@ -193,7 +193,7 @@ public:
 
     setupOneway(params);
 
-    glHint(GL_FOG_HINT, GL_NICEST);
+    setQuality(params["app.low_efficiency_device"].getValue<bool>());
   }
   
   ~FieldView() {
@@ -951,6 +951,26 @@ private:
                                              getEaseFunc(params["game_view.oneway.easing.name"].getValue<std::string>()));
 
     option.loop(true);
+  }
+
+
+  static void setQuality(const bool low_device) noexcept {
+    GLenum target[] = {
+      GL_FOG_HINT,
+      GL_GENERATE_MIPMAP,
+      GL_LINE_SMOOTH_HINT,
+      GL_PERSPECTIVE_CORRECTION_HINT,
+      GL_POINT_SMOOTH_HINT,
+#if !defined(CINDER_COCOA_TOUCH)
+      GL_POLYGON_SMOOTH_HINT,
+#endif
+    };
+
+    GLenum mode = low_device ? GL_FASTEST : GL_NICEST;
+    
+    for (const auto t : target) {
+      glHint(t, mode);
+    }
   }
 
 };
