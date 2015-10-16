@@ -1,6 +1,6 @@
 {
-   "auto_collapse" : 6.0,
-   "bg_color" : [ 0.3921570, 0.3921570, 0.3921570 ],
+   "auto_collapse" : 6,
+   "bg_color" : [ 0.70588200000000001, 0.70588200000000001, 0.70588200000000001 ],
    "body" : [
       [ -1, -1, 0, -1, -1, 0, -1, -1 ],
       [ -1, -1, 0, -1, -1, 0, -1, -1 ],
@@ -43,50 +43,50 @@
       [ -1, -1, 0, -1, -1, 0, -1, -1 ],
       [ -1, -1, 0, -1, -1, 0, -1, -1 ]
    ],
-   "build_speed" : 0.50,
+   "build_speed" : 0.5,
    "camera" : "normal",
-   "collapse_speed" : 0.50,
-   "color" : [ 0.9529410, 0.5960780, 0 ],
+   "collapse_speed" : 0.5,
+   "color" : [ 0.95294100000000004, 0.596078, 0 ],
    "falling" : [
       {
          "delay" : 0,
          "entry" : [ 2, 0, 5 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 1, 0, 10 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 1, 0, 14 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 1, 0, 18 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 6, 0, 21 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 6, 0, 25 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 2, 0, 39 ],
-         "interval" : 0.50
+         "interval" : 0.5
       },
       {
          "delay" : 0,
          "entry" : [ 5, 0, 39 ],
-         "interval" : 0.40
+         "interval" : 0.40000000000000002
       }
    ],
    "items" : [

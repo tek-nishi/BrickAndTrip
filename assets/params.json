@@ -242,13 +242,13 @@
               "target": "ambient",
               "type": "EaseNone",
               "end": [ 0.01, 0.01, 0.01 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "specular",
               "type": "EaseNone",
               "end": [ 1, 1, 1 ],
-              "duration": 1.5
+              "duration": 3
             }
           ],
           
@@ -257,31 +257,31 @@
               "target": "position",
               "type": "EaseNone",
               "end": [ 4, 10, 2 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "quadratic_attenuation",
               "type": "EaseNone",
               "end": 0.01,
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "diffuse",
               "type": "EaseNone",
               "end": [ 0.9, 0.9, 0.9 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "ambient",
               "type": "EaseNone",
               "end": [ 0.025, 0.025, 0.025 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "specular",
               "type": "EaseNone",
               "end": [ 1, 1, 1 ],
-              "duration": 1.5
+              "duration": 3
             }
           ],
           
@@ -334,25 +334,25 @@
               "target": "direction",
               "type": "EaseNone",
               "end": [ -1, 0, 0 ],
-              "duration": 1
+              "duration": 3
             },
             {
               "target": "diffuse",
               "type": "EaseNone",
               "end": [ 0.25, 0.25, 0.5 ],
-              "duration": 2.5
+              "duration": 3
             },
             {
               "target": "ambient",
               "type": "EaseNone",
               "end": [ 0.0, 0.0, 0.0 ],
-              "duration": 2.5
+              "duration": 3
             },
             {
               "target": "specular",
               "type": "EaseNone",
               "end": [ 0.3, 0.3, 0.3 ],
-              "duration": 2.5
+              "duration": 3
             }
           ],
           
@@ -361,25 +361,25 @@
               "target": "direction",
               "type": "EaseNone",
               "end": [ -1, 0, 0 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "diffuse",
               "type": "EaseNone",
               "end": [ 0.25, 0.25, 0.5 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "ambient",
               "type": "EaseNone",
               "end": [ 0.0, 0.0, 0.0 ],
-              "duration": 1.5
+              "duration": 3
             },
             {
               "target": "specular",
               "type": "EaseNone",
               "end": [ 0.3, 0.3, 0.3 ],
-              "duration": 1.5
+              "duration": 3
             }
           ],
           
@@ -511,8 +511,8 @@
     "bg_fog_start": 23,
     "bg_fog_end": 42,
 
-    "bg_tween_type": "EaseOutExpo",
-    "bg_tween_duration": 1.5,
+    "bg_tween_type": "EaseOutCubic",
+    "bg_tween_duration": 2,
 
     "debug_info": false
   },
