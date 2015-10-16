@@ -504,9 +504,10 @@
       }
     },
 
-    "fog_start": 22,
-    "fog_end": 26,
     "fog_color": [ 0.6, 0.6, 0.6, 1 ],
+
+    "fog_start": 20,
+    "fog_end": 28,
     
     "bg_fog_start": 23,
     "bg_fog_end": 42,
