@@ -80,6 +80,8 @@ public:
 
       DOUT << "score from clear-time:" << score
            << " highest:" << highest_score
+           << " fastest:" << clear_fastest_time
+           << " clear time:" << clear_time
            << std::endl;
     }
 

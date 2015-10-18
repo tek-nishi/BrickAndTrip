@@ -833,7 +833,7 @@
       "item_score": 1000,
       "item_perfect_score": 1000,
       "stage_collect": 0.1,
-      "rank_rate_table": [ 95, 90, 80, 70, 60, 50 ]
+      "rank_rate_table": [ 98, 93, 86, 76, 61, 41 ]
     },
     
     "records": "records.data",

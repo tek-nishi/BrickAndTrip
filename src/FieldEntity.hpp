@@ -388,7 +388,7 @@ public:
     first_out_pickable_     = false;
     
     records_.prepareCurrentGameRecord(stage_num_,
-                                      finish_line_z_ - start_line_z_ + 1,
+                                      finish_line_z_ - start_line_z_ - 1,
                                       stage_.buildSpeed(),
                                       event_timeline_->getCurrentTime(),
                                       entry_item_num);
