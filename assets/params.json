@@ -420,10 +420,6 @@
       "k": 4
     },
     
-    "stagecolor": [ 0.5, 0.5, 0.5 ],
-    "stagecolor_ease": "EaseOutQuad",
-    "stagecolor_duration": 2,
-
     "move_begin_time": 0.3,
     "move_begin_threshold": 0.75,
     "move_threshold": 0.5,

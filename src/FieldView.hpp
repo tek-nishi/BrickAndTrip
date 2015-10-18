@@ -73,24 +73,20 @@ class FieldView : private boost::noncopyable {
   
   // pick用情報
   struct TouchCube {
-    u_int id;
-    ci::Vec3f position;
-    ci::Quatf rotation;
+    u_int                id;
+    ci::Vec3f            position;
+    ci::Quatf            rotation;
     ci::AxisAlignedBox3f bbox;
   };
 
   std::vector<TouchCube> touch_cubes_;
 
   struct Pick {
-    u_int touch_id;
+    u_int     touch_id;
     ci::Vec2f touch_begin_pos;
-    double timestamp;
-    u_int cube_id;
-
-    ci::Vec3f picking_plane;
-    ci::Vec3f picking_pos;
-
-    bool began_move;
+    double    timestamp;
+    u_int     cube_id;
+    bool      began_move;
   };
   std::vector<Pick> pickings_;
 
@@ -437,12 +433,12 @@ public:
 private:
   void touchesBegan(const Connection&, std::vector<Touch>& touches) noexcept {
     if (!touch_input_) return;
+    
     for (const auto& touch : touches) {
-      // if (isPicking(touch)) continue;
-      
-      auto ray = generateRay(touch.pos);
+      auto  ray    = generateRay(touch.pos);
       float near_z = std::numeric_limits<float>::max();
-      bool picked = false;
+      bool  picked = false;
+      
       TouchCube* picked_cube = nullptr;
       
       for (auto& cube : touch_cubes_) {
@@ -462,18 +458,11 @@ private:
       if (picked) {
         assert(picked_cube);
           
-        // cubeの上平面との交点
-        float cross_z;
-        auto origin = ci::Vec3f(0, picked_cube->position.y + 0.5f, 0);
-        ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          
         Pick pick = {
           touch.id,
           touch.pos,
           touch.timestamp,
           picked_cube->id,
-          origin,
-          ray.calcPosition(cross_z),
           false,
         };
         pickings_.push_back(std::move(pick));
@@ -501,20 +490,26 @@ private:
 
       for (auto& cube : touch_cubes_) {
         if (cube.id == pick->cube_id) {
-          // cubeの上平面との交点
+          // cubeの上平面との交点を求める
+          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
           auto ray = generateRay(touch.pos);
           float cross_z;
-          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          // auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
 
-          float began_z;
+          // カメラが動いている事を考慮して、タッチ開始時の座標もここで求めている
           auto began_ray = generateRay(pick->touch_begin_pos);
+          float began_z;
           began_ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &began_z);
-          auto began_pos = began_ray.calcPosition(began_z);
+          
+          auto began_pos   = began_ray.calcPosition(began_z);
           auto picking_ofs = ray.calcPosition(cross_z) - began_pos;
-
+          
           float move_threshold = move_begin_threshold_;
+
+          // カメラの離れ具合で、移動量の閾値を変える
+          float distance = eye_distance_ + target_radius_ * eye_distance_rate_;
+          move_threshold = move_threshold * distance / eye_distance_();
+          
           int move_direction = PickableCube::MOVE_NONE;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
             // 縦移動
@@ -564,25 +559,29 @@ private:
       assert(pick);
       
       for (auto& cube : touch_cubes_) {
-        // if (!isTouching(cube.id)) continue;
-
         if (cube.id == pick->cube_id) {
           // cubeの上平面との交点
+          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
           auto ray = generateRay(touch.pos);
           float cross_z;
-          auto origin = ci::Vec3f(0, cube.position.y + 0.5f, 0);
           ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &cross_z);
-          // auto picking_ofs = ray.calcPosition(cross_z) - pick->picking_pos;
 
-          float began_z;
+          // カメラが動いている事を考慮して、タッチ開始時の座標もここで求めている
           auto began_ray = generateRay(pick->touch_begin_pos);
+          float began_z;
           began_ray.calcPlaneIntersection(origin, ci::Vec3f(0, 1, 0), &began_z);
-          auto began_pos = began_ray.calcPosition(began_z);
+          
+          auto began_pos   = began_ray.calcPosition(began_z);
           auto picking_ofs = ray.calcPosition(cross_z) - began_pos;
 
           auto delta_time = touch.timestamp - pick->timestamp;
 
           float move_threshold = move_threshold_;
+
+          // カメラの離れ具合で、移動量の閾値を変える
+          float distance = eye_distance_ + target_radius_ * eye_distance_rate_;
+          move_threshold = move_threshold * distance / eye_distance_();
+          
           int move_direction = PickableCube::MOVE_NONE;
           int move_speed     = 0;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
