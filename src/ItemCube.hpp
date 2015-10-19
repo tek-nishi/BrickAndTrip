@@ -113,7 +113,7 @@ public:
   }
 
 
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
     rotation_ += rotation_speed_ * rotation_speed_rate_() * progressing_seconds;
 
     std::fmod(rotation_.x, static_cast<float>(M_PI * 2.0));
@@ -122,7 +122,7 @@ public:
   }
   
 
-  void fallFromStage() {
+  void fallFromStage() noexcept {
     on_stage_  = false;
     getatable_ = false;
 
@@ -139,7 +139,7 @@ public:
       });
   }
 
-  void pickup() {
+  void pickup() noexcept {
     getatable_ = false;
     on_stage_  = false;
 
@@ -158,7 +158,7 @@ public:
     event_.signal("view-sound", params);
   }
 
-  void moveDown() {
+  void moveDown() noexcept {
     block_position_new_.y -= 1;
 
     // StageCubeの上に乗るように位置を調整している
@@ -177,32 +177,32 @@ public:
   
   ci::Vec3f position() const noexcept { return position_() + offset_(); }
 
-  ci::Quatf rotation() const {
+  ci::Quatf rotation() const noexcept {
     return ci::Quatf(rotation_.x, rotation_.y, rotation_.z);
   }
 
-  const ci::Vec3i& blockPosition() const { return block_position_; }
+  const ci::Vec3i& blockPosition() const noexcept { return block_position_; }
 
-  ci::Vec3f size() const { return scale_(); }
+  ci::Vec3f size() const noexcept { return scale_(); }
 
-  ci::Color color() const {
+  ci::Color color() const noexcept {
     return ci::hsvToRGB(ci::Vec3f(std::fmod(color_().x, 1.0f), color_().y, color_().z));
   }
 
-  u_int id() const { return id_; }
+  u_int id() const noexcept { return id_; }
 
-  bool isActive() const { return active_; }
-  bool isOnStage() const { return on_stage_; }
-  bool isGetatable() const { return getatable_; }
+  bool isActive() const noexcept { return active_; }
+  bool isOnStage() const noexcept { return on_stage_; }
+  bool isGetatable() const noexcept { return getatable_; }
   
   // std::findを利用するための定義
-  bool operator==(const u_int rhs_id) const {
+  bool operator==(const u_int rhs_id) const noexcept {
     return id_ == rhs_id;
   }
 
   
 private:
-  void startTween(const std::string& name) {
+  void startTween(const std::string& name) noexcept {
     auto tween_params = params_["game.item." + name];
 
     std::set<std::string> applyed_targets;
