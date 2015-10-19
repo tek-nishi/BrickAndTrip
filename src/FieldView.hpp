@@ -961,9 +961,6 @@ private:
       GL_LINE_SMOOTH_HINT,
       GL_PERSPECTIVE_CORRECTION_HINT,
       GL_POINT_SMOOTH_HINT,
-#if !defined(CINDER_COCOA_TOUCH)
-      GL_POLYGON_SMOOTH_HINT,
-#endif
     };
 
     GLenum mode = low_device ? GL_FASTEST : GL_NICEST;
