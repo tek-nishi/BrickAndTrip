@@ -17,7 +17,7 @@
     ],
 
     "low_efficiency_device": false,
-    "force_low_efficiency": false,
+    "force_low_efficiency":  false,
     
     "background": [ 0.4, 0.4, 0.4 ],
 
@@ -86,7 +86,8 @@
       },
       {
         "name": "item_shadow",
-        "path": "item_shadow.obj",
+        "path":     "item_shadow.obj",
+        "path_low": "item_shadow_low.obj",
         "normals": false,
         "uvs": false,
         "indices": true
