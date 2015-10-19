@@ -42,6 +42,10 @@ class ItemCube : private boost::noncopyable {
   std::string move_ease_;
   float move_duration_;
   float move_delay_;
+
+  std::string shadow_ease_;
+  float shadow_duration_;
+  ci::Anim<float> shadow_alpha_;
   
   ci::TimelineRef animation_timeline_;
 
@@ -71,6 +75,9 @@ public:
     move_ease_(params["game.stage.move_ease"].getValue<std::string>()),
     move_duration_(params["game.stage.move_duration"].getValue<float>()),
     move_delay_(params["game.stage.move_delay"].getValue<float>()),
+    shadow_ease_(params["game.item.shadow_ease"].getValue<std::string>()),
+    shadow_duration_(params["game.item.shadow_duration"].getValue<float>()),
+    shadow_alpha_(0.0f),
     animation_timeline_(ci::Timeline::create())
   {
     DOUT << "ItemCube()" << std::endl;
@@ -96,6 +103,8 @@ public:
     options.finishFn([this]() {
         on_stage_ = true;
         startTween("idle_tween");
+
+        startShadowAlphaTween(1.0f);
         
         EventParam params = {
           { "block_pos", block_position_ },
@@ -137,6 +146,8 @@ public:
     options.finishFn([this]() {
         active_ = false;
       });
+
+    startShadowAlphaTween(0.0f);
   }
 
   void pickup() noexcept {
@@ -149,6 +160,8 @@ public:
         active_ = false;
       },
       animation_timeline_->getCurrentTime() + params_["game.item.pickup_duration"].getValue<float>());
+
+    startShadowAlphaTween(0.0f);
 
     EventParam params = {
       { "pos",      position() },
@@ -176,6 +189,7 @@ public:
   
   
   ci::Vec3f position() const noexcept { return position_() + offset_(); }
+  float stageHeight() const noexcept { return position_().y - 0.5f; }
 
   ci::Quatf rotation() const noexcept {
     return ci::Quatf(rotation_.x, rotation_.y, rotation_.z);
@@ -194,6 +208,9 @@ public:
   bool isActive() const noexcept { return active_; }
   bool isOnStage() const noexcept { return on_stage_; }
   bool isGetatable() const noexcept { return getatable_; }
+
+  float shadowAlpha() const noexcept { return shadow_alpha_(); }
+
   
   // std::findを利用するための定義
   bool operator==(const u_int rhs_id) const noexcept {
@@ -236,6 +253,13 @@ private:
       const auto& target = params["target"].getValue<std::string>();
       tween_setup[target](params, isFirstApply(target, applyed_targets));
     }
+  }
+
+  void startShadowAlphaTween(const float target_alpha) noexcept {
+    animation_timeline_->apply(&shadow_alpha_,
+                               target_alpha,
+                               shadow_duration_,
+                               getEaseFunc(shadow_ease_));
   }
   
 };

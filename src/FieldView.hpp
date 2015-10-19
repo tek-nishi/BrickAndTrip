@@ -887,18 +887,20 @@ private:
     auto& material = materials_.get(material_name);
     material.apply();
 
-    ci::gl::color(ci::ColorA(0, 0, 0, shadow_alpha_));
-
     const auto& mesh = models.get(model_name).mesh();
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
+      auto alpha = cube->shadowAlpha();
+      if (alpha == 0.0f) continue;
+      
+      ci::gl::color(ci::ColorA(0, 0, 0, shadow_alpha_ * alpha));
+
       ci::gl::pushModelView();
 
       // 位置は、stage cubeの上面
-      // FIXME: stage cubeの上面位置がmagic number
       auto position = cube->position();
-      ci::gl::translate(ci::Vec3f(position.x, 0.5f, position.z));
+      ci::gl::translate(ci::Vec3f(position.x, cube->stageHeight(), position.z));
 
       // 影は、縦方向をぺちゃんこにすればよい
       auto s = cube->size();
