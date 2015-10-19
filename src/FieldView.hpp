@@ -284,6 +284,7 @@ public:
     if (debug_info_) {
       drawPickableCubesBBox(field.pickable_cubes);
       drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
+      drawCameraTargetRange();
     }
 #endif
 
@@ -834,15 +835,6 @@ private:
         ci::gl::popModelView();
       }
     }
-
-#if 0
-    ci::gl::pushModelView();
-    ci::gl::translate(new_target_point_);
-    ci::gl::rotate(ci::Vec3f(90, 0, 0));
-    
-    ci::gl::drawStrokedCircle(ci::Vec2f::zero(), target_radius_);
-    ci::gl::popModelView();
-#endif
   }
 
 
@@ -893,7 +885,16 @@ private:
 
       ci::gl::drawStrokedCube(bbox);
     }    
-  }  
+  }
+
+  void drawCameraTargetRange() noexcept {
+    ci::gl::pushModelView();
+    ci::gl::translate(new_target_point_);
+    ci::gl::rotate(ci::Vec3f(90, 0, 0));
+    
+    ci::gl::drawStrokedCircle(ci::Vec2f::zero(), target_radius_);
+    ci::gl::popModelView();
+  }
 #endif
 
   void drawBgCubes(const std::vector<Bg::Cube>& cubes,
