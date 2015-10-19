@@ -85,6 +85,13 @@
         "indices": true
       },
       {
+        "name": "item_shadow",
+        "path": "item_shadow.obj",
+        "normals": false,
+        "uvs": false,
+        "indices": true
+      },
+      {
         "name": "stage_cube",
         "path":     "stage_cube.obj",
         "path_low": "stage_cube_low.obj",
@@ -459,6 +466,14 @@
         "emission": [ 0.15, 0.15, 0.15, 1 ]
       },
 
+      "item_shadow": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0, 0, 0, 1 ],
+        "specular": [ 0, 0, 0, 1 ],
+        "shininess": 60,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
       "stage_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
@@ -511,6 +526,8 @@
     "bg_tween_type": "EaseOutCubic",
     "bg_tween_duration": 2,
 
+    "shadow_alpha": 0.3,
+    
     "debug_info": false
   },
 

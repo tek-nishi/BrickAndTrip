@@ -120,6 +120,8 @@ class FieldView : private boost::noncopyable {
 
   std::vector<std::string> oneway_models_;
   ci::Anim<int> oneway_index_;
+
+  float shadow_alpha_;
   
   
 public:
@@ -167,7 +169,8 @@ public:
     bg_fog_end_(params_["game_view.bg_fog_end"].getValue<float>()),
     bg_color_(ci::Color(0, 0, 0)),
     fog_color_(ci::ColorA(0, 0, 0, 1)),
-    oneway_models_(Json::getArray<std::string>(params["game_view.oneway.model"]))
+    oneway_models_(Json::getArray<std::string>(params["game_view.oneway.model"])),
+    shadow_alpha_(params_["game_view.shadow_alpha"].getValue<float>())
   {
     setCameraParams(params["game_view.camera.start_camera"].getValue<std::string>());
     
@@ -266,6 +269,8 @@ public:
 
     drawStageCubes(field.active_cubes, models, frustum_);
     drawStageCubes(field.collapse_cubes, models, frustum_);
+
+    drawCubeShadow(field.item_cubes, models, "item_shadow", "item_shadow");
     
     drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
     drawCubes(field.item_cubes, models, "item_cube", "item_cube");
@@ -854,6 +859,7 @@ private:
       
       ci::gl::pushModelView();
       ci::gl::translate(cube->position());
+
       // FIXME:通常のscaleが1.0で、pickableが潰された時のみscaleが変わる
       //       ので、回転の後でscaleを掛けている
       ci::gl::scale(cube->size());
@@ -867,6 +873,48 @@ private:
       
       ci::gl::popModelView();
     }    
+  }
+
+  template<typename T>
+  void drawCubeShadow(const std::vector<T>& cubes,
+                      ModelHolder& models,
+                      const std::string& model_name, const std::string& material_name) noexcept {
+    ci::gl::disableDepthRead();
+    ci::gl::disableDepthWrite();
+    ci::gl::disable(GL_LIGHTING);
+    ci::gl::enable(GL_BLEND);
+
+    auto& material = materials_.get(material_name);
+    material.apply();
+
+    ci::gl::color(ci::ColorA(0, 0, 0, shadow_alpha_));
+
+    const auto& mesh = models.get(model_name).mesh();
+    for (const auto& cube : cubes) {
+      if (!cube->isActive()) continue;
+
+      ci::gl::pushModelView();
+
+      // 位置は、stage cubeの上面
+      // FIXME: stage cubeの上面位置がmagic number
+      auto position = cube->position();
+      ci::gl::translate(ci::Vec3f(position.x, 0.5f, position.z));
+
+      // 影は、縦方向をぺちゃんこにすればよい
+      auto s = cube->size();
+      ci::gl::scale(s.x, 0.0f, s.z);
+      
+      glMultMatrixf(cube->rotation().toMatrix44());
+
+      ci::gl::draw(mesh);
+
+      ci::gl::popModelView();
+    }
+    
+    ci::gl::disable(GL_BLEND);
+    ci::gl::enableDepthRead();
+    ci::gl::enableDepthWrite();
+    ci::gl::enable(GL_LIGHTING);
   }
   
 #ifdef DEBUG

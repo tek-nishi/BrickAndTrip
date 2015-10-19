@@ -175,7 +175,7 @@ public:
   }
   
   
-  ci::Vec3f position() const { return position_() + offset_(); }
+  ci::Vec3f position() const noexcept { return position_() + offset_(); }
 
   ci::Quatf rotation() const {
     return ci::Quatf(rotation_.x, rotation_.y, rotation_.z);
