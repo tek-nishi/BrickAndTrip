@@ -510,11 +510,8 @@ private:
           auto began_pos   = began_ray.calcPosition(began_z);
           auto picking_ofs = ray.calcPosition(cross_z) - began_pos;
           
-          float move_threshold = move_begin_threshold_;
-
           // カメラの離れ具合で、移動量の閾値を変える
-          float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
-          move_threshold = move_threshold * distance * 1.5f / eye_distance_();
+          float move_threshold = reviseValueByCamera(move_begin_threshold_);
           
           int move_direction = PickableCube::MOVE_NONE;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
@@ -582,11 +579,8 @@ private:
 
           auto delta_time = touch.timestamp - pick->timestamp;
 
-          float move_threshold = move_threshold_;
-
           // カメラの離れ具合で、移動量の閾値を変える
-          float distance = eye_distance_ + target_radius_ * eye_distance_rate_;
-          move_threshold = move_threshold * distance * 1.5f / eye_distance_();
+          float move_threshold = reviseValueByCamera(move_threshold_);
           
           int move_direction = PickableCube::MOVE_NONE;
           int move_speed     = 0;
@@ -715,11 +709,8 @@ private:
       
       if (!cube->isAdjoinOther()) {
         // 隣接がなければpaddingを加える
-        float padding_size = cube->getPaddingSize();
-
-        // カメラの離れ具合でpaddingを変える
-        float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
-        padding_size = padding_size * distance * 1.5f / eye_distance_();
+        // ※カメラの離れ具合で補正
+        float padding_size = reviseValueByCamera(cube->getPaddingSize());
 
         half_size += ci::Vec3f(padding_size, padding_size, padding_size);
       }
@@ -937,11 +928,8 @@ private:
 
       if (!cube->isAdjoinOther()) {
         // 隣接がなければpaddingを加える
-        float padding_size = cube->getPaddingSize();
-
-        // カメラの離れ具合でpaddingを変える
-        float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
-        padding_size = padding_size * distance * 1.5f / eye_distance_();
+        // ※カメラの離れ具合で補正
+        float padding_size = reviseValueByCamera(cube->getPaddingSize());
 
         half_size += ci::Vec3f(padding_size, padding_size, padding_size);
       }
@@ -1017,6 +1005,13 @@ private:
                                              getEaseFunc(params["game_view.oneway.easing.name"].getValue<std::string>()));
 
     option.loop(true);
+  }
+
+
+  // カメラの距離に応じた補正
+  float reviseValueByCamera(const float value) {
+    float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
+    return value * distance * 1.5f / eye_distance_();
   }
 
 
