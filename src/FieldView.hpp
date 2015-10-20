@@ -893,20 +893,8 @@ private:
       
       ci::gl::pushModelView();
 
+      // TIPS:行列計算は引数で与えられたのを使う
       matrix(cube->position(), cube->rotation(), cube->size());
-
-#if 0
-      ci::gl::translate(cube->position());
-
-      // FIXME:通常のscaleが1.0で、pickableが潰された時のみscaleが変わる
-      //       ので、回転の後でscaleを掛けている
-      ci::gl::scale(cube->size());
-
-      // TIPS:gl::rotate(Quarf)は、内部でglRotatefを使っている
-      //      この計算が正しく求まらない状況があるため、Quarf->Matrix
-      //      にしている。これだと問題ない
-      glMultMatrixf(cube->rotation().toMatrix44());
-#endif
 
       ci::gl::draw(mesh);
       
@@ -957,6 +945,27 @@ private:
     ci::gl::enableDepthWrite();
     ci::gl::enable(GL_LIGHTING);
   }
+
+  void drawBgCubes(const std::vector<Bg::Cube>& cubes,
+                   ModelHolder& models) noexcept {
+    auto& material = materials_.get("bg_cube");
+    material.apply();
+
+    const auto& mesh = models.get("bg_cube").mesh();
+    
+    for (const auto& cube : cubes) {
+      ci::gl::color(cube.color);
+      
+      ci::gl::pushModelView();
+      ci::gl::translate(cube.position);
+      ci::gl::scale(cube.size);
+
+      ci::gl::draw(mesh);
+      
+      ci::gl::popModelView();
+    }
+  }
+
   
 #ifdef DEBUG
   void drawPickableCubesBBox(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
@@ -992,30 +1001,7 @@ private:
     ci::gl::drawStrokedCircle(ci::Vec2f::zero(), target_radius_);
     ci::gl::popModelView();
   }
-#endif
-
-  void drawBgCubes(const std::vector<Bg::Cube>& cubes,
-                   ModelHolder& models) noexcept {
-    auto& material = materials_.get("bg_cube");
-    material.apply();
-
-    const auto& mesh = models.get("bg_cube").mesh();
-    
-    for (const auto& cube : cubes) {
-      ci::gl::color(cube.color);
-      
-      ci::gl::pushModelView();
-      ci::gl::translate(cube.position);
-      ci::gl::scale(cube.size);
-
-      ci::gl::draw(mesh);
-      
-      ci::gl::popModelView();
-    }
-  }
-
-
-#ifdef DEBUG
+  
   void drawBgBbox(const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) noexcept {
     ci::AxisAlignedBox3f bbox(bbox_min, bbox_max);
     
@@ -1023,8 +1009,8 @@ private:
     ci::gl::drawStrokedCube(bbox);
   }
 #endif
-  
 
+  
   void readMaterials(const ci::JsonTree& params) noexcept {
     for (const auto& p : params) {
       materials_.add(p.getKey(), p);
