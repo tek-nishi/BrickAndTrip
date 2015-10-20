@@ -192,7 +192,25 @@ public:
   float stageHeight() const noexcept { return position_().y - 0.5f; }
 
   ci::Quatf rotation() const noexcept {
-    return ci::Quatf(rotation_.x, rotation_.y, rotation_.z);
+    // オイラー角からクオータニオンを生成
+    // FIXME:cinderの実装が間違っている
+    // SOURCE: http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q60
+    const float fSinPitch(std::sin(rotation_.x * 0.5f));
+    const float fCosPitch(std::cos(rotation_.x * 0.5f));
+    const float fSinYaw(std::sin(rotation_.y * 0.5f));
+    const float fCosYaw(std::cos(rotation_.y * 0.5f));
+    const float fSinRoll(std::sin(rotation_.z * 0.5f));
+    const float fCosRoll(std::cos(rotation_.z * 0.5f));
+    
+    const float fCosPitchCosYaw(fCosPitch * fCosYaw);
+    const float fSinPitchSinYaw(fSinPitch * fSinYaw);
+    
+    float x = fSinRoll * fCosPitchCosYaw     - fCosRoll * fSinPitchSinYaw;
+    float y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
+    float z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
+    float w = fCosRoll * fCosPitchCosYaw     + fSinRoll * fSinPitchSinYaw;    
+
+    return ci::Quatf(w, x, y, z);
   }
 
   const ci::Vec3i& blockPosition() const noexcept { return block_position_; }

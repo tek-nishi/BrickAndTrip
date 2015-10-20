@@ -271,13 +271,50 @@ public:
     drawStageCubes(field.collapse_cubes, models, frustum_);
 
     drawCubeShadow(field.item_cubes, models, "item_shadow", "item_shadow");
+
+    auto pickable_matrix = [](const ci::Vec3f& position, const ci::Quatf& rotation, const ci::Vec3f& size) {
+      ci::gl::translate(position);
+
+      // FIXME:通常のscaleが1.0で、pickableが潰された時のみscaleが変わる
+      //       ので、回転の後でscaleを掛けている
+      ci::gl::scale(size);
+
+      // TIPS:gl::rotate(Quarf)は、内部でglRotatefを使っている
+      //      この計算が正しく求まらない状況があるため、Quarf->Matrix
+      //      にしている。これだと問題ない
+      glMultMatrixf(rotation.toMatrix44());
+    };
     
-    drawCubes(field.pickable_cubes, models, "pickable_cube", "pickable_cube");
-    drawCubes(field.item_cubes, models, "item_cube", "item_cube");
-    drawCubes(field.moving_cubes, models, "pickable_cube", "moving_cube");
-    drawCubes(field.falling_cubes, models, "pickable_cube", "falling_cube");
-    drawCubes(field.switches, models, "switch", "switch");
-    drawCubes(field.oneways, models, oneway_models_[oneway_index_()], "oneway");
+    drawCubes(field.pickable_cubes, models,
+              "pickable_cube", "pickable_cube",
+              pickable_matrix);
+
+    auto matrix = [](const ci::Vec3f& position, const ci::Quatf& rotation, const ci::Vec3f& size) {
+      ci::gl::translate(position);
+      glMultMatrixf(rotation.toMatrix44());
+      ci::gl::scale(size);
+    };
+    
+    drawCubes(field.item_cubes, models,
+              "item_cube", "item_cube",
+              matrix);
+    
+    drawCubes(field.moving_cubes, models,
+              "pickable_cube",
+              "moving_cube",
+              matrix);
+    
+    drawCubes(field.falling_cubes, models,
+              "pickable_cube", "falling_cube",
+              matrix);
+    
+    drawCubes(field.switches, models,
+              "switch", "switch",
+              matrix);
+    
+    drawCubes(field.oneways, models,
+              oneway_models_[oneway_index_()], "oneway",
+              matrix);
     
     // bgのfogは別設定
     glFogf(GL_FOG_START, bg_fog_start_);
@@ -842,7 +879,8 @@ private:
   template<typename T>
   void drawCubes(const std::vector<T>& cubes,
                  ModelHolder& models,
-                 const std::string& model_name, const std::string& material_name) noexcept {
+                 const std::string& model_name, const std::string& material_name,
+                 std::function<void (const ci::Vec3f& position, const ci::Quatf& rotation, const ci::Vec3f& size)> matrix) noexcept {
     auto& material = materials_.get(material_name);
     material.apply();
 
@@ -854,6 +892,10 @@ private:
       ci::gl::color(cube->color());
       
       ci::gl::pushModelView();
+
+      matrix(cube->position(), cube->rotation(), cube->size());
+
+#if 0
       ci::gl::translate(cube->position());
 
       // FIXME:通常のscaleが1.0で、pickableが潰された時のみscaleが変わる
@@ -864,6 +906,7 @@ private:
       //      この計算が正しく求まらない状況があるため、Quarf->Matrix
       //      にしている。これだと問題ない
       glMultMatrixf(cube->rotation().toMatrix44());
+#endif
 
       ci::gl::draw(mesh);
       
@@ -899,10 +942,10 @@ private:
       ci::gl::translate(ci::Vec3f(position.x, cube->stageHeight(), position.z));
 
       // 影は、縦方向をぺちゃんこにすればよい
-      auto s = cube->size();
-      ci::gl::scale(s.x, 0.0f, s.z);
+      ci::gl::scale(1.0f, 0.0f, 1.0f);
       
       glMultMatrixf(cube->rotation().toMatrix44());
+      ci::gl::scale(cube->size());
 
       ci::gl::draw(mesh);
 

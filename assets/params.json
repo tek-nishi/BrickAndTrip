@@ -712,7 +712,7 @@
     "item": {
       "color": [ 60, 0.5, 1 ],
 
-      "rotation_speed": [ 0, 0.8, 0.7 ],
+      "rotation_speed": [ 0.8, 1.1, -1.2 ],
 
       "entry_ease": "EaseOutQuad",
       "entry_duration": 1.5,
