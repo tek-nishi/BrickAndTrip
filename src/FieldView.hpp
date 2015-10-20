@@ -513,8 +513,8 @@ private:
           float move_threshold = move_begin_threshold_;
 
           // カメラの離れ具合で、移動量の閾値を変える
-          float distance = eye_distance_ + target_radius_ * eye_distance_rate_;
-          move_threshold = move_threshold * distance / eye_distance_();
+          float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
+          move_threshold = move_threshold * distance * 1.5f / eye_distance_();
           
           int move_direction = PickableCube::MOVE_NONE;
           if (std::abs(picking_ofs.z) >= std::abs(picking_ofs.x)) {
@@ -586,7 +586,7 @@ private:
 
           // カメラの離れ具合で、移動量の閾値を変える
           float distance = eye_distance_ + target_radius_ * eye_distance_rate_;
-          move_threshold = move_threshold * distance / eye_distance_();
+          move_threshold = move_threshold * distance * 1.5f / eye_distance_();
           
           int move_direction = PickableCube::MOVE_NONE;
           int move_speed     = 0;
@@ -716,6 +716,11 @@ private:
       if (!cube->isAdjoinOther()) {
         // 隣接がなければpaddingを加える
         float padding_size = cube->getPaddingSize();
+
+        // カメラの離れ具合でpaddingを変える
+        float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
+        padding_size = padding_size * distance * 1.5f / eye_distance_();
+
         half_size += ci::Vec3f(padding_size, padding_size, padding_size);
       }
       
@@ -926,12 +931,23 @@ private:
     for (const auto& cube : cubes) {
       if (!cube->isActive()) continue;
 
-      const auto& pos  = cube->position();
+      const auto& pos = cube->position();
       const auto& size = cube->size();
-      float padding_size = cube->getPaddingSize();
-      ci::Vec3f padding(padding_size, padding_size, padding_size);
-      ci::AxisAlignedBox3f bbox(pos - size / 2 - padding,
-                                pos + size / 2 + padding);
+      ci::Vec3f half_size = size / 2;
+
+      if (!cube->isAdjoinOther()) {
+        // 隣接がなければpaddingを加える
+        float padding_size = cube->getPaddingSize();
+
+        // カメラの離れ具合でpaddingを変える
+        float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
+        padding_size = padding_size * distance * 1.5f / eye_distance_();
+
+        half_size += ci::Vec3f(padding_size, padding_size, padding_size);
+      }
+
+      ci::AxisAlignedBox3f bbox(pos - half_size,
+                                pos + half_size);
 
       ci::gl::drawStrokedCube(bbox);
     }    
