@@ -460,6 +460,7 @@ public:
         { "complete_item",  current_stage.complete_item },
         { "score",          current_stage.score },
         { "rank",           current_stage.rank },
+        { "fastest_time",   current_stage.fastest_time },
         { "highest_score",  current_stage.highest_score },
         { "highest_rank",   current_stage.highest_rank },
         { "all_cleared",    all_cleard },

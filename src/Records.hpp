@@ -27,7 +27,7 @@ public:
     int    rank;
 
     StageRecord() :
-      clear_time(0.0),
+      clear_time(std::numeric_limits<double>::max()),
       all_item_get(false),
       score(0),
       rank(RANK_DUMMY)
@@ -43,6 +43,7 @@ public:
     int rank;
 
     bool complete_item;
+    bool fastest_time;
     bool highest_score;
     bool highest_rank;
 
@@ -52,6 +53,7 @@ public:
       score(0),
       rank(RANK_DUMMY),
       complete_item(false),
+      fastest_time(false),
       highest_score(false),
       highest_rank(false)
     {}
@@ -274,7 +276,8 @@ public:
     }
 
     // 記録更新判定
-    // 同じ記録でもhighest扱い
+    // 同じ記録でもhighest扱い(ステージの記録は更新済みなので、値が一致→記録更新とみなせる)
+    current_stage_.fastest_time  = current_stage_.play_time == stage_records_[current_game_.stage_num].clear_time;
     current_stage_.highest_score = current_stage_.score == stage_records_[current_game_.stage_num].score;
     current_stage_.highest_rank  = current_stage_.rank == stage_records_[current_game_.stage_num].rank;
 

@@ -191,7 +191,13 @@ private:
       options.updateFn([this]() {
           view_->getWidget("time-result").setText(toFormatedString(clear_time_()));
         });
-      // TODO:最速タイム時の演出
+      
+      // カウントアップ演出が終わったあとで記録更新演出
+      if (boost::any_cast<bool>(result.at("fastest_time"))) {
+        options.finishFn([this]() {
+            view_->startWidgetTween("tween-fastest-time");
+          });
+      }
     }
 
     // SNS投稿で使うのでここで定義
