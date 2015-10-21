@@ -122,6 +122,9 @@ class FieldView : private boost::noncopyable {
   ci::Anim<int> oneway_index_;
 
   float shadow_alpha_;
+
+  ci::Area  bg_area_;
+  ci::Rectf bg_rect_;
   
   
 public:
@@ -170,7 +173,8 @@ public:
     bg_color_(ci::Color(0, 0, 0)),
     fog_color_(ci::ColorA(0, 0, 0, 1)),
     oneway_models_(Json::getArray<std::string>(params["game_view.oneway.model"])),
-    shadow_alpha_(params_["game_view.shadow_alpha"].getValue<float>())
+    shadow_alpha_(params_["game_view.shadow_alpha"].getValue<float>()),
+    bg_rect_(0, 256, 256, 0)
   {
     setCameraParams(params["game_view.camera.start_camera"].getValue<std::string>());
     
@@ -191,8 +195,10 @@ public:
                                         std::bind(&FieldView::touchesEnded, this, std::placeholders::_1, std::placeholders::_2));
 
     setupOneway(params);
-
     setQuality(params["app.low_efficiency_device"].getValue<bool>());
+
+    float aspect = ci::app::getWindowAspectRatio();
+    setupBg(aspect);
   }
   
   ~FieldView() {
@@ -220,6 +226,8 @@ public:
       // 横長の場合、fovは固定
       camera_.setFov(fov_);
     }
+
+    setupBg(aspect);
   }
 
 
@@ -240,14 +248,14 @@ public:
 
     // 遠景(一枚絵)
     {
-      ci::CameraOrtho camera(0, 255, 255, 0, -1, 1);
+      ci::CameraOrtho camera(0, 256, 0, 256, -1, 1);
       ci::gl::setMatrices(camera);
         
       ci::gl::disableDepthRead();
       ci::gl::disableDepthWrite();
       ci::gl::disable(GL_LIGHTING);
       ci::gl::color(bg_color_);
-      ci::gl::draw(bg_texture_);
+      ci::gl::draw(bg_texture_, bg_area_, bg_rect_);
     }
 
     ci::gl::enableDepthRead();
@@ -1038,9 +1046,26 @@ private:
 
 
   // カメラの距離に応じた補正
-  float reviseValueByCamera(const float value) {
+  float reviseValueByCamera(const float value) noexcept {
     float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
     return value * distance * 1.5f / eye_distance_();
+  }
+
+  // 画面の縦横サイズから、BGの描画サイズを決める
+  // 画面の長い方のサイズにあわせ、短い方は切り取って表示する
+  void setupBg(const float aspect) noexcept {
+    if (aspect > 1.0f) {
+      int height = 256.0f / aspect;
+
+      bg_area_ = ci::Area(0, (256 - height) / 2, 256,
+                          256 - (256 - height) / 2);
+    }
+    else {
+      int width = 256.0f * aspect;
+
+      bg_area_ = ci::Area((256 - width) / 2, 0,
+                          256 - (256 - width) / 2, 256);        
+    }
   }
 
 
