@@ -9,6 +9,8 @@
     "event_message": "pause-agree",
     "sound_message": "pause",
 
+    "padding": 0.1,
+    
     "text": "Ý",
     "font": "icon",
     "size": 0.6,

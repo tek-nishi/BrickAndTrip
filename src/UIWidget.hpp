@@ -27,6 +27,8 @@ class UIWidget : private boost::noncopyable {
   CubeText text_;
   std::string font_name_;
 
+  ci::Vec3f padding_;
+
   std::string model_;
   
   ci::Anim<ci::Vec3f> pos_;
@@ -58,7 +60,8 @@ class UIWidget : private boost::noncopyable {
 public:
   UIWidget(const ci::JsonTree& params,
            ci::TimelineRef timeline,
-           Autolayout& autolayout) :
+           Autolayout& autolayout,
+           const float padding) :
     params_(params),
     name_(params["name"].getValue<std::string>()),
     text_(params["text"].getValue<std::string>(),
@@ -66,6 +69,7 @@ public:
           params["spacing"].getValue<float>(),
           params["chara_split"].getValue<size_t>()),
     font_name_(Json::getValue(params, "font", std::string("default"))),
+    padding_(padding, padding, 0.0f),
     model_(Json::getValue(params, "model", std::string("text"))),
     pos_(ci::Vec3f::zero()),
     scale_(ci::Vec3f::one()),
@@ -90,6 +94,12 @@ public:
     if (params.hasChild("sound_message")) {
       sound_message_ = params["sound_message"].getValue<std::string>();
       touch_sound_   = true;
+    }
+    
+    if (params.hasChild("padding")) {
+      // 初期値を上書き
+      float value = params["padding"].getValue<float>();
+      padding_ = ci::Vec3f(value, value, 0.0f);
     }
 
     disp_ = Json::getValue(params, "disp", disp_);
@@ -214,9 +224,9 @@ public:
 #ifdef DEBUG
   void drawDebugInfo() noexcept {
     ci::gl::color(0, 1, 0);
-    
+
     auto pos = pos_() + layout_->getPos();
-    auto bbox = ci::AxisAlignedBox3f(pos + text_.minPos(), pos + text_.maxPos());
+    auto bbox = ci::AxisAlignedBox3f(pos + text_.minPos() - padding_, pos + text_.maxPos() + padding_);
     ci::gl::drawStrokedCube(bbox);
   }
 #endif

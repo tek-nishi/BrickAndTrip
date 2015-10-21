@@ -175,10 +175,10 @@
     },
     
     "widget": {
-      "padding": 0
+      "padding": 0.05
     },
 
-    "debug_info": true
+    "debug_info": false
   },
   
   "game_view": {

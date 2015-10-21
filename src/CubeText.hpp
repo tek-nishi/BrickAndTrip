@@ -76,8 +76,8 @@ private:
     }
 
     if (!text_.empty()) {
-      min_pos_ = ci::Vec3f(0.0f, 0.0f, -size_ / 2);
-      max_pos_ = ci::Vec3f(size_ * text_.size() + spacing_ * (text_.size() - 1), size_, -size_ / 2);
+      min_pos_ = ci::Vec3f::zero();
+      max_pos_ = ci::Vec3f(size_ * text_.size() + spacing_ * (text_.size() - 1), size_, 0.0f);
     }
   }
   
