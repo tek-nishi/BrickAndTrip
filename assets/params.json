@@ -172,7 +172,13 @@
       "far_z":  100,
     
       "eye_point": [ 0, 0, 20 ]
-    }
+    },
+    
+    "widget": {
+      "padding": 0
+    },
+
+    "debug_info": true
   },
   
   "game_view": {

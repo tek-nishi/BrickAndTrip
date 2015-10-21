@@ -28,6 +28,7 @@ class UIView : private boost::noncopyable {
   bool active_;
 #ifdef DEBUG
   bool hide_;
+  bool debug_info_;
 #endif
 
   ci::Camera& camera_;
@@ -56,6 +57,7 @@ public:
     active_(true),
 #ifdef DEBUG
     hide_(false),
+    debug_info_(params["ui_view.debug_info"].getValue<bool>()),
 #endif
     camera_(camera),
     event_(event),
@@ -120,6 +122,12 @@ public:
       if (!widget->isDisp()) continue;
       
       widget->draw(fonts, models);
+
+#ifdef DEBUG
+      if (debug_info_) {
+        widget->drawDebugInfo();
+      }
+#endif
     }
   }
 
