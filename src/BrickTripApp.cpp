@@ -20,6 +20,7 @@
 #include "Model.hpp"
 #include "Params.hpp"
 #include "AudioSession.h"
+#include "GameCenter.h"
 
 
 using namespace ci;
@@ -102,6 +103,8 @@ class BrickTripApp : public AppNative,
 
 	void setup() noexcept override {
     beginAudioSession();
+    GameCenter::authenticateLocalPlayer();
+    
     
     Rand::randomize();
     

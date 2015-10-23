@@ -15,11 +15,13 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		470A47201BD8F6E7008ED826 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470A471F1BD8F6E7008ED826 /* GameKit.framework */; };
+		470A47221BD8FA63008ED826 /* GameCenter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 470A47211BD8FA63008ED826 /* GameCenter.mm */; };
 		471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 471BAE9F1BA42303000BD01F /* AudioSession.mm */; };
 		473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 473FFD121B7A0E7700EFDD9E /* Images.xcassets */; };
 		474560051BABD1E400310BBD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 474560071BABD1E400310BBD /* InfoPlist.strings */; };
 		474560081BABD1EE00310BBD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4745600A1BABD1EE00310BBD /* Localizable.strings */; };
-		4745600E1BABD57800310BBD /* Localize.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4745600D1BABD57800310BBD /* Localize.mm */; settings = {ASSET_TAGS = (); }; };
+		4745600E1BABD57800310BBD /* Localize.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4745600D1BABD57800310BBD /* Localize.mm */; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47B62A291B6A263400ABF155 /* Capture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47B62A271B6A263400ABF155 /* Capture.mm */; };
 		47B62A2C1B6A264200ABF155 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47B62A2B1B6A264200ABF155 /* Social.framework */; };
@@ -46,6 +48,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		470A471F1BD8F6E7008ED826 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		470A47211BD8FA63008ED826 /* GameCenter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameCenter.mm; path = ../src/GameCenter.mm; sourceTree = "<group>"; };
 		471BAE9F1BA42303000BD01F /* AudioSession.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioSession.mm; path = ../src/AudioSession.mm; sourceTree = "<group>"; };
 		473FFD121B7A0E7700EFDD9E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		474560061BABD1E400310BBD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -84,6 +88,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+				470A47201BD8F6E7008ED826 /* GameKit.framework in Frameworks */,
 				00CFDF6B1138442D0091E310 /* CoreGraphics.framework in Frameworks */,
 				C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */,
 				C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */,
@@ -118,6 +123,7 @@
 		00692BD214FF149000D0A05E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				470A471F1BD8F6E7008ED826 /* GameKit.framework */,
 				47B62A2B1B6A264200ABF155 /* Social.framework */,
 				C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */,
 				00A66A351965AC8800B17EB3 /* Accelerate.framework */,
@@ -139,6 +145,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				470A47211BD8FA63008ED826 /* GameCenter.mm */,
 				4745600D1BABD57800310BBD /* Localize.mm */,
 				471BAE9F1BA42303000BD01F /* AudioSession.mm */,
 				47D342F41B78A03D007AF9E9 /* Share.mm */,
@@ -208,6 +215,11 @@
 				TargetAttributes = {
 					00692BCE14FF149000D0A05E = {
 						DevelopmentTeam = 4Y46LA3FF9;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -255,6 +267,7 @@
 				471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */,
 				47B8CD071B7A0D4900109D0E /* BrickTripApp.cpp in Sources */,
 				4745600E1BABD57800310BBD /* Localize.mm in Sources */,
+				470A47221BD8FA63008ED826 /* GameCenter.mm in Sources */,
 				47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,6 +386,7 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ngs.bricktrip;
 				PRODUCT_NAME = BrickTrip;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -400,6 +414,7 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ngs.bricktrip;
 				PRODUCT_NAME = BrickTrip;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

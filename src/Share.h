@@ -7,8 +7,7 @@
 #include <string>
 #include <functional>
 
-namespace ngs {
-namespace Share {
+namespace ngs { namespace Share {
 
 #if defined(CINDER_COCOA_TOUCH)
 
@@ -17,10 +16,9 @@ void post(const std::string& text, UIImage* image, std::function<void()> complet
 
 #else
 
-template<typename T>
-bool canPost(const T) noexcept { return false; }
+template <typename T = void>
+bool canPost() noexcept { return false; }
 
 #endif
 
-}
-}
+} }
