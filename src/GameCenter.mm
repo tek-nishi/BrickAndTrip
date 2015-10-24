@@ -33,8 +33,8 @@ void authenticateLocalPlayer(std::function<void()> start_callback,
       [app_vc presentViewController:viewController animated:YES completion:nil];
     }
     else if ([GKLocalPlayer localPlayer].isAuthenticated) {
-      finish_callback();
       authenticated = true;
+      finish_callback();
       
       NSLOG(@"認証成功");
     }

@@ -191,7 +191,7 @@ public:
   bool isDisp() const noexcept { return disp_; }
   void setDisp(const bool value) noexcept { disp_ = value; }
   
-  bool isActive() const noexcept { return active_; }
+  bool isActive() const noexcept { return active_ && disp_; }
   void setActive(const bool value) noexcept {
     // touch_eventがない場合は常にfalse
     active_ = touch_event_ ? value : false;

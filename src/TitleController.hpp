@@ -159,23 +159,7 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 #endif
-
-    // プレイ回数が0の場合はMenuをOFF
-    if (records.getTotalPlayNum() == 0) {
-      std::string widget_names[] = {
-        "records",
-        "settings",
-        "credits",
-      };
-      
-      for (const auto& name : widget_names) {
-        auto& widget = view_->getWidget(name);
-        widget.setDisp(false);
-        widget.setActive(false);
-      }
-    }
-    
-    view_->startWidgetTween("tween-in");
+    setupView();
 
     {
       std::string jingle_name = startup ? "title.jingle-full" : "title.jingle-short";
@@ -205,6 +189,47 @@ public:
 
 
 private:
+  void dispLeaderBoard() {
+    auto& widget = view_->getWidget("leaderboard");
+    if (widget.isDisp()) return;
+    
+    widget.setDisp(true);
+    widget.setActive(true);
+  }
+  
+  void setupView() {
+    // プレイ回数が0の場合はMenuをOFF
+    if (records_.getTotalPlayNum() == 0) {
+      std::string widget_names[] = {
+        "records",
+        "settings",
+        "credits",
+      };
+      
+      for (const auto& name : widget_names) {
+        auto& widget = view_->getWidget(name);
+        widget.setDisp(false);
+        widget.setActive(false);
+      }
+    }
+    else {
+      if (GameCenter::isAuthenticated()) {
+        dispLeaderBoard();
+      }
+
+      // 時間差で認証される事もありうる
+      connections_ += event_.connect("gamecenter-authenticated",
+                                     [this](const Connection&, EventParam& param) {
+                                       if (GameCenter::isAuthenticated()) {
+                                         dispLeaderBoard();
+                                       }
+                                     });
+    }
+    
+    view_->startWidgetTween("tween-in");    
+  }
+
+  
   bool isActive() const override { return active_; }
 
   Event<EventParam>& event() override { return event_; }

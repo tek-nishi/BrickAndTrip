@@ -135,11 +135,11 @@
 
   {
     "name": "leaderboard",
-    "disp": true,
+    "disp": false,
 
     "model": "button",
     
-    "active": true,
+    "active": false,
     "event_message": "leaderboard-start",
     "sound_message": "select",
 
@@ -148,7 +148,7 @@
     "size": 0.8,
     "spacing": 0.05,
     "chara_split": 1,
-    "pos": [ -0.2, 2.2, 0 ],
+    "pos": [ -0.2, 3.2, 0 ],
     "origin": "bottom-right",
     "layout": "bottom-right",
     "base_color": [ 1, 1, 1 ],
@@ -232,7 +232,7 @@
             "type": "EaseOutElastic",
             "duration": 0.6,
             "start": [ 0.3, 0.3, 0.3 ],
-            "end": [ 1.3, 1.3, 1.3 ]
+            "end": [ 1, 1, 1 ]
           },
           {
             "target": "base_color",

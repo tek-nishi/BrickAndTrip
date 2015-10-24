@@ -165,6 +165,7 @@ class BrickTripApp : public AppNative,
       },
       [this]() {
         update_exec_ = true;
+        controller_->event().signal("gamecenter-authenticated", EventParam());
       });
   }
   
