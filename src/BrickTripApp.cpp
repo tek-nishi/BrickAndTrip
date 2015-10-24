@@ -94,6 +94,8 @@ class BrickTripApp : public AppNative,
     
     // Retina Display対応
     settings->enableHighDensityDisplay();
+    // 勝手に画面が暗くなるのを抑制
+    settings->enablePowerManagement(false);
 
     fast_speed_ = params_["app.fast_speed"].getValue<double>();
     slow_speed_ = params_["app.slow_speed"].getValue<double>();
