@@ -10,6 +10,7 @@
 #include "Share.h"
 #include "Capture.h"
 #include "Localize.h"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -160,6 +161,7 @@ private:
     
     auto game_score = boost::any_cast<int>(result.at("total_score"));
     view_->getWidget("score-result").setText(toFormatedString(game_score, 5));
+    GameCenter::submitScore(game_score);
 
     if (boost::any_cast<bool>(result.at("highest_score"))) {
       view_->startWidgetTween("tween-highest-score");

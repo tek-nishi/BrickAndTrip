@@ -3,16 +3,9 @@
 //
 
 #import <GameKit/GameKit.h>
+#include <sstream>
+#include <iomanip>
 #import "GameCenter.h"
-#include <functional>
-
-
-// リリース時 NSLog 一網打尽マクロ
-#ifdef DEBUG
-#define NSLOG(...) NSLog(__VA_ARGS__)
-#else
-#define NSLOG(...) 
-#endif
 
 
 namespace ngs { namespace GameCenter {
@@ -68,14 +61,10 @@ void showBoard(std::function<void()> start_callback,
   }  
 }
 
-void submitScore() noexcept {
-  GKScore* scoreReporter = [[GKScore alloc] initWithCategory:@"設定したIDを記入"];
 
-  // 送信する値
-  NSInteger scoreR = 0;
-
-  scoreReporter.value = scoreR;
-  [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+// スコア送信
+static void sendScore(NSArray* scores) {
+  [GKScore reportScores:scores withCompletionHandler:^(NSError* error) {
       if (error != nil) {
         NSLOG(@"Sending score error:%@", [error localizedDescription]);
       }
@@ -83,6 +72,46 @@ void submitScore() noexcept {
         NSLOG(@"Sending score OK!");
       }
     }];
+}
+
+static NSString* createString(const std::string& text) {
+  NSString* str = [[[NSString alloc] initWithCString:text.c_str() encoding:NSUTF8StringEncoding] autorelease];
+  return str;
+}
+
+
+void submitStageScore(const int stage,
+                      const int score, const double clear_time) noexcept {
+  std::ostringstream str;
+  str << "BRICKTRIP.STAGE"
+      << std::setw(2) << std::setfill('0') << stage;
+
+  std::string hiscore_id(str.str() + ".HISCORE");
+  GKScore* hiscore_reporter = [[[GKScore alloc] initWithCategory:createString(hiscore_id)] autorelease];
+  hiscore_reporter.value = score;
+
+  DOUT << "submit:" << hiscore_id << " " << score << std::endl;
+  
+  std::string besttime_id(str.str() + ".BESTTIME");
+  GKScore* besttime_reporter = [[[GKScore alloc] initWithCategory:createString(besttime_id)] autorelease];
+  besttime_reporter.value = int64_t(clear_time * 100.0);
+
+  DOUT << "submit:" << besttime_id << " " << clear_time << std::endl;
+
+  NSArray* score_array = @[hiscore_reporter, besttime_reporter];
+  sendScore(score_array);
+}
+
+void submitScore(const int score) noexcept {
+  if (score == 0) return;
+  
+  GKScore* score_reporter = [[[GKScore alloc] initWithCategory:createString("BRICKTRIP.HISCORE")] autorelease];
+  score_reporter.value = score;
+
+  DOUT << "submit:" << score << std::endl;
+  
+  NSArray* score_array = @[score_reporter];
+  sendScore(score_array);
 }
 
 } }

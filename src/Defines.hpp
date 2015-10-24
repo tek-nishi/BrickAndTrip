@@ -27,6 +27,13 @@
 
 #if defined(CINDER_COCOA_TOUCH)
 
+// リリース時 NSLog 一網打尽マクロ
+#ifdef DEBUG
+#define NSLOG(...) NSLog(__VA_ARGS__)
+#else
+#define NSLOG(...) 
+#endif
+
 #define glFogi(pname, param) glFogx(pname, param)
 
 #endif

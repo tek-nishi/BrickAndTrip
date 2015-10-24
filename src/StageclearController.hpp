@@ -10,6 +10,7 @@
 #include "Share.h"
 #include "Capture.h"
 #include "Localize.h"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -177,10 +178,10 @@ private:
 
     view_->getWidget("current-stage-num").setText(toFormatedString(current_stage_, 2), false);
     
+    // constなのでatを使っている
+    // GameCenterに送信するので、ここで定義
+    auto clear_time = boost::any_cast<double>(result.at("clear_time"));
     {
-      // constなのでatを使っている
-      auto clear_time = boost::any_cast<double>(result.at("clear_time"));
-
       // カウントアップ演出
       auto options = animation_timeline_->apply(&clear_time_,
                                                 0.0, clear_time,
@@ -265,6 +266,10 @@ private:
         view_->startWidgetTween("tween-highest-rank");
       }
     }
+    
+    GameCenter::submitStageScore(current_stage_,
+                                 game_score, clear_time);
+
     
 #if defined(CINDER_COCOA_TOUCH)
     if (canCaptureTopView()) {
