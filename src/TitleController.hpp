@@ -7,6 +7,7 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -96,7 +97,6 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
-                                  
     
     connections_ += event.connect("settings-start",
                                   [this](const Connection& connection, EventParam& param) {
@@ -139,6 +139,26 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
+    
+#if defined(CINDER_COCOA_TOUCH)
+    connections_ += event.connect("leaderboard-start",
+                                  [this](const Connection& connection, EventParam& param) {
+                                    view_->setActive(false);
+                                    event_.signal("field-input-stop", EventParam());
+                                    
+                                    event_timeline_->add([this]() {
+                                        GameCenter::showBoard([this]() {
+                                            event_.signal("field-update-stop", EventParam());
+                                          },
+                                          [this]() {
+                                            event_.signal("field-update-restart", EventParam());
+                                            event_.signal("field-input-start", EventParam());
+                                            view_->setActive(true);
+                                          });
+                                      },
+                                      event_timeline_->getCurrentTime() + tween_delay_);
+                                  });
+#endif
 
     // プレイ回数が0の場合はMenuをOFF
     if (records.getTotalPlayNum() == 0) {

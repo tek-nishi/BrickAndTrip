@@ -291,12 +291,12 @@ public:
                                    });
 
     
-    connections_ += event_.connect("sns-post-begin",
+    connections_ += event_.connect("field-update-stop",
                                    [this](const Connection&, EventParam& param) {
                                      paused_ = true;
                                    });
 
-    connections_ += event_.connect("sns-post-end",
+    connections_ += event_.connect("field-update-restart",
                                    [this](const Connection&, EventParam& param) {
                                      paused_ = false;
                                    });

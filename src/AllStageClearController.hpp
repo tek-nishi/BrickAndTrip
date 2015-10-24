@@ -113,7 +113,7 @@ public:
     connections_ += event.connect("selected-share",
                                   [this](const Connection& connection, EventParam& param) {
                                     view_->setActive(false);
-                                    event_.signal("sns-post-begin", EventParam());
+                                    event_.signal("field-update-stop", EventParam());
                                     
                                     event_timeline_->add([this]() {
                                         DOUT << "Share" << std::endl;
@@ -121,7 +121,7 @@ public:
                                         Share::post(sns_text_,
                                                     captureTopView(),
                                                     [this]() {
-                                                      event_.signal("sns-post-end", EventParam());
+                                                      event_.signal("field-update-restart", EventParam());
                                                       view_->setActive(true);
                                                     });
                                       },

@@ -34,7 +34,7 @@ class RootController : public ControllerBase {
   Event<std::vector<Touch> >& touch_event_;
   
   Event<EventParam> event_;
-
+  
   ci::CameraPersp ui_camera_;
   float fov_;
   float near_z_;
@@ -53,7 +53,7 @@ class RootController : public ControllerBase {
   // TIPS:イテレート中にpush_backされるのでstd::listを使っている
   std::list<ControllerPtr> children_;
 
-
+  
 public:
   RootController(ci::JsonTree& params,
                  ci::TimelineRef timeline,
@@ -142,7 +142,6 @@ public:
                                                             param,
                                                             view_creator_.create("ui_allstageclear.json"));
                    });
-
 
     // サウンド再生
     event_.connect("sound-play",

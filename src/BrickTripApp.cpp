@@ -44,6 +44,7 @@ class BrickTripApp : public AppNative,
   double forward_speed_;
   bool forward_speed_change_;
   bool pause_;
+  bool update_exec_;
 
   bool active_touch_;
 
@@ -103,8 +104,6 @@ class BrickTripApp : public AppNative,
 
 	void setup() noexcept override {
     beginAudioSession();
-    GameCenter::authenticateLocalPlayer();
-    
     
     Rand::randomize();
     
@@ -124,6 +123,9 @@ class BrickTripApp : public AppNative,
     forward_speed_        = 1.0;
     forward_speed_change_ = false;
     pause_ = false;
+
+    // GameCenter認証画面が表示中は全更新を止める
+    update_exec_ = true;
     
     setupFonts();
     setupModels();
@@ -156,6 +158,14 @@ class BrickTripApp : public AppNative,
         max_elapsed_seconds_ = 1.0 / v.y;
       },
       timeline().getCurrentTime() + params_["app.startup_frame"].getValue<float>());
+
+    
+    GameCenter::authenticateLocalPlayer([this]() {
+        update_exec_ = false;        
+      },
+      [this]() {
+        update_exec_ = true;
+      });
   }
   
   void shutdown() noexcept override {
@@ -312,8 +322,10 @@ class BrickTripApp : public AppNative,
     }
 #endif
     
-    timeline_->step(progressing_seconds);
-    controller_->update(progressing_seconds);
+    if (update_exec_) {
+      timeline_->step(progressing_seconds);
+      controller_->update(progressing_seconds);
+    }
     
     elapsed_seconds_ = elapsed_seconds;
   }
