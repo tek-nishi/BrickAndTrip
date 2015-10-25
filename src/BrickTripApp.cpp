@@ -150,17 +150,11 @@ class BrickTripApp : public AppNative,
     // TIPS: ambientとdiffuseをci::gl::colorで決める
     gl::enable(GL_COLOR_MATERIAL);
 
-    elapsed_seconds_ = getElapsedSeconds();
-    
-    // 起動後安定するまでは経過時間の許容を少なく
-    auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
-    max_elapsed_seconds_ = 1.0 / v.x;
-
-    timeline().add([this, v]() {
-        max_elapsed_seconds_ = 1.0 / v.y;
-      },
-      timeline().getCurrentTime() + params_["app.startup_frame"].getValue<float>());
-
+#if defined(CINDER_COCOA_TOUCH) && defined(DEBUG)
+    // キーボード表示
+    // TIPS:シミュレーターはMacのキー入力を受け付ける
+    // showKeyboard();
+#endif
     
     GameCenter::authenticateLocalPlayer([this]() {
         update_exec_ = false;        
@@ -169,6 +163,17 @@ class BrickTripApp : public AppNative,
         update_exec_ = true;
         controller_->event().signal("gamecenter-authenticated", EventParam());
       });
+
+    // 起動後安定するまでは経過時間の許容を少なく
+    auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
+    max_elapsed_seconds_ = 1.0 / v.x;
+
+    timeline().add([this, v]() {
+        max_elapsed_seconds_ = 1.0 / v.y;
+      },
+      timeline().getCurrentTime() + params_["app.startup_frame"].getValue<float>());
+    
+    elapsed_seconds_ = getElapsedSeconds();
   }
   
   void shutdown() noexcept override {
