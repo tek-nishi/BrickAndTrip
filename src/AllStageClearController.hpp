@@ -98,6 +98,7 @@ public:
                                         view_->startWidgetTween("tween-out");
 
                                         event_timeline_->add([this]() {
+                                            event_.signal("check-after-gameover", EventParam());
                                             event_.signal("back-to-title", EventParam());
 
                                             event_timeline_->add([this]() {

@@ -145,6 +145,13 @@ public:
                                                             view_creator_.create("ui_allstageclear.json"));
                    });
 
+    // GameOver時に色々チェック
+    event_.connect("check-after-gameover",
+                   [this](const Connection& connection, EventParam& param) {
+                     DOUT << "check-after-gameover" << std::endl;
+                     checkAchievment();
+                   });
+
     // サウンド再生
     event_.connect("sound-play",
                    [this](const Connection& connection, EventParam& param) {
@@ -316,14 +323,14 @@ private:
 
 
   template<typename T, typename... Args>
-  void addController(Args&&... args) {
+  void addController(Args&&... args) noexcept {
     auto controller = std::unique_ptr<ControllerBase>(new T(std::forward<Args>(args)...));
     children_.push_back(std::move(controller));
   }
 
 
   // 汎用的なパラメーターからCameraを生成する
-  static ci::CameraPersp createCamera(const ci::JsonTree& params) {
+  static ci::CameraPersp createCamera(const ci::JsonTree& params) noexcept {
     ci::CameraPersp camera(ci::app::getWindowWidth(), ci::app::getWindowHeight(),
                            params["fov"].getValue<float>(),
                            params["near_z"].getValue<float>(),
@@ -332,6 +339,23 @@ private:
     camera.setEyePoint(Json::getVec3<float>(params["eye_point"]));
 
     return camera;
+  }
+
+  // FIXME:ここに書くべき実装ではない
+  void checkAchievment() noexcept {
+    // プレイ回数による実績
+    std::vector<std::pair<int, std::string> > achievements = {
+      {  10, "BRICKTRIP.ACHIEVEMENT.PLAYED_10_TIMES" },
+      {  50, "BRICKTRIP.ACHIEVEMENT.PLAYED_50_TIMES" },
+      { 100, "BRICKTRIP.ACHIEVEMENT.PLAYED_100_TIMES" },
+    };
+
+    int play_num = records_.getTotalPlayNum();
+    for (const auto& a : achievements) {
+      // 毎回更新して、達成率を少しずつあげる
+      double rate = play_num * 100.0 / a.first;
+      AchievementRequest(event_, a.second, rate);
+    }
   }
 
 };

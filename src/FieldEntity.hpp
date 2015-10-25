@@ -23,6 +23,7 @@
 #include "EventParam.hpp"
 #include "Records.hpp"
 #include "Bg.hpp"
+#include "AchievementRequest.hpp"
 
 
 namespace ngs {
@@ -395,6 +396,11 @@ public:
 
     stage_num_ += 1;
 
+    // FIXME:マジックナンバー
+    if (stage_num_ == 11) {
+      AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.APPEARED_STAGE11");
+    }
+    
     stage_.startBuildStage(1.0f, true);
     float collapse_rate = is_continued_ ? continue_collapse_rate_
                                         : 1.0f;
@@ -425,7 +431,8 @@ public:
     stage_.startCollapseStage(finish_line_z_ - 1, finish_rate_);
 
     records_.storeStageRecord();
-
+    checkAchievment();
+    
     // 全ステージクリア判定
     bool all_cleard    = false;
     bool regular_stage = false;
@@ -1233,6 +1240,30 @@ private:
   static int getPickableCubeEntryNum(const std::string& path) noexcept {
     auto stage = Json::readFromFile(path);
     return Json::getValue(stage, "pickable", 0);
+  }
+
+
+  void checkAchievment() const noexcept {
+    // STAGEクリア実績
+    std::vector<std::pair<int, std::string> > achievements = {
+      {  1, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE01" },
+      {  3, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE03" },
+      {  6, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE06" },
+      { 10, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE10" },
+      { 11, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE11" },
+    };
+    
+    for (const auto& a : achievements) {
+      if (a.first == stage_num_) {
+        AchievementRequest(event_, a.second);
+        break;
+      }
+    }
+    
+    // 10ステージRANK S判定
+    if (records_.isSatisfyRegularStageRank(0)) {
+      AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
+    }
   }
   
 };

@@ -457,17 +457,20 @@ public:
     }
     return true;
   }
-
+  
   // 10stageまでのrankが規定以上か??
-  bool isSatisfyRegularStageRank() {
+  bool isSatisfyRegularStageRank(const int rank_satisfy) const {
     if (stage_records_.size() < regular_stage_num_) return false;
     
     for (size_t i = 0; i < regular_stage_num_; ++i) {
-      if (stage_records_[i].rank > rank_satisfy_) return false;
+      if (stage_records_[i].rank > rank_satisfy) return false;
     }
     return true;
   }
 
+  bool isSatisfyRegularStageRank() const {
+    return isSatisfyRegularStageRank(rank_satisfy_);
+  }
   
   bool isSeOn() const { return se_on_; }
   bool isBgmOn() const { return bgm_on_; }
