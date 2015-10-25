@@ -52,7 +52,7 @@ public:
     timeline->apply(event_timeline_);
 
     connections_ += event.connect("se-change",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     bool active = records_.toggleSeOn();
                                     setSoundIcon("se-setting", active);
                                     
@@ -63,7 +63,7 @@ public:
                                   });
 
     connections_ += event.connect("bgm-change",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     bool active = records_.toggleBgmOn();
                                     setSoundIcon("bgm-setting", active);
                                     
@@ -74,7 +74,7 @@ public:
                                   });
 
     connections_ += event.connect("settings-agree",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     records_.write(params_["game.records"].getValue<std::string>());
 

@@ -45,7 +45,7 @@ public:
     ci::JsonTree achievements = ci::JsonTree(ci::loadFile(full_path));
 #endif
 
-    for (int i = 0; i < achievements.getNumChildren(); ++i) {
+    for (u_int i = 0; i < achievements.getNumChildren(); ++i) {
       auto& json = achievements[i];
       
       std::string id = json["id"].getValue<std::string>();

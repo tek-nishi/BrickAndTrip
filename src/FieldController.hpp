@@ -81,13 +81,13 @@ public:
                                    });
     
     connections_ += event_.connect("pickable-on-stage",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                    });
 
 #if 0
     // pickablecubeの1つがstartlineを越えたらcollapse開始
     connections_ += event_.connect("first-pickable-started",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      DOUT << "first-pickable-started" << std::endl;
                                      // const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
                                      // view_.setStageBgColor(color);
@@ -100,12 +100,12 @@ public:
 #endif
     
     connections_ += event_.connect("all-pickable-started",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      DOUT << "all-pickable-started" << std::endl;
                                    });
 
     connections_ += event_.connect("all-pickable-finished",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      DOUT << "all-pickable-finished" << std::endl;
                                      entity_.completeBuildAndCollapseStage();
                                      entity_.cancelPickPickableCubes();
@@ -208,7 +208,7 @@ public:
 
 #if 0
     connections_ += event_.connect("fall-all-pickable",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-all-pickable" << std::endl;
                                      entity_.cancelPickPickableCubes();
                                      view_.enableTouchInput(false);
@@ -271,7 +271,7 @@ public:
                                   });
 
     connections_ += event_.connect("continue-game",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      view_.enableTouchInput();
                                    });
                                   
@@ -290,7 +290,7 @@ public:
                                    });
     
     connections_ += event_.connect("game-abort",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      DOUT << "game-abort" << std::endl;
                                      view_.enableFollowCamera(false);
                                      paused_ = false;
@@ -310,27 +310,27 @@ public:
 
     
     connections_ += event_.connect("pickuped-item",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      DOUT << "pickuped-item" << std::endl;
                                      entity_.pickupedItemCube();
                                    });
 
     
     connections_ += event_.connect("field-input-stop",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.cancelPickPickableCubes();
                                      entity_.enablePickableCubeMovedEvent(false);
                                      view_.enableTouchInput(false);
                                    });
 
     connections_ += event_.connect("field-input-start",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.enablePickableCubeMovedEvent();
                                      view_.enableTouchInput();
                                    });
 
     connections_ += event_.connect("stage-color",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
                                      view_.setStageBgColor(color);
 
@@ -340,14 +340,14 @@ public:
 
     
     connections_ += event_.connect("camera-change",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      const auto& name = boost::any_cast<const std::string&>(param["name"]);
                                      view_.changeCameraParams(name);
                                    });
 
     
     connections_ += event_.connect("falling-down",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      auto duration = boost::any_cast<float>(param["duration"]);
                                      const auto& pos      = boost::any_cast<const ci::Vec3f&>(param["pos"]);
                                      const auto& size     = boost::any_cast<const ci::Vec3f&>(param["size"]);
@@ -355,19 +355,19 @@ public:
                                    });
 
     connections_ += event_.connect("begin-regulat-stageclear",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.setRestartLine();
                                    });
     
     connections_ += event_.connect("begin-all-stageclear",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.setRestartLine();
                                    });
 
 
     // 効果音系
     connections_ += event_.connect("view-sound",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      const auto& sound = boost::any_cast<const std::string&>(param["sound"]);
                                      const auto& pos  = boost::any_cast<const ci::Vec3f&>(param["pos"]);
                                      const auto& size = boost::any_cast<const ci::Vec3f&>(param["size"]);
@@ -376,17 +376,17 @@ public:
     
 #ifdef DEBUG
     connections_ += event_.connect("force-collapse",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.startStageCollapse();
                                    });
     
     connections_ += event_.connect("stop-build-and-collapse",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.stopBuildAndCollapse();
                                    });
 
     connections_ += event_.connect("entry-pickable",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      entity_.entryPickableCube();
                                    });
 #endif
@@ -471,6 +471,7 @@ private:
                                                       event_.signal("begin-progress", EventParam());
                                                     },
                                                     timeline_->getCurrentTime() + progress_start_delay_);
+                                                  
                                                   connection.disconnect();
                                                 });
 #endif
@@ -485,17 +486,21 @@ private:
   }
 
   void startNextStage() noexcept {
-    view_.enableTouchInput();
-    view_.endDistanceCloser();
-    entity_.entryPickableCubes();
-    entity_.startStageBuild();
+    disposable_connections_.clear();
 
     disposable_connections_ += event_.connect("pickable-moved",
                                               [this](const Connection& connection, EventParam& param) {
                                                 // このタイミングで光源設定を変更
                                                 view_.setStageBgColor(entity_.bgColor());
                                                 view_.setStageLightTween(entity_.lightTween());
+                                                
+                                                connection.disconnect();
                                               });
+    
+    view_.enableTouchInput();
+    view_.endDistanceCloser();
+    entity_.entryPickableCubes();
+    entity_.startStageBuild();
 
     stage_cleard_     = false;
     stageclear_agree_ = false;

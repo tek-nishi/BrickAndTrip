@@ -49,7 +49,7 @@ public:
     timeline->apply(event_timeline_);
 
     connections_ += event.connect("pause-cancel",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     
                                     event_timeline_->add([this]() {
@@ -69,7 +69,7 @@ public:
                                   });
 
     connections_ += event.connect("pause-abort",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     
                                     event_timeline_->add([this]() {

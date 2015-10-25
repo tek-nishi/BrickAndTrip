@@ -85,7 +85,7 @@ public:
 
 #ifdef DEBUG
     connections_ += event_.connect("toggle-ui-hide",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      hide_ = !hide_;
                                    });
 #endif

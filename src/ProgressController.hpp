@@ -51,7 +51,7 @@ public:
     timeline->apply(event_timeline_);
 
     connections_ += event.connect("pause-agree",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     // 自動PAUSEのための措置
                                     if (!view_->isActive()) return;
 
@@ -89,7 +89,7 @@ public:
                                   });
 
     connections_ += event.connect("game-continue",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setDisp(true);
                                     view_->setActive(true);
                                     
@@ -98,12 +98,12 @@ public:
                                   });
 
     connections_ += event.connect("game-abort",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     active_ = false;
                                   });
 
     connections_ += event.connect("begin-stageclear",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     bool all_cleard = boost::any_cast<bool>(param.at("all_cleared"));
                                     if (all_cleard) {
@@ -119,7 +119,7 @@ public:
                                   });
 
     connections_ += event.connect("stageclear-agree",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setDisp(true);
                                     view_->setActive(true);
                                     view_->resetWidgetTween();
@@ -127,19 +127,19 @@ public:
                                   });
 
     connections_ += event_.connect("first-out-pickable",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                      deactivateView();
                                    });
 
 #if 0
     connections_ += event_.connect("pressed-pickable",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                      deactivateView();
                                    });
 #endif
 
     connections_ += event_.connect("update-record",
-                                   [this](const Connection& connection, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) {
                                      auto play_time = boost::any_cast<double>(param["play-time"]);
                                      auto& widget = view_->getWidget("play-time");
                                      widget.setText(toFormatedString(play_time));

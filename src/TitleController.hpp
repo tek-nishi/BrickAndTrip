@@ -76,7 +76,7 @@ public:
                                   });
 
     connections_ += event.connect("records-start",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
 
@@ -99,7 +99,7 @@ public:
                                   });
     
     connections_ += event.connect("settings-start",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
 
@@ -120,7 +120,7 @@ public:
                                   });
     
     connections_ += event.connect("credits-start",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
                                     
@@ -142,7 +142,7 @@ public:
     
 #if defined(CINDER_COCOA_TOUCH)
     connections_ += event.connect("leaderboard-start",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
                                     

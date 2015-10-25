@@ -58,7 +58,7 @@ public:
     timeline->apply(event_timeline_);
 
     connections_ += event.connect("gameover-agree",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     
                                     event_timeline_->add([this]() {
@@ -79,7 +79,7 @@ public:
                                   });
 
     connections_ += event.connect("gameover-continue",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     
                                     event_timeline_->add([this]() {
@@ -100,7 +100,7 @@ public:
 
 #if defined(CINDER_COCOA_TOUCH)
     connections_ += event.connect("selected-share",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     event_.signal("field-update-stop", EventParam());
                                     
