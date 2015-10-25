@@ -42,8 +42,8 @@ template <typename T1, typename T2, typename T3>
 void submitStageScore(const T1 stage,
                       const T2 score, const T3 clear_time) noexcept {};
 
-template <typename T1>
-void submitScore(const int score) noexcept {};
+template <typename T>
+void submitScore(const T score) noexcept {};
 
 #endif
 
