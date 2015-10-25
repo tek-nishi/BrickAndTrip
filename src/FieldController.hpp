@@ -10,6 +10,7 @@
 #include "EventParam.hpp"
 #include "ConnectionHolder.hpp"
 #include "SoundRequest.hpp"
+#include "AchievementRequest.hpp"
 
 
 namespace ngs {
@@ -184,7 +185,18 @@ public:
     connections_ += event_.connect("fall-pickable",
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-pickable" << std::endl;
-                                     // view_.cancelPicking(boost::any_cast<u_int>(param["id"]));
+                                     if (boost::any_cast<bool>(param["first_out"])) {
+                                       AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.FALLEN");
+                                     }
+                                   });
+
+    // ドッスンに踏まれた
+    connections_ += event_.connect("pressed-pickable",
+                                   [this](const Connection&, EventParam& param) {
+                                     DOUT << "pressed-pickable" << std::endl;
+                                     if (boost::any_cast<bool>(param["first_out"])) {
+                                       AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.SQUASHED");
+                                     }
                                    });
 
     // pickablecubeの1つがやられたらgameover
@@ -192,12 +204,6 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "first-out-pickable" << std::endl;
                                      beginGameover(param);
-                                   });
-
-    // ドッスンに踏まれた
-    connections_ += event_.connect("pressed-pickable",
-                                   [this](const Connection&, EventParam& param) {
-                                     DOUT << "pressed-pickable" << std::endl;
                                    });
 
 #if 0
@@ -239,6 +245,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "gameover-continue" << std::endl;
                                      entity_.cleanupField(true);
+                                     AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.CONTINUED");
                                    });
 
     connections_ += event_.connect("stage-all-collapsed",
@@ -450,6 +457,8 @@ private:
                                                       event_.signal("begin-progress", EventParam());
                                                     },
                                                     timeline_->getCurrentTime() + progress_start_delay_);
+
+                                                  AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.FIRST_TRIP");
                                                   
                                                   connection.disconnect();
                                                 });

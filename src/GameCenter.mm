@@ -161,6 +161,18 @@ void submitAchievement(const std::string& identifier, const double complete_rate
   }
 }
 
+#ifdef DEBUG
+void resetAchievement() noexcept {
+  [GKAchievement resetAchievementsWithCompletionHandler:^(NSError* error) {
+      if (error != nil) {
+        NSLOG(@"Error in resetting achievements:%@", [error localizedDescription]);
+      }
+      else {
+        NSLOG(@"deleteAchievements OK!");
+      }
+    }];
+}
+#endif
 
 } }
 

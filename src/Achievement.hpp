@@ -22,7 +22,7 @@ public:
   Achievement() = default;
 
   
-  void entry(const std::string& id, const double value) {
+  void entry(const std::string& id, const double value) noexcept {
     GameCenter::submitAchievement(id, value,
                                   [this, id, value]() {
                                     Item item = { false, value };
@@ -84,6 +84,21 @@ public:
     
     DOUT << "Achievement: write success." << std::endl;
   }
+
+  
+#ifdef DEBUG
+  void reset() noexcept {
+    // キャッシュは項目の内容を初期化して、即座に書き出す
+    for (auto& item : items_) {
+      item.second.send  = true;
+      item.second.value = 0.0;
+    }
+    
+    GameCenter::resetAchievement();
+    
+    DOUT << "Achievement::reset" << std::endl;
+  }
+#endif
   
 };
 

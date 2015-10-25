@@ -966,10 +966,11 @@ private:
 
         if (!cube->isSleep()) {
           EventParam params = {
-            { "id", cube->id() },
+            { "id",        cube->id() },
+            { "first_out", !first_out_pickable_ },
           };
           event_.signal("fall-pickable", params);
-
+          
           if (!first_out_pickable_) {
             first_out_pickable_ = true;
             event_.signal("first-out-pickable", params);
@@ -987,12 +988,12 @@ private:
       if (falling_cubes_.isCubePressed(cube->blockPosition())) {
         // 踏まれた!!
         cube->pressed();
-        
+
         EventParam params = {
-          { "id", cube->id() },
-          { "block_position", cube->blockPosition() }
+          { "id",             cube->id() },
+          { "block_position", cube->blockPosition() },
+          { "first_out",      !first_out_pickable_ },
         };
-        
         event_.signal("pressed-pickable", params);
 
         if (!first_out_pickable_) {

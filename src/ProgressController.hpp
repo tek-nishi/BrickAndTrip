@@ -131,10 +131,12 @@ public:
                                      deactivateView();
                                    });
 
+#if 0
     connections_ += event_.connect("pressed-pickable",
                                   [this](const Connection& connection, EventParam& param) {
                                      deactivateView();
                                    });
+#endif
 
     connections_ += event_.connect("update-record",
                                    [this](const Connection& connection, EventParam& param) {

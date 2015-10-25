@@ -201,10 +201,15 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      records_ = Records(params_["version"].getValue<float>());
                    });
+    
+    event_.connect("reset-achievement",
+                   [this](const Connection& connection, EventParam& param) {
+                     achievement_.reset();
+                   });
 #endif
 
+    records_.load(params["game.records"].getValue<std::string>());
     // FIXME:ファイル名がハードコーディング
-    records_.load("records.data");
     achievement_.load("achievement.data");
     
     sound_.get().setBufferSilent(!records_.isSeOn());
@@ -226,6 +231,10 @@ public:
           { "force", true }
         };
         event_.signal("pause-agree", params);
+
+        // アプリ切り替えのタイミングでキャッシュの内容を書き出しておく
+        // ※アプリ終了のタイミングで呼び出される関数はない
+        achievement_.write("achievement.data");
       });
 #endif
   }

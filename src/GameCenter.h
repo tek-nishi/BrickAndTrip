@@ -29,7 +29,15 @@ void submitAchievement(const std::string& identifier, const double complete_rate
                        std::function<void()> begin_callback,
                        std::function<void()> end_callback) noexcept;
 
+#ifdef DEBUG
+
+void resetAchievement() noexcept;
+
+#endif
+
 #else
+
+// TIPS:iOS以外の環境は、テンプレートを使ってダミー関数を用意している
 
 template <typename T1, typename T2>
 void authenticateLocalPlayer(T1 start_callback,
@@ -54,6 +62,13 @@ void submitAchievement(T1 identifier, T2 complete_rate,
                        T3 begin_callback,
                        T4 end_callback) noexcept {}
 
+
+#ifdef DEBUG
+
+template <typename T = void>
+void resetAchievement() noexcept {}
+
+#endif
 
 #endif
 
