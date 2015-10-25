@@ -63,7 +63,7 @@ void showBoard(std::function<void()> start_callback,
 
 
 // スコア送信
-static void sendScore(NSArray* scores) {
+static void sendScore(NSArray* scores) noexcept {
   [GKScore reportScores:scores withCompletionHandler:^(NSError* error) {
       if (error != nil) {
         NSLOG(@"Sending score error:%@", [error localizedDescription]);
@@ -74,7 +74,7 @@ static void sendScore(NSArray* scores) {
     }];
 }
 
-static NSString* createString(const std::string& text) {
+static NSString* createString(const std::string& text) noexcept {
   NSString* str = [[[NSString alloc] initWithCString:text.c_str() encoding:NSUTF8StringEncoding] autorelease];
   return str;
 }
@@ -82,6 +82,12 @@ static NSString* createString(const std::string& text) {
 
 void submitStageScore(const int stage,
                       const int score, const double clear_time) noexcept {
+  if (!isAuthenticated()) {
+    NSLOG(@"GameCenter::submitStageScore: GameCenter is not active.");
+    return;
+  }
+
+  
   std::ostringstream str;
   str << "BRICKTRIP.STAGE"
       << std::setw(2) << std::setfill('0') << stage;
@@ -103,6 +109,11 @@ void submitStageScore(const int stage,
 }
 
 void submitScore(const int score) noexcept {
+  if (!isAuthenticated()) {
+    NSLOG(@"GameCenter::submitScore: GameCenter is not active.");
+    return;
+  }
+  
   if (score == 0) return;
   
   GKScore* score_reporter = [[[GKScore alloc] initWithCategory:createString("BRICKTRIP.HISCORE")] autorelease];
@@ -113,6 +124,43 @@ void submitScore(const int score) noexcept {
   NSArray* score_array = @[score_reporter];
   sendScore(score_array);
 }
+
+
+static GKAchievement* getAchievementForIdentifier(const std::string& identifier) noexcept {
+  GKAchievement* achievement = [[[GKAchievement alloc] initWithIdentifier:createString(identifier)] autorelease];
+  return achievement;
+}
+
+
+// 達成項目送信
+void submitAchievement(const std::string& identifier, const double complete_rate,
+                       std::function<void()> begin_callback,
+                       std::function<void()> end_callback) noexcept {
+  begin_callback();
+  
+  if (!isAuthenticated()) {
+    NSLOG(@"GameCenter::submitAchievement: GameCenter is not active.");
+    return;
+  }
+
+  GKAchievement* achievement = getAchievementForIdentifier(identifier);
+  if (achievement) {
+    achievement.percentComplete = complete_rate;
+    achievement.showsCompletionBanner = YES;
+    [achievement reportAchievementWithCompletionHandler:^(NSError* error) {
+        if (error != nil) {
+          NSLOG(@"Error in reporting achievements:%@", [error localizedDescription]);
+        }
+        else {
+          end_callback();
+        }
+      }];
+  }
+  else {
+    NSLOG(@"GameCenter::submitAchievement: Cant' create GKAchievement.");
+  }
+}
+
 
 } }
 

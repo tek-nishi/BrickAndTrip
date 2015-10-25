@@ -105,7 +105,7 @@ class BrickTripApp : public AppNative,
   
 
 	void setup() noexcept override {
-    beginAudioSession();
+    AudioSession::begin();
     
     Rand::randomize();
     
@@ -175,7 +175,7 @@ class BrickTripApp : public AppNative,
     DOUT << "shutdown()" << std::endl;
     
     timeline_->clear();
-    endAudioSession();
+    AudioSession::end();
   }
 
   

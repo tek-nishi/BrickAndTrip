@@ -863,8 +863,6 @@
       "rank_rate_table": [ 98, 93, 86, 76, 61, 41 ]
     },
     
-    "records": "records.data",
-
     "progress_start_delay": 1.0,
     "progress_continue_delay": 3.0,
 
@@ -996,7 +994,6 @@
     "sns_delay": 0.2,
     "sns_text": "all_stageclear"
   },
-  
 
   "easing": {
     "ease_in_elastic_a": 1.25,

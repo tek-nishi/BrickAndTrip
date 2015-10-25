@@ -21,6 +21,7 @@
 #include "CreditsController.hpp"
 #include "AllStageClearController.hpp"
 #include "Records.hpp"
+#include "Achievement.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "SoundPlayer.hpp"
@@ -48,6 +49,7 @@ class RootController : public ControllerBase {
   ci::Color background_;
 
   Records records_;
+  Achievement achievement_;
   
   using ControllerPtr = std::unique_ptr<ControllerBase>;
   // TIPS:イテレート中にpush_backされるのでstd::listを使っている
@@ -148,8 +150,7 @@ public:
                    [this](const Connection& connection, EventParam& param) {
                      auto& name = boost::any_cast<const std::string&>(param.at("sound"));
                      sound_.play(name);
-
-                     DOUT << "sound:" << name << std::endl;
+                     // DOUT << "sound:" << name << std::endl;
                    });
 
     
@@ -163,6 +164,16 @@ public:
                      sound_.get().setFileSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
+    // 実績
+    event_.connect("entry-achievement",
+                   [this](const Connection&, EventParam& param) {
+                     auto id    = boost::any_cast<std::string>(param["id"]);
+                     auto value = boost::any_cast<double>(param["value"]);
+                     
+                     achievement_.entry(id, value);
+                   });
+
+    
 #ifdef DEBUG
     event_.connect("force-regular-completed",
                    [this](const Connection& connection, EventParam& param) {
@@ -192,7 +203,9 @@ public:
                    });
 #endif
 
-    records_.load(params["game.records"].getValue<std::string>());
+    // FIXME:ファイル名がハードコーディング
+    records_.load("records.data");
+    achievement_.load("achievement.data");
     
     sound_.get().setBufferSilent(!records_.isSeOn());
     sound_.get().setFileSilent(!records_.isBgmOn());
@@ -311,7 +324,7 @@ private:
 
     return camera;
   }
-  
+
 };
 
 }

@@ -34,13 +34,16 @@
 #define NSLOG(...) 
 #endif
 
-#define glFogi(pname, param) glFogx(pname, param)
+template <typename T1, typename T2>
+void glFogi(T1 pname, T2 param) { glFogx(pname, param); }
 
 #endif
 
 
 // Recordsの難読化
 #define OBFUSCATION_RECORD
+// Achievementの難読化
+// #define OBFUSCATION_ACHIEVEMENT
 // params.jsonの難読化
 // #define OBFUSCATION_PARAMS
 

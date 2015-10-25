@@ -4,16 +4,22 @@
 // AudioSession設定
 //
 
+namespace ngs { namespace AudioSession { 
 
 #if defined(CINDER_COCOA_TOUCH)
 
-void beginAudioSession() noexcept;
-void endAudioSession() noexcept;
+void begin() noexcept;
+void end() noexcept;
 
 #else
 
 // iOS以外は実装無し
-#define beginAudioSession()
-#define endAudioSession()
+template <typename T = void>
+void begin() noexcept {}
+
+template <typename T = void>
+void end() noexcept {}
 
 #endif
+
+} }

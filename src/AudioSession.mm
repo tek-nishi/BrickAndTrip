@@ -33,9 +33,13 @@ NSString *const AVAudioSessionCategoryMultiRoute;
 #import <AVFoundation/AVFoundation.h>
 #include "cinder/audio/Context.h"
 
-id observer = nullptr;
 
-void beginAudioSession() {
+namespace ngs { namespace AudioSession {
+
+// FIXME:グローバル変数にしたくない...
+static id observer = nullptr;
+
+void begin() noexcept {
   // AVFoundationのインスタンス
   AVAudioSession* audioSession = [AVAudioSession sharedInstance];
 
@@ -72,11 +76,14 @@ void beginAudioSession() {
     }];
 }
 
-void endAudioSession() {
+void end() noexcept {
   AVAudioSession* audioSession = [AVAudioSession sharedInstance];
   [audioSession setActive:NO error:nil];
 
   if (observer) {
     [[NSNotificationCenter defaultCenter] removeObserver:observer];
+    observer = nullptr;
   }
 }
+
+} }

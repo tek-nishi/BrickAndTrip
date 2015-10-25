@@ -25,6 +25,10 @@ void submitStageScore(const int stage,
 
 void submitScore(const int score) noexcept;
 
+void submitAchievement(const std::string& identifier, const double complete_rate,
+                       std::function<void()> begin_callback,
+                       std::function<void()> end_callback) noexcept;
+
 #else
 
 template <typename T1, typename T2>
@@ -39,11 +43,17 @@ void showBoard(T1 start_callback,
                T2 finish_callback) noexcept {}
 
 template <typename T1, typename T2, typename T3>
-void submitStageScore(const T1 stage,
-                      const T2 score, const T3 clear_time) noexcept {};
+void submitStageScore(T1 stage,
+                      T2 score, T3 clear_time) noexcept {}
 
 template <typename T>
-void submitScore(const T score) noexcept {};
+void submitScore(const T score) noexcept {}
+
+template <typename T1, typename T2, typename T3, typename T4>
+void submitAchievement(T1 identifier, T2 complete_rate,
+                       T3 begin_callback,
+                       T4 end_callback) noexcept {}
+
 
 #endif
 

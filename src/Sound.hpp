@@ -299,7 +299,7 @@ private:
   // FIXME:iOSではNodeをOutputにたくさん繋げると、音量が小さくなる
   void disconnectInactiveNode() noexcept {
     auto output = ci::audio::Context::master()->getOutput();
-    DOUT << "active nodes:" << output->getNumConnectedInputs() << std::endl;
+    // DOUT << "active nodes:" << output->getNumConnectedInputs() << std::endl;
 
     std::set<ci::audio::NodeRef> nodes = output->getInputs();
     for (auto node : nodes) {
