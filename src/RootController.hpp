@@ -180,6 +180,14 @@ public:
                      achievement_.entry(id, value);
                    });
 
+    event_.connect("gamecenter-authenticated",
+                   [this](const Connection&, EventParam& param) {
+                     // 認証できたら送信できなかった実績を送信
+                     if (GameCenter::isAuthenticated()) {
+                       achievement_.entryCached();
+                     }
+                   });
+
     
 #ifdef DEBUG
     event_.connect("force-regular-completed",

@@ -94,6 +94,19 @@ public:
   }
 
   
+  void entryCached() noexcept {
+    // キャッシュが空の場合は何もしない
+    if (items_.empty()) return;
+
+    for (const auto& item : items_) {
+      if (item.second.send) continue;
+
+      entry(item.first, item.second.value);
+    }
+    DOUT << "Achievement::entryCached()" << std::endl;
+  }
+
+  
 #ifdef DEBUG
   void reset() noexcept {
     // キャッシュは項目の内容を初期化して、即座に書き出す
