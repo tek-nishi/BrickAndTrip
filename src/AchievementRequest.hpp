@@ -14,7 +14,7 @@ void AchievementRequest(Event<EventParam>& event,
                         const std::string& id, const double value = 100.0) noexcept {
   EventParam params = {
     { "id",    id },
-    { "value", value },
+    { "value", std::min(value, 100.0) },
   };
   event.signal("entry-achievement", params);
 }

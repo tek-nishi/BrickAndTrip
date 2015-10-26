@@ -148,10 +148,13 @@ public:
                                     
                                     event_timeline_->add([this]() {
                                         GameCenter::showBoard([this]() {
-                                            event_.signal("field-update-stop", EventParam());
+                                            auto* app = ci::app::AppCocoaTouch::get();
+                                            app->pauseDraw(true);
                                           },
                                           [this]() {
-                                            event_.signal("field-update-restart", EventParam());
+                                            auto* app = ci::app::AppCocoaTouch::get();
+                                            app->pauseDraw(false);
+                                            
                                             event_.signal("field-input-start", EventParam());
                                             view_->setActive(true);
                                           });

@@ -44,7 +44,6 @@ class BrickTripApp : public AppNative,
   double forward_speed_;
   bool forward_speed_change_;
   bool pause_;
-  bool update_exec_;
 
   bool active_touch_;
 
@@ -126,9 +125,6 @@ class BrickTripApp : public AppNative,
     forward_speed_change_ = false;
     pause_ = false;
 
-    // GameCenter認証画面が表示中は全更新を止める
-    update_exec_ = true;
-    
     setupFonts();
     setupModels();
     
@@ -155,14 +151,18 @@ class BrickTripApp : public AppNative,
     // TIPS:シミュレーターはMacのキー入力を受け付ける
     // showKeyboard();
 #endif
-    
+
+#if defined(CINDER_COCOA_TOUCH)
     GameCenter::authenticateLocalPlayer([this]() {
-        update_exec_ = false;        
+        // FIXME:AppCocoaTouchに追加したpause関数を使っている
+        pauseDraw(true);
       },
       [this]() {
-        update_exec_ = true;
+        pauseDraw(false);
+        
         controller_->event().signal("gamecenter-authenticated", EventParam());
       });
+#endif
 
     // 起動後安定するまでは経過時間の許容を少なく
     auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
@@ -330,10 +330,8 @@ class BrickTripApp : public AppNative,
     }
 #endif
     
-    if (update_exec_) {
-      timeline_->step(progressing_seconds);
-      controller_->update(progressing_seconds);
-    }
+    timeline_->step(progressing_seconds);
+    controller_->update(progressing_seconds);
     
     elapsed_seconds_ = elapsed_seconds;
   }

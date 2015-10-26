@@ -23,6 +23,7 @@ public:
 
   
   void entry(const std::string& id, const double value) noexcept {
+    // TODO:キャッシュと値が同じ場合は送信しない
     GameCenter::submitAchievement(id, value,
                                   [this, id, value]() {
                                     Item item = { false, value };
