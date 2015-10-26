@@ -21,10 +21,10 @@
 #include "CreditsController.hpp"
 #include "AllStageClearController.hpp"
 #include "Records.hpp"
-#include "Achievement.hpp"
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "SoundPlayer.hpp"
+#include "AchievementRequest.hpp"
 
 
 namespace ngs {
@@ -49,7 +49,6 @@ class RootController : public ControllerBase {
   ci::Color background_;
 
   Records records_;
-  Achievement achievement_;
   
   using ControllerPtr = std::unique_ptr<ControllerBase>;
   // TIPS:イテレート中にpush_backされるのでstd::listを使っている
@@ -171,23 +170,6 @@ public:
                      sound_.get().setFileSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
-    // 実績
-    event_.connect("entry-achievement",
-                   [this](const Connection&, EventParam& param) {
-                     auto id    = boost::any_cast<std::string>(param["id"]);
-                     auto value = boost::any_cast<double>(param["value"]);
-                     
-                     achievement_.entry(id, value);
-                   });
-
-    event_.connect("gamecenter-authenticated",
-                   [this](const Connection&, EventParam& param) {
-                     // 認証できたら送信できなかった実績を送信
-                     if (GameCenter::isAuthenticated()) {
-                       achievement_.entryCached();
-                     }
-                   });
-
     
 #ifdef DEBUG
     event_.connect("force-regular-completed",
@@ -219,13 +201,11 @@ public:
     
     event_.connect("reset-achievement",
                    [this](const Connection&, EventParam& param) {
-                     achievement_.reset();
+                     GameCenter::resetAchievement();
                    });
 #endif
 
     records_.load(params["game.records"].getValue<std::string>());
-    // FIXME:ファイル名がハードコーディング
-    achievement_.load("achievement.data");
     
     sound_.get().setBufferSilent(!records_.isSeOn());
     sound_.get().setFileSilent(!records_.isBgmOn());
@@ -246,10 +226,6 @@ public:
           { "force", true }
         };
         event_.signal("pause-agree", params);
-
-        // アプリ切り替えのタイミングでキャッシュの内容を書き出しておく
-        // ※アプリ終了のタイミングで呼び出される関数はない
-        achievement_.write("achievement.data");
       });
 #endif
   }
@@ -350,9 +326,9 @@ private:
   }
 
   // FIXME:ここに書くべき実装ではない
-  void checkAchievment() noexcept {
+  void checkAchievment() const noexcept {
     // プレイ回数による実績
-    std::vector<std::pair<int, std::string> > achievements = {
+    static std::vector<std::pair<int, std::string> > achievements = {
       {  10, "BRICKTRIP.ACHIEVEMENT.PLAYED_10_TIMES" },
       {  50, "BRICKTRIP.ACHIEVEMENT.PLAYED_50_TIMES" },
       { 100, "BRICKTRIP.ACHIEVEMENT.PLAYED_100_TIMES" },
@@ -362,7 +338,7 @@ private:
     for (const auto& a : achievements) {
       // 毎回更新して、達成率を少しずつあげる
       double rate = play_num * 100.0 / a.first;
-      AchievementRequest(event_, a.second, rate);
+      AchievementRequest(a.second, rate);
     }
   }
 

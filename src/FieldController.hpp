@@ -186,7 +186,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-pickable" << std::endl;
                                      if (boost::any_cast<bool>(param["first_out"])) {
-                                       AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.FALLEN");
+                                       AchievementRequest("BRICKTRIP.ACHIEVEMENT.FALLEN");
                                      }
                                    });
 
@@ -195,7 +195,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "pressed-pickable" << std::endl;
                                      if (boost::any_cast<bool>(param["first_out"])) {
-                                       AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.SQUASHED");
+                                       AchievementRequest("BRICKTRIP.ACHIEVEMENT.SQUASHED");
                                      }
                                    });
 
@@ -245,7 +245,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "gameover-continue" << std::endl;
                                      entity_.cleanupField(true);
-                                     AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.CONTINUED");
+                                     AchievementRequest("BRICKTRIP.ACHIEVEMENT.CONTINUED");
                                    });
 
     connections_ += event_.connect("stage-all-collapsed",
@@ -458,7 +458,7 @@ private:
                                                     },
                                                     timeline_->getCurrentTime() + progress_start_delay_);
 
-                                                  AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.FIRST_TRIP");
+                                                  AchievementRequest("BRICKTRIP.ACHIEVEMENT.FIRST_TRIP");
                                                   
                                                   connection.disconnect();
                                                 });

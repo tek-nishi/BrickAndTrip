@@ -81,7 +81,7 @@ public:
         event_timeline_->getCurrentTime() + delay);
     }
     
-    AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.VIEWED_CREDITS");
+    AchievementRequest("BRICKTRIP.ACHIEVEMENT.VIEWED_CREDITS");
   }
 
   ~CreditsController() {

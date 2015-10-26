@@ -398,7 +398,7 @@ public:
 
     // FIXME:マジックナンバー
     if (stage_num_ == 11) {
-      AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.APPEARED_STAGE11");
+      AchievementRequest("BRICKTRIP.ACHIEVEMENT.APPEARED_STAGE11");
     }
     
     stage_.startBuildStage(1.0f, true);
@@ -1255,14 +1255,14 @@ private:
     
     for (const auto& a : achievements) {
       if (a.first == stage_num_) {
-        AchievementRequest(event_, a.second);
+        AchievementRequest(a.second);
         break;
       }
     }
     
     // 10ステージRANK S判定
     if (records_.isSatisfyRegularStageRank(0)) {
-      AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
+      AchievementRequest("BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
     }
   }
   

@@ -25,9 +25,7 @@ void submitStageScore(const int stage,
 
 void submitScore(const int score) noexcept;
 
-void submitAchievement(const std::string& identifier, const double complete_rate,
-                       std::function<void()> begin_callback,
-                       std::function<void()> end_callback) noexcept;
+void submitAchievement(const std::string& identifier, const double complete_rate) noexcept;
 
 #ifdef DEBUG
 
@@ -57,10 +55,8 @@ void submitStageScore(T1 stage,
 template <typename T>
 void submitScore(const T score) noexcept {}
 
-template <typename T1, typename T2, typename T3, typename T4>
-void submitAchievement(T1 identifier, T2 complete_rate,
-                       T3 begin_callback,
-                       T4 end_callback) noexcept {}
+template <typename T1, typename T2>
+void submitAchievement(T1 identifier, T2 complete_rate) noexcept {}
 
 
 #ifdef DEBUG

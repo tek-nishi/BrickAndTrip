@@ -135,11 +135,7 @@ static GKAchievement* getAchievementForIdentifier(const std::string& identifier)
 
 
 // 達成項目送信
-void submitAchievement(const std::string& identifier, const double complete_rate,
-                       std::function<void()> begin_callback,
-                       std::function<void()> end_callback) noexcept {
-  begin_callback();
-  
+void submitAchievement(const std::string& identifier, const double complete_rate) noexcept {
   if (!isAuthenticated()) {
     NSLOG(@"GameCenter::submitAchievement: GameCenter is not active.");
     return;
@@ -147,14 +143,12 @@ void submitAchievement(const std::string& identifier, const double complete_rate
 
   GKAchievement* achievement = getAchievementForIdentifier(identifier);
   if (achievement) {
-    achievement.percentComplete = complete_rate;
+    achievement.percentComplete       = complete_rate;
     achievement.showsCompletionBanner = YES;
+    
     [achievement reportAchievementWithCompletionHandler:^(NSError* error) {
         if (error != nil) {
           NSLOG(@"Error in reporting achievements:%@", [error localizedDescription]);
-        }
-        else {
-          end_callback();
         }
       }];
   }

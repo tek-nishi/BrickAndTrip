@@ -110,7 +110,7 @@ public:
         event_timeline_->getCurrentTime() + delay);
     }
     
-    AchievementRequest(event_, "BRICKTRIP.ACHIEVEMENT.VIEWED_SETTINGS");
+    AchievementRequest("BRICKTRIP.ACHIEVEMENT.VIEWED_SETTINGS");
   }
 
   ~SettingsController() {
