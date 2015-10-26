@@ -49,15 +49,17 @@ static std::function<void()> leaderboard_finish;
 
 void showBoard(std::function<void()> start_callback,
                std::function<void()> finish_callback) noexcept {
-  GKLeaderboardViewController* leaderboardController = [[[GKLeaderboardViewController alloc] init] autorelease];
+  GKGameCenterViewController* gamecenter_vc = [[[GKGameCenterViewController alloc] init] autorelease];
 
-  if (leaderboardController != nil) {
+  if (gamecenter_vc != nil) {
     leaderboard_finish = finish_callback;
     start_callback();
     
-    auto app_vc = (UIViewController<GKLeaderboardViewControllerDelegate>*)ci::app::getWindow()->getNativeViewController();
-    leaderboardController.leaderboardDelegate = app_vc;
-    [app_vc presentViewController:leaderboardController animated:YES completion:nil];
+    auto app_vc = (UIViewController<GKGameCenterControllerDelegate>*)ci::app::getWindow()->getNativeViewController();
+    gamecenter_vc.gameCenterDelegate = app_vc;
+    gamecenter_vc.viewState          = GKGameCenterViewControllerStateLeaderboards;
+    [gamecenter_vc.view setNeedsDisplay];
+    [app_vc presentViewController:gamecenter_vc animated:YES completion:nil];
   }  
 }
 
@@ -185,13 +187,13 @@ void resetAchievement() noexcept {
 // 既存のクラスにクラスメソッドを追加する
 @interface WindowImplCocoaTouch(GameCenter)
 
-- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController*)viewController;
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController*)viewController;
 
 @end
 
 @implementation WindowImplCocoaTouch(GameCenter)
 
-- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController*)viewController {
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController*)viewController {
   [viewController dismissViewControllerAnimated:YES completion:nil];
   ngs::GameCenter::leaderboard_finish();
   NSLOG(@"leaderboardViewControllerDidFinish");
