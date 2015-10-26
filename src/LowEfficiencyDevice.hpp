@@ -2,6 +2,7 @@
 
 //
 // 性能の低いハードをモデル名から判別する(iOS)
+// TODO:２段階くらい欲しい
 //
 
 #include "DecideHard.hpp"
@@ -25,10 +26,10 @@ bool determine() noexcept {
   std::smatch result;
 
   if (std::regex_search(hard_type, result, iphone)) {
-    // iPhone4S以前を低性能と扱う
+    // iPhone5以前を低性能と扱う
     DOUT << result[0] << " " << result[1] << std::endl;
     
-    return (std::stoi(result[1]) >= 4) ? false : true;
+    return (std::stoi(result[1]) >= 5) ? false : true;
   }
   else if (std::regex_search(hard_type, result, ipad)) {
     DOUT << result[0] << " " << result[1] << std::endl;
@@ -39,8 +40,8 @@ bool determine() noexcept {
   else if (std::regex_search(hard_type, result, ipod)) {
     DOUT << result[0] << " " << result[1] << std::endl;
 
-    // iPod第４世代(Retina、カメラ搭載)以前を低性能と扱う
-    return (std::stoi(result[1]) >= 4) ? false : true;
+    // iPod第6世代(Retina、カメラ搭載)以前を低性能と扱う
+    return (std::stoi(result[1]) >= 6) ? false : true;
   }
 
   // 新機種は全て高性能

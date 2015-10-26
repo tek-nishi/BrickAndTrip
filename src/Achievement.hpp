@@ -17,7 +17,6 @@ class Achievement {
   };
   std::map<std::string, Item> items_;
 
-
 public:
   Achievement() = default;
 

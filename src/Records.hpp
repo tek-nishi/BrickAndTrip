@@ -223,7 +223,7 @@ public:
   const CurrentGame& currentGame() const {
     return current_game_;
   }
-  
+
   
   // ゲーム開始時の初期化
   void prepareGameRecord() {
