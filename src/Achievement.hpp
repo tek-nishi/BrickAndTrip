@@ -23,9 +23,9 @@ public:
 
   
   void entry(const std::string& id, const double value) noexcept {
-    // キャッシュと値が同じ場合は送信しない
+    // 送信に成功したキャッシュ値の方が値が大きければ送信しない
     if (hasAchievementId(id)) {
-      if (items_[id].value == value) {
+      if (items_[id].send && (items_[id].value >= value)) {
         DOUT << "Achievement: " << id << " is cached." << std::endl;
         return;
       }
