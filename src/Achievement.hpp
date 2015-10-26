@@ -23,7 +23,14 @@ public:
 
   
   void entry(const std::string& id, const double value) noexcept {
-    // TODO:キャッシュと値が同じ場合は送信しない
+    // キャッシュと値が同じ場合は送信しない
+    if (hasAchievementId(id)) {
+      if (items_[id].value == value) {
+        DOUT << "Achievement: " << id << " is cached." << std::endl;
+        return;
+      }
+    }
+    
     GameCenter::submitAchievement(id, value,
                                   [this, id, value]() {
                                     Item item = { false, value };
@@ -100,6 +107,13 @@ public:
     DOUT << "Achievement::reset" << std::endl;
   }
 #endif
+
+  
+private:
+  bool hasAchievementId(const std::string& id) const noexcept {
+    // TIPS:検索するには要素数を数えればよい
+    return items_.count(id) != 0;
+  }
   
 };
 
