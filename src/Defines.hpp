@@ -42,8 +42,6 @@ void glFogi(T1 pname, T2 param) { glFogx(pname, param); }
 
 // Recordsの難読化
 #define OBFUSCATION_RECORD
-// Achievementの難読化
-#define OBFUSCATION_ACHIEVEMENT
 // params.jsonの難読化
 // #define OBFUSCATION_PARAMS
 
