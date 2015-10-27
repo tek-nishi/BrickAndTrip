@@ -10,6 +10,7 @@
 #include "Share.h"
 #include "Capture.h"
 #include "Localize.h"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -111,7 +112,7 @@ public:
         event_timeline_->getCurrentTime() + delay);
     }
 
-    AchievementRequest("BRICKTRIP.ACHIEVEMENT.VIEWED_RECORDS");
+    GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.VIEWED_RECORDS");
   }
 
   ~RecordsController() {

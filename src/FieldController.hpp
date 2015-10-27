@@ -10,7 +10,7 @@
 #include "EventParam.hpp"
 #include "ConnectionHolder.hpp"
 #include "SoundRequest.hpp"
-#include "AchievementRequest.hpp"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -186,7 +186,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "fall-pickable" << std::endl;
                                      if (boost::any_cast<bool>(param["first_out"])) {
-                                       AchievementRequest("BRICKTRIP.ACHIEVEMENT.FALLEN");
+                                       GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.FALLEN");
                                      }
                                    });
 
@@ -195,7 +195,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "pressed-pickable" << std::endl;
                                      if (boost::any_cast<bool>(param["first_out"])) {
-                                       AchievementRequest("BRICKTRIP.ACHIEVEMENT.SQUASHED");
+                                       GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.SQUASHED");
                                      }
                                    });
 
@@ -245,7 +245,7 @@ public:
                                    [this](const Connection&, EventParam& param) {
                                      DOUT << "gameover-continue" << std::endl;
                                      entity_.cleanupField(true);
-                                     AchievementRequest("BRICKTRIP.ACHIEVEMENT.CONTINUED");
+                                     GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.CONTINUED");
                                    });
 
     connections_ += event_.connect("stage-all-collapsed",
@@ -458,7 +458,7 @@ private:
                                                     },
                                                     timeline_->getCurrentTime() + progress_start_delay_);
 
-                                                  AchievementRequest("BRICKTRIP.ACHIEVEMENT.FIRST_TRIP");
+                                                  GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.FIRST_TRIP");
                                                   
                                                   connection.disconnect();
                                                 });

@@ -24,7 +24,6 @@
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "SoundPlayer.hpp"
-#include "AchievementRequest.hpp"
 
 
 namespace ngs {
@@ -338,7 +337,7 @@ private:
     for (const auto& a : achievements) {
       // 毎回更新して、達成率を少しずつあげる
       double rate = play_num * 100.0 / a.first;
-      AchievementRequest(a.second, rate);
+      GameCenter::submitAchievement(a.second, rate);
     }
   }
 

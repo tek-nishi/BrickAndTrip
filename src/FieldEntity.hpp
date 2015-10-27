@@ -23,7 +23,7 @@
 #include "EventParam.hpp"
 #include "Records.hpp"
 #include "Bg.hpp"
-#include "AchievementRequest.hpp"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -398,7 +398,7 @@ public:
 
     // FIXME:マジックナンバー
     if (stage_num_ == 11) {
-      AchievementRequest("BRICKTRIP.ACHIEVEMENT.APPEARED_STAGE11");
+      GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.APPEARED_STAGE11");
     }
     
     stage_.startBuildStage(1.0f, true);
@@ -1255,14 +1255,14 @@ private:
     
     for (const auto& a : achievements) {
       if (a.first == stage_num_) {
-        AchievementRequest(a.second);
+        GameCenter::submitAchievement(a.second);
         break;
       }
     }
     
     // 10ステージRANK S判定
     if (records_.isSatisfyRegularStageRank(0)) {
-      AchievementRequest("BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
+      GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
     }
   }
   

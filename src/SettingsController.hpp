@@ -7,6 +7,7 @@
 #include "ControllerBase.hpp"
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
+#include "GameCenter.h"
 
 
 namespace ngs {
@@ -110,7 +111,7 @@ public:
         event_timeline_->getCurrentTime() + delay);
     }
     
-    AchievementRequest("BRICKTRIP.ACHIEVEMENT.VIEWED_SETTINGS");
+    GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.VIEWED_SETTINGS");
   }
 
   ~SettingsController() {

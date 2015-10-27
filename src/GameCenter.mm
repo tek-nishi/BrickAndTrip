@@ -143,7 +143,7 @@ void submitAchievement(const std::string& identifier, const double complete_rate
 
   GKAchievement* achievement = getAchievementForIdentifier(identifier);
   if (achievement) {
-    achievement.percentComplete       = complete_rate;
+    achievement.percentComplete       = std::min(complete_rate, 100.0);
     achievement.showsCompletionBanner = YES;
     
     [achievement reportAchievementWithCompletionHandler:^(NSError* error) {
