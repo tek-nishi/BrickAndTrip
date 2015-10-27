@@ -111,7 +111,6 @@ public:
                                       event_timeline_->getCurrentTime() + tween_out_delay_);
                                   });
     
-#if defined(CINDER_COCOA_TOUCH)
     connections_ += event.connect("selected-share",
                                   [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
@@ -121,7 +120,7 @@ public:
                                         DOUT << "Share" << std::endl;
                                         
                                         Share::post(sns_text_,
-                                                    captureTopView(),
+                                                    Capture::execute(),
                                                     [this]() {
                                                       event_.signal("field-update-restart", EventParam());
                                                       view_->setActive(true);
@@ -129,7 +128,6 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + sns_delay_);
                                   });
-#endif
     
     setup(params, result);
   }
@@ -171,14 +169,11 @@ private:
     view_->setDisp(false);
     view_->setActive(false);
     
-#if defined(CINDER_COCOA_TOUCH)
-    if (canCaptureTopView()) {
-      if (Share::canPost()) {
-        auto& widget = view_->getWidget("share");
+    if (Capture::canExec() && Share::canPost()) {
+      auto& widget = view_->getWidget("share");
         
-        widget.setDisp(true);
-        widget.setActive(true);
-      }
+      widget.setDisp(true);
+      widget.setActive(true);
     }
     
     {
@@ -192,7 +187,6 @@ private:
       auto stage_num = boost::any_cast<int>(result.at("current_stage"));
       replaceString(sns_text_, "%4", std::to_string(stage_num));
     }
-#endif
   }
 
   

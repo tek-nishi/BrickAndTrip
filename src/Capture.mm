@@ -1,6 +1,6 @@
 ﻿//
 // UIViewのキャプチャ(iOS専用)
-// http://qiita.com/nasu_st/items/561d8946966015abd448
+// SOURCE:http://qiita.com/nasu_st/items/561d8946966015abd448
 //
 
 #include "cinder/app/Window.h"
@@ -8,23 +8,19 @@
 #include "Capture.h"
 
 
-namespace ngs {
-
-
-bool canCaptureTopView() noexcept {
-  return canCapture((UIView*)ci::app::getWindow()->getNative());
-}
+namespace ngs { namespace Capture {
   
-bool canCapture(UIView* view) noexcept {
+static bool canExec(UIView* view) noexcept {
+  // クラスメソッドがあるかどうかて判別している
   return [view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)] ? true : false;
 }
 
-  
-UIImage* captureTopView() noexcept {
-  return captureView((UIView*)ci::app::getWindow()->getNative());
+bool canExec() noexcept {
+  return canExec((UIView*)ci::app::getWindow()->getNative());
 }
-  
-UIImage* captureView(UIView* view) noexcept {
+
+
+static UIImage* execute(UIView* view) noexcept {
   if ([view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
     // iOS7以降はOpenGLの描画も手軽にキャプチャできる
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);
@@ -47,5 +43,9 @@ UIImage* captureView(UIView* view) noexcept {
     // return image;
   }
 }
-
+  
+UIImage* execute() noexcept {
+  return execute((UIView*)ci::app::getWindow()->getNative());
 }
+
+} }

@@ -98,7 +98,6 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
-#if defined(CINDER_COCOA_TOUCH)
     connections_ += event.connect("selected-share",
                                   [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
@@ -108,7 +107,7 @@ public:
                                         DOUT << "Share" << std::endl;
                                         
                                         Share::post(sns_text_,
-                                                    captureTopView(),
+                                                    Capture::execute(),
                                                     [this]() {
                                                       event_.signal("field-update-restart", EventParam());
                                                       view_->setActive(true);
@@ -116,8 +115,7 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + sns_delay_);
                                   });
-#endif
-
+    
     // 再開できるかどうかの判断
     if (boost::any_cast<bool>(event_params.at("can_continue"))) {
       view_->getWidget("continue").setDisp(true);
@@ -151,14 +149,11 @@ public:
         event_timeline_->getCurrentTime() + delay);
     }
 
-#if defined(CINDER_COCOA_TOUCH)
-    if (canCaptureTopView()) {
-      if (Share::canPost()) {
-        auto& widget = view_->getWidget("share");
+    if (Capture::canExec() && Share::canPost()) {
+      auto& widget = view_->getWidget("share");
         
-        widget.setDisp(true);
-        widget.setActive(true);
-      }
+      widget.setDisp(true);
+      widget.setActive(true);
     }
 
     {
@@ -168,7 +163,6 @@ public:
       sns_text_ = localizedString(text);
       replaceString(sns_text_, "%1", std::to_string(game_score));
     }
-#endif
   }
 
   ~GameoverController() {

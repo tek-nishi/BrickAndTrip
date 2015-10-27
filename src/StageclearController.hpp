@@ -125,7 +125,6 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
 
-#if defined(CINDER_COCOA_TOUCH)
     connections_ += event.connect("selected-share",
                                   [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
@@ -135,7 +134,7 @@ public:
                                         DOUT << "Share" << std::endl;
 
                                         Share::post(sns_text_,
-                                                    captureTopView(),
+                                                    Capture::execute(),
                                                     [this]() {
                                                       event_.signal("field-update-restart", EventParam());
                                                       view_->setActive(true);
@@ -143,7 +142,6 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + sns_delay_);
                                   });
-#endif
     
     setupView(params, result);
 
@@ -271,14 +269,11 @@ private:
                                  game_score, clear_time);
 
     
-#if defined(CINDER_COCOA_TOUCH)
-    if (canCaptureTopView()) {
-      if (Share::canPost()) {
-        auto& widget = view_->getWidget("share");
+    if (Capture::canExec() && Share::canPost()) {
+      auto& widget = view_->getWidget("share");
         
-        widget.setDisp(true);
-        widget.setActive(true);
-      }
+      widget.setDisp(true);
+      widget.setActive(true);
     }
 
     {
@@ -291,7 +286,6 @@ private:
       replaceString(sns_text_, "%3", std::to_string(item_rate));
       replaceString(sns_text_, "%4", std::to_string(current_stage_));
     }
-#endif
   }
 
   

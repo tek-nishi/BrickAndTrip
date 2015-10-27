@@ -4,16 +4,22 @@
 // UIViewのキャプチャ(iOS専用)
 //
 
+namespace ngs { namespace Capture {
+
 #if defined(CINDER_COCOA_TOUCH)
 
-namespace ngs {
+bool canExec() noexcept;
 
-bool canCaptureTopView() noexcept;
-bool canCapture(UIView* view) noexcept;
+UIImage* execute() noexcept;
 
-UIImage* captureTopView() noexcept;
-UIImage* captureView(UIView* view) noexcept;
+#else
 
-}
+template <typename T = void>
+bool canExec() noexcept { return false; }
+
+template <typename T = void>
+T* execute() noexcept { return nullptr; }
 
 #endif
+
+} }
