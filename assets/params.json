@@ -110,7 +110,8 @@
       },
       {
         "name": "switch",
-        "path": "switch.obj",
+        "path":     "switch.obj",
+        "path_low": "switch_low.obj",
         "normals": true,
         "uvs": false,
         "indices": true
@@ -558,7 +559,7 @@
     "regular_stage_num": 10,
     "satisfy_rank": 2,
 
-    "start_stage": 0,
+    "start_stage": 5,
 
     "stage_path": [
       "stage01.json",
@@ -803,7 +804,9 @@
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,
-      "fall_y": -10
+      "fall_y": -10,
+
+      "rotate_speed": 2.5
     },
 
     "oneway": {

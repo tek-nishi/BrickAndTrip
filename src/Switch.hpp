@@ -21,6 +21,9 @@ class Switch : private boost::noncopyable {
   ci::Anim<ci::Vec3f> position_;
   ci::Color color_;
 
+  ci::Quatf rotation_;
+  float rotate_speed_;
+
   bool on_stage_;
   bool started_;
 
@@ -42,6 +45,8 @@ public:
     alive_(true),
     active_(false),
     color_(Json::getColor<float>(params["game.switch.color"])),
+    rotation_(ci::Quatf::identity()),
+    rotate_speed_(params["game.switch.rotate_speed"].getValue<float>()),
     on_stage_(false),
     started_(false),
     fall_ease_(params["game.switch.fall_ease"].getValue<std::string>()),
@@ -73,7 +78,10 @@ public:
   }
 
 
-  void update(const double progressing_seconds) { }
+  void update(const double progressing_seconds) {
+    rotation_ *= ci::Quatf(ci::Vec3f(0, 1, 0),
+                           rotate_speed_ * progressing_seconds);
+  }
 
   
   void entry() {
@@ -127,8 +135,7 @@ public:
   const ci::Vec3i& blockPosition() const { return block_position_; }
 
   const ci::Quatf& rotation() const {
-    static ci::Quatf rotation = ci::Quatf::identity();
-    return rotation;
+    return rotation_;
   }
 
   ci::Vec3f size() const { return ci::Vec3f::one(); }
