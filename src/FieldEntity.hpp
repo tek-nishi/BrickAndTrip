@@ -387,10 +387,16 @@ public:
     mode_ = START;
     first_started_pickable_ = false;
     first_out_pickable_     = false;
+
+    // ステージのクリア時間などの情報を設定
+    int stege_length  = finish_line_z_ - start_line_z_ - 1;
+    float build_speed = stage_.buildSpeed();
+    float build_time  = calcBuildTime(stege_length, build_speed);
     
     records_.prepareCurrentGameRecord(stage_num_,
-                                      finish_line_z_ - start_line_z_ - 1,
-                                      stage_.buildSpeed(),
+                                      stege_length,
+                                      build_speed,
+                                      build_time,
                                       event_timeline_->getCurrentTime(),
                                       entry_item_num);
 
@@ -1264,6 +1270,27 @@ private:
     if (records_.isSatisfyRegularStageRank(0)) {
       GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
     }
+  }
+
+
+  // STAGEがfinishlineまでビルドされる時間を計算
+  float calcBuildTime(const int lines, const float build_speed) {
+    auto ease_func         = getEaseFunc(params_["game.stage.build_start_ease"].getValue<std::string>());
+    float ease_duration    = params_["game.stage.build_start_duration"].getValue<float>();
+    float build_start_rate = params_["game.stage.build_start_rate"].getValue<float>();
+
+    float time = 0.0;
+    for (int i = 0; i < lines; ++i) {
+      float t = std::min(time / ease_duration, 1.0f);
+      float build_time = build_speed * (build_start_rate + (1.0f - build_start_rate) * ease_func(t));
+
+      time += build_time;
+    }
+
+    // Cubeの落下時間を最後に加算
+    time += params_["game.stage.build_duration"].getValue<float>();
+
+    return time;
   }
   
 };

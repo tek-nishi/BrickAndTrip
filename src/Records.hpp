@@ -233,6 +233,7 @@ public:
   // ステージ開始時の初期化
   void prepareCurrentGameRecord(const int stage_num,
                                 const int stage_length, const float build_speed,
+                                const float build_time,
                                 const double current_time,
                                 const int item_num) {
     current_stage_ = CurrentStage();
@@ -242,10 +243,12 @@ public:
 
     game_score_.setStageInfo(stage_num,
                              stage_length, build_speed,
+                             build_time,
                              item_num);
 
     DOUT << "Records stage:" << stage_num << std::endl
          << "       length:" << stage_length << std::endl
+         << "   build time:" << build_time << std::endl
          << "     item_num:" << item_num << std::endl;
   }
 

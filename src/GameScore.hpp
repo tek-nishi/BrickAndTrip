@@ -25,6 +25,7 @@ class GameScore {
   int   stage_num_;
   int   stage_length_;
   float build_speed_;
+  float build_time_;
   int   item_total_num_;
   
 
@@ -46,13 +47,13 @@ public:
   
   void setStageInfo(const int stage_num,
                     const int stage_length, const float build_speed,
+                    const float build_time,
                     const int item_total_num) noexcept {
     stage_num_      = stage_num;
     stage_length_   = stage_length;
     build_speed_    = build_speed;
+    build_time_     = build_time;
     item_total_num_ = item_total_num;
-
-    DOUT << "stage length:" << stage_length << std::endl;
   }
 
 
@@ -65,9 +66,7 @@ public:
     {
       // クリア時間による加点
 
-      // ステージの長さと生成速度から、最短クリア時間が決まる
-      float clear_fastest_time = stage_length_ * build_speed_;
-      float time_remain = std::max(float(clear_time) - clear_fastest_time, 0.0f);
+      float time_remain = std::max(float(clear_time) - build_time_, 0.0f);
 
       // (x - 1)^-1 はx=0の時にy=1で、xが増加するとyは0に収束する
       float score_rate = std::pow((time_remain * clear_time_score_rate_ + 1.0f), -1.0f);
@@ -80,7 +79,7 @@ public:
 
       DOUT << "score from clear-time:" << score
            << " highest:" << highest_score
-           << " fastest:" << clear_fastest_time
+           << " fastest:" << build_time_
            << " clear time:" << clear_time
            << std::endl;
     }

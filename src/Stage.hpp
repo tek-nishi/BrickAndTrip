@@ -327,7 +327,7 @@ public:
     return collapse_cubes_;
   }
 
-
+  
 private:
   // 生成(再帰)
   void buildStage() {
