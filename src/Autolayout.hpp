@@ -55,7 +55,11 @@ public:
 
       BOTTOM_LEFT,
       BOTTOM_CENTER,
-      BOTTOM_RIGHT
+      BOTTOM_RIGHT,
+
+      TOP_MID_LEFT,
+      TOP_MID_CENTER,
+      TOP_MID_RIGHT,
     };
 
     
@@ -132,6 +136,22 @@ public:
         pos.x += world_rect.second.x;
         pos.y += world_rect.second.y;
         break;
+
+        
+      case Type::TOP_MID_LEFT:
+        pos.x += world_rect.first.x;
+        pos.y += world_rect.first.y * 0.75f + world_rect.second.y * 0.25f;
+        break;
+
+      case Type::TOP_MID_CENTER:
+        pos.x += (world_rect.first.x + world_rect.second.x) / 2.0f;
+        pos.y += world_rect.first.y * 0.75f + world_rect.second.y * 0.25f;
+        break;
+        
+      case Type::TOP_MID_RIGHT:
+        pos.x += world_rect.second.x;
+        pos.y += world_rect.first.y * 0.75f + world_rect.second.y * 0.25f;
+        break;
       }
 
       layout_pos_ = pos;
@@ -175,6 +195,13 @@ public:
           
       case Type::BOTTOM_RIGHT:
         pos.x -= size_.x;
+        break;
+
+        
+      case Type::TOP_MID_LEFT:
+      case Type::TOP_MID_CENTER:
+      case Type::TOP_MID_RIGHT:
+        assert(0);
         break;
       }
 
@@ -224,6 +251,13 @@ public:
           
       case Type::BOTTOM_RIGHT:
         pos.x -= size_.x;
+        break;
+
+        
+      case Type::TOP_MID_LEFT:
+      case Type::TOP_MID_CENTER:
+      case Type::TOP_MID_RIGHT:
+        assert(0);
         break;
       }
       
@@ -302,6 +336,10 @@ public:
       {"bottom-left",   Widget::Type::BOTTOM_LEFT },
       {"bottom-center", Widget::Type::BOTTOM_CENTER },
       {"bottom-right",  Widget::Type::BOTTOM_RIGHT },
+      
+      {"top-mid-left",   Widget::Type::TOP_MID_LEFT },
+      {"top-mid-center", Widget::Type::TOP_MID_CENTER },
+      {"top-mid-right",  Widget::Type::TOP_MID_RIGHT },
     };
 
     return layout[name];
