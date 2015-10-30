@@ -104,20 +104,20 @@ public:
   }
 
 
-  void enableLights() {
+  void enableLights() noexcept {
     for (auto& light : lights_) {
       light.l.enable();
     }
   }
 
-  void disableLights() {
+  void disableLights() noexcept {
     for (auto& light : lights_) {
       light.l.disable();
     }
   }
 
   
-  void updateLights(const ci::Vec3f& target_position) {
+  void updateLights(const ci::Vec3f& target_position) noexcept {
     for (auto& light : lights_) {
       switch (light.type) {
       case ci::gl::Light::POINT:
@@ -145,7 +145,7 @@ public:
     }
   }
 
-  void startLightTween(const std::string& tween_name) {
+  void startLightTween(const std::string& tween_name) noexcept {
     for (auto& light : lights_) {
       if (!light.tween_params) continue;
       if (!light.tween_params->hasChild(tween_name)) continue;
@@ -156,7 +156,7 @@ public:
 
   
 private:
-  void startTween(Light& light, const ci::JsonTree& tween_params) {
+  void startTween(Light& light, const ci::JsonTree& tween_params) noexcept {
     std::set<std::string> applyed_targets;
     for (const auto& params : tween_params) {
       std::map<std::string,

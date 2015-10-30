@@ -37,7 +37,7 @@ public:
   }
   
 
-  void update(const double progressing_seconds, const Stage& stage) {
+  void update(const double progressing_seconds, const Stage& stage) noexcept {
     for (auto& cube : switches_) {
       cube->update(progressing_seconds);
     }
@@ -53,7 +53,7 @@ public:
   
   void addSwitches(ci::JsonTree& params,
                    const ci::JsonTree& entry_params,
-                   const int bottom_z, const int offset_x) {
+                   const int bottom_z, const int offset_x) noexcept {
     if (!entry_params.hasChild("switches")) return;
 
     for (const auto& p : entry_params["switches"]) {
@@ -64,7 +64,7 @@ public:
     }
   }
 
-  void entrySwitches(const int current_z) {
+  void entrySwitches(const int current_z) noexcept {
     for (const auto& s : switches_) {
       if (s->blockPosition().z == current_z) {
         s->entry();
@@ -73,7 +73,7 @@ public:
   }
   
   // FIXME:nullptrでデータの有無を判定
-  const std::vector<ci::Vec3i>* const startSwitch(const ci::Vec3i& block_pos) {
+  const std::vector<ci::Vec3i>* const startSwitch(const ci::Vec3i& block_pos) noexcept {
     for (auto& s : switches_) {
       if (s->checkStart(block_pos)) {
         s->start();
@@ -85,7 +85,7 @@ public:
     return nullptr;
   }
 
-  void clear() {
+  void clear() noexcept {
     // 待機中のswitchをすべて削除
     for (auto& cube : switches_) {
       if (cube->isAlive() && !cube->isActive()) {
@@ -99,7 +99,7 @@ public:
 
   
 private:
-  void decideEachSwitchFalling(const Stage& stage) {
+  void decideEachSwitchFalling(const Stage& stage) noexcept {
     for (auto& cube : switches_) {
       if (!cube->isOnStage()) continue;
       

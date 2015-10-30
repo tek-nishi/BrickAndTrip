@@ -89,17 +89,16 @@ public:
 
 
 private:
-  bool isActive() const override { return active_; }
+  bool isActive() const noexcept override { return active_; }
 
-  Event<EventParam>& event() override { return event_; }
+  Event<EventParam>& event() noexcept override { return event_; }
 
-  void resize() override {
+  void resize() noexcept override {
   }
   
-  void update(const double progressing_seconds) override {
-  }
+  void update(const double progressing_seconds) override { }
   
-  void draw(FontHolder& fonts, ModelHolder& models) override {
+  void draw(FontHolder& fonts, ModelHolder& models) noexcept override {
     view_->draw(fonts, models);
   }
   

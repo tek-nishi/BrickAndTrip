@@ -78,8 +78,8 @@ public:
   }
   
 
-  const ci::gl::VboMesh& mesh() const { return *mesh_; }
-  int getGroupFaces(const size_t index) const { return group_face_[index]; }
+  const ci::gl::VboMesh& mesh() const noexcept { return *mesh_; }
+  int getGroupFaces(const size_t index) const noexcept { return group_face_[index]; }
   
 
 private:

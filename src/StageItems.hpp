@@ -45,7 +45,7 @@ public:
   }
 
 
-  void update(const double progressing_seconds, const Stage& stage) {
+  void update(const double progressing_seconds, const Stage& stage) noexcept {
     for (auto& cube : items_) {
       cube->update(progressing_seconds);
     }
@@ -59,16 +59,16 @@ public:
   }
 
 
-  void cleanup() {
+  void cleanup() noexcept {
     event_timeline_->clear();
   }
   
   
-  void clear() {
+  void clear() noexcept {
     entry_items_.clear();
   }
   
-  int addItemCubes(const ci::JsonTree& params, const int start_z, const int x_offset) {
+  int addItemCubes(const ci::JsonTree& params, const int start_z, const int x_offset) noexcept {
     if (!params.hasChild("items")) return 0;
 
     ci::Vec3i start_pos(x_offset, 0, start_z);
@@ -80,7 +80,7 @@ public:
     return static_cast<int>(entry_items_.size());
   }
 
-  void entryItemCube(const int current_z) {
+  void entryItemCube(const int current_z) noexcept {
     for (const auto& entry : entry_items_) {
       if (entry.z == current_z) {
         auto cube = ItemCubePtr(new ItemCube(params_, timeline_, event_, entry));
@@ -90,7 +90,7 @@ public:
   }
 
 
-  std::pair<bool, u_int> canGetItemCube(const ci::Vec3i& block_pos) {
+  std::pair<bool, u_int> canGetItemCube(const ci::Vec3i& block_pos) noexcept {
     if (items_.empty()) return std::make_pair(false, 0);
     
     for (const auto& cube : items_) {
@@ -102,7 +102,7 @@ public:
     return std::make_pair(false, 0);
   }
 
-  void pickupItemCube(const u_int id) {
+  void pickupItemCube(const u_int id) noexcept {
     auto it = std::find_if(std::begin(items_), std::end(items_),
                            [id](const ItemCubePtr& obj) {
                              return *obj == id;
@@ -117,7 +117,7 @@ public:
       event_timeline_->getCurrentTime() + params_["game.item.pickup_delay"].getValue<float>());
   }
   
-  void moveCube(const ci::Vec3i& block_pos) {
+  void moveCube(const ci::Vec3i& block_pos) noexcept {
     for (auto& cube : items_) {
       const auto& cube_block_pos = cube->blockPosition();
       if ((cube_block_pos.x == block_pos.x) && (cube_block_pos.z == block_pos.z)) {
@@ -128,11 +128,11 @@ public:
   }
 
   
-  const std::vector<ItemCubePtr>& items() const { return items_; }
+  const std::vector<ItemCubePtr>& items() const noexcept { return items_; }
   
 
 private:
-  void decideEachItemCubeFalling(const Stage& stage) {
+  void decideEachItemCubeFalling(const Stage& stage) noexcept {
     for (auto& cube : items_) {
       if (!cube->isOnStage()) continue;
       

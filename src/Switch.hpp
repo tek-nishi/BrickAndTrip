@@ -78,13 +78,13 @@ public:
   }
 
 
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
     rotation_ *= ci::Quatf(ci::Vec3f(0, 1, 0),
                            rotate_speed_ * progressing_seconds);
   }
 
   
-  void entry() {
+  void entry() noexcept {
     active_ = true;
     
     // 登場演出
@@ -101,7 +101,7 @@ public:
       });
   }    
 
-  void fallFromStage() {
+  void fallFromStage() noexcept {
     on_stage_ = false;
 
     ci::Vec3f end_value(block_position_ + ci::Vec3f(0, fall_y_, 0));
@@ -110,43 +110,43 @@ public:
                                               fall_duration_,
                                               getEaseFunc(fall_ease_));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         active_ = false;
         alive_  = false;
       });
   }
 
-  bool checkStart(const ci::Vec3i& block_position) const {
+  bool checkStart(const ci::Vec3i& block_position) const noexcept {
     if (started_ || !on_stage_) return false;
 
     return block_position == block_position_;
   }
 
-  void start() {
+  void start() noexcept {
     started_ = true;
     active_  = false;
   }
 
 
-  const std::vector<ci::Vec3i>& targets() const { return targets_; }
+  const std::vector<ci::Vec3i>& targets() const noexcept { return targets_; }
 
 
-  const ci::Vec3f& position() const { return position_(); }
-  const ci::Vec3i& blockPosition() const { return block_position_; }
+  const ci::Vec3f& position() const noexcept { return position_(); }
+  const ci::Vec3i& blockPosition() const noexcept { return block_position_; }
 
-  const ci::Quatf& rotation() const {
+  const ci::Quatf& rotation() const noexcept {
     return rotation_;
   }
 
-  ci::Vec3f size() const { return ci::Vec3f::one(); }
+  ci::Vec3f size() const noexcept { return ci::Vec3f::one(); }
 
-  bool isActive() const { return active_; }
-  bool isOnStage() const { return on_stage_; }
-  bool isAlive() const { return alive_; }
+  bool isActive() const noexcept { return active_; }
+  bool isOnStage() const noexcept { return on_stage_; }
+  bool isAlive() const noexcept { return alive_; }
 
-  void alive(const bool live = true) { alive_ = live; }
+  void alive(const bool live = true) noexcept { alive_ = live; }
   
-  const ci::Color& color() const { return color_; }
+  const ci::Color& color() const noexcept { return color_; }
   
   
 private:

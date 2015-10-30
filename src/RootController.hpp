@@ -237,7 +237,7 @@ public:
 
 
 private:
-  void startTitle(const EventParam& exec_params) {
+  void startTitle(const EventParam& exec_params) noexcept {
     addController<TitleController>(params_, timeline_, event_, exec_params, records_,
                                    view_creator_.create("ui_title.json"));
 
@@ -247,11 +247,11 @@ private:
   }
 
   
-  bool isActive() const override { return true; }
+  bool isActive() const noexcept override { return true; }
 
-  Event<EventParam>& event() override { return event_; }
+  Event<EventParam>& event() noexcept override { return event_; }
 
-  void resize() override {
+  void resize() noexcept override {
     float aspect = ci::app::getWindowAspectRatio();
     ui_camera_.setAspectRatio(aspect);
     
@@ -279,7 +279,7 @@ private:
     }
   }
   
-  void update(const double progressing_seconds) override {
+  void update(const double progressing_seconds) noexcept override {
     for (auto& controller : children_) {
       controller->update(progressing_seconds);
     }
@@ -294,7 +294,7 @@ private:
     sound_.update();
   }
   
-  void draw(FontHolder& fonts, ModelHolder& models) override {
+  void draw(FontHolder& fonts, ModelHolder& models) noexcept override {
     // ci::gl::clear(background_);
     ci::gl::enableDepthWrite();
     glClear(GL_DEPTH_BUFFER_BIT);

@@ -45,7 +45,7 @@ public:
 
   
   void update(const double progressing_seconds,
-              const Stage& stage) {
+              const Stage& stage) noexcept {
     for (auto& cube : cubes_) {
       cube->update(progressing_seconds);
     }
@@ -59,15 +59,14 @@ public:
   }
 
 
-  void cleanup() {
-  }
+  void cleanup() noexcept { }
   
-  void clear() {
+  void clear() noexcept {
     entry_cubes_.clear();
   }
 
 
-  void addCubes(const ci::JsonTree& params, const int start_z, const int x_offset) {
+  void addCubes(const ci::JsonTree& params, const int start_z, const int x_offset) noexcept {
     if (!params.hasChild("falling")) return;
 
     ci::Vec3i start_pos(x_offset, 0, start_z);
@@ -87,7 +86,7 @@ public:
     }
   }
 
-  void entryCube(const int current_z) {
+  void entryCube(const int current_z) noexcept {
     for (const auto& entry : entry_cubes_) {
       if (entry.position.z == current_z) {
         auto cube = FallingCubePtr(new FallingCube(params_, timeline_, event_,
@@ -98,14 +97,14 @@ public:
     }
   }
 
-  bool isCubeExists(const ci::Vec3i& block_pos) const {
+  bool isCubeExists(const ci::Vec3i& block_pos) const noexcept {
     for (const auto& cube : cubes_) {
       if (cube->canBlock() && (block_pos == cube->blockPosition())) return true;
     }
     return false;
   }
 
-  bool isCubePressed(const ci::Vec3i& block_pos) const {
+  bool isCubePressed(const ci::Vec3i& block_pos) const noexcept {
     for (const auto& cube : cubes_) {
       if (block_pos != cube->blockPosition()) continue;
       
@@ -119,7 +118,7 @@ public:
 
   
 private:
-  void decideEachCubeFalling(const Stage& stage) {
+  void decideEachCubeFalling(const Stage& stage) noexcept {
     for (auto& cube : cubes_) {
       if (!cube->isOnStage()) continue;
       

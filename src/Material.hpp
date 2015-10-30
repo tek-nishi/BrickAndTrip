@@ -27,26 +27,26 @@ public:
   { }
 
   
-  void apply() const { material_.apply(); }
+  void apply() const noexcept { material_.apply(); }
 
   
-  void setAmbient(const ci::ColorA& color) {
+  void setAmbient(const ci::ColorA& color) noexcept {
     material_.setAmbient(color);
   }
 
-  void setDiffuse(const ci::ColorA& color) {
+  void setDiffuse(const ci::ColorA& color) noexcept {
     material_.setDiffuse(color);
   }
 
-  void setSpecular(const ci::ColorA& color) {
+  void setSpecular(const ci::ColorA& color) noexcept {
     material_.setSpecular(color);
   }
  
-  void setShininess(const float shininess) {
+  void setShininess(const float shininess) noexcept {
     material_.setShininess(shininess);
   }
 
-  void setEmission(const ci::ColorA& color) {
+  void setEmission(const ci::ColorA& color) noexcept {
     material_.setEmission(color);
   }
 

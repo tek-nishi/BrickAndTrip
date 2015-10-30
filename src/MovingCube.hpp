@@ -162,7 +162,7 @@ public:
   }
 
 
-  void update(const double progressing_seconds) {
+  void update(const double progressing_seconds) noexcept {
     if (moving_) return;
     
     if (stop_time_ < 0.0f) {
@@ -191,16 +191,16 @@ public:
   }
 
   
-  bool willRotationMove() const {
+  bool willRotationMove() const noexcept {
     return !moving_ && on_stage_ && can_move_;
   }
 
-  void removeRotationMoveReserve() {
+  void removeRotationMoveReserve() noexcept {
     stop_time_ = rotate_duration_;
     can_move_  = false;
   }
 
-  void startRotationMove() {
+  void startRotationMove() noexcept {
     moving_ = true;
 
     current_pattern_ += 1;
@@ -278,7 +278,7 @@ public:
       animation_timeline_->getCurrentTime() + duration * 0.6f);
   }
 
-  void fallFromStage() {
+  void fallFromStage() noexcept {
     on_stage_ = false;
 
     const auto& pos = position_();
@@ -293,7 +293,7 @@ public:
       });
   }
 
-  void moveDown() {
+  void moveDown() noexcept {
     block_position_new_.y -= 1;
 
     // StageCubeの上に乗るように位置を調整している
@@ -310,32 +310,32 @@ public:
   }
 
   
-  u_int id() const { return id_; }
+  u_int id() const noexcept { return id_; }
   
-  bool isActive() const { return active_; }
-  bool isOnStage() const { return on_stage_; }
-  bool isMoving() const { return moving_; }
+  bool isActive() const noexcept { return active_; }
+  bool isOnStage() const noexcept { return on_stage_; }
+  bool isMoving() const noexcept { return moving_; }
 
-  int moveSpeed() const { return move_speed_; }
-  const ci::Vec3i& moveVector() const { return move_vector_; }
+  int moveSpeed() const noexcept { return move_speed_; }
+  const ci::Vec3i& moveVector() const noexcept { return move_vector_; }
   
-  const ci::Vec3f& position() const { return position_(); }
-  const ci::Quatf& rotation() const { return rotation_(); }
+  const ci::Vec3f& position() const noexcept { return position_(); }
+  const ci::Quatf& rotation() const noexcept { return rotation_(); }
 
-  const ci::Vec3i& blockPosition() const { return block_position_; }
-  const ci::Vec3i& prevBlockPosition() const { return prev_block_position_; }
+  const ci::Vec3i& blockPosition() const noexcept { return block_position_; }
+  const ci::Vec3i& prevBlockPosition() const noexcept { return prev_block_position_; }
   
-  ci::Vec3f size() const { return ci::Vec3f::one(); }
+  ci::Vec3f size() const noexcept { return ci::Vec3f::one(); }
 
-  const ci::Color& color() const { return color_; }
+  const ci::Color& color() const noexcept { return color_; }
 
 
   // std::findを利用するための定義
-  bool operator==(const u_int rhs_id) const {
+  bool operator==(const u_int rhs_id) const noexcept {
     return id_ == rhs_id;
   }
 
-  bool operator==(const MovingCube& rhs) const {
+  bool operator==(const MovingCube& rhs) const noexcept {
     return id_ == rhs.id_;
   }
   

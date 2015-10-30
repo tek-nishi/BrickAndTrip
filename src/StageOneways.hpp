@@ -37,7 +37,8 @@ public:
   }
   
 
-  void update(const double progressing_seconds, const Stage& stage) {
+  void update(const double progressing_seconds,
+              const Stage& stage) noexcept {
     for (auto& obj : objects_) {
       obj->update(progressing_seconds);
     }
@@ -53,7 +54,7 @@ public:
   
   void addOneways(ci::JsonTree& params,
                   const ci::JsonTree& entry_params,
-                  const int bottom_z, const int offset_x) {
+                  const int bottom_z, const int offset_x) noexcept {
     if (!entry_params.hasChild("oneways")) return;
 
     for (const auto& p : entry_params["oneways"]) {
@@ -64,7 +65,7 @@ public:
     }
   }
 
-  void entryOneways(const int current_z) {
+  void entryOneways(const int current_z) noexcept {
     for (const auto& obj : objects_) {
       if (obj->blockPosition().z == current_z) {
         obj->entry();
@@ -72,7 +73,7 @@ public:
     }
   }
 
-  std::pair<int, int> startOneway(const ci::Vec3i& block_pos) {
+  std::pair<int, int> startOneway(const ci::Vec3i& block_pos) noexcept {
     for (auto& obj : objects_) {
       if (obj->checkStart(block_pos)) {
         // obj->start();
@@ -83,7 +84,7 @@ public:
     return std::make_pair(Oneway::NONE, 0);
   }
 
-  void clear() {
+  void clear() noexcept {
     // 待機中のonewayをすべて削除
     for (auto& cube : objects_) {
       if (cube->isAlive() && !cube->isActive()) {
@@ -93,11 +94,11 @@ public:
   }
 
 
-  const std::vector<OnewayPtr>& oneways() const { return objects_; }
+  const std::vector<OnewayPtr>& oneways() const noexcept { return objects_; }
 
   
 private:
-  void decideEachOnewayFalling(const Stage& stage) {
+  void decideEachOnewayFalling(const Stage& stage) noexcept {
     for (auto& obj : objects_) {
       if (!obj->isOnStage()) continue;
       

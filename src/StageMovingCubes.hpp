@@ -44,7 +44,7 @@ public:
   
   void update(const double progressing_seconds,
               const Stage& stage,
-              const std::vector<ci::Vec3i>& pickables) {
+              const std::vector<ci::Vec3i>& pickables) noexcept {
     for (auto& cube : cubes_) {
       cube->update(progressing_seconds);
     }
@@ -59,15 +59,14 @@ public:
   }
 
 
-  void cleanup() {
-  }
+  void cleanup() noexcept { }
   
-  void clear() {
+  void clear() noexcept {
     entry_cubes_.clear();
   }
 
 
-  void addCubes(const ci::JsonTree& params, const int start_z, const int x_offset) {
+  void addCubes(const ci::JsonTree& params, const int start_z, const int x_offset) noexcept {
     if (!params.hasChild("moving")) return;
 
     ci::Vec3i start_pos(x_offset, 0, start_z);
@@ -85,7 +84,7 @@ public:
     }
   }
 
-  void entryCube(const int current_z) {
+  void entryCube(const int current_z) noexcept {
     for (const auto& entry : entry_cubes_) {
       if (entry.pos.z == current_z) {
         auto cube = MovingCubePtr(new MovingCube(params_, timeline_, event_, entry.pos, entry.move_pattern));
@@ -94,7 +93,7 @@ public:
     }
   }
 
-  bool isCubeExists(const ci::Vec3i& block_pos) const {
+  bool isCubeExists(const ci::Vec3i& block_pos) const noexcept {
     for (const auto& cube : cubes_) {
       if (block_pos == cube->blockPosition()) return true;
 
@@ -105,7 +104,7 @@ public:
     return false;
   }
 
-  void moveCube(const ci::Vec3i& block_pos) {
+  void moveCube(const ci::Vec3i& block_pos) noexcept {
     for (auto& cube : cubes_) {
       const auto& cube_block_pos = cube->blockPosition();
       if ((cube_block_pos.x == block_pos.x) && (cube_block_pos.z == block_pos.z)) {
@@ -116,11 +115,12 @@ public:
   }
 
   
-  const std::vector<MovingCubePtr>& cubes() const { return cubes_; }
+  const std::vector<MovingCubePtr>& cubes() const noexcept { return cubes_; }
 
   
 private:
-  void decideEachCubeMoving(const Stage& stage, const std::vector<ci::Vec3i>& pickables) {
+  void decideEachCubeMoving(const Stage& stage,
+                            const std::vector<ci::Vec3i>& pickables) noexcept {
     for (auto& cube : cubes_) {
       if (cube->willRotationMove()) {
         // 移動できなかったときにすこし間をおいて
@@ -143,7 +143,7 @@ private:
     }
   }
   
-  void decideEachCubeFalling(const Stage& stage) {
+  void decideEachCubeFalling(const Stage& stage) noexcept {
     for (auto& cube : cubes_) {
       if (!cube->isOnStage() || cube->isMoving()) continue;
       
@@ -157,7 +157,8 @@ private:
   }
 
 
-  bool isOtherMovingCubeExists(const MovingCubePtr& cube, const ci::Vec3i& block_pos) const {
+  bool isOtherMovingCubeExists(const MovingCubePtr& cube,
+                               const ci::Vec3i& block_pos) const noexcept {
     for (const auto& other_cube : cubes_) {
       if (*cube == *other_cube) continue;
 
@@ -172,14 +173,15 @@ private:
   }
 
   bool isPickableCubeExists(const ci::Vec3i& block_pos,
-                            const std::vector<ci::Vec3i>& pickables) const {
+                            const std::vector<ci::Vec3i>& pickables) const noexcept {
     for (const auto& pos : pickables) {
       if (pos == block_pos) return true;
     }
     return false;
   }
 
-  bool isStageHeightSame(const ci::Vec3i& block_pos, const Stage& stage) const {
+  bool isStageHeightSame(const ci::Vec3i& block_pos,
+                         const Stage& stage) const noexcept {
     auto height = stage.getStageHeight(block_pos);
     return height.first && (height.second == block_pos.y);
   }

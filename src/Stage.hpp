@@ -118,7 +118,7 @@ public:
 
 
   // 生成開始
-  void startBuildStage(const float speed_rate, const bool start_speedup) {
+  void startBuildStage(const float speed_rate, const bool start_speedup) noexcept {
     if (start_speedup) {
       animation_timeline_->apply(&build_speed_rate_,
                                  speed_rate * build_start_rate_, speed_rate,
@@ -134,25 +134,25 @@ public:
   }
 
   // 生成速度の変更
-  void setBuildSpeedRate(const float speed_rate) {
+  void setBuildSpeedRate(const float speed_rate) noexcept {
     build_speed_rate_ = speed_rate;
   }
 
   // 崩壊開始
-  void startCollapseStage(const int stop_z, const float speed_rate = 1.0f) {
+  void startCollapseStage(const int stop_z, const float speed_rate = 1.0f) noexcept {
     collapse_speed_rate_ = speed_rate;
     collapseStage(stop_z);
   }
 
   
   // 生成 & 崩壊を止める
-  void stopBuildAndCollapse() {
+  void stopBuildAndCollapse() noexcept {
     event_timeline_->clear();
     build_speed_rate_.stop();
   }
 
   // BuildとCollapseが完了しているか判定
-  bool isFinishedBuildAndCollapse() {
+  bool isFinishedBuildAndCollapse() noexcept {
     if (!finished_build_ || !finished_collapse_) return false;
 
     // Build演出の完了も調べる
@@ -164,11 +164,11 @@ public:
   }
 
   // 崩壊完了()
-  bool isFinishedCollapse() {
+  bool isFinishedCollapse() noexcept {
     return active_cubes_.empty();
   }
 
-  void restart(const int restart_z) {
+  void restart(const int restart_z) noexcept {
     stopBuildAndCollapse();
 
     top_z_         = restart_z;
@@ -184,7 +184,7 @@ public:
   
 
   // StartLineを下げる
-  void openStartLine() {
+  void openStartLine() noexcept {
     size_t iz = active_cubes_.size() - 1;
 
     for (auto& cube : active_cubes_[iz]) {
@@ -210,7 +210,7 @@ public:
   }
 
   // stageの自動崩壊を仕掛ける
-  void setupAutoCollapse(const int stop_z, const float speed_rate = 1.0f) {
+  void setupAutoCollapse(const int stop_z, const float speed_rate = 1.0f) noexcept {
     started_collapse_ = false;
 
     event_timeline_->add([this, stop_z, speed_rate]() {
@@ -222,23 +222,23 @@ public:
       event_timeline_->getCurrentTime() + auto_collapse_);
   }
 
-  bool isStartedCollapse() const { return started_collapse_; }
+  bool isStartedCollapse() const noexcept { return started_collapse_; }
 
-  void setFinishLine(const int z) {
+  void setFinishLine(const int z) noexcept {
     finish_line_z_ = z;
   }
   
 
-  int getTopZ() const { return top_z_; }
-  int getActiveTopZ() const { return active_top_z_; }
-  int getActiveBottomZ() const { return active_top_z_ - int(active_cubes_.size()); }
+  int getTopZ() const noexcept { return top_z_; }
+  int getActiveTopZ() const noexcept { return active_top_z_; }
+  int getActiveBottomZ() const noexcept { return active_top_z_ - int(active_cubes_.size()); }
 
-  const ci::Vec2i& getStageWidth() const { return stage_width_; }
+  const ci::Vec2i& getStageWidth() const noexcept { return stage_width_; }
   
   int addCubes(const ci::JsonTree& stage_data,
                const int x_offset,
                const std::vector<ci::Color>& cube_color,
-               const ci::Color& line_color) {
+               const ci::Color& line_color) noexcept {
     // FIXME:finishlineにはデータが入っていてはいけない
     build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
@@ -297,40 +297,40 @@ public:
 
   
   // 「この場所にはCubeが無い」も結果に含めるので、std::pairを利用
-  std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) const {
+  std::pair<bool, int> getStageHeight(const ci::Vec3i& block_pos) const noexcept {
     const auto* const cube = getStageCube(block_pos);
     if (!cube) return std::make_pair(false, 0);
     
     return std::make_pair(cube->can_ride, cube->block_position.y);
   }
 
-  void moveStageCube(const ci::Vec3i& block_pos) {
+  void moveStageCube(const ci::Vec3i& block_pos) noexcept {
     auto* const target = getStageCube(block_pos);
     if (!target) return;
 
     moveStageCube(*target);
   }
 
-  void cleanup() {
+  void cleanup() noexcept {
     event_timeline_->clear();
   }
 
 
-  float buildSpeed() const { return build_speed_; }
+  float buildSpeed() const noexcept { return build_speed_; }
   
   
-  const std::deque<std::vector<StageCube> >& activeCubes() const {
+  const std::deque<std::vector<StageCube> >& activeCubes() const noexcept {
     return active_cubes_;
   }
 
-  const std::deque<std::vector<StageCube> >& collapseCubes() const {
+  const std::deque<std::vector<StageCube> >& collapseCubes() const noexcept {
     return collapse_cubes_;
   }
 
   
 private:
   // 生成(再帰)
-  void buildStage() {
+  void buildStage() noexcept {
     if (!canBuild()) {
       finished_build_ = true;
       return;
@@ -379,7 +379,7 @@ private:
   }
 
   // 崩壊(再帰)
-  void collapseStage(const int stop_z) {
+  void collapseStage(const int stop_z) noexcept {
     int bottom_z = active_top_z_ - int(active_cubes_.size()) - 1;
     
     if (!canCollapse() || (bottom_z == stop_z)) {
@@ -411,7 +411,7 @@ private:
                           event_timeline_->getCurrentTime() + collapse_speed_ * collapse_speed_rate_);
   }
   
-  const StageCube* const getStageCube(const ci::Vec3i& block_pos) const {
+  const StageCube* const getStageCube(const ci::Vec3i& block_pos) const noexcept {
     int top_z    = active_top_z_ - 1;
     int bottom_z = active_top_z_ - int(active_cubes_.size());
 
@@ -426,7 +426,7 @@ private:
     return nullptr;
   }
 
-  StageCube* const getStageCube(const ci::Vec3i& block_pos) {
+  StageCube* const getStageCube(const ci::Vec3i& block_pos) noexcept {
     // FIXME:constなし版のための苦肉の策
     return const_cast<StageCube*>(static_cast<const Stage*>(this)->getStageCube(block_pos));
   }

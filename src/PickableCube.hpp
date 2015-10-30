@@ -216,7 +216,8 @@ public:
   }
   
 
-  void reserveRotationMove(const int direction, const ci::Vec3i& vector, const int speed) {
+  void reserveRotationMove(const int direction,
+                           const ci::Vec3i& vector, const int speed) noexcept {
     move_vector_ = vector;
 
     if (move_direction_ == direction) {
@@ -230,17 +231,17 @@ public:
     move_requested_ = true;
   }
   
-  bool willRotationMove() const {
+  bool willRotationMove() const noexcept {
     return (move_speed_ > 0) && !moving_ && on_stage_ && !sleep_;
   }
 
-  void cancelRotationMove() {
+  void cancelRotationMove() noexcept {
     move_speed_     = 0;
     move_step_      = 0;
     move_requested_ = false;
   }
 
-  void controlFinishedMove() {
+  void controlFinishedMove() noexcept {
     // Finish時、予約された移動なら中断
     if (move_requested_) {
       cancelRotationMove();
@@ -251,13 +252,13 @@ public:
     return move_direction_;
   }
 
-  const ci::Vec3i& moveVector() const { return move_vector_; }
+  const ci::Vec3i& moveVector() const noexcept { return move_vector_; }
   
-  void enableMovedEvent(const bool enable = true) {
+  void enableMovedEvent(const bool enable = true) noexcept {
     move_event_ = enable;
   }
   
-  void startRotationMove() {
+  void startRotationMove() noexcept {
     moving_         = true;
     first_moved_    = true;
     move_requested_ = false;
@@ -348,7 +349,7 @@ public:
       });
   }
 
-  void startIdleMotion(const std::vector<int>& directions) {
+  void startIdleMotion(const std::vector<int>& directions) noexcept {
     ci::Quatf rotation_table[] = {
       { ci::Vec3f(1, 0, 0),  idle_angle_ },
       { ci::Vec3f(1, 0, 0), -idle_angle_ },
@@ -403,7 +404,7 @@ public:
       });    
   }
 
-  void fallFromStage() {
+  void fallFromStage() noexcept {
     on_stage_ = false;
 
     // idle中の動作を中断
@@ -422,7 +423,7 @@ public:
   }
 
   // ドッスンに踏まれた
-  void pressed() {
+  void pressed() noexcept {
     // on_stage_ = false;
     pressed_  = true;
     cancelRotationMove();
@@ -451,7 +452,7 @@ public:
   }
 
   // 昇天
-  void rise() {
+  void rise() noexcept {
     on_stage_ = false;
     
     auto      ease_type = params_["game.pickable.rise_ease"].getValue<std::string>();
@@ -470,28 +471,28 @@ public:
       });
   }
 
-  void startPickingColor() {
+  void startPickingColor() noexcept {
     animation_timeline_->apply(&color_,
                                picking_color_,
                                picking_start_duration_,
                                getEaseFunc(picking_start_ease_));
   }
 
-  void endPickingColor() {
+  void endPickingColor() noexcept {
     animation_timeline_->apply(&color_,
                                orig_color_,
                                picking_end_duration_,
                                getEaseFunc(picking_end_ease_));
   }
 
-  void startSleepingColor() {
+  void startSleepingColor() noexcept {
     animation_timeline_->apply(&color_,
                                Json::getColor<float>(params_["game.pickable.sleeping_color"]),
                                params_["game.pickable.sleeping_start.duration"].getValue<float>(),
                                getEaseFunc(params_["game.pickable.sleeping_start.ease"].getValue<std::string>()));
   }
   
-  void endSleepingColor() {
+  void endSleepingColor() noexcept {
     animation_timeline_->apply(&color_,
                                orig_color_,
                                params_["game.pickable.sleeping_end.duration"].getValue<float>(),
@@ -500,41 +501,41 @@ public:
 
   
   
-  u_int id() const { return id_; }
+  u_int id() const noexcept { return id_; }
   
-  bool isActive() const { return active_; }
-  bool isOnStage() const { return on_stage_; }
-  bool isMoving() const { return moving_; }
-  bool isPressed() const { return pressed_; }
+  bool isActive() const noexcept { return active_; }
+  bool isOnStage() const noexcept { return on_stage_; }
+  bool isMoving() const noexcept { return moving_; }
+  bool isPressed() const noexcept { return pressed_; }
 
-  bool isSleep() const { return sleep_; }
-  void awaken(const bool sleeing = false) { sleep_ = sleeing; }
+  bool isSleep() const noexcept { return sleep_; }
+  void awaken(const bool sleeing = false) noexcept { sleep_ = sleeing; }
   
-  int moveSpeed() const { return move_speed_; }
+  int moveSpeed() const noexcept { return move_speed_; }
   
-  const ci::Vec3f& position() const { return position_(); }
-  const ci::Quatf& rotation() const { return rotation_(); }
+  const ci::Vec3f& position() const noexcept { return position_(); }
+  const ci::Quatf& rotation() const noexcept { return rotation_(); }
 
-  const ci::Vec3i& blockPosition() const { return block_position_; }
-  const ci::Vec3i& prevBlockPosition() const { return prev_block_position_; }
+  const ci::Vec3i& blockPosition() const noexcept { return block_position_; }
+  const ci::Vec3i& prevBlockPosition() const noexcept { return prev_block_position_; }
   
-  float cubeSize() const { return 1.0f; }
-  const ci::Vec3f& size() const { return scale_; }
+  float cubeSize() const noexcept { return 1.0f; }
+  const ci::Vec3f& size() const noexcept { return scale_; }
 
-  float getPaddingSize() const { return padding_size_; }
+  float getPaddingSize() const noexcept { return padding_size_; }
 
-  const ci::Color& color() const { return color_(); }
+  const ci::Color& color() const noexcept { return color_(); }
 
-  bool isAdjoinOther() const { return adjoin_other_; }
-  void setAdjoinOther(const bool adjoin_other) { adjoin_other_ = adjoin_other; }
+  bool isAdjoinOther() const noexcept { return adjoin_other_; }
+  void setAdjoinOther(const bool adjoin_other) noexcept { adjoin_other_ = adjoin_other; }
 
   
   // std::findを利用するための定義
-  bool operator==(const u_int rhs_id) const {
+  bool operator==(const u_int rhs_id) const noexcept {
     return id_ == rhs_id;
   }
 
-  bool operator==(const PickableCube& rhs) const {
+  bool operator==(const PickableCube& rhs) const noexcept {
     return id_ == rhs.id_;
   }
   
