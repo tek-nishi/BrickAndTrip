@@ -87,7 +87,7 @@ public:
     {
       // アイテムによる加点
       // 収集率で決まる
-      auto score         = item_score_ * item_num / item_total_num_;
+      auto score         = itemScore(item_num);
       auto highest_score = item_score_;
     
       total_score += score;
@@ -127,6 +127,13 @@ public:
 
     return std::make_pair(total_score, rank);
   }
+
+
+  // GameOver時に加点したいので関数化
+  int itemScore(const int item_num) const noexcept {
+    return item_score_ * item_num / item_total_num_;
+  }
+  
 };
 
 }

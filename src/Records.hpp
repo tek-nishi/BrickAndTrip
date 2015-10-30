@@ -274,9 +274,11 @@ public:
   // GameOver時の記録の保存
   void storeGameOverRecords() noexcept {
     storeRecord();
-    
+
     total_play_time_ += current_stage_.play_time;
     total_item_num_  += current_stage_.item_num;
+    
+    current_game_.score += game_score_.itemScore(current_stage_.item_num);
   }
   
   // 10ステージクリア
