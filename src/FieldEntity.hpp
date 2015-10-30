@@ -489,7 +489,7 @@ public:
 
         { "current_stage", stage_num_ },
       };
-
+      
       event_.signal("begin-stageclear", params);
     }
     

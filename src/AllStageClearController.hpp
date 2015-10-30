@@ -164,7 +164,7 @@ private:
     GameCenter::submitScore(game_score, total_items);
 
     if (boost::any_cast<bool>(result.at("highest_score"))) {
-      view_->startWidgetTween("tween-highest-score");
+      view_->startWidgetTween("tween-hi-score");
     }
     
     view_->setDisp(false);
