@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		00748058165D41390024B57A /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 00748057165D41390024B57A /* assets */; };
 		0087D25512CD809F002CD69F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0087D25412CD809F002CD69F /* CoreText.framework */; };
-		00A66A361965AC8800B17EB3 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A66A351965AC8800B17EB3 /* Accelerate.framework */; };
 		00CFDF6B1138442D0091E310 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091E310 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -18,6 +17,10 @@
 		470A47201BD8F6E7008ED826 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470A471F1BD8F6E7008ED826 /* GameKit.framework */; };
 		470A47221BD8FA63008ED826 /* GameCenter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 470A47211BD8FA63008ED826 /* GameCenter.mm */; };
 		471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 471BAE9F1BA42303000BD01F /* AudioSession.mm */; };
+		4727F4BC1BE34C4000EF244A /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A66A351965AC8800B17EB3 /* Accelerate.framework */; };
+		4727F4BD1BE34CEC00EF244A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
+		4727F4BE1BE34D1900EF244A /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; };
+		4727F4BF1BE34D5000EF244A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; };
 		473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 473FFD121B7A0E7700EFDD9E /* Images.xcassets */; };
 		474560051BABD1E400310BBD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 474560071BABD1E400310BBD /* InfoPlist.strings */; };
 		474560081BABD1EE00310BBD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4745600A1BABD1EE00310BBD /* Localizable.strings */; };
@@ -29,12 +32,9 @@
 		47C2CE161AD5099E00C9FF09 /* Vbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47C2CE151AD5099E00C9FF09 /* Vbo.cpp */; };
 		47D342F51B78A03D007AF9E9 /* Share.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47D342F41B78A03D007AF9E9 /* Share.mm */; };
 		47EAFB6C1B2D4DE800703A45 /* DrawVboMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47F3CE631B287B250030D955 /* DrawVboMesh.cpp */; };
-		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
-		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */; };
-		DDDDE001121DAC8FFFFADDDD /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,20 +79,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4727F4BF1BE34D5000EF244A /* CoreMedia.framework in Frameworks */,
+				4727F4BE1BE34D1900EF244A /* CoreVideo.framework in Frameworks */,
+				4727F4BD1BE34CEC00EF244A /* MobileCoreServices.framework in Frameworks */,
+				4727F4BC1BE34C4000EF244A /* Accelerate.framework in Frameworks */,
 				47B62A2C1B6A264200ABF155 /* Social.framework in Frameworks */,
 				C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */,
-				C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */,
 				C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */,
-				DDDDE001121DAC8FFFFADDDD /* MobileCoreServices.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				470A47201BD8F6E7008ED826 /* GameKit.framework in Frameworks */,
 				00CFDF6B1138442D0091E310 /* CoreGraphics.framework in Frameworks */,
-				C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */,
 				C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */,
-				00A66A361965AC8800B17EB3 /* Accelerate.framework in Frameworks */,
 				0087D25512CD809F002CD69F /* CoreText.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

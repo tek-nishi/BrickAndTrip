@@ -245,6 +245,8 @@ public:
     record.all_item_get = current_stage_.item_num == current_stage_.item_total_num;
     current_stage_.complete_item = record.all_item_get;
 
+    total_play_time_ += current_stage_.play_time;
+
     auto stage_score = game_score_(current_stage_.play_time, current_stage_.item_num);
     current_stage_.score = stage_score.first;
     current_stage_.rank = stage_score.second;
