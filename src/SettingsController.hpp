@@ -83,7 +83,10 @@ public:
                                         view_->startWidgetTween("tween-out");
 
                                         event_timeline_->add([this]() {
-                                            event_.signal("begin-title", EventParam());
+                                            EventParam params = {
+                                              { "menu-to-title", true },
+                                            };
+                                            event_.signal("begin-title", params);
                                             
                                             event_timeline_->add([this]() {
                                                 active_ = false;

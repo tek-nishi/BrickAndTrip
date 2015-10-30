@@ -52,12 +52,6 @@ public:
     auto current_time = timeline->getCurrentTime();
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
-
-    // アプリ起動直後のタイトル画面か??
-    bool startup = false;
-    if (hasKey(exec_params, "title-startup")) {
-      startup = boost::any_cast<bool>(exec_params.at("title-startup"));
-    }
     
     connections_ += event.connect("pickable-moved",
                                   [this](const Connection& connection, EventParam& param) {
@@ -164,8 +158,22 @@ public:
 #endif
     setupView();
 
+    // アプリ起動直後のタイトル画面か??
+    bool startup = false;
+    if (hasKey(exec_params, "title-startup")) {
+      startup = boost::any_cast<bool>(exec_params.at("title-startup"));
+    }
+    // 各種menuから戻ってきた??
+    bool from_menu = false;
+    if (hasKey(exec_params, "menu-to-title")) {
+      from_menu = boost::any_cast<bool>(exec_params.at("menu-to-title"));
+    }
+
     {
-      std::string jingle_name = startup ? "title.jingle-full" : "title.jingle-short";
+      std::string jingle_name = "title.jingle-short";
+      if (startup)        jingle_name = "title.jingle-full";
+      else if (from_menu) jingle_name = "title.jingle-mini";
+      
       requestSound(event_, params[jingle_name].getValue<std::string>());
     }
     

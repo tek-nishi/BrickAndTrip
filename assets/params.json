@@ -887,8 +887,9 @@
   },
   
   "title": {
-    "jingle-full": "title",
-    "jingle-short": "menu-jingle",
+    "jingle-full":  "title",
+    "jingle-short": "title-jingle",
+    "jingle-mini":  "menu-jingle",
     
     "active_delay": 1.0,
     "tween_delay": 0.6,
@@ -1270,6 +1271,15 @@
       "type": "file",
       "category": "jingle",
       "path": "menu-jingle.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "title-jingle",
+      "type": "file",
+      "category": "jingle",
+      "path": "title-jingle.m4a",
       "gain": 1,
       "loop": false
     },
