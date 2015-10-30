@@ -130,8 +130,13 @@ public:
     
     auto game_score = boost::any_cast<int>(event_params.at("score"));
     view_->getWidget("score-result").setText(toFormatedString(game_score, 5));
-    GameCenter::submitScore(game_score);
+    auto total_items = boost::any_cast<int>(event_params.at("total_items"));
+    GameCenter::submitScore(game_score, total_items);
 
+    if (game_score == 0) {
+      GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.NO_SCORE");
+    }
+    
     if (boost::any_cast<bool>(event_params.at("hi_score"))) {
       view_->startWidgetTween("tween-hi-score");
     }

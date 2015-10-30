@@ -485,6 +485,7 @@ public:
         { "play_item_num",       current_game.item_num },
         { "play_item_total_num", current_game.item_total_num },
         { "highest_item_num",    current_game.highest_item_num },
+        { "total_items",         records_.getTotalItemNum() },
 
         { "current_stage", stage_num_ },
       };
@@ -515,6 +516,7 @@ public:
       EventParam params = {
         { "score",        current_game.score },
         { "hi_score",     current_game.highest_score },
+        { "total_items",  records_.getTotalItemNum() },
         { "can_continue", canContinue() },
       };
       event_.signal("begin-gameover", params);

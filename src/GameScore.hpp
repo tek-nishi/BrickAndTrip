@@ -58,7 +58,7 @@ public:
 
 
   std::pair<int, int> operator() (const double clear_time,
-                                  const int item_num) noexcept {
+                                  const int item_num) const noexcept {
     int total_score = 0;
     // 最高スコア(理論値)
     int highest_total_score = 0;

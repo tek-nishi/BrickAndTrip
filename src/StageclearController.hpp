@@ -33,6 +33,7 @@ class StageclearController : public ControllerBase {
 
   // FIXME:全ステージクリア時の情報を保持している
   int total_score_;
+  int total_items_;
   bool highest_score_;
   int item_num_;
   int item_total_num_;
@@ -69,6 +70,7 @@ public:
     regular_stage_(boost::any_cast<bool>(result.at("regular_stage"))),
     all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
     total_score_(boost::any_cast<int>(result.at("total_score"))),
+    total_items_(boost::any_cast<int>(result.at("total_items"))),
     highest_score_(boost::any_cast<bool>(result.at("highest_total_score"))),
     item_num_(boost::any_cast<int>(result.at("play_item_num"))),
     item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
@@ -106,6 +108,7 @@ public:
 
                                             EventParam params = {
                                               { "total_score",       total_score_ },
+                                              { "total_items",       total_items_ },
                                               { "highest_score",     highest_score_ },
                                               { "item_num",          item_num_ },
                                               { "item_total_num",    item_total_num_ },

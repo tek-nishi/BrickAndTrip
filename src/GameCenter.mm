@@ -81,6 +81,12 @@ static NSString* createString(const std::string& text) noexcept {
   return str;
 }
 
+static GKScore* createScore(const std::string& id, const double value) {
+  GKScore* reporter = [[[GKScore alloc] initWithCategory:createString(id)] autorelease];
+  reporter.value = value;
+
+  return reporter;
+}
 
 void submitStageScore(const int stage,
                       const int score, const double clear_time) noexcept {
@@ -88,42 +94,38 @@ void submitStageScore(const int stage,
     NSLOG(@"GameCenter::submitStageScore: GameCenter is not active.");
     return;
   }
-
   
   std::ostringstream str;
   str << "BRICKTRIP.STAGE"
       << std::setw(2) << std::setfill('0') << stage;
 
   std::string hiscore_id(str.str() + ".HISCORE");
-  GKScore* hiscore_reporter = [[[GKScore alloc] initWithCategory:createString(hiscore_id)] autorelease];
-  hiscore_reporter.value = score;
+  GKScore* hiscore_reporter = createScore(hiscore_id, score);
 
   DOUT << "submit:" << hiscore_id << " " << score << std::endl;
   
   std::string besttime_id(str.str() + ".BESTTIME");
-  GKScore* besttime_reporter = [[[GKScore alloc] initWithCategory:createString(besttime_id)] autorelease];
-  besttime_reporter.value = int64_t(clear_time * 100.0);
+  GKScore* besttime_reporter = createScore(besttime_id, int64_t(clear_time * 100.0));
 
   DOUT << "submit:" << besttime_id << " " << clear_time << std::endl;
 
-  NSArray* score_array = @[hiscore_reporter, besttime_reporter];
+  // GKScoreをArrayにまとめて送信
+  NSArray* score_array = @[ hiscore_reporter, besttime_reporter ];
   sendScore(score_array);
 }
 
-void submitScore(const int score) noexcept {
+void submitScore(const int score, const int total_items) noexcept {
   if (!isAuthenticated()) {
     NSLOG(@"GameCenter::submitScore: GameCenter is not active.");
     return;
   }
   
-  if (score == 0) return;
-  
-  GKScore* score_reporter = [[[GKScore alloc] initWithCategory:createString("BRICKTRIP.HISCORE")] autorelease];
-  score_reporter.value = score;
+  GKScore* score_reporter = createScore("BRICKTRIP.HISCORE", score);
+  GKScore* items_reporter = createScore("BRICKTRIP.MOST_BRICK", total_items);
 
-  DOUT << "submit:" << score << std::endl;
+  DOUT << "submit:" << score << " " << total_items << std::endl;
   
-  NSArray* score_array = @[score_reporter];
+  NSArray* score_array = @[ score_reporter, items_reporter ];
   sendScore(score_array);
 }
 
