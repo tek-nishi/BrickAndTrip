@@ -48,7 +48,7 @@
         "size": 128,
         "scale": [ 1.0, 1.0, 1 ],
         "offset": [ 0, 0.09, 0 ],
-        "mipmap": true
+        "mipmap": false
       }
     ],
 

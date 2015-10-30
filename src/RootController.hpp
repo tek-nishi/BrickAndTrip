@@ -104,7 +104,7 @@ public:
                        { "total_play",  records_.getTotalPlayNum() },
                        { "total_time",  records_.getTotalPlayTime() },
                        { "high_score",  records_.getHighScore() },
-                       { "total_clear", records_.getTotalClearNum() },
+                       { "total_item",  records_.getTotalItemNum() },
                        { "stage_ranks", records_.stageRanks() },
                      };
                      
@@ -183,7 +183,7 @@ public:
 
     event_.connect("clear-records",
                    [this](const Connection&, EventParam& param) {
-                     records_.clear();
+                     records_ = Records(params_["version"].getValue<float>());
                    });
 
     event_.connect("do-snapshot",

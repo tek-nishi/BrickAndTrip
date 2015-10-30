@@ -118,7 +118,7 @@ public:
     
   // 一文字レンダリング
   ci::Surface8u rendering(const char32_t chara) noexcept {
-    FT_Load_Char(face_, chara, FT_LOAD_RENDER);
+    FT_Load_Char(face_, chara, FT_LOAD_RENDER | FT_LOAD_NO_BITMAP | FT_LOAD_TARGET_LIGHT);
     FT_GlyphSlot slot = face_->glyph;
     auto bitmap = slot->bitmap;
       
@@ -153,7 +153,7 @@ public:
     int pen_x = 0;
     for (size_t ic = 0; ic < size_t(chara_num); ++ic) {
       char32_t chara = getCharactor(text, ic);
-      FT_Load_Char(face_, chara, FT_LOAD_RENDER);
+      FT_Load_Char(face_, chara, FT_LOAD_RENDER | FT_LOAD_NO_BITMAP | FT_LOAD_TARGET_LIGHT);
       auto bitmap = slot->bitmap;
 
       // font_heightがsurfaceサイズより大きい場合はascenderを調整

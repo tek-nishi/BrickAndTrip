@@ -506,7 +506,7 @@ public:
     setRestartLine();
     
     stopBuildAndCollapse();
-    records_.storeRecord();
+    records_.storeGameOverRecords();
     records_.write(params_["game.records"].getValue<std::string>());
 
     {

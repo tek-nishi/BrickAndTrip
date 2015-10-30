@@ -305,10 +305,10 @@
   },
 
   {
-    "name": "clear",
+    "name": "item",
     "disp": true,
 
-    "text": "CLEARS",
+    "text": "BRICKS",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,
@@ -348,10 +348,10 @@
     }
   },
   {
-    "name": "total_clear",
+    "name": "total_item",
     "disp": true,
 
-    "text": "0000",
+    "text": "00000",
     "size": 0.3,
     "spacing": 0.03,
     "chara_split": 1,

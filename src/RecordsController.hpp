@@ -155,8 +155,8 @@ private:
     }
     
     {
-      auto total_clear = boost::any_cast<int>(records.at("total_clear"));
-      view_->getWidget("total_clear").setText(toFormatedString(total_clear, 4));
+      auto total_item = boost::any_cast<int>(records.at("total_item"));
+      view_->getWidget("total_item").setText(toFormatedString(total_item, 5));
     }
 
     {
