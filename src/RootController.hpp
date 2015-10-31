@@ -200,6 +200,7 @@ public:
     
     event_.connect("reset-achievement",
                    [this](const Connection&, EventParam& param) {
+                     DOUT << "reset-achievement" << std::endl;
                      GameCenter::resetAchievement();
                    });
 #endif

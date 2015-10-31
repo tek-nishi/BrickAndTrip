@@ -149,7 +149,10 @@ class BrickTripApp : public AppNative,
 #if defined(CINDER_COCOA_TOUCH) && defined(DEBUG)
     // キーボード表示
     // TIPS:シミュレーターはMacのキー入力を受け付ける
-    // showKeyboard();
+    if (params_["app.use_keyboard"].getValue<bool>()) {
+      DOUT << "showKeyboard()" << std::endl;
+      showKeyboard();
+    }
 #endif
 
 #if defined(CINDER_COCOA_TOUCH)

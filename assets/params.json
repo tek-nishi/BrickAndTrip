@@ -164,7 +164,9 @@
       "N": "reset-records",
       "U": "toggle-ui-hide",
       "A": "reset-achievement"
-    }
+    },
+
+    "use_keyboard": false
   },
 
   "ui_view": {
