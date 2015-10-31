@@ -439,7 +439,11 @@ private:
 
       // Stageは一定時間後に生成開始
       timeline_->add([this]() {
-          entity_.startStageBuild();          
+          entity_.startStageBuild();
+          
+          // このタイミングで光源設定を変更
+          view_.setStageBgColor(entity_.bgColor());
+          view_.setStageLightTween(entity_.lightTween());
         },
         timeline_->getCurrentTime() + continued_start_delay_);
     }
@@ -462,19 +466,6 @@ private:
                                                   
                                                   connection.disconnect();
                                                 });
-
-#if 0
-      // 最初から始めた時はPickableを動かしたらProgressを表示
-      disposable_connections_ += event_.connect("pickable-moved",
-                                                [this](const Connection& connection, EventParam& param) {
-                                                  timeline_->add([this]() {
-                                                      event_.signal("begin-progress", EventParam());
-                                                    },
-                                                    timeline_->getCurrentTime() + progress_start_delay_);
-                                                  
-                                                  connection.disconnect();
-                                                });
-#endif
     }
     
     view_.enableTouchInput(false);
