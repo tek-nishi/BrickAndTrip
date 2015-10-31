@@ -434,13 +434,13 @@
         "type": "point",
         "position": [ 4.5, -16, 16 ],
         
-        "constant_attenuation":  0,
-        "linear_attenuation":    0.15,
+        "constant_attenuation":  1,
+        "linear_attenuation":    0,
         "quadratic_attenuation": 0,
         
-        "diffuse":  [ 0.7, 0.7, 0.7 ],
+        "diffuse":  [ 0.5, 0.5, 0.5 ],
         "ambient":  [ 0.0, 0.0, 0.0 ],
-        "specular": [ 0.5, 0.5, 0.5 ]
+        "specular": [ 0.3, 0.3, 0.3 ]
       }
     ],
 
