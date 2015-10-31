@@ -330,23 +330,16 @@ public:
 
     drawBgCubes(field.bg_cubes, models);
 
+    lights_.disableLights();
+    ci::gl::disable(GL_FOG);
+
 #ifdef DEBUG
     if (debug_info_) {
       drawPickableCubesBBox(field.pickable_cubes);
       drawBgBbox(field.bg_bbox_min, field.bg_bbox_max);
       drawCameraTargetRange();
+      drawLightInfo();
     }
-#endif
-
-    lights_.disableLights();
-    ci::gl::disable(GL_FOG);
-
-#if 0
-    ci::gl::disable(GL_LIGHTING);
-    ci::gl::disableDepthRead();
-    ci::gl::disableDepthWrite();
-    
-    camera_editor_.draw();
 #endif
   }
 
@@ -976,7 +969,7 @@ private:
 
   
 #ifdef DEBUG
-  void drawPickableCubesBBox(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
+  void drawPickableCubesBBox(const std::vector<std::unique_ptr<PickableCube> >& cubes) const noexcept {
     ci::gl::color(0, 1, 0);
     
     for (const auto& cube : cubes) {
@@ -1001,7 +994,7 @@ private:
     }    
   }
 
-  void drawCameraTargetRange() noexcept {
+  void drawCameraTargetRange() const noexcept {
     ci::gl::pushModelView();
     ci::gl::translate(new_target_point_);
     ci::gl::rotate(ci::Vec3f(90, 0, 0));
@@ -1010,11 +1003,24 @@ private:
     ci::gl::popModelView();
   }
   
-  void drawBgBbox(const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) noexcept {
+  void drawBgBbox(const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) const noexcept {
     ci::AxisAlignedBox3f bbox(bbox_min, bbox_max);
     
     ci::gl::color(0, 1, 0);
     ci::gl::drawStrokedCube(bbox);
+  }
+
+  void drawLightInfo() const noexcept {
+    ci::gl::color(1, 0, 0);
+    
+    const auto& lights = lights_.get();
+    for (const auto& light : lights) {
+      switch (light.type) {
+      case ci::gl::Light::POINT:
+        ci::gl::drawSphere(light.position(), 0.1f);
+        break;
+      }
+    }
   }
 #endif
 
@@ -1026,7 +1032,7 @@ private:
   }
 
   
-  ci::Vec3f calcEyePoint(const float distance_offset) noexcept {
+  ci::Vec3f calcEyePoint(const float distance_offset) const noexcept {
     ci::Vec3f pos = ci::Quatf(ci::Vec3f(1, 0, 0), ci::toRadians(eye_rx_))
                   * ci::Quatf(ci::Vec3f(0, 1, 0), ci::toRadians(eye_ry_))
                   * ci::Vec3f(0, 0, eye_distance_ + distance_offset) * distance_rate_() + interest_point_;
@@ -1046,7 +1052,7 @@ private:
 
 
   // カメラの距離に応じた補正
-  float reviseValueByCamera(const float value) noexcept {
+  float reviseValueByCamera(const float value) const noexcept {
     float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
     return value * distance * 1.5f / eye_distance_();
   }

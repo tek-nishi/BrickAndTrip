@@ -226,7 +226,7 @@
     "lights": [
       {
         "type": "point",
-        "position": [ 4, 20, 0 ],
+        "position": [ 3.5, 20, 0 ],
         
         "constant_attenuation":  0,
         "linear_attenuation":    0,
@@ -241,8 +241,8 @@
             {
               "target": "position",
               "type": "EaseNone",
-              "end": [ 4, 5.5, 0 ],
-              "duration": 3
+              "end": [ 3.5, 5.5, 0 ],
+              "duration": 3.5
             },
             {
               "target": "quadratic_attenuation",
@@ -274,13 +274,13 @@
             {
               "target": "position",
               "type": "EaseNone",
-              "end": [ 4, 10, 2 ],
+              "end": [ 3.5, 10, 2 ],
               "duration": 3
             },
             {
               "target": "quadratic_attenuation",
               "type": "EaseNone",
-              "end": 0.01,
+              "end": 0.0095,
               "duration": 3
             },
             {
@@ -307,7 +307,7 @@
             {
               "target": "position",
               "type": "EaseNone",
-              "end": [ 4, 5.5, 1 ],
+              "end": [ 3.5, 5.5, 0 ],
               "duration": 0.8
             },
             {
@@ -428,6 +428,19 @@
             }
           ]
         }
+      },
+      
+      {
+        "type": "point",
+        "position": [ 4.5, -16, 16 ],
+        
+        "constant_attenuation":  0,
+        "linear_attenuation":    0.15,
+        "quadratic_attenuation": 0,
+        
+        "diffuse":  [ 0.7, 0.7, 0.7 ],
+        "ambient":  [ 0.0, 0.0, 0.0 ],
+        "specular": [ 0.5, 0.5, 0.5 ]
       }
     ],
 
@@ -448,7 +461,7 @@
       "pickable_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "specular": [ 0.4, 0.4, 0.4, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       },
@@ -512,7 +525,7 @@
       "bg_cube": {
         "ambient": [ 0, 0, 0, 1 ],
         "diffuse": [ 0.8, 0.8, 0.8, 1 ],
-        "specular": [ 0.2, 0.2, 0.2, 1 ],
+        "specular": [ 0.4, 0.4, 0.4, 1 ],
         "shininess": 80,
         "emission": [ 0, 0, 0, 1 ]
       }
@@ -830,8 +843,8 @@
       "cube_speed": [ 0.05, 1.2 ],
       "cube_lifetime": [ 10, 15 ],
       
-      "bbox_min": [ -19, -17,  -3 ],
-      "bbox_max": [  20,  -2,  30 ],
+      "bbox_min": [ -25, -16,  -3 ],
+      "bbox_max": [  25,  -4,  34 ],
 
       "revise_duration": 0.25,
 

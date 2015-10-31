@@ -37,8 +37,7 @@ class FieldLights {
 public:
   FieldLights(ci::JsonTree& params,
               ci::TimelineRef timeline) :
-    animation_timeline_(ci::Timeline::create())
-  {
+    animation_timeline_(ci::Timeline::create()) {
     auto current_time = timeline->getCurrentTime();
     animation_timeline_->setStartTime(current_time);
     timeline->apply(animation_timeline_);
@@ -154,6 +153,11 @@ public:
     }
   }
 
+  
+#ifdef DEBUG
+  const std::vector<Light>& get() const { return lights_; }
+#endif
+  
   
 private:
   void startTween(Light& light, const ci::JsonTree& tween_params) noexcept {
