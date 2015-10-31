@@ -53,6 +53,8 @@ class RootController : public ControllerBase {
   // TIPS:イテレート中にpush_backされるのでstd::listを使っている
   std::list<ControllerPtr> children_;
 
+  Connection resign_active_;
+
   
 public:
   RootController(ci::JsonTree& params,
@@ -219,7 +221,7 @@ public:
     // 自動PAUSE
     // getSignalDidEnterBackground(Backgroundになった直後)
     // getSignalWillResignActive(アクティブでなくなる直前)
-    ci::app::App::get()->getSignalWillResignActive().connect([this]() {
+    resign_active_ = ci::app::App::get()->getSignalWillResignActive().connect([this]() {
         DOUT << "SignalWillResignActive" << std::endl;
         EventParam params = {
           { "force", true }
@@ -232,6 +234,7 @@ public:
     DOUT << "~RootController()" << std::endl;
 
     timeline_->clear();
+    resign_active_.disconnect();
   }
 
 
