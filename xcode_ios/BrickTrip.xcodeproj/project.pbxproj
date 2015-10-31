@@ -413,6 +413,65 @@
 			};
 			name = Release;
 		};
+		479E28BE1BE4B59300EC0869 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CINDER_PATH = "../../Cinder-release_v0.8.6";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_FAST_MATH = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"PRODUCT_NAME=\"$(PRODUCT_NAME)\"",
+					"NDEBUG=1",
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include/freetype2\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
+		479E28BF1BE4B59300EC0869 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = BrickTrip_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = Info.plist;
+				"OTHER_LDFLAGS[sdk=iphoneos*][arch=*]" = (
+					"\"$(CINDER_PATH)/lib/libcinder-iphone.a\"",
+					"-lz",
+					"\"$(CINDER_PATH)/lib/ios/libfreetype.a\"",
+				);
+				"OTHER_LDFLAGS[sdk=iphonesimulator*][arch=*]" = (
+					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim.a\"",
+					"-lz",
+					"\"$(CINDER_PATH)/lib/ios-sim/libfreetype.a\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ngs.bricktrip;
+				PRODUCT_NAME = BrickTrip;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Distribution;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -421,6 +480,7 @@
 			buildConfigurations = (
 				00692BF314FF149000D0A05E /* Debug */,
 				00692BF414FF149000D0A05E /* Release */,
+				479E28BE1BE4B59300EC0869 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -430,6 +490,7 @@
 			buildConfigurations = (
 				00692BF614FF149000D0A05E /* Debug */,
 				00692BF714FF149000D0A05E /* Release */,
+				479E28BF1BE4B59300EC0869 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
