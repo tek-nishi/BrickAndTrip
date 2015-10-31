@@ -440,7 +440,9 @@
         
         "diffuse":  [ 0.5, 0.5, 0.5 ],
         "ambient":  [ 0.0, 0.0, 0.0 ],
-        "specular": [ 0.3, 0.3, 0.3 ]
+        "specular": [ 0.3, 0.3, 0.3 ],
+
+        "low_efficiency": true
       }
     ],
 

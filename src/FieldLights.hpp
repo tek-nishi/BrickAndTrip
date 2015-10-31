@@ -44,12 +44,18 @@ public:
     
     int id = 0;
 
+    bool low_efficiency = params["app.low_efficiency_device"].getValue<bool>();
+    
     static std::map<std::string, int> light_type = {
       { "point",       ci::gl::Light::POINT },
       { "directional", ci::gl::Light::DIRECTIONAL },
     };
     
     for (const auto& param : params["game_view.lights"]) {
+      // 低性能環境では使わない光源の判定
+      bool low = Json::getValue(param, "low_efficiency", false);
+      if (low && low_efficiency) continue;
+      
       const auto& type = light_type.at(param["type"].getValue<std::string>());
       const ci::JsonTree* const tween_params = param.hasChild("tween") ? &param["tween"] : nullptr;
       
