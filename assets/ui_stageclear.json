@@ -718,7 +718,7 @@
     "size": 1,
     "spacing": 0.1,
     "chara_split": 1,
-    "pos": [ 0, 0.2, 0 ],
+    "pos": [ 0, 0.28, 0 ],
     "origin": "bottom-center",
     "layout": "bottom-center",
     "base_color": [ 1, 1, 1 ],
