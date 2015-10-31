@@ -8,6 +8,7 @@
 #include "UIView.hpp"
 #include "ConnectionHolder.hpp"
 #include "GameCenter.h"
+#include "AppSupport.hpp"
 
 
 namespace ngs {
@@ -134,7 +135,6 @@ public:
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
     
-#if defined(CINDER_COCOA_TOUCH)
     connections_ += event.connect("leaderboard-start",
                                   [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
@@ -142,12 +142,10 @@ public:
                                     
                                     event_timeline_->add([this]() {
                                         GameCenter::showBoard([this]() {
-                                            auto* app = ci::app::AppCocoaTouch::get();
-                                            app->pauseDraw(true);
+                                            AppSupport::pauseDraw(true);
                                           },
                                           [this]() {
-                                            auto* app = ci::app::AppCocoaTouch::get();
-                                            app->pauseDraw(false);
+                                            AppSupport::pauseDraw(false);
                                             
                                             event_.signal("field-input-start", EventParam());
                                             view_->setActive(true);
@@ -155,7 +153,7 @@ public:
                                       },
                                       event_timeline_->getCurrentTime() + tween_delay_);
                                   });
-#endif
+    
     setupView();
 
     // アプリ起動直後のタイトル画面か??

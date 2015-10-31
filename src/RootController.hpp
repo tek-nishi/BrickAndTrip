@@ -216,7 +216,6 @@ public:
                                    records_.getTotalPlayNum(),
                                    view_creator_.create("ui_intro.json"));
 
-#if defined(CINDER_COCOA_TOUCH)
     // 自動PAUSE
     // getSignalDidEnterBackground(Backgroundになった直後)
     // getSignalWillResignActive(アクティブでなくなる直前)
@@ -227,7 +226,6 @@ public:
         };
         event_.signal("pause-agree", params);
       });
-#endif
   }
 
   ~RootController() {

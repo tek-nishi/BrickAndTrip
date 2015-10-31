@@ -21,6 +21,7 @@
 #include "Params.hpp"
 #include "AudioSession.h"
 #include "GameCenter.h"
+#include "AppSupport.hpp"
 
 
 using namespace ci;
@@ -155,17 +156,14 @@ class BrickTripApp : public AppNative,
     }
 #endif
 
-#if defined(CINDER_COCOA_TOUCH)
     GameCenter::authenticateLocalPlayer([this]() {
-        // FIXME:AppCocoaTouchに追加したpause関数を使っている
-        pauseDraw(true);
+        AppSupport::pauseDraw(true);
       },
       [this]() {
-        pauseDraw(false);
+        AppSupport::pauseDraw(false);
         
         controller_->event().signal("gamecenter-authenticated", EventParam());
       });
-#endif
 
     // 起動後安定するまでは経過時間の許容を少なく
     auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
