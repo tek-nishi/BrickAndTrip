@@ -850,7 +850,7 @@
 
       "revise_duration": 0.25,
 
-      "color_range": [ 0.1, 0.8 ],
+      "color_range": [ 0.15, 0.75 ],
       
       "tween": {
         "in_box": [
