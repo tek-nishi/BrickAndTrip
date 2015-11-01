@@ -118,7 +118,13 @@ class BrickTripApp : public AppNative,
     
 #if defined(CINDER_COCOA_TOUCH)
     // 縦横画面両対応
-    getSignalSupportedOrientations().connect([](){ return InterfaceOrientation::All; });
+    getSignalSupportedOrientations().connect([]() { return InterfaceOrientation::All; });
+
+    // 画面回転時に更新(Share時の処理負荷軽減)
+    getSignalWillRotate().connect([this]() {
+        DOUT << "SignalDidRotate" << std::endl;
+        if (isPausedDraw()) drawView();
+      });
 #endif
 
     timeline_ = Timeline::create();

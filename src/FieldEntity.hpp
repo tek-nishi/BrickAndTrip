@@ -284,7 +284,7 @@ public:
       }
       break;
     }
-
+    
     {
       // 背景で使う中央座標を算出
       ci::Vec3i pos(stage_center_x_, 0, stage_.getActiveBottomZ());

@@ -83,15 +83,16 @@ public:
     connections_ += event.connect("selected-share",
                                   [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
-                                    event_.signal("field-update-stop", EventParam());
                                     
                                     event_timeline_->add([this]() {
                                         DOUT << "Share" << std::endl;
+
+                                        AppSupport::pauseDraw(true);
                                         
                                         Share::post(sns_text_,
                                                     Capture::execute(),
                                                     [this]() {
-                                                      event_.signal("field-update-restart", EventParam());
+                                                      AppSupport::pauseDraw(false);
                                                       view_->setActive(true);
                                                     });
                                       },

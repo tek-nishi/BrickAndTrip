@@ -10,8 +10,7 @@
 #include <sstream>
 
 
-namespace ngs {
-namespace Params {
+namespace ngs { namespace Params {
 
 ci::JsonTree load(const std::string& path) noexcept {
 #if defined (OBFUSCATION_PARAMS)
@@ -52,5 +51,4 @@ void convert(const std::string& path) noexcept {
 
 #endif
 
-}
-}
+} }
