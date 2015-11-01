@@ -278,10 +278,11 @@ public:
     
     float duration = rotate_duration_ * speed_rate;
 
-    int index = ci::randInt(4) + move_step_;
+    size_t index = ci::randInt(4) + move_step_;
+    index = std::min(index, move_sounds_.size() - 1);
     const auto& move_sound = move_sounds_[index];
-    move_step_ = std::min(move_step_ + 1, int(move_sounds_.size() - 4));
-    
+
+    move_step_  += 1;
     move_speed_ -= 1;
 
     auto angle = ci::toRadians(90.0f);
@@ -340,6 +341,7 @@ public:
           { "block_pos", block_position_ },
           { "pos",       position_() },
           { "size",      size() },
+          { "move_step", move_step_ },
           { "sound",     move_sound },
         };
         if (move_event_) {

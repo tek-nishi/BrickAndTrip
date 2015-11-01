@@ -41,6 +41,7 @@ public:
     int item_total_num;
     int score;
     int rank;
+    int highest_move_step;
 
     bool complete_item;
     bool fastest_time;
@@ -52,6 +53,7 @@ public:
       item_num(0),
       score(0),
       rank(RANK_DUMMY),
+      highest_move_step(0),
       complete_item(false),
       fastest_time(false),
       highest_score(false),
@@ -152,11 +154,13 @@ public:
   void setScoreInfo(const int clear_time_score, const float clear_time_score_rate,
                     const int item_score, const int item_perfect_score,
                     const float stage_collect,
+                    const int move_step,
                     const std::vector<int>& rank_rate_table) noexcept {
 
     game_score_ = GameScore(clear_time_score, clear_time_score_rate,
                             item_score, item_perfect_score,
                             stage_collect,
+                            move_step,
                             rank_rate_table);
   }
 
@@ -197,6 +201,13 @@ public:
     current_game_.continued = continued_game;
   }
 
+  void recordMoveStep(const int move_step) noexcept {
+    if (!record_current_game_) return;
+
+    current_stage_.highest_move_step = std::max(move_step, current_stage_.highest_move_step);
+  }
+  
+  
   const CurrentStage& currentStage() const noexcept {
     return current_stage_;
   }
@@ -247,7 +258,10 @@ public:
 
     total_play_time_ += current_stage_.play_time;
 
-    auto stage_score = game_score_(current_stage_.play_time, current_stage_.item_num);
+    auto stage_score = game_score_(current_stage_.play_time,
+                                   current_stage_.item_num,
+                                   current_stage_.highest_move_step);
+    
     current_stage_.score = stage_score.first;
     current_stage_.rank = stage_score.second;
 

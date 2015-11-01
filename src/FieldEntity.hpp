@@ -655,6 +655,11 @@ public:
     }
   }
 
+  // Pickableの最大移動量を記録
+  void recordMoveStep(const int move_step) noexcept {
+    records_.recordMoveStep(move_step);
+  }
+
   // Ttile画面での画面遷移とゲーム開始操作が被るので用意した
   void enablePickableCubeMovedEvent(const bool enable = true) noexcept {
     for (auto& cube : pickable_cubes_) {
@@ -1185,6 +1190,7 @@ private:
                           params["game.score.item_score"].getValue<int>(),
                           params["game.score.item_perfect_score"].getValue<int>(),
                           params["game.score.stage_collect"].getValue<float>(),
+                          params["game.score.move_step"].getValue<int>(),
                           Json::getArray<int>(params["game.score.rank_rate_table"]));
 
     int regular_item_num = 0;

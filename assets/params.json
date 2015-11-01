@@ -878,10 +878,14 @@
     "score": {
       "clear_time_score": 500,
       "clear_time_score_rate": 0.015,
+      
       "item_score": 1000,
       "item_perfect_score": 1000,
+      
       "stage_collect": 0.1,
-      "rank_rate_table": [ 98, 93, 86, 76, 61, 41 ]
+      "rank_rate_table": [ 98, 93, 86, 76, 61, 41 ],
+
+      "move_step": 100
     },
 
     "records": "records.data",

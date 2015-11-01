@@ -78,6 +78,9 @@ public:
                                      const auto& block_pos = boost::any_cast<const ci::Vec3i&>(param["block_pos"]);
                                      const auto id = boost::any_cast<u_int>(param["id"]);
                                      entity_.movedPickableCube(id, block_pos);
+
+                                     auto move_step = boost::any_cast<int>(param["move_step"]);
+                                     entity_.recordMoveStep(move_step);
                                    });
     
     connections_ += event_.connect("pickable-on-stage",

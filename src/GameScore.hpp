@@ -18,6 +18,9 @@ class GameScore {
   // ステージ補正
   float stage_collect_;
 
+  // 移動量によるスコア加算
+  int move_step_;
+  
   // ランク
   std::vector<int> rank_rate_table_;
 
@@ -35,12 +38,14 @@ public:
   GameScore(const int clear_time_score, const float clear_time_score_rate,
             const int item_score, const int item_perfect_score,
             const float stage_collect,
+            const int move_step,
             const std::vector<int>& rank_rate_table) :
     clear_time_score_(clear_time_score),
     clear_time_score_rate_(clear_time_score_rate),
     item_score_(item_score),
     item_perfect_score_(item_perfect_score),
     stage_collect_(stage_collect),
+    move_step_(move_step),
     rank_rate_table_(rank_rate_table)
   {}
 
@@ -58,7 +63,8 @@ public:
 
 
   std::pair<int, int> operator() (const double clear_time,
-                                  const int item_num) const noexcept {
+                                  const int item_num,
+                                  const int move_step) const noexcept {
     int total_score = 0;
     // 最高スコア(理論値)
     int highest_total_score = 0;
@@ -77,10 +83,11 @@ public:
       total_score += score;
       highest_total_score += highest_score;
 
-      DOUT << "score from clear-time:" << score
-           << " highest:" << highest_score
-           << " fastest:" << build_time_
-           << " clear time:" << clear_time
+      DOUT << "score from clear-time:" << score << std::endl
+           << "              highest:" << highest_score << std::endl
+           << "              fastest:" << build_time_ << std::endl
+           << "           clear time:" << clear_time << std::endl
+           << "            move_step:" << move_step << std::endl
            << std::endl;
     }
 
@@ -117,6 +124,9 @@ public:
         rank += 1;
       }
     }
+
+    // 最高移動量によるボーナス(RANKには影響しない)
+    total_score += move_step * move_step_;
 
     // アイテム100% BONUS(ランク判定に寄与しない)
     if (item_num == item_total_num_) total_score += item_perfect_score_;
