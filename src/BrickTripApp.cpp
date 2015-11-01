@@ -114,6 +114,15 @@ class BrickTripApp : public AppNative,
 #if defined(CINDER_MAC)
     // OSXでタイトルバーにアプリ名を表示するworkaround
     getWindow()->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
+
+    // バックグラウンドになった時に全速力で更新されるのを防ぐ
+    get()->getSignalWillResignActive().connect([this]() {
+        setFrameRate(30);
+      });
+    
+    get()->getSignalDidBecomeActive().connect([this]() {
+        disableFrameRate();
+      });
 #endif
     
 #if defined(CINDER_COCOA_TOUCH)

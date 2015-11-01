@@ -5,8 +5,8 @@
     "size": [ 960, 640 ],
     "framerate_limit": false,
 
-    "max_elapsed_seconds": [ 30, 20 ],
-    "startup_frame": 0.5,
+    "max_elapsed_seconds": [ 20, 15 ],
+    "startup_frame": 0.25,
     
     "fixed_size": [
       [  960, 640 ],
@@ -203,10 +203,10 @@
       "ease_name": "EaseInOutQuart",
       "ease_duration": 2.0,
 
-      "close_distance_rate": 0.8,
+      "close_distance_rate": 0.75,
 
       "distance_ease_name": "EaseOutCubic",
-      "distance_ease_duration": 0.8,
+      "distance_ease_duration": 0.9,
       
       "normal": {
         "interest_point": [ 0.5, 0.5, 1.0 ],
