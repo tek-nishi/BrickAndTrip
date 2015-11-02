@@ -21,6 +21,7 @@
 		4727F4BD1BE34CEC00EF244A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
 		4727F4BE1BE34D1900EF244A /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; };
 		4727F4BF1BE34D5000EF244A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; };
+		47352CCD1BE7B0CF00A6817F /* TextCodec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47352CCC1BE7B0CF00A6817F /* TextCodec.cpp */; };
 		473FFD131B7A0E7700EFDD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 473FFD121B7A0E7700EFDD9E /* Images.xcassets */; };
 		474560051BABD1E400310BBD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 474560071BABD1E400310BBD /* InfoPlist.strings */; };
 		474560081BABD1EE00310BBD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4745600A1BABD1EE00310BBD /* Localizable.strings */; };
@@ -51,6 +52,7 @@
 		470A471F1BD8F6E7008ED826 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		470A47211BD8FA63008ED826 /* GameCenter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameCenter.mm; path = ../src/GameCenter.mm; sourceTree = "<group>"; };
 		471BAE9F1BA42303000BD01F /* AudioSession.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioSession.mm; path = ../src/AudioSession.mm; sourceTree = "<group>"; };
+		47352CCC1BE7B0CF00A6817F /* TextCodec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextCodec.cpp; path = ../src/TextCodec.cpp; sourceTree = "<group>"; };
 		473FFD121B7A0E7700EFDD9E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		474560061BABD1E400310BBD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		474560091BABD1EE00310BBD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				47352CCC1BE7B0CF00A6817F /* TextCodec.cpp */,
 				470A47211BD8FA63008ED826 /* GameCenter.mm */,
 				4745600D1BABD57800310BBD /* Localize.mm */,
 				471BAE9F1BA42303000BD01F /* AudioSession.mm */,
@@ -263,6 +266,7 @@
 				47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */,
 				47B62A291B6A263400ABF155 /* Capture.mm in Sources */,
 				47D342F51B78A03D007AF9E9 /* Share.mm in Sources */,
+				47352CCD1BE7B0CF00A6817F /* TextCodec.cpp in Sources */,
 				47EAFB6C1B2D4DE800703A45 /* DrawVboMesh.cpp in Sources */,
 				471BAEA01BA42303000BD01F /* AudioSession.mm in Sources */,
 				47B8CD071B7A0D4900109D0E /* BrickTripApp.cpp in Sources */,

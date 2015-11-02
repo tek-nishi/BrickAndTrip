@@ -16,12 +16,14 @@ ci::fs::path getDocumentPath() noexcept;
 
 #elif defined(CINDER_MAC)
 
+template <typename T = void>
 ci::fs::path getDocumentPath() noexcept {
   return ci::app::getAppPath() / "Contents/Resources";
 }
 
 #else
 
+template <typename T = void>
 ci::fs::path getDocumentPath() noexcept {
   return ci::app::getAppPath();
 }

@@ -25,7 +25,11 @@ void submitStageScore(const int stage,
 
 void submitScore(const int score, const int total_items) noexcept;
 
-void submitAchievement(const std::string& identifier, const double complete_rate = 100.0) noexcept;
+void submitAchievement(const std::string& identifier, const double complete_rate = 100.0,
+                       const bool banner = true) noexcept;
+
+void writeCachedAchievement() noexcept;
+
 
 #ifdef DEBUG
 
@@ -55,8 +59,11 @@ void submitStageScore(T1 stage,
 template <typename T>
   void submitScore(const T score, const T total_items) noexcept {}
 
-template <typename T1, typename T2 = double>
-void submitAchievement(T1 identifier, T2 complete_rate = 0) noexcept {}
+template <typename T1, typename T2 = double, typename T3 = bool>
+void submitAchievement(T1 identifier, T2 complete_rate = 0, T3 banner = true) noexcept {}
+
+template <typename T = void>
+void writeCachedAchievement() noexcept {};
 
 
 #ifdef DEBUG

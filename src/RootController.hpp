@@ -6,6 +6,7 @@
 
 #include "ControllerBase.hpp"
 #include <list>
+#include <tuple>
 #include <boost/range/algorithm_ext/erase.hpp>
 #include "FontHolder.hpp"
 #include "FieldController.hpp"
@@ -227,6 +228,8 @@ public:
           { "force", true }
         };
         event_.signal("pause-agree", params);
+        
+        GameCenter::writeCachedAchievement();
       });
   }
 
@@ -330,37 +333,43 @@ private:
   void checkAchievment() const noexcept {
     {
       // プレイ回数による実績
-      static std::vector<std::pair<int, std::string> > achievements = {
-        {    10, "BRICKTRIP.ACHIEVEMENT.PLAYED_10_TIMES" },
-        {    50, "BRICKTRIP.ACHIEVEMENT.PLAYED_50_TIMES" },
-        {   100, "BRICKTRIP.ACHIEVEMENT.PLAYED_100_TIMES" },
-        {  1000, "BRICKTRIP.ACHIEVEMENT.PLAYED_1000_TIMES" },
-        { 10000, "BRICKTRIP.ACHIEVEMENT.PLAYED_10000_TIMES" },
+      static std::vector<std::tuple<int, int, std::string> > achievements = {
+        {    10,    0, "BRICKTRIP.ACHIEVEMENT.PLAYED_10_TIMES" },
+        {    50,    0, "BRICKTRIP.ACHIEVEMENT.PLAYED_50_TIMES" },
+        {   100,    0, "BRICKTRIP.ACHIEVEMENT.PLAYED_100_TIMES" },
+        {  1000,  100, "BRICKTRIP.ACHIEVEMENT.PLAYED_1000_TIMES" },
+        { 10000, 1000, "BRICKTRIP.ACHIEVEMENT.PLAYED_10000_TIMES" },
       };
 
       int play_num = records_.getTotalPlayNum();
       for (const auto& a : achievements) {
+        // 後半の項目は、前半のを全て達成してから開示
+        if (play_num < std::get<1>(a)) break;
+        
         // 毎回更新して、達成率を少しずつあげる
-        double rate = play_num * 100.0 / a.first;
-        GameCenter::submitAchievement(a.second, rate);
+        double rate = play_num * 100.0 / std::get<0>(a);
+        GameCenter::submitAchievement(std::get<2>(a), rate);
       }
     }
 
     {
       // 総取得ITEM数による実績
-      static std::vector<std::pair<int, std::string> > achievements = {
-        {    10, "BRICKTRIP.ACHIEVEMENT.GOT_10_BRICKS" },
-        {    50, "BRICKTRIP.ACHIEVEMENT.GOT_50_BRICKS" },
-        {   100, "BRICKTRIP.ACHIEVEMENT.GOT_100_BRICKS" },
-        {  1000, "BRICKTRIP.ACHIEVEMENT.GOT_1000_BRICKS" },
-        { 10000, "BRICKTRIP.ACHIEVEMENT.GOT_10000_BRICKS" },
+      static std::vector<std::tuple<int, int, std::string> > achievements = {
+        {    10,    0, "BRICKTRIP.ACHIEVEMENT.GOT_10_BRICKS" },
+        {    50,    0, "BRICKTRIP.ACHIEVEMENT.GOT_50_BRICKS" },
+        {   100,    0, "BRICKTRIP.ACHIEVEMENT.GOT_100_BRICKS" },
+        {  1000,  100, "BRICKTRIP.ACHIEVEMENT.GOT_1000_BRICKS" },
+        { 10000, 1000, "BRICKTRIP.ACHIEVEMENT.GOT_10000_BRICKS" },
       };
       
       int item_num = records_.getTotalItemNum();
       for (const auto& a : achievements) {
+        // 後半の項目は、前半のを全て達成してから開示
+        if (item_num < std::get<1>(a)) break;
+        
         // 毎回更新して、達成率を少しずつあげる
-        double rate = item_num * 100.0 / a.first;
-        GameCenter::submitAchievement(a.second, rate);
+        double rate = item_num * 100.0 / std::get<0>(a);
+        GameCenter::submitAchievement(std::get<2>(a), rate);
       }
     }
   }
