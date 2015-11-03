@@ -1278,6 +1278,11 @@ private:
     if (records_.isSatisfyRegularStageRank(0)) {
       GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
     }
+
+    // Itemを１つも取らずにクリア
+    if (!records_.currentStage().item_num) {
+      GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.NO_ITEM");
+    }
   }
 
 
