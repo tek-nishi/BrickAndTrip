@@ -284,7 +284,7 @@ private:
       // SNSへの投稿テキストはローカライズされたものを使う
       auto text = params["stageclear.sns_text"].getValue<std::string>();
       
-      sns_text_ = localizedString(text);
+      sns_text_ = Localize::get(text);
       replaceString(sns_text_, "%1", std::to_string(game_score));
       replaceString(sns_text_, "%2", game_rank);
       replaceString(sns_text_, "%3", std::to_string(item_rate));

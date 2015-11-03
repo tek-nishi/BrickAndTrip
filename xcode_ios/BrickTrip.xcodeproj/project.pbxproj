@@ -26,6 +26,7 @@
 		474560051BABD1E400310BBD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 474560071BABD1E400310BBD /* InfoPlist.strings */; };
 		474560081BABD1EE00310BBD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4745600A1BABD1EE00310BBD /* Localizable.strings */; };
 		4745600E1BABD57800310BBD /* Localize.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4745600D1BABD57800310BBD /* Localize.mm */; };
+		478F84721BE876FA002F640C /* Rating.mm in Sources */ = {isa = PBXBuildFile; fileRef = 478F84711BE876FA002F640C /* Rating.mm */; };
 		47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47A8C39D1ACC43C10009B7AD /* FileUtil.mm */; };
 		47B62A291B6A263400ABF155 /* Capture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 47B62A271B6A263400ABF155 /* Capture.mm */; };
 		47B62A2C1B6A264200ABF155 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47B62A2B1B6A264200ABF155 /* Social.framework */; };
@@ -59,6 +60,7 @@
 		4745600B1BABD20000310BBD /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4745600C1BABD20000310BBD /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4745600D1BABD57800310BBD /* Localize.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Localize.mm; path = ../src/Localize.mm; sourceTree = "<group>"; };
+		478F84711BE876FA002F640C /* Rating.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rating.mm; path = ../src/Rating.mm; sourceTree = "<group>"; };
 		47A8C39D1ACC43C10009B7AD /* FileUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileUtil.mm; path = ../src/FileUtil.mm; sourceTree = "<group>"; };
 		47B62A271B6A263400ABF155 /* Capture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Capture.mm; path = ../src/Capture.mm; sourceTree = "<group>"; };
 		47B62A2B1B6A264200ABF155 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -147,6 +149,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				478F84711BE876FA002F640C /* Rating.mm */,
 				47352CCC1BE7B0CF00A6817F /* TextCodec.cpp */,
 				470A47211BD8FA63008ED826 /* GameCenter.mm */,
 				4745600D1BABD57800310BBD /* Localize.mm */,
@@ -263,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				478F84721BE876FA002F640C /* Rating.mm in Sources */,
 				47A8C39E1ACC43C10009B7AD /* FileUtil.mm in Sources */,
 				47B62A291B6A263400ABF155 /* Capture.mm in Sources */,
 				47D342F51B78A03D007AF9E9 /* Share.mm in Sources */,

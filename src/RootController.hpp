@@ -25,6 +25,7 @@
 #include "UIView.hpp"
 #include "UIViewCreator.hpp"
 #include "SoundPlayer.hpp"
+#include "Rating.h"
 
 
 namespace ngs {
@@ -150,6 +151,13 @@ public:
     event_.connect("check-after-gameover",
                    [this](const Connection&, EventParam& param) {
                      DOUT << "check-after-gameover" << std::endl;
+                     Rating::popup([this]() {
+                         AppSupport::pauseDraw(true);
+                       },
+                       [this]() {
+                         AppSupport::pauseDraw(false);
+                       });
+                     
                      checkAchievment();
                    });
 

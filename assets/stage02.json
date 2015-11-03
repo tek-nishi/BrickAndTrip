@@ -35,7 +35,7 @@
    ],
    "build_speed" : 0.5,
    "camera" : "normal",
-   "collapse_speed" : 0.5,
+   "collapse_speed" : 0.69999998807907104,
    "color" : [ 0, 0.59999999999999998, 0.26666699999999999 ],
    "items" : [
       [ 8, 0, 7 ],

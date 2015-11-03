@@ -166,7 +166,7 @@ public:
       // SNSへの投稿テキストはローカライズされたものを使う
       auto text = params["gameover.sns_text"].getValue<std::string>();
       
-      sns_text_ = localizedString(text);
+      sns_text_ = Localize::get(text);
       replaceString(sns_text_, "%1", std::to_string(game_score));
     }
   }

@@ -214,7 +214,7 @@ private:
 
     {
       auto text = params["records.sns_text"].getValue<std::string>();
-      sns_text_ = localizedString(text);
+      sns_text_ = Localize::get(text);
     }
   }
   

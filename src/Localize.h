@@ -7,19 +7,19 @@
 #include <string>
 
 
-namespace ngs {
+namespace ngs { namespace Localize {
 
 #ifdef CINDER_COCOA_TOUCH
   
-std::string localizedString(const std::string& key) noexcept;
+std::string get(const std::string& key) noexcept;
 
 #else
 
 template<typename T>
-T localizedString(const T& key) noexcept {
+T get(const T& key) noexcept {
   return key;
 }
 
 #endif
 
-}
+} }

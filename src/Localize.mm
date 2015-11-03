@@ -3,19 +3,17 @@
 //
 
 
-#import "Localize.h" 
+#include "Localize.h" 
 
 
-namespace ngs {
+namespace ngs { namespace Localize {
 
 // 投稿用の文字列(ローカライズ済み)を取得
-std::string localizedString(const std::string& key) noexcept {
-  NSString* text;
-
+std::string get(const std::string& key) noexcept {
   NSString* key_text = [NSString stringWithUTF8String:key.c_str()];
   
-  text = NSLocalizedString(key_text, nil);
+  NSString* text = NSLocalizedString(key_text, nil);
   return [text UTF8String];
 }
 
-}
+} }
