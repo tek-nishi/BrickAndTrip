@@ -24,6 +24,7 @@
 #include "Records.hpp"
 #include "Bg.hpp"
 #include "GameCenter.h"
+#include "Achievment.hpp"
 
 
 namespace ngs {
@@ -437,7 +438,7 @@ public:
     stage_.startCollapseStage(finish_line_z_ - 1, finish_rate_);
 
     records_.storeStageRecord();
-    checkAchievment();
+    Achievment::atStageClear(records_);
     
     // 全ステージクリア判定
     bool all_cleard    = false;
@@ -788,9 +789,8 @@ public:
   const ci::Color& bgColor() const noexcept { return bg_color_; }
 
   const std::string& lightTween() const noexcept { return light_tween_; }
-  
-  
-  
+
+
 private:
   // TODO:参照の無効値をあらわすためにboost::optionalを利用
   boost::optional<PickableCubePtr&> findPickableCube(const u_int id) noexcept {
@@ -1254,35 +1254,6 @@ private:
   static int getPickableCubeEntryNum(const std::string& path) noexcept {
     auto stage = Json::readFromFile(path);
     return Json::getValue(stage, "pickable", 0);
-  }
-
-
-  void checkAchievment() const noexcept {
-    // STAGEクリア実績
-    std::vector<std::pair<int, std::string> > achievements = {
-      {  1, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE01" },
-      {  3, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE03" },
-      {  6, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE06" },
-      { 10, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE10" },
-      { 11, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE11" },
-    };
-    
-    for (const auto& a : achievements) {
-      if (a.first == stage_num_) {
-        GameCenter::submitAchievement(a.second);
-        break;
-      }
-    }
-    
-    // 10ステージRANK S判定
-    if (records_.isSatisfyRegularStageRank(0)) {
-      GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.GET_10_RANK_S");
-    }
-
-    // Itemを１つも取らずにクリア
-    if (!records_.currentStage().item_num) {
-      GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.NO_ITEM");
-    }
   }
 
 
