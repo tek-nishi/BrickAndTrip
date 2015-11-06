@@ -93,7 +93,9 @@ class BrickTripApp : public AppNative,
 #endif
     
     // Retina Display対応
-    settings->enableHighDensityDisplay();
+    bool high_density_display = Json::getValue(params_,
+                                               "app.high_density_display", true);
+    settings->enableHighDensityDisplay(high_density_display);
     // 勝手に画面が暗くなるのを抑制
     settings->enablePowerManagement(false);
 
