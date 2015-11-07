@@ -305,7 +305,7 @@
     "name": "freetype",
     "disp": true,
 
-    "text": "FREETYPE 2.6",
+    "text": "FREETYPE 2.6.1",
     "size": 0.25,
     "spacing": 0.025,
     "chara_split": 1,
