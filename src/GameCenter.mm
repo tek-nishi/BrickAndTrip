@@ -125,7 +125,8 @@ static void loadCachedAchievement() noexcept {
   if (!ci::fs::is_regular_file(full_path)) return;
 
 #if defined(OBFUSCATION_ACHIEVEMENT)
-  ci::JsonTree json(TextCodec::load(full_path.string()));
+  std::string text_data = TextCodec::load(full_path.string());
+  ci::JsonTree json(text_data);
 #else
   ci::JsonTree json = ci::JsonTree(ci::loadFile(full_path));
 #endif
@@ -143,14 +144,21 @@ static void loadCachedAchievement() noexcept {
 }
 
 void writeCachedAchievement() noexcept {
-  ci::JsonTree json = ci::JsonTree::makeObject();
+  if (!isAuthenticated()) return;
   
+  ci::JsonTree json = ci::JsonTree::makeObject();
+
   for (const auto& achievement : cached_achievements) {
     ci::JsonTree data = ci::JsonTree::makeObject(achievement.first);
     data.addChild(ci::JsonTree("rate", achievement.second.rate))
       .addChild(ci::JsonTree("submited", achievement.second.submited));
 
     json.addChild(data);
+  }
+
+  if (!json.hasChildren()) {
+    NSLOG(@"NO Achievement.");
+    return;
   }
 
   auto full_path = getDocumentPath() / "achievements.cache";
@@ -160,7 +168,7 @@ void writeCachedAchievement() noexcept {
   record.write(full_path);
 #endif
   
-  NSLOG(@"writeCachedAchievement: done.");
+  NSLOG(@"writeCachedAchievement: %d values", json.getNumChildren());
 }
 
 static void resubmitCachedAchievement() noexcept {
