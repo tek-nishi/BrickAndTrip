@@ -88,7 +88,7 @@ public:
           source_.insert({ param["name"].getValue<std::string>(), source });
 
           const auto& category = param["category"].getValue<std::string>();
-          if (file_node_.find(category) == file_node_.end()) {
+          if (!file_node_.count(category)) {
             // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
             ci::audio::Node::Format format;
             format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
@@ -217,7 +217,7 @@ public:
   }
 
   void stop(const std::string& category) noexcept {
-    if (category_node_.find(category) != category_node_.end()) {
+    if (category_node_.count(category)) {
       auto node = category_node_.at(category);
       if (node->isEnabled()) {
         node->stop();
@@ -270,7 +270,7 @@ public:
 
 private:
   void makeBufferNode(ci::audio::Context* ctx, const std::string& category) noexcept {
-    if (buffer_node_.find(category) == buffer_node_.end()) {
+    if (!buffer_node_.count(category)) {
       // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
       ci::audio::Node::Format format;
       format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
