@@ -125,8 +125,11 @@ static void loadCachedAchievement() noexcept {
   if (!ci::fs::is_regular_file(full_path)) return;
 
 #if defined(OBFUSCATION_ACHIEVEMENT)
-  std::string text_data = TextCodec::load(full_path.string());
-  ci::JsonTree json(text_data);
+  // ファイル読み込みでエラーがあると、空の文字列を返す
+  // その場合は空のJsonTreeを作っている
+  auto text_data = TextCodec::load(full_path.string());
+  ci::JsonTree json = text_data.empty() ? ci::JsonTree()
+                                        : ci::JsonTree(text_data);
 #else
   ci::JsonTree json = ci::JsonTree(ci::loadFile(full_path));
 #endif

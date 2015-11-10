@@ -346,7 +346,11 @@ public:
     if (!ci::fs::is_regular_file(full_path)) return;
 
 #if defined(OBFUSCATION_RECORD)
-    ci::JsonTree record(TextCodec::load(full_path.string()));
+    // ファイル読み込みでエラーがあると、空の文字列を返す
+    // その場合は空のJsonTreeを作っている
+    auto text_data = TextCodec::load(full_path.string());
+    ci::JsonTree record = text_data.empty() ? ci::JsonTree()
+                                            : ci::JsonTree(text_data);
 #else
     ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
 #endif
