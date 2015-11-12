@@ -25,6 +25,7 @@
 #include "Bg.hpp"
 #include "GameCenter.h"
 #include "Achievment.hpp"
+#include "StageData.hpp"
 
 
 namespace ngs {
@@ -859,7 +860,8 @@ private:
 
   
   StageInfo addCubeStage(const std::string& path) noexcept {
-    auto stage = Json::readFromFile(path);
+    // auto stage = Json::readFromFile(path);
+    auto stage = StageData::load(path);
     int current_z = stage_.getTopZ();
 
     int x_offset = Json::getValue(stage, "x_offset", 0);

@@ -22,6 +22,7 @@
 #include "AudioSession.h"
 #include "GameCenter.h"
 #include "AppSupport.hpp"
+#include "StageData.hpp"
 
 
 using namespace ci;
@@ -65,6 +66,11 @@ class BrickTripApp : public AppNative,
     Params::convert("params.json");
 #endif
     params_ = Params::load("params.json");
+
+#if defined (OBFUSCATION_STAGES) && defined (DEBUG)
+    StageData::convert(params_);
+#endif
+    
 
     // 低性能環境を調べて設定に追加
     params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device",

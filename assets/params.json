@@ -117,13 +117,6 @@
         "uvs": false,
         "indices": true
       },
-      {
-        "name": "oneway",
-        "path": "oneway.obj",
-        "normals": true,
-        "uvs": false,
-        "indices": true
-      },
 
       {
         "name": "oneway-1",

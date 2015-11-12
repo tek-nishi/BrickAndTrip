@@ -46,6 +46,9 @@ void glFogi(T1 pname, T2 param) { glFogx(pname, param); }
 #define OBFUSCATION_ACHIEVEMENT
 // params.jsonの難読化
 // #define OBFUSCATION_PARAMS
+// stageの難読化
+#define OBFUSCATION_STAGES
+
 
 namespace ngs {
 
