@@ -27,6 +27,7 @@ ci::JsonTree load(const std::string& path) noexcept {
 }
 
 void convert(const ci::JsonTree& params) noexcept {
+#if !defined (CINDER_COCOA_TOUCH)
   const auto& stages = Json::getArray<std::string>(params["game.stage_path"]);
   for (const auto& path : stages) {
     auto data = Json::readFromFile(path);
@@ -43,6 +44,7 @@ void convert(const ci::JsonTree& params) noexcept {
     auto data = Json::readFromFile("finishline.json");
     Params::write("finishline.data", data);
   }
+#endif
 }
 
 } }
