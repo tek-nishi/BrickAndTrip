@@ -139,8 +139,7 @@ static void loadCachedAchievement() noexcept {
       data["rate"].getValue<double>(),
       data["submited"].getValue<bool>(),
     };
-
-    cached_achievements.insert({ data.getKey(), achievement });
+    cached_achievements[data.getKey()] = achievement;
   }
   
   NSLOG(@"loadCachedAchievement: done.");
@@ -171,7 +170,7 @@ void writeCachedAchievement() noexcept {
   record.write(full_path);
 #endif
   
-  NSLOG(@"writeCachedAchievement: %d values", json.getNumChildren());
+  NSLOG(@"writeCachedAchievement: %zu values", json.getNumChildren());
 }
 
 static void resubmitCachedAchievement() noexcept {
