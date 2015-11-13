@@ -345,14 +345,23 @@ public:
     auto full_path = getDocumentPath() / path;
     if (!ci::fs::is_regular_file(full_path)) return;
 
+    ci::JsonTree record;
 #if defined(OBFUSCATION_RECORD)
-    // ファイル読み込みでエラーがあると、空の文字列を返す
-    // その場合は空のJsonTreeを作っている
+    // ファイル読み込みでエラーがあった場合、空のJsonTreeを使う
     auto text_data = TextCodec::load(full_path.string());
-    ci::JsonTree record = text_data.empty() ? ci::JsonTree()
-                                            : ci::JsonTree(text_data);
+    try {
+      record = ci::JsonTree(text_data);
+    }
+    catch (ci::JsonTree::ExcJsonParserError& exc) {
+      DOUT << exc.what() << std::endl;
+    }
 #else
-    ci::JsonTree record = ci::JsonTree(ci::loadFile(full_path));
+    try {
+      record = ci::JsonTree(ci::loadFile(full_path));
+    }
+    catch (ci::JsonTree::ExcJsonParserError& exc) {
+      DOUT << exc.what() << std::endl;
+    }
 #endif
 
     total_play_num_  = Json::getValue(record, "total_play_num", 0);

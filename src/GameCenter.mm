@@ -124,14 +124,23 @@ static void loadCachedAchievement() noexcept {
   auto full_path = getDocumentPath() / "achievements.cache";
   if (!ci::fs::is_regular_file(full_path)) return;
 
+  ci::JsonTree json;
 #if defined(OBFUSCATION_ACHIEVEMENT)
-  // ファイル読み込みでエラーがあると、空の文字列を返す
-  // その場合は空のJsonTreeを作っている
+  // ファイル読み込みでエラーがあった場合、空のJsonTreeを使う
   auto text_data = TextCodec::load(full_path.string());
-  ci::JsonTree json = text_data.empty() ? ci::JsonTree()
-                                        : ci::JsonTree(text_data);
+  try {
+    json = ci::JsonTree(text_data);
+  }
+  catch (ci::JsonTree::ExcJsonParserError& exc) {
+    NSLOG(@"%s", exc.what());
+  }
 #else
-  ci::JsonTree json = ci::JsonTree(ci::loadFile(full_path));
+  try {
+    json = ci::JsonTree(ci::loadFile(full_path));
+  }
+  catch (ci::JsonTree::ExcJsonParserError& exc) {
+    NSLOG(@"%s", exc.what());
+  }
 #endif
 
   for (const auto& data : json) {
@@ -139,7 +148,7 @@ static void loadCachedAchievement() noexcept {
       data["rate"].getValue<double>(),
       data["submited"].getValue<bool>(),
     };
-    cached_achievements[data.getKey()] = achievement;
+    cached_achievements.insert({ data.getKey(), achievement });
   }
   
   NSLOG(@"loadCachedAchievement: done.");
@@ -205,7 +214,7 @@ static void loadAchievement() noexcept {
           };
           std::string id([achievement.identifier UTF8String]);
           
-          cached_achievements.insert({ id, data });
+          cached_achievements[id] = data;
         }
         resubmitCachedAchievement();
       }

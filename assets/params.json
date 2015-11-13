@@ -617,8 +617,8 @@
       "entry_start_delay": 2,
       "entry_next_delay": 0,
       
-      "entry_ease": "EaseOutQuad",
-      "entry_duration": 1.5,
+      "entry_ease": "EaseOutCubic",
+      "entry_duration": 2.0,
       "entry_y": [ 15, 18 ],
 
       "padding_size": 0.1,
