@@ -43,7 +43,7 @@ private:
 public:
   Bg(ci::JsonTree& params,
      ci::TimelineRef timeline,
-     Event<EventParam>& event) :
+     Event<EventParam>& event) noexcept :
     params_(params),
     event_(event),
     animation_timeline_(ci::Timeline::create()),

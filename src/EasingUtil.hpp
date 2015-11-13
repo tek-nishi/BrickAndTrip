@@ -17,7 +17,7 @@ class EasePingPong {
 
 public:
   EasePingPong() = default;
-  EasePingPong(const float a, const float b) :
+  EasePingPong(const float a, const float b) noexcept :
     ease_(a, b)
   { }
 

@@ -128,7 +128,7 @@ public:
   FieldEntity(ci::JsonTree& params,
               ci::TimelineRef timeline,
               Event<EventParam>& event,
-              Records& records) :
+              Records& records) noexcept :
     params_(params),
     timeline_(timeline),
     event_(event),

@@ -39,7 +39,7 @@ public:
             const int item_score, const int item_perfect_score,
             const float stage_collect,
             const int move_step,
-            const std::vector<int>& rank_rate_table) :
+            const std::vector<int>& rank_rate_table) noexcept :
     clear_time_score_(clear_time_score),
     clear_time_score_rate_(clear_time_score_rate),
     item_score_(item_score),

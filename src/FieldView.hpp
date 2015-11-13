@@ -131,7 +131,7 @@ public:
   FieldView(ci::JsonTree& params,
             ci::TimelineRef timeline,
             Event<EventParam>& event,
-            Event<std::vector<Touch> >& touch_event) :
+            Event<std::vector<Touch> >& touch_event) noexcept :
     params_(params),
     event_(event),
 #ifdef DEBUG
@@ -765,7 +765,7 @@ private:
 
     // Pick中なのに含まれないCubeを削除
     boost::remove_erase_if(pickings_,
-                           [this](const Pick& pick) {
+                           [this](const Pick& pick) noexcept {
                              return !isCubeExists(pick.cube_id);
                            });
   }

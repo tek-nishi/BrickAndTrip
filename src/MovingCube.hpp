@@ -78,7 +78,7 @@ public:
              ci::TimelineRef timeline,
              Event<EventParam>& event,
              const ci::Vec3i& entry_pos,
-             const std::vector<int>& move_pattern) :
+             const std::vector<int>& move_pattern) noexcept :
     params_(params),
     event_(event),
     active_(true),
@@ -143,7 +143,7 @@ public:
                                               params["game.moving.entry_duration"].getValue<float>(),
                                               getEaseFunc(params["game.moving.entry_ease"].getValue<std::string>()));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         on_stage_ = true;
         
         EventParam params = {
@@ -234,7 +234,7 @@ public:
     auto rotation = rotation_();
     auto position = position_();
     
-    options.updateFn([this, pivot_rotation, rotation, position]() {
+    options.updateFn([this, pivot_rotation, rotation, position]() noexcept {
         rotation_ = rotation * move_rotation_();
 
         // 立方体がエッジの部分で回転するよう平行移動を追加
@@ -243,7 +243,7 @@ public:
         position_ = position - pivot_pos + pivot_rotation;
       });
     
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         // 移動後に正確な位置を設定
         // FIXME:回転も正規化
         position_ = ci::Vec3f(block_position_);
@@ -271,7 +271,7 @@ public:
         event_.signal("view-sound", params);
       });
 
-    animation_timeline_->add([this]() {
+    animation_timeline_->add([this]() noexcept {
         // 移動動作の途中で直前の位置を移動先と同じに
         prev_block_position_ = block_position_;
       },
@@ -288,7 +288,7 @@ public:
                                               fall_duration_,
                                               getEaseFunc(fall_ease_));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         active_ = false;
       });
   }
@@ -304,7 +304,7 @@ public:
 
     option.delay(move_delay_);
 
-    option.finishFn([this]() {
+    option.finishFn([this]() noexcept {
         block_position_.y -= 1;
       });
   }

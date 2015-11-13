@@ -60,7 +60,7 @@ public:
               ci::TimelineRef timeline,
               Event<EventParam>& event,
               const ci::Vec3i& entry_pos,
-              const float interval, const float delay) :
+              const float interval, const float delay) noexcept :
     params_(params),
     event_(event),
     active_(true),
@@ -101,7 +101,7 @@ public:
                                               params["game.falling.entry_duration"].getValue<float>(),
                                               getEaseFunc(params["game.falling.entry_ease"].getValue<std::string>()));
 
-    options.finishFn([this, delay]() {
+    options.finishFn([this, delay]() noexcept {
         on_stage_ = true;
         
         EventParam params = {
@@ -135,7 +135,7 @@ public:
                                               fall_duration_,
                                               getEaseFunc(fall_ease_));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         active_ = false;
       });
   }
@@ -192,7 +192,7 @@ private:
                                               getEaseFunc(up_ease_));
 
     options.delay(interval_ + delay);
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         startDownEase();
       });
   }
@@ -209,7 +209,7 @@ private:
                                               down_duration_,
                                               getEaseFunc(down_ease_));
     options.delay(interval_);
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         EventParam params = {
           { "duration", quake_duration_ },
           { "pos",      position() },

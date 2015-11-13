@@ -33,7 +33,7 @@ public:
   ProgressController(ci::JsonTree& params,
                      ci::TimelineRef timeline,
                      Event<EventParam>& event,
-                     std::unique_ptr<UIView>&& view) :
+                     std::unique_ptr<UIView>&& view) noexcept :
     params_(params),
     event_(event),
     tween_delay_(params["progress.tween_delay"].getValue<float>()),
@@ -51,7 +51,7 @@ public:
     timeline->apply(event_timeline_);
 
     connections_ += event.connect("pause-agree",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     // 自動PAUSEのための措置
                                     if (!view_->isActive()) return;
 
@@ -62,21 +62,21 @@ public:
                                       // 強制PAUSEはタイミングが違う
                                       event_.signal("begin-pause", EventParam());
                                       view_->startWidgetTween("tween-out");
-                                      event_timeline_->add([this]() {
+                                      event_timeline_->add([this]() noexcept {
                                           view_->setDisp(false);
                                         },
                                         event_timeline_->getCurrentTime() + deactive_delay_);
                                     }
                                     else {
                                       // 時間差tween
-                                      event_timeline_->add([this]() {
+                                      event_timeline_->add([this]() noexcept {
                                           view_->startWidgetTween("tween-out");
 
                                           // 時間差でsignal
-                                          event_timeline_->add([this]() {
+                                          event_timeline_->add([this]() noexcept {
                                               event_.signal("begin-pause", EventParam());
 
-                                              event_timeline_->add([this]() {
+                                              event_timeline_->add([this]() noexcept {
                                                   // Viewは非表示に
                                                   view_->setDisp(false);
                                                 },
@@ -89,7 +89,7 @@ public:
                                   });
 
     connections_ += event.connect("game-continue",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setDisp(true);
                                     view_->setActive(true);
                                     
@@ -98,12 +98,12 @@ public:
                                   });
 
     connections_ += event.connect("game-abort",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     active_ = false;
                                   });
 
     connections_ += event.connect("begin-stageclear",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     bool all_cleard = boost::any_cast<bool>(param.at("all_cleared"));
                                     if (all_cleard) {
@@ -111,7 +111,7 @@ public:
                                     }
                                     else {
                                       view_->startWidgetTween("tween-out");
-                                      event_timeline_->add([this]() {
+                                      event_timeline_->add([this]() noexcept {
                                           view_->setDisp(false);
                                         },
                                         event_timeline_->getCurrentTime() + deactivate_view_delay_);
@@ -119,7 +119,7 @@ public:
                                   });
 
     connections_ += event.connect("stageclear-agree",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setDisp(true);
                                     view_->setActive(true);
                                     view_->resetWidgetTween();
@@ -127,19 +127,19 @@ public:
                                   });
 
     connections_ += event_.connect("first-out-pickable",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                      deactivateView();
                                    });
 
 #if 0
     connections_ += event_.connect("pressed-pickable",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                      deactivateView();
                                    });
 #endif
 
     connections_ += event_.connect("update-record",
-                                   [this](const Connection&, EventParam& param) {
+                                   [this](const Connection&, EventParam& param) noexcept {
                                      auto play_time = boost::any_cast<double>(param["play-time"]);
                                      auto& widget = view_->getWidget("play-time");
                                      widget.setText(toFormatedString(play_time));
@@ -151,7 +151,7 @@ public:
       view_->setActive(false);
 
       float delay = params["progress.active_delay"].getValue<float>();
-      event_timeline_->add([this]() {
+      event_timeline_->add([this]() noexcept {
           view_->setActive(true);
         },
         event_timeline_->getCurrentTime() + delay);
@@ -170,7 +170,7 @@ private:
   void deactivateView() noexcept {
     view_->setActive(false);
     view_->startWidgetTween("tween-out");
-    event_timeline_->add([this]() {
+    event_timeline_->add([this]() noexcept {
         active_ = false;
       },
       event_timeline_->getCurrentTime() + deactivate_view_delay_);

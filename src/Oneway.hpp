@@ -50,7 +50,7 @@ public:
          const ci::JsonTree& entry_params,
          ci::TimelineRef timeline,
          Event<EventParam>& event,
-         const int offset_x, const int bottom_z) :
+         const int offset_x, const int bottom_z) noexcept :
     params_(params),
     event_(event),
     alive_(true),
@@ -117,7 +117,7 @@ public:
                                               params_["game.oneway.entry_duration"].getValue<float>(),
                                               getEaseFunc(params_["game.oneway.entry_ease"].getValue<std::string>()));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         on_stage_ = true;
       });
   }    

@@ -35,7 +35,7 @@ public:
                     ci::TimelineRef timeline,
                     Event<EventParam>& event,
                     Records& records,
-                     std::unique_ptr<UIView>&& view) :
+                     std::unique_ptr<UIView>&& view) noexcept :
     params_(params),
     event_(event),
     tween_delay_(params["settings.tween_delay"].getValue<float>()),
@@ -53,7 +53,7 @@ public:
     timeline->apply(event_timeline_);
 
     connections_ += event.connect("se-change",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     bool active = records_.toggleSeOn();
                                     setSoundIcon("se-setting", active);
                                     
@@ -64,7 +64,7 @@ public:
                                   });
 
     connections_ += event.connect("bgm-change",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     bool active = records_.toggleBgmOn();
                                     setSoundIcon("bgm-setting", active);
                                     
@@ -75,20 +75,20 @@ public:
                                   });
 
     connections_ += event.connect("settings-agree",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     records_.write(params_["game.records"].getValue<std::string>());
 
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
 
-                                        event_timeline_->add([this]() {
+                                        event_timeline_->add([this]() noexcept {
                                             EventParam params = {
                                               { "menu-to-title", true },
                                             };
                                             event_.signal("begin-title", params);
                                             
-                                            event_timeline_->add([this]() {
+                                            event_timeline_->add([this]() noexcept {
                                                 active_ = false;
                                               },
                                               event_timeline_->getCurrentTime() + deactive_delay_);
@@ -108,7 +108,7 @@ public:
       view_->setActive(false);
 
       float delay = params["settings.active_delay"].getValue<float>();
-      event_timeline_->add([this]() {
+      event_timeline_->add([this]() noexcept {
           view_->setActive(true);
         },
         event_timeline_->getCurrentTime() + delay);

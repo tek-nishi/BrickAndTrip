@@ -21,7 +21,7 @@ class Model : private boost::noncopyable {
 public:
   Model(const std::string& path,
         const bool has_normals = true, const bool has_uv = true,
-        const bool has_indics = true) {
+        const bool has_indics = true) noexcept {
     ci::ObjLoader loader(ci::app::loadAsset(path));
 
     ci::TriMesh mesh;

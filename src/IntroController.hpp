@@ -30,7 +30,7 @@ public:
                   ci::TimelineRef timeline,
                   Event<EventParam>& event,
                   const int total_play_num,
-                  std::unique_ptr<UIView>&& view) :
+                  std::unique_ptr<UIView>&& view) noexcept :
     params_(params),
     event_(event),
     view_(std::move(view)),

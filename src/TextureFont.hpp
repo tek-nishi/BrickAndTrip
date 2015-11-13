@@ -27,7 +27,7 @@ public:
   explicit TextureFont(const std::string& path, FontCreator& creator,
                        const int size,
                        const ci::Vec3f& scale, const ci::Vec3f& offset,
-                       const bool mipmap) :
+                       const bool mipmap) noexcept :
     font_(path, creator),
     scale_(scale),
     offset_(offset),

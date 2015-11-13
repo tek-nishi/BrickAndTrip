@@ -124,11 +124,11 @@ class BrickTripApp : public AppNative,
     getWindow()->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
 
     // バックグラウンドになった時に全速力で更新されるのを防ぐ
-    get()->getSignalWillResignActive().connect([this]() {
+    get()->getSignalWillResignActive().connect([this]() noexcept {
         setFrameRate(30);
       });
     
-    get()->getSignalDidBecomeActive().connect([this]() {
+    get()->getSignalDidBecomeActive().connect([this]() noexcept {
         disableFrameRate();
       });
 #endif
@@ -138,7 +138,7 @@ class BrickTripApp : public AppNative,
     getSignalSupportedOrientations().connect([]() { return InterfaceOrientation::All; });
 
     // 画面回転時に更新(Share時の処理負荷軽減)
-    getSignalWillRotate().connect([this]() {
+    getSignalWillRotate().connect([this]() noexcept {
         DOUT << "SignalDidRotate" << std::endl;
         if (isPausedDraw()) drawView();
       });
@@ -179,10 +179,10 @@ class BrickTripApp : public AppNative,
     }
 #endif
 
-    GameCenter::authenticateLocalPlayer([this]() {
+    GameCenter::authenticateLocalPlayer([this]() noexcept {
         AppSupport::pauseDraw(true);
       },
-      [this]() {
+      [this]() noexcept {
         AppSupport::pauseDraw(false);
         
         controller_->event().signal("gamecenter-authenticated", EventParam());
@@ -192,7 +192,7 @@ class BrickTripApp : public AppNative,
     auto v = Json::getVec2<double>(params_["app.max_elapsed_seconds"]);
     max_elapsed_seconds_ = 1.0 / v.x;
 
-    timeline().add([this, v]() {
+    timeline().add([this, v]() noexcept {
         max_elapsed_seconds_ = 1.0 / v.y;
       },
       timeline().getCurrentTime() + params_["app.startup_frame"].getValue<float>());

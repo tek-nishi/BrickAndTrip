@@ -70,7 +70,7 @@ class Stage : private boost::noncopyable {
 public:
   Stage(const ci::JsonTree& params,
         ci::TimelineRef timeline,
-        Event<EventParam>& event) :
+        Event<EventParam>& event) noexcept :
     event_(event),
     top_z_(0),
     active_top_z_(0),
@@ -195,11 +195,11 @@ public:
       option.delay(open_delay_);
     }
 
-    event_timeline_->add([this]() {
+    event_timeline_->add([this]() noexcept {
         event_.signal("startline-will-open", EventParam());
       }, event_timeline_->getCurrentTime() + open_delay_);
     
-    event_timeline_->add([this, iz]() {
+    event_timeline_->add([this, iz]() noexcept {
         // コンテナへの参照が無効になっている場合があるので、関数経由で取得
         for (auto& cube : active_cubes_[iz]) {
           cube.block_position.y -= 1;
@@ -213,7 +213,7 @@ public:
   void setupAutoCollapse(const int stop_z, const float speed_rate = 1.0f) noexcept {
     started_collapse_ = false;
 
-    event_timeline_->add([this, stop_z, speed_rate]() {
+    event_timeline_->add([this, stop_z, speed_rate]() noexcept {
         if (!started_collapse_) {
           DOUT << "auto collapse:" << auto_collapse_ << std::endl;
           startCollapseStage(stop_z, speed_rate);
@@ -337,7 +337,7 @@ private:
     }
     finished_build_ = false;
     
-    event_timeline_->add([this]() {
+    event_timeline_->add([this]() noexcept {
         buildOneLine();
 
         {
@@ -402,7 +402,7 @@ private:
                                  collapse_duration_, getEaseFunc(collapse_ease_));
     }
 
-    animation_timeline_->add([this]() {
+    animation_timeline_->add([this]() noexcept {
         collapseFinishOneLine();
       },
       animation_timeline_->getCurrentTime() + collapse_duration_);
@@ -480,7 +480,7 @@ private:
     option.delay(move_delay_);
 
     ci::Vec3f block_position = cube.block_position;
-    option.finishFn([this, block_position]() {
+    option.finishFn([this, block_position]() noexcept {
         auto* cube = getStageCube(block_position);
         if (cube) {
           cube->block_position.y -= 1;

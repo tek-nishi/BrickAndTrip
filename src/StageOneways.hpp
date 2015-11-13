@@ -22,7 +22,7 @@ class StageOneways : private boost::noncopyable {
   
 public:
   StageOneways(ci::TimelineRef timeline,
-               Event<EventParam>& event) :
+               Event<EventParam>& event) noexcept :
     event_(event),
     timeline_(timeline),
     event_timeline_(ci::Timeline::create())

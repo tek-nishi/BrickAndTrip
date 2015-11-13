@@ -52,7 +52,7 @@ public:
                   ci::Camera& camera,
                   Autolayout& autolayout,
                   Event<EventParam>& event,
-                  Event<std::vector<Touch> >& touch_event) :
+                  Event<std::vector<Touch> >& touch_event) noexcept :
     disp_(true),
     active_(true),
 #ifdef DEBUG

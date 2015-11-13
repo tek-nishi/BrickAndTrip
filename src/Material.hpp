@@ -17,7 +17,7 @@ class Material : private boost::noncopyable {
 
 
 public:
-  Material(const ci::JsonTree& params) :
+  Material(const ci::JsonTree& params) noexcept :
     material_(Json::getColorA<float>(params["ambient"]),
               Json::getColorA<float>(params["diffuse"]),
               Json::getColorA<float>(params["specular"]),

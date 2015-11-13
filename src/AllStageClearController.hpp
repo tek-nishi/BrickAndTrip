@@ -46,7 +46,7 @@ public:
                           ci::TimelineRef timeline,
                           Event<EventParam>& event,
                           const EventParam& result,
-                          std::unique_ptr<UIView>&& view) :
+                          std::unique_ptr<UIView>&& view) noexcept :
     event_(event),
     message_(params["message"].getValue<std::string>()),
     event_delay_(params["event_delay"].getValue<float>()),
@@ -67,18 +67,18 @@ public:
     event_timeline_->setStartTime(current_time);
     timeline->apply(event_timeline_);
 
-    event_timeline_->add([this]() {
+    event_timeline_->add([this]() noexcept {
         // 演出開始
         event_.signal(message_, EventParam());
 
         // stage崩壊
-        event_timeline_->add([this]() {
+        event_timeline_->add([this]() noexcept {
             event_.signal("collapse-stage", EventParam());
             requestSound(event_, "all-stage-collapse");
             
 
             // text表示
-            event_timeline_->add([this]() {
+            event_timeline_->add([this]() noexcept {
                 view_->setDisp(true);
                 view_->setActive(true);
                 view_->startWidgetTween("tween-in");
@@ -91,17 +91,17 @@ public:
       event_timeline_->getCurrentTime() + event_delay_);
 
     connections_ += event.connect("selected-agree",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
 
-                                        event_timeline_->add([this]() {
+                                        event_timeline_->add([this]() noexcept {
                                             event_.signal("check-after-gameover", EventParam());
                                             event_.signal("back-to-title", EventParam());
 
-                                            event_timeline_->add([this]() {
+                                            event_timeline_->add([this]() noexcept {
                                                 active_ = false;
                                               },
                                               event_timeline_->getCurrentTime() + deactive_delay_);
@@ -112,17 +112,17 @@ public:
                                   });
     
     connections_ += event.connect("selected-share",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         DOUT << "Share" << std::endl;
 
                                         AppSupport::pauseDraw(true);
                                         
                                         Share::post(sns_text_,
                                                     Capture::execute(),
-                                                    [this]() {
+                                                    [this]() noexcept {
                                                       AppSupport::pauseDraw(false);
                                                       view_->setActive(true);
                                                     });

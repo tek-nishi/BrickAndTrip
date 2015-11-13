@@ -17,7 +17,7 @@ class Quake {
 
   
 public:
-  Quake(const ci::JsonTree& params) :
+  Quake(const ci::JsonTree& params) noexcept :
     power_(params["power"].getValue<float>()),
     speed_(ci::toRadians(params["speed"].getValue<float>())),
     w_st_(ci::toRadians(params["w_st"].getValue<float>())),

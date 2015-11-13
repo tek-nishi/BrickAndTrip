@@ -10,7 +10,7 @@
 namespace ngs { namespace StageData {
 
 ci::JsonTree load(const std::string& path) noexcept {
-#if defined(OBFUSCATION_STAGES)
+#if defined (OBFUSCATION_STAGES)
 #if defined (DEBUG) && defined (CINDER_MAC)
   // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
   boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + path);

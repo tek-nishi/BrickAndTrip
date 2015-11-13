@@ -36,7 +36,7 @@ class FieldLights {
 
 public:
   FieldLights(ci::JsonTree& params,
-              ci::TimelineRef timeline) :
+              ci::TimelineRef timeline) noexcept :
     animation_timeline_(ci::Timeline::create()) {
     auto current_time = timeline->getCurrentTime();
     animation_timeline_->setStartTime(current_time);

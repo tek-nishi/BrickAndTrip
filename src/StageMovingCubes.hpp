@@ -31,7 +31,7 @@ class StageMovingCubes : private boost::noncopyable {
 public:
   StageMovingCubes(ci::JsonTree& params,
              ci::TimelineRef timeline,
-                   Event<EventParam>& event) :
+                   Event<EventParam>& event) noexcept :
     params_(params),
     event_(event),
     timeline_(timeline)

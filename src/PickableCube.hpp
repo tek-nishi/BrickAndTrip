@@ -114,7 +114,7 @@ public:
   PickableCube(ci::JsonTree& params,
                ci::TimelineRef timeline,
                Event<EventParam>& event,
-               const ci::Vec3i& entry_pos, const bool sleep = false) :
+               const ci::Vec3i& entry_pos, const bool sleep = false) noexcept :
     params_(params),
     event_(event),
     active_(true),
@@ -184,7 +184,7 @@ public:
                                               params["game.pickable.entry_duration"].getValue<float>(),
                                               getEaseFunc(params["game.pickable.entry_ease"].getValue<std::string>()));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         on_stage_ = true;
         
         EventParam params = {
@@ -194,7 +194,7 @@ public:
         event_.signal("pickable-on-stage", params);
 
         // 時間差でidle動作
-        animation_timeline_->add([this]() {
+        animation_timeline_->add([this]() noexcept {
             if (isOnStage() && !first_moved_) {
               EventParam params = {
                 { "id", id_ },
@@ -314,7 +314,7 @@ public:
     auto pivot_rotation = pivot_table[move_direction_];
     auto rotation = rotation_();
     auto position = position_();
-    options.updateFn([this, pivot_rotation, rotation, position]() {
+    options.updateFn([this, pivot_rotation, rotation, position]() noexcept {
         rotation_ = rotation * move_rotation_();
 
         // 立方体がエッジの部分で回転するよう平行移動を追加
@@ -323,7 +323,7 @@ public:
         position_ = position - pivot_pos + pivot_rotation;
       });
     
-    options.finishFn([this, move_sound]() {
+    options.finishFn([this, move_sound]() noexcept {
         // 移動後に正確な位置を設定
         position_ = ci::Vec3f(block_position_);
         position_().y += 1.0f;
@@ -377,7 +377,7 @@ public:
     auto pivot_rotation = pivot_table[move_direction];
     auto rotation = rotation_();
     auto position = position_();
-    options.updateFn([this, pivot_rotation, rotation, position]() {
+    options.updateFn([this, pivot_rotation, rotation, position]() noexcept {
         rotation_ = rotation * move_rotation_();
 
         // 立方体がエッジの部分で回転するよう平行移動を追加
@@ -386,14 +386,14 @@ public:
         position_ = position - pivot_pos + pivot_rotation;
       });
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         // 移動後に正確な位置を設定
         // FIXME:回転も正規化
         position_ = ci::Vec3f(block_position_);
         position_().y += 1.0f;
 
         // 時間差でidle動作
-        animation_timeline_->add([this]() {
+        animation_timeline_->add([this]() noexcept {
             if (isOnStage() && !first_moved_) {
               EventParam params = {
                 { "id", id_ },
@@ -419,7 +419,7 @@ public:
                                               fall_duration_,
                                               getEaseFunc(fall_ease_));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         active_ = false;
       });
   }
@@ -446,7 +446,7 @@ public:
                                               getEaseFunc(pressed_ease_));
 
     const auto& position = position_();
-    options.updateFn([this, position]() {
+    options.updateFn([this, position]() noexcept {
         scale_.y  = pressed_scale_();
         // 潰されたぶん、位置をずらす
         position_().y = position.y - (1.0f - scale_.y) * (1.0f / 2);
@@ -468,7 +468,7 @@ public:
                                               duration,
                                               getEaseFunc(ease_type));
 
-    options.finishFn([this] {
+    options.finishFn([this]() noexcept {
         active_ = false;
       });
   }

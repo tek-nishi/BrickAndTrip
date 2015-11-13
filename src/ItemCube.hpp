@@ -54,7 +54,7 @@ public:
   ItemCube(ci::JsonTree& params,
            ci::TimelineRef timeline,
            Event<EventParam>& event,
-           const ci::Vec3i& entry_pos) :
+           const ci::Vec3i& entry_pos) noexcept :
     params_(params),
     event_(event),
     active_(true),
@@ -100,7 +100,7 @@ public:
                                               duration,
                                               getEaseFunc(params["game.item.entry_ease"].getValue<std::string>()));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         on_stage_ = true;
         startTween("idle_tween");
 
@@ -143,7 +143,7 @@ public:
                                               fall_duration_,
                                               getEaseFunc(fall_ease_));
 
-    options.finishFn([this]() {
+    options.finishFn([this]() noexcept {
         active_ = false;
       });
 
@@ -156,7 +156,7 @@ public:
 
     startTween("pickup_tween");
 
-    animation_timeline_->add([this]() {
+    animation_timeline_->add([this]() noexcept {
         active_ = false;
       },
       animation_timeline_->getCurrentTime() + params_["game.item.pickup_duration"].getValue<float>());
@@ -182,7 +182,7 @@ public:
 
     option.delay(move_delay_);
 
-    option.finishFn([this]() {
+    option.finishFn([this]() noexcept {
         block_position_.y -= 1;
       });
   }

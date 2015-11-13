@@ -18,7 +18,7 @@ class SoundPlayer : private boost::noncopyable {
   
 
 public:
-  SoundPlayer(const ci::JsonTree& params) :
+  SoundPlayer(const ci::JsonTree& params) noexcept :
     sound_(params)
   {
     DOUT << "SoundPlayer()" << std::endl;

@@ -57,7 +57,7 @@ class Sound : private boost::noncopyable {
   
   
 public:
-  Sound(const ci::JsonTree& params) :
+  Sound(const ci::JsonTree& params) noexcept :
     buffer_silent_(false),
     file_silent_(false)
   {

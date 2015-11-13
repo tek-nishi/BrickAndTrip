@@ -75,7 +75,9 @@ public:
 
     
   public:
-    explicit Widget(const Type origin, const Type layout, const ci::Vec3f& pos, const ci::Vec3f& size) :
+    explicit Widget(const Type origin,
+                    const Type layout, const
+                    ci::Vec3f& pos, const ci::Vec3f& size) noexcept :
       origin_(origin),
       layout_(layout),
       pos_(pos),
@@ -277,7 +279,7 @@ public:
 
   Autolayout() = default;
   
-  explicit Autolayout(ci::Camera& camera) :
+  explicit Autolayout(ci::Camera& camera) noexcept :
     view_rect_(createViewRect(camera))
   { }
 

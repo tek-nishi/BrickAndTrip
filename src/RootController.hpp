@@ -61,7 +61,7 @@ class RootController : public ControllerBase {
 public:
   RootController(ci::JsonTree& params,
                  ci::TimelineRef timeline,
-                 Event<std::vector<Touch> >& touch_event) :
+                 Event<std::vector<Touch> >& touch_event) noexcept :
     params_(params),
     timeline_(timeline),
     ui_camera_(createCamera(params["ui_view.camera"])),
@@ -78,32 +78,32 @@ public:
     DOUT << "RootController()" << std::endl;
     
     event_.connect("begin-progress",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<ProgressController>(params_, timeline_, event_,
                                                        view_creator_.create("ui_progress.json"));
                    });
     
     event_.connect("begin-gameover",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<GameoverController>(params_, timeline_, event_,
                                                        param,
                                                        view_creator_.create("ui_gameover.json"));
                    });
 
     event_.connect("begin-stageclear",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<StageclearController>(params_, timeline_, event_, param,
                                                          view_creator_.create("ui_stageclear.json"));
                    });
 
     event_.connect("begin-pause",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<PauseController>(params_, timeline_, event_,
                                                     view_creator_.create("ui_pause.json"));
                    });
 
     event_.connect("begin-records",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      EventParam records = {
                        { "total_play",  records_.getTotalPlayNum() },
                        { "total_time",  records_.getTotalPlayTime() },
@@ -117,31 +117,31 @@ public:
                    });
 
     event_.connect("begin-credits",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<CreditsController>(params_, timeline_, event_,
                                                       view_creator_.create("ui_credits.json"));
                    });
 
     event_.connect("begin-title",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      startTitle(param);
                    });
 
     event_.connect("begin-settings",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<SettingsController>(params_, timeline_, event_, records_,
                                                        view_creator_.create("ui_settings.json"));
                    });
 
     event_.connect("begin-regulat-stageclear",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<AllStageClearController>(params_["regular_stageclear"], timeline_, event_,
                                                             param,
                                                             view_creator_.create("ui_regularstageclear.json"));
                    });
 
     event_.connect("begin-all-stageclear",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      addController<AllStageClearController>(params_["all_stageclear"], timeline_, event_,
                                                             param,
                                                             view_creator_.create("ui_allstageclear.json"));
@@ -149,7 +149,7 @@ public:
 
     // GameOver時に色々チェック
     event_.connect("check-after-gameover",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      DOUT << "check-after-gameover" << std::endl;
                      Rating::popup([this]() {
                          AppSupport::pauseDraw(true);
@@ -162,7 +162,7 @@ public:
 
     // サウンド再生
     event_.connect("sound-play",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      auto& name = boost::any_cast<const std::string&>(param.at("sound"));
                      sound_.play(name);
                      // DOUT << "sound:" << name << std::endl;
@@ -170,46 +170,46 @@ public:
 
     
     event_.connect("se-silent",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      sound_.get().setBufferSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
     event_.connect("bgm-silent",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      sound_.get().setFileSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
     
 #ifdef DEBUG
     event_.connect("force-regular-completed",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      records_.forceRegularStageComplated();
                    });
 
     event_.connect("cancel-regular-completed",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      records_.cancelRegularStageComplated();
                    });
 
     event_.connect("clear-records",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      records_ = Records(params_["version"].getValue<float>());
                    });
 
     event_.connect("do-snapshot",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      auto surface = ci::app::copyWindowSurface();
                      auto full_path = getDocumentPath() / std::string("snapshot" + createUniquePath() + ".png");
                      ci::writeImage(full_path, surface);
                    });
     
     event_.connect("reset-records",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      records_ = Records(params_["version"].getValue<float>());
                    });
     
     event_.connect("reset-achievement",
-                   [this](const Connection&, EventParam& param) {
+                   [this](const Connection&, EventParam& param) noexcept {
                      DOUT << "reset-achievement" << std::endl;
                      GameCenter::resetAchievement();
                    });
@@ -229,7 +229,7 @@ public:
     // 自動PAUSE
     // getSignalDidEnterBackground(Backgroundになった直後)
     // getSignalWillResignActive(アクティブでなくなる直前)
-    resign_active_ = ci::app::App::get()->getSignalWillResignActive().connect([this]() {
+    resign_active_ = ci::app::App::get()->getSignalWillResignActive().connect([this]() noexcept {
         DOUT << "SignalWillResignActive" << std::endl;
         EventParam params = {
           { "force", true }

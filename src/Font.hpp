@@ -36,7 +36,7 @@ class FontCreator : private boost::noncopyable {
 
 
 public:
-  FontCreator() {
+  FontCreator() noexcept {
     DOUT << "FontCreator()" << std::endl;
     
     auto error = FT_Init_FreeType(&library_);
@@ -71,7 +71,7 @@ class Font : private boost::noncopyable {
 
 
 public:
-  Font(const std::string& path, FontCreator& creator) {
+  Font(const std::string& path, FontCreator& creator) noexcept {
     DOUT << "Font()" << std::endl;
     
     auto error = FT_New_Face(creator.handle(),

@@ -61,7 +61,7 @@ public:
   UIWidget(const ci::JsonTree& params,
            ci::TimelineRef timeline,
            Autolayout& autolayout,
-           const float padding) :
+           const float padding) noexcept :
     params_(params),
     name_(params["name"].getValue<std::string>()),
     text_(params["text"].getValue<std::string>(),
@@ -310,7 +310,7 @@ private:
 
     if (tween.hasChild("next")) {
       const auto& name = tween["next"].getValue<std::string>();
-      timeline_->add([this, name]() {
+      timeline_->add([this, name]() noexcept {
           startTween(name);
         },
         timeline_->getDuration());

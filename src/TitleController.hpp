@@ -37,7 +37,7 @@ public:
                   Event<EventParam>& event,
                   const EventParam& exec_params,
                   Records& records,
-                  std::unique_ptr<UIView>&& view) :
+                  std::unique_ptr<UIView>&& view) noexcept :
     params_(params),
     event_(event),
     records_(records),
@@ -55,14 +55,14 @@ public:
     timeline->apply(event_timeline_);
     
     connections_ += event.connect("pickable-moved",
-                                  [this](const Connection& connection, EventParam& param) {
+                                  [this](const Connection& connection, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     view_->startWidgetTween("tween-out");
 
                                     // 時間差でControllerを破棄
                                     // メニュー遷移の時間調整方法とあわせるために
                                     // event_delay_ + deactive_delay_ としている
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         active_ = false;
                                       },
                                       event_timeline_->getCurrentTime() + event_delay_ + deactive_delay_);
@@ -71,19 +71,19 @@ public:
                                   });
 
     connections_ += event.connect("records-start",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
 
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
 
                                         // 時間差でsignal
-                                        event_timeline_->add([this]() {
+                                        event_timeline_->add([this]() noexcept {
                                             event_.signal("begin-records", EventParam());
 
                                             // 時間差で消滅
-                                            event_timeline_->add([this]() {
+                                            event_timeline_->add([this]() noexcept {
                                                 active_ = false;
                                               },
                                               event_timeline_->getCurrentTime() + deactive_delay_);
@@ -94,17 +94,17 @@ public:
                                   });
     
     connections_ += event.connect("settings-start",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
 
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
 
-                                        event_timeline_->add([this]() {
+                                        event_timeline_->add([this]() noexcept {
                                             event_.signal("begin-settings", EventParam());
 
-                                            event_timeline_->add([this]() {
+                                            event_timeline_->add([this]() noexcept {
                                                 active_ = false;
                                               },
                                               event_timeline_->getCurrentTime() + deactive_delay_);
@@ -115,17 +115,17 @@ public:
                                   });
     
     connections_ += event.connect("credits-start",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
                                     
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
 
-                                        event_timeline_->add([this]() {
+                                        event_timeline_->add([this]() noexcept {
                                             event_.signal("begin-credits", EventParam());
 
-                                            event_timeline_->add([this]() {
+                                            event_timeline_->add([this]() noexcept {
                                                 active_ = false;
                                               },
                                               event_timeline_->getCurrentTime() + deactive_delay_);
@@ -136,15 +136,15 @@ public:
                                   });
     
     connections_ += event.connect("leaderboard-start",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     event_.signal("field-input-stop", EventParam());
                                     
-                                    event_timeline_->add([this]() {
-                                        GameCenter::showBoard([this]() {
+                                    event_timeline_->add([this]() noexcept {
+                                        GameCenter::showBoard([this]() noexcept {
                                             AppSupport::pauseDraw(true);
                                           },
-                                          [this]() {
+                                          [this]() noexcept {
                                             AppSupport::pauseDraw(false);
                                             
                                             event_.signal("field-input-start", EventParam());
@@ -182,7 +182,7 @@ public:
       view_->setActive(false);
 
       float delay = params["title.active_delay"].getValue<float>();
-      event_timeline_->add([this]() {
+      event_timeline_->add([this]() noexcept {
           view_->setActive(true);
         },
         event_timeline_->getCurrentTime() + delay);
@@ -228,7 +228,7 @@ private:
 
       // 時間差で認証される事もありうる
       connections_ += event_.connect("gamecenter-authenticated",
-                                     [this](const Connection&, EventParam& param) {
+                                     [this](const Connection&, EventParam& param) noexcept {
                                        if (GameCenter::isAuthenticated()) {
                                          dispLeaderBoard();
                                        }

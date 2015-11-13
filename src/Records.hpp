@@ -26,7 +26,7 @@ public:
     int    score;
     int    rank;
 
-    StageRecord() :
+    StageRecord() noexcept :
       clear_time(std::numeric_limits<double>::max()),
       all_item_get(false),
       score(0),
@@ -48,7 +48,7 @@ public:
     bool highest_score;
     bool highest_rank;
 
-    CurrentStage() :
+    CurrentStage() noexcept :
       play_time(0.0),
       item_num(0),
       score(0),
@@ -73,7 +73,7 @@ public:
 
     bool continued;
     
-    CurrentGame() :
+    CurrentGame() noexcept :
       stage_num(0),
       score(0),
       highest_score(false),
@@ -119,7 +119,7 @@ private:
   
 
 public:
-  Records(const float version) :
+  Records(const float version) noexcept :
     record_current_game_(false),
     total_stage_num_(0),
     regular_stage_num_(0),

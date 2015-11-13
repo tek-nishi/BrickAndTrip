@@ -31,7 +31,7 @@ public:
   
   CubeText(const std::string& text,
            const float size, const float spacing,
-           const size_t chara_num) :
+           const size_t chara_num) noexcept :
     size_(size),
     spacing_(spacing),
     chara_num_(chara_num),

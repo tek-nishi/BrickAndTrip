@@ -57,7 +57,7 @@ public:
                        ci::TimelineRef timeline,
                        Event<EventParam>& event,
                        const EventParam& result,
-                       std::unique_ptr<UIView>&& view) :
+                       std::unique_ptr<UIView>&& view) noexcept :
     params_(params),
     event_(event),
     tween_delay_(params["stageclear.tween_delay"].getValue<float>()),
@@ -92,13 +92,13 @@ public:
     timeline->apply(animation_timeline_);
 
     connections_ += event.connect("selected-agree",
-                                  [this](const Connection&, EventParam& param) {
+                                  [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
                                     
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
 
-                                        event_timeline_->add([this]() {
+                                        event_timeline_->add([this]() noexcept {
                                             // クリア状況でmessageが違う
                                             std::string msg = "stageclear-agree";
                                             if (all_cleard_) {
@@ -118,7 +118,7 @@ public:
                                             
                                             event_.signal(msg, params);
 
-                                            event_timeline_->add([this]() {
+                                            event_timeline_->add([this]() noexcept {
                                                 active_ = false;
                                               },
                                               event_timeline_->getCurrentTime() + deactive_delay_);
@@ -132,14 +132,14 @@ public:
                                   [this](const Connection&, EventParam& param) {
                                     view_->setActive(false);
                                     
-                                    event_timeline_->add([this]() {
+                                    event_timeline_->add([this]() noexcept {
                                         DOUT << "Share" << std::endl;
 
                                         AppSupport::pauseDraw(true);
 
                                         Share::post(sns_text_,
                                                     Capture::execute(),
-                                                    [this]() {
+                                                    [this]() noexcept {
                                                       AppSupport::pauseDraw(false);
                                                       view_->setActive(true);
                                                     });
@@ -156,7 +156,7 @@ public:
       view_->setActive(false);
 
       float delay = params["stageclear.active_delay"].getValue<float>();
-      event_timeline_->add([this]() {
+      event_timeline_->add([this]() noexcept {
           view_->setActive(true);
         },
         event_timeline_->getCurrentTime() + delay);
@@ -191,13 +191,13 @@ private:
 
       options.delay(params_["stageclear.clear_time_delay"].getValue<float>());
 
-      options.updateFn([this]() {
+      options.updateFn([this]() noexcept {
           view_->getWidget("time-result").setText(toFormatedString(clear_time_()));
         });
       
       // カウントアップ演出が終わったあとで記録更新演出
       if (boost::any_cast<bool>(result.at("fastest_time"))) {
-        options.finishFn([this]() {
+        options.finishFn([this]() noexcept {
             view_->startWidgetTween("tween-fastest-time");
           });
       }
@@ -219,13 +219,13 @@ private:
 
         options.delay(params_["stageclear.item_rate_delay"].getValue<float>());
 
-        options.updateFn([this]() {
+        options.updateFn([this]() noexcept {
             view_->getWidget("item-result").setText(toFormatedString(item_rate_(), 3) + "%", false);
           });
 
         // カウントアップ演出が終わったあとで100%達成演出
         if (boost::any_cast<bool>(result.at("complete_item"))) {
-          options.finishFn([this]() {
+          options.finishFn([this]() noexcept {
               view_->startWidgetTween("tween-complete-item");
             });
         }
@@ -243,12 +243,12 @@ private:
       options.delay(params_["stageclear.score_delay"].getValue<float>());
 
       // カウントアップ演出が終わったあとで最高得点演出
-      options.updateFn([this]() {
+      options.updateFn([this]() noexcept {
           view_->getWidget("score-result").setText(toFormatedString(score_(), 5), false);
         });
 
       if (boost::any_cast<bool>(result.at("highest_score"))) {
-          options.finishFn([this]() {
+          options.finishFn([this]() noexcept {
               view_->startWidgetTween("tween-highest-score");
             });
       }
