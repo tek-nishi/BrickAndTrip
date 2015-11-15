@@ -95,6 +95,7 @@ class FieldView : private boost::noncopyable {
   float move_threshold_;
   float move_speed_rate_;
   int   move_swipe_speed_;
+  float distance_revise_;
   
   bool touch_input_;
 
@@ -159,6 +160,7 @@ public:
     move_threshold_(params["game_view.move_threshold"].getValue<float>()),
     move_speed_rate_(params["game_view.move_speed_rate"].getValue<float>()),
     move_swipe_speed_(params["game_view.move_swipe_speed"].getValue<int>()),
+    distance_revise_(params["game_view.distance_revise"].getValue<float>()),
     touch_input_(true),
     animation_timeline_(ci::Timeline::create()),
     progressing_seconds_(0.0),
@@ -1054,7 +1056,7 @@ private:
   // カメラの距離に応じた補正
   float reviseValueByCamera(const float value) const noexcept {
     float distance = eye_distance_() + target_radius_ * eye_distance_rate_;
-    return value * distance * 1.5f / eye_distance_();
+    return value * distance * distance_revise_ / eye_distance_();
   }
 
   // 画面の縦横サイズから、BGの描画サイズを決める
