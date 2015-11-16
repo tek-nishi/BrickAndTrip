@@ -6,7 +6,9 @@
 #include "TextCodec.hpp"
 #include <iostream>
 #include <fstream>
+#include <cassert>
 #include <zlib.h>
+#include "cinder/app/App.h"
 
 
 namespace ngs { namespace TextCodec {

@@ -448,11 +448,11 @@
     },
     
     "move_begin_time": 0.3,
-    "move_begin_threshold": 0.75,
+    "move_begin_threshold": 0.65,
     "move_threshold": 0.5,
     "move_speed_rate": 0.27,
     "move_swipe_speed": 10,
-    "distance_revise": 1.6,
+    "distance_revise": 1.7,
   
     "materials": {
       "pickable_cube": {
@@ -571,7 +571,7 @@
     "regular_stage_num": 10,
     "satisfy_rank": 2,
 
-    "start_stage": 0,
+    "start_stage": 9,
 
     "stage_path": [
       "stage01.json",

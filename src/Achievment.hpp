@@ -14,11 +14,11 @@ namespace ngs { namespace Achievment {
 void atStageClear(const Records& records) noexcept {
   // STAGEクリア実績
   std::vector<std::pair<int, std::string> > achievements = {
-    {  0, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE01" },
-    {  2, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE03" },
-    {  5, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE06" },
-    {  9, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE10" },
-    { 10, "BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE11" },
+    { std::make_tuple( 0, std::string("BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE01")) },
+    { std::make_tuple( 2, std::string("BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE03")) },
+    { std::make_tuple( 5, std::string("BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE06")) },
+    { std::make_tuple( 9, std::string("BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE10")) },
+    { std::make_tuple(10, std::string("BRICKTRIP.ACHIEVEMENT.CLEARED_STAGE11")) },
   };
     
   for (const auto& a : achievements) {
@@ -44,11 +44,11 @@ void atGameOver(const Records& records) noexcept {
   {
     // プレイ回数による実績
     static std::vector<std::tuple<int, int, std::string> > achievements = {
-      {    10,    0, "BRICKTRIP.ACHIEVEMENT.PLAYED_10_TIMES" },
-      {    50,    0, "BRICKTRIP.ACHIEVEMENT.PLAYED_50_TIMES" },
-      {   100,    0, "BRICKTRIP.ACHIEVEMENT.PLAYED_100_TIMES" },
-      {  1000,  100, "BRICKTRIP.ACHIEVEMENT.PLAYED_1000_TIMES" },
-      { 10000, 1000, "BRICKTRIP.ACHIEVEMENT.PLAYED_10000_TIMES" },
+      { std::make_tuple(   10,    0, std::string("BRICKTRIP.ACHIEVEMENT.PLAYED_10_TIMES")) },
+      { std::make_tuple(   50,    0, std::string("BRICKTRIP.ACHIEVEMENT.PLAYED_50_TIMES")) },
+      { std::make_tuple(  100,    0, std::string("BRICKTRIP.ACHIEVEMENT.PLAYED_100_TIMES")) },
+      { std::make_tuple( 1000,  100, std::string("BRICKTRIP.ACHIEVEMENT.PLAYED_1000_TIMES")) },
+      { std::make_tuple(10000, 1000, std::string("BRICKTRIP.ACHIEVEMENT.PLAYED_10000_TIMES")) },
     };
 
     int play_num = records.getTotalPlayNum();
