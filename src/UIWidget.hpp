@@ -206,7 +206,7 @@ public:
   
   bool intersects(const ci::Ray& ray) const noexcept {
     auto pos = pos_() + layout_->getPos();
-    auto bbox = ci::AxisAlignedBox3f(pos + text_.minPos(), pos + text_.maxPos());
+    auto bbox = ci::AxisAlignedBox3f(pos + text_.minPos() - padding_, pos + text_.maxPos() + padding_);
 
     return bbox.intersects(ray);
   }

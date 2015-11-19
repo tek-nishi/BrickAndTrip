@@ -40,7 +40,7 @@
    ],
    "build_speed" : 0.5,
    "camera" : "normal",
-   "collapse_speed" : 0.5,
+   "collapse_speed" : 0.55000001192092896,
    "color" : [ 0.584314, 0.33725500000000003, 0.16078400000000001 ],
    "falling" : [
       {
