@@ -4,6 +4,8 @@
   "app": {
     "size": [ 960, 640 ],
     "framerate_limit": false,
+    "framerate": 60,
+    "framerate_low": 30,
 
     "max_elapsed_seconds": [ 20, 15 ],
     "startup_frame": 0.25,
@@ -878,7 +880,7 @@
       "item_perfect_score": 1000,
       
       "stage_collect": 0.1,
-      "rank_rate_table": [ 98, 93, 86, 76, 61, 41 ],
+      "rank_rate_table": [ 97, 93, 86, 76, 61, 41 ],
 
       "move_step": 100
     },

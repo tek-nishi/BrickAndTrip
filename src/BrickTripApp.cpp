@@ -86,8 +86,14 @@ class BrickTripApp : public AppNative,
     settings->setWindowSize(size);
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
+
+    // 垂直同期が有効な場合、frameRate設定はOFFにした方が、描画が安定する
+    // app.framerate_limit はDEBUG用途
     if (!params_["app.framerate_limit"].getValue<bool>() && gl::isVerticalSyncEnabled()) {
       settings->disableFrameRate();
+    }
+    else {
+      settings->setFrameRate(params_["app.framerate"].getValue<bool>());
     }
     
 #if !defined(CINDER_MAC)
@@ -125,11 +131,11 @@ class BrickTripApp : public AppNative,
 
     // バックグラウンドになった時に全速力で更新されるのを防ぐ
     get()->getSignalWillResignActive().connect([this]() noexcept {
-        setFrameRate(30);
+        setFrameRate(params_["app.framerate_low"].getValue<float>());
       });
     
     get()->getSignalDidBecomeActive().connect([this]() noexcept {
-        disableFrameRate();
+        setupFrameRate();
       });
 #endif
     
@@ -480,7 +486,18 @@ class BrickTripApp : public AppNative,
     ease_outin_elastic_a = params["easing.ease_outin_elastic_a"].getValue<float>();
     ease_outin_elastic_b = params["easing.ease_outin_elastic_b"].getValue<float>();
   }
-  
+
+
+  void setupFrameRate() noexcept {
+    // 垂直同期が有効なら、FrameRateを無効にした方が表示が安定する
+    // ※DEBUG用途でframerate_limitを用意した
+    if (!params_["app.framerate_limit"].getValue<bool>() && gl::isVerticalSyncEnabled()) {
+      disableFrameRate();
+    }
+    else {
+      setFrameRate(params_["app.framerate"].getValue<float>());
+    }
+  }
 };
 
 }

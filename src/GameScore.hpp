@@ -85,6 +85,7 @@ public:
 
       DOUT << "score from clear-time:" << score << std::endl
            << "              highest:" << highest_score << std::endl
+           << "           score rate:" << score_rate << std::endl
            << "              fastest:" << build_time_ << std::endl
            << "           clear time:" << clear_time << std::endl
            << "            move_step:" << move_step << std::endl
@@ -123,6 +124,8 @@ public:
         if (score_rate > rank_rate) break;
         rank += 1;
       }
+
+      DOUT << "sore rate:" << score_rate << std::endl;
     }
 
     // 最高移動量によるボーナス(RANKには影響しない)
