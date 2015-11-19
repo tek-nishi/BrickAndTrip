@@ -488,6 +488,7 @@ class BrickTripApp : public AppNative,
   }
 
 
+#if defined(CINDER_MAC)
   void setupFrameRate() noexcept {
     // 垂直同期が有効なら、FrameRateを無効にした方が表示が安定する
     // ※DEBUG用途でframerate_limitを用意した
@@ -498,6 +499,8 @@ class BrickTripApp : public AppNative,
       setFrameRate(params_["app.framerate"].getValue<float>());
     }
   }
+#endif
+  
 };
 
 }
