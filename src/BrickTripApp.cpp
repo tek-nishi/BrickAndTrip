@@ -1,5 +1,5 @@
 ﻿//
-// BRICK TRIP
+// BRICK & TRIP
 // 
 
 #include "Defines.hpp"
@@ -70,7 +70,6 @@ class BrickTripApp : public AppNative,
 #if defined (OBFUSCATION_STAGES) && defined (DEBUG)
     StageData::convert(params_);
 #endif
-    
 
     // 低性能環境を調べて設定に追加
     params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device",
@@ -86,15 +85,6 @@ class BrickTripApp : public AppNative,
     settings->setWindowSize(size);
 
     settings->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
-
-    // 垂直同期が有効な場合、frameRate設定はOFFにした方が、描画が安定する
-    // app.framerate_limit はDEBUG用途
-    if (!params_["app.framerate_limit"].getValue<bool>() && gl::isVerticalSyncEnabled()) {
-      settings->disableFrameRate();
-    }
-    else {
-      settings->setFrameRate(params_["app.framerate"].getValue<bool>());
-    }
     
 #if !defined(CINDER_MAC)
     // FIXME:Macでだとマルチタッチが邪魔
@@ -111,6 +101,9 @@ class BrickTripApp : public AppNative,
     // 勝手に画面が暗くなるのを抑制
     settings->enablePowerManagement(false);
 
+    // iOSのみ、ここでの設定が有効になる
+    settings->setFrameRate(params_["app.framerate"].getValue<float>());
+    
     fast_speed_ = params_["app.fast_speed"].getValue<double>();
     slow_speed_ = params_["app.slow_speed"].getValue<double>();
 
@@ -119,12 +112,16 @@ class BrickTripApp : public AppNative,
   
 
 	void setup() noexcept override {
-    AudioSession::begin();
-    
-    Rand::randomize();
-    
     // Windowが表示された後の設定はここで処理
     // OpenGLのコンテキストも使える
+    AudioSession::begin();
+    Rand::randomize();
+
+#if !defined(CINDER_COCOA_TOUCH)
+    // OpenGLの機能を使っているので、setup内で処理
+    setupFrameRate();
+#endif
+    
 #if defined(CINDER_MAC)
     // OSXでタイトルバーにアプリ名を表示するworkaround
     getWindow()->setTitle(PREPRO_TO_STR(PRODUCT_NAME));
@@ -488,14 +485,16 @@ class BrickTripApp : public AppNative,
   }
 
 
-#if defined(CINDER_MAC)
+#if !defined(CINDER_COCOA_TOUCH)
   void setupFrameRate() noexcept {
     // 垂直同期が有効なら、FrameRateを無効にした方が表示が安定する
     // ※DEBUG用途でframerate_limitを用意した
     if (!params_["app.framerate_limit"].getValue<bool>() && gl::isVerticalSyncEnabled()) {
+      DOUT << "Disable Framerate." << std::endl;
       disableFrameRate();
     }
     else {
+      DOUT << "Enable Framerate." << std::endl;
       setFrameRate(params_["app.framerate"].getValue<float>());
     }
   }
