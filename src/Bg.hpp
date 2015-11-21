@@ -86,7 +86,7 @@ public:
             ci::Vec3f::zero(),
             false,
           };
-          cubes_.push_back(cube);
+          cubes_.push_back(std::move(cube));
         }
       }
       else {
@@ -108,7 +108,7 @@ public:
             ci::Vec3f::zero(),
             false,
           };
-          cubes_.push_back(cube);
+          cubes_.push_back(std::move(cube));
         }
       }
     }

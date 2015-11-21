@@ -80,7 +80,7 @@ public:
         entry.move_pattern.push_back(value.getValue<int>());
       }
       
-      entry_cubes_.push_back(entry);
+      entry_cubes_.push_back(std::move(entry));
     }
   }
 
