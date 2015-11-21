@@ -63,16 +63,21 @@ public:
   {
     auto* ctx = ci::audio::Context::master();
 
-#if 0
     {
       // フレームあたりの処理数を増やす(標準は512)
+      ci::audio::DeviceManager* dm = ci::audio::Context::deviceManager();
+
       auto device = ci::audio::Device::getDefaultOutput();
-      size_t frames_per_block = device->getFramesPerBlock();
-      ci::audio::Device::Format format;
-      format.framesPerBlock(frames_per_block * 2);
-      device->updateFormat(format);
+      size_t frames_per_block = dm->getFramesPerBlock(device);
+
+      dm->setFramesPerBlock(device, frames_per_block * 2);
+
+      DOUT << "Sound::FramesPerBlock:"
+           << dm->getFramesPerBlock(device)
+           << " old:"
+           << frames_per_block
+           << std::endl;
     }
-#endif
 
     ctx->enable();
     

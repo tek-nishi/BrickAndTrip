@@ -585,6 +585,7 @@ private:
             removePick(touch);
 
             DOUT << "move:" << move_direction << std::endl;
+            DOUT << "     " << (touch.pos - pick->touch_begin_pos).length() << std::endl;
           }
           break;
         }
