@@ -143,13 +143,14 @@ public:
                                    [this](const Connection&, EventParam& param) noexcept {
                                      DOUT << "regular-stage-clear-out" << std::endl;
                                      view_.enableTouchInput();
-                                     
+                                     view_.endDistanceCloser();
                                    });
 
     connections_ += event_.connect("all-stage-clear-out",
                                    [this](const Connection&, EventParam& param) noexcept {
                                      DOUT << "all-stage-clear-out" << std::endl;
                                      entity_.riseAllPickableCube();
+                                     view_.endDistanceCloser();
                                    });
 
     connections_ += event_.connect("collapse-stage",
