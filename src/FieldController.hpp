@@ -138,19 +138,28 @@ public:
                                      }
                                    });
 
+    connections_ += event_.connect("begin-regulat-stageclear",
+                                   [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "begin-regulat-stageclear" << std::endl;
+                                     view_.endDistanceCloser();
+                                   });
+
+    connections_ += event_.connect("begin-all-stageclear",
+                                   [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "begin-all-stageclear" << std::endl;
+                                     view_.endDistanceCloser();
+                                   });
     
     connections_ += event_.connect("regular-stage-clear-out",
                                    [this](const Connection&, EventParam& param) noexcept {
                                      DOUT << "regular-stage-clear-out" << std::endl;
                                      view_.enableTouchInput();
-                                     view_.endDistanceCloser();
                                    });
 
     connections_ += event_.connect("all-stage-clear-out",
                                    [this](const Connection&, EventParam& param) noexcept {
                                      DOUT << "all-stage-clear-out" << std::endl;
                                      entity_.riseAllPickableCube();
-                                     view_.endDistanceCloser();
                                    });
 
     connections_ += event_.connect("collapse-stage",
