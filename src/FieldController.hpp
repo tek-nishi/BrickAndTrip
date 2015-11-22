@@ -275,6 +275,7 @@ public:
 
     connections_ += event_.connect("continue-game",
                                    [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "continue-game" << std::endl;
                                      view_.enableTouchInput();
                                    });
                                   
@@ -469,9 +470,10 @@ private:
                                                   
                                                   connection.disconnect();
                                                 });
+      // Title開始時は操作禁止状態ではじめる
+      view_.enableTouchInput(false);
     }
     
-    view_.enableTouchInput(false);
     view_.resetCamera(entity_.getStageTopZ());
     view_.enableFollowCamera();
     view_.endDistanceCloser();

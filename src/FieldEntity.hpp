@@ -1171,8 +1171,11 @@ private:
   }
 
   bool canContinue() const noexcept {
-    // 最終ステージはcontinue不可
-    // if (stage_num_ == total_stage_num_) return false;
+    // ITEMを取っていないと不可
+    //   STAGEをクリアしないとCurrentGameの値が更新されないので
+    //   足した値で判定している
+    int item_num = records_.currentGame().item_num + records_.currentStage().item_num;
+    if (item_num == 0) return false;
     
     // stage開始時にstage_num_は加算されている
 #ifdef DEBUG
