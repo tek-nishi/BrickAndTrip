@@ -1020,7 +1020,7 @@ private:
     for (const auto& light : lights) {
       switch (light.type) {
       case ci::gl::Light::POINT:
-        ci::gl::drawSphere(light.position(), 0.1f);
+        ci::gl::drawSphere(light.l.getPosition(), 0.1f);
         break;
       }
     }

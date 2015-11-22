@@ -62,23 +62,6 @@ public:
     file_silent_(false)
   {
     auto* ctx = ci::audio::Context::master();
-
-    {
-      // フレームあたりの処理数を増やす(標準は512)
-      ci::audio::DeviceManager* dm = ci::audio::Context::deviceManager();
-
-      auto device = ci::audio::Device::getDefaultOutput();
-      size_t frames_per_block = dm->getFramesPerBlock(device);
-
-      dm->setFramesPerBlock(device, frames_per_block * 2);
-
-      DOUT << "Sound::FramesPerBlock:"
-           << dm->getFramesPerBlock(device)
-           << " old:"
-           << frames_per_block
-           << std::endl;
-    }
-
     ctx->enable();
     
     // TIPS:文字列による処理の分岐をstd::mapとラムダ式で実装
@@ -272,6 +255,25 @@ public:
       disconnectInactiveNode();
     }
   }
+
+
+  static void setupFramesPerBlock() noexcept {
+    // フレームあたりの処理数を増やす(標準は512)
+    ci::audio::DeviceManager* dm = ci::audio::Context::deviceManager();
+
+    auto device = ci::audio::Device::getDefaultOutput();
+    size_t frames_per_block = dm->getFramesPerBlock(device);
+
+    // FIXME:とりあえず初期値の２倍
+    dm->setFramesPerBlock(device, frames_per_block * 2);
+
+    DOUT << "Sound::FramesPerBlock:"
+         << dm->getFramesPerBlock(device)
+         << " old:"
+         << frames_per_block
+         << std::endl;
+  }
+  
 
 private:
   void makeBufferNode(ci::audio::Context* ctx, const std::string& category) noexcept {

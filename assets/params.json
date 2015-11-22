@@ -222,7 +222,7 @@
     "lights": [
       {
         "type": "point",
-        "position": [ 3.5, 20, 0 ],
+        "position": [ 3.5, 25, 0 ],
         
         "constant_attenuation":  0,
         "linear_attenuation":    0,
@@ -236,21 +236,21 @@
           "start": [
             {
               "target": "position",
-              "type": "EaseNone",
+              "type": "EaseOutCubic",
               "end": [ 3.5, 5.5, 0 ],
-              "duration": 3.5
+              "duration": 4.5
             },
             {
               "target": "quadratic_attenuation",
-              "type": "EaseNone",
-              "end": 0.03,
-              "duration": 3
+              "type": "EaseOutCubic",
+              "end":   0.03,
+              "duration": 4.5
             },
             {
               "target": "diffuse",
               "type": "EaseNone",
               "end": [ 0.9, 0.9, 0.9 ],
-              "duration": 3
+              "duration": 4.5
             },
             {
               "target": "ambient",
@@ -269,15 +269,15 @@
           "default": [
             {
               "target": "position",
-              "type": "EaseNone",
+              "type": "EaseOutCubic",
               "end": [ 3.5, 10, 2 ],
-              "duration": 3
+              "duration": 3.5
             },
             {
               "target": "quadratic_attenuation",
-              "type": "EaseNone",
+              "type": "EaseOutCubic",
               "end": 0.0095,
-              "duration": 3
+              "duration": 3.5
             },
             {
               "target": "diffuse",
@@ -302,15 +302,15 @@
           "finish": [
             {
               "target": "position",
-              "type": "EaseNone",
+              "type": "EaseOutCubic",
               "end": [ 3.5, 5.5, 0 ],
-              "duration": 0.8
+              "duration": 1.0
             },
             {
               "target": "quadratic_attenuation",
-              "type": "EaseNone",
+              "type": "EaseOutCubic",
               "end": 0.03,
-              "duration": 1.0
+              "duration": 1.2
             },
             {
               "target": "diffuse",
@@ -434,9 +434,9 @@
         "linear_attenuation":    0,
         "quadratic_attenuation": 0,
         
-        "diffuse":  [ 0.5, 0.5, 0.5 ],
+        "diffuse":  [ 0.55, 0.55, 0.55 ],
         "ambient":  [ 0.0, 0.0, 0.0 ],
-        "specular": [ 0.3, 0.3, 0.3 ],
+        "specular": [ 0.25, 0.25, 0.25 ],
 
         "low_efficiency": true
       }
@@ -847,7 +847,7 @@
 
       "revise_duration": 0.25,
 
-      "color_range": [ 0.15, 0.75 ],
+      "color_range": [ 0.05, 0.65 ],
       
       "tween": {
         "in_box": [
