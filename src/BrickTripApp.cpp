@@ -269,7 +269,7 @@ class BrickTripApp : public AppNative,
       controller_.reset();
       timeline_->clear();
 
-#if defined (OBFUSCATION_PARAMS) && defined (DEBUG)
+#if defined (OBFUSCATION_PARAMS) && defined (DEBUG) && defined (CONVERT_JSON)
       Params::convert("params.json");
 #endif
       params_ = Params::load("params.json");

@@ -1,0 +1,1395 @@
+{
+  "version": 1.0,
+  
+  "app": {
+    "size": [ 960, 640 ],
+    "framerate_limit": false,
+    "framerate": 60,
+    "framerate_low": 30,
+
+    "max_elapsed_seconds": [ 20, 15 ],
+    "startup_frame": 0.25,
+    
+    "fixed_size": [
+      [  960, 640 ],
+      [  560, 840 ],
+      [  473, 840 ],
+      [  630, 840 ],
+      [ 1024, 768 ]
+    ],
+
+    "low_efficiency_device": false,
+    "force_low_efficiency":  false,
+    "high_density_display":  true,
+    
+    "background": [ 0.4, 0.4, 0.4 ],
+
+    "fonts": [
+      {
+        "name": "default",
+        "path": "SGIEXB.ttf",
+        "default": true,
+        "size": 64,
+        "scale": [ 0.95, 0.95, 1 ],
+        "offset": [ 0, 0.085, 0 ],
+        "mipmap": true,
+        
+        "pre_render": true,
+        "pre_render_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      },
+      {
+        "name": "icon",
+        "path": "websymbolsligaregular.ttf",
+        "size": 64,
+        "scale": [ 1.16, 1.16, 1 ],
+        "offset": [ 0, 0.035, 0 ],
+        "mipmap": false
+      },
+      {
+        "name": "logo",
+        "path": "SGIEXB.ttf",
+        "size": 128,
+        "scale": [ 1.0, 1.0, 1 ],
+        "offset": [ 0, 0.09, 0 ],
+        "mipmap": false
+      }
+    ],
+
+    "models": [
+      {
+        "name": "text",
+        "path": "text.obj",
+        "normals": false,
+        "uvs": true,
+        "indices": true
+      },
+      {
+        "name": "button",
+        "path": "button.obj",
+        "normals": false,
+        "uvs": true,
+        "indices": true
+      },
+
+      {
+        "name": "pickable_cube",
+        "path":     "pickable_cube.obj",
+        "path_low": "pickable_cube_low.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "item_cube",
+        "path":     "item_cube.obj",
+        "path_low": "item_cube_low.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "item_shadow",
+        "path":     "item_shadow.obj",
+        "path_low": "item_shadow_low.obj",
+        "normals": false,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "stage_cube",
+        "path":     "stage_cube.obj",
+        "path_low": "stage_cube_low.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "bg_cube",
+        "path":     "bg_cube.obj",
+        "path_low": "bg_cube_low.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "switch",
+        "path":     "switch.obj",
+        "path_low": "switch_low.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+
+      {
+        "name": "oneway-1",
+        "path": "oneway-1.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "oneway-2",
+        "path": "oneway-2.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      },
+      {
+        "name": "oneway-3",
+        "path": "oneway-3.obj",
+        "normals": true,
+        "uvs": false,
+        "indices": true
+      }
+    ],
+    
+    "fast_speed": 3,
+    "slow_speed": 0.25,
+
+    "start_title_delay": 3.8,
+
+    "debug": {
+      "d": "force-collapse",
+      "s": "stop-build-and-collapse",
+      "i": "force-regular-completed",
+      "I": "cancel-regular-completed",
+      "p": "entry-pickable",
+      "n": "clear-records",
+      "G": "do-snapshot",
+      "P": "pause-agree",
+      "N": "reset-records",
+      "U": "toggle-ui-hide",
+      "A": "reset-achievement"
+    },
+
+    "use_keyboard": false
+  },
+
+  "ui_view": {
+    "camera": {
+      "fov": 20,
+      "near_z": 1,
+      "far_z":  100,
+    
+      "eye_point": [ 0, 0, 20 ]
+    },
+    
+    "widget": {
+      "padding": 0.05
+    },
+
+    "debug_info": false
+  },
+  
+  "game_view": {
+    "camera": {
+      "fov": 30,
+      "near_z": 0.1,
+      "far_z":  500,
+
+      "eye_distance_rate": 0.8,
+      "eye_offset_rate": 0.3,
+      
+      "speed": 0.04,
+
+      "target_point": [ 3, 1, 1 ],
+
+      "start_camera": "normal",
+
+      "ease_name": "EaseInOutQuart",
+      "ease_duration": 2.0,
+
+      "close_distance_rate": 0.75,
+
+      "distance_ease_name": "EaseOutCubic",
+      "distance_ease_duration": 0.9,
+      
+      "normal": {
+        "interest_point": [ 0.5, 0.5, 1.0 ],
+        "eye_distance": 15,
+        "eye_ry": -145,
+        "eye_rx": -40
+      },
+      
+      "reverse": {
+        "interest_point": [ -0.5, 0.5, 1.0 ],
+        "eye_distance": 15,
+        "eye_ry": -215,
+        "eye_rx": -40
+      }
+    },
+
+    "lights": [
+      {
+        "type": "point",
+        "position": [ 3.5, 25, 0 ],
+        
+        "constant_attenuation":  0,
+        "linear_attenuation":    0,
+        "quadratic_attenuation": 0.08,
+        
+        "diffuse":  [ 0.9, 0.9, 0.9 ],
+        "ambient":  [ 0.01, 0.01, 0.01 ],
+        "specular": [ 1, 1, 1 ],
+
+        "tween": {
+          "start": [
+            {
+              "target": "position",
+              "type": "EaseOutCubic",
+              "end": [ 3.5, 5.5, 0 ],
+              "duration": 4.5
+            },
+            {
+              "target": "quadratic_attenuation",
+              "type": "EaseOutCubic",
+              "end":   0.03,
+              "duration": 4.5
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseNone",
+              "end": [ 0.9, 0.9, 0.9 ],
+              "duration": 4.5
+            },
+            {
+              "target": "ambient",
+              "type": "EaseNone",
+              "end": [ 0.01, 0.01, 0.01 ],
+              "duration": 3
+            },
+            {
+              "target": "specular",
+              "type": "EaseNone",
+              "end": [ 1, 1, 1 ],
+              "duration": 3
+            }
+          ],
+          
+          "default": [
+            {
+              "target": "position",
+              "type": "EaseOutCubic",
+              "end": [ 3.5, 10, 2 ],
+              "duration": 3.5
+            },
+            {
+              "target": "quadratic_attenuation",
+              "type": "EaseOutCubic",
+              "end": 0.0095,
+              "duration": 3.5
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseNone",
+              "end": [ 0.9, 0.9, 0.9 ],
+              "duration": 3
+            },
+            {
+              "target": "ambient",
+              "type": "EaseNone",
+              "end": [ 0.025, 0.025, 0.025 ],
+              "duration": 3
+            },
+            {
+              "target": "specular",
+              "type": "EaseNone",
+              "end": [ 1, 1, 1 ],
+              "duration": 3
+            }
+          ],
+          
+          "finish": [
+            {
+              "target": "position",
+              "type": "EaseOutCubic",
+              "end": [ 3.5, 5.5, 0 ],
+              "duration": 1.0
+            },
+            {
+              "target": "quadratic_attenuation",
+              "type": "EaseOutCubic",
+              "end": 0.03,
+              "duration": 1.2
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseNone",
+              "end": [ 0.9, 0.9, 0.9 ],
+              "duration": 0.8
+            },
+            {
+              "target": "ambient",
+              "type": "EaseNone",
+              "end": [ 0.01, 0.01, 0.01 ],
+              "duration": 0.8
+            },
+            {
+              "target": "specular",
+              "type": "EaseNone",
+              "end": [ 1, 1, 1 ],
+              "duration": 0.8
+            }
+          ]
+        }
+      },
+      
+      {
+        "type": "directional",
+        "direction": [ -1, 0, 0 ],
+        
+        "diffuse": [ 0.025, 0.025, 0.05 ],
+        "ambient": [ 0, 0, 0 ],
+        "specular": [ 0.1, 0.1, 0.1 ],
+
+        "tween": {
+          "start": [
+            {
+              "target": "direction",
+              "type": "EaseNone",
+              "end": [ -1, 0, 0 ],
+              "duration": 3
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseNone",
+              "end": [ 0.25, 0.25, 0.5 ],
+              "duration": 3
+            },
+            {
+              "target": "ambient",
+              "type": "EaseNone",
+              "end": [ 0.0, 0.0, 0.0 ],
+              "duration": 3
+            },
+            {
+              "target": "specular",
+              "type": "EaseNone",
+              "end": [ 0.3, 0.3, 0.3 ],
+              "duration": 3
+            }
+          ],
+          
+          "default": [
+            {
+              "target": "direction",
+              "type": "EaseNone",
+              "end": [ -1, 0, 0 ],
+              "duration": 3
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseNone",
+              "end": [ 0.25, 0.25, 0.5 ],
+              "duration": 3
+            },
+            {
+              "target": "ambient",
+              "type": "EaseNone",
+              "end": [ 0.0, 0.0, 0.0 ],
+              "duration": 3
+            },
+            {
+              "target": "specular",
+              "type": "EaseNone",
+              "end": [ 0.3, 0.3, 0.3 ],
+              "duration": 3
+            }
+          ],
+          
+          "finish": [
+            {
+              "target": "direction",
+              "type": "EaseNone",
+              "end": [ -1, 0, 0 ],
+              "duration": 1.5
+            },
+            {
+              "target": "diffuse",
+              "type": "EaseNone",
+              "end": [ 0.25, 0.25, 0.5 ],
+              "duration": 1.5
+            },
+            {
+              "target": "ambient",
+              "type": "EaseNone",
+              "end": [ 0.0, 0.0, 0.0 ],
+              "duration": 1.5
+            },
+            {
+              "target": "specular",
+              "type": "EaseNone",
+              "end": [ 0.3, 0.3, 0.3 ],
+              "duration": 1.5
+            }
+          ]
+        }
+      },
+      
+      {
+        "type": "point",
+        "position": [ 4.5, -16, 16 ],
+        
+        "constant_attenuation":  1,
+        "linear_attenuation":    0,
+        "quadratic_attenuation": 0,
+        
+        "diffuse":  [ 0.55, 0.55, 0.55 ],
+        "ambient":  [ 0.0, 0.0, 0.0 ],
+        "specular": [ 0.25, 0.25, 0.25 ],
+
+        "low_efficiency": true
+      }
+    ],
+
+    "quake": {
+      "power": 0.12,
+      "speed": 2500,
+      "w_st": 45,
+      "k": 4
+    },
+    
+    "move_begin_time": 0.3,
+    "move_begin_threshold": 0.65,
+    "move_threshold": 0.5,
+    "move_speed_rate": 0.27,
+    "move_swipe_speed": 10,
+    "distance_revise": 2.0,
+  
+    "materials": {
+      "pickable_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.4, 0.4, 0.4, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+      
+      "moving_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.8, 0.8, 0.8, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+      
+      "falling_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.8, 0.8, 0.8, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
+      "item_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.8, 0.8, 0.8, 1 ],
+        "shininess": 60,
+        "emission": [ 0.15, 0.15, 0.15, 1 ]
+      },
+
+      "item_shadow": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0, 0, 0, 1 ],
+        "specular": [ 0, 0, 0, 1 ],
+        "shininess": 60,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
+      "stage_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.3, 0.3, 0.3, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
+      "switch": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.7, 0.7, 0.7, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
+      "oneway": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.7, 0.7, 0.7, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      },
+
+      "bg_cube": {
+        "ambient": [ 0, 0, 0, 1 ],
+        "diffuse": [ 0.8, 0.8, 0.8, 1 ],
+        "specular": [ 0.4, 0.4, 0.4, 1 ],
+        "shininess": 80,
+        "emission": [ 0, 0, 0, 1 ]
+      }
+    },
+
+    "oneway": {
+      "model": [ "oneway-1", "oneway-2", "oneway-3" ],
+      "easing": {
+        "name": "EaseNone",
+        "duration": 0.7
+      }
+    },
+
+    "fog_color": [ 0.6, 0.6, 0.6, 1 ],
+
+    "fog_start": 20,
+    "fog_end": 28,
+    
+    "bg_fog_start": 23,
+    "bg_fog_end": 42,
+
+    "bg_tween_type": "EaseOutCubic",
+    "bg_tween_duration": 2,
+
+    "shadow_alpha": 0.3,
+    
+    "debug_info": false
+  },
+
+  
+  "game": {
+    "cube_stage_color": [
+      [ 1, 1, 1 ],
+      [ 0.6, 0.6, 0.6 ]
+    ],
+
+    "cube_line_color": [ 0.7, 0, 0 ],
+
+    "collapse_speed_rate": 0.2,
+    "collapse_speed_rate_min": 0.2,
+    "finish_rate": 0.1,
+
+    "continue_collapse_rate": 1.25,
+
+    "total_stage_num": 11,
+    "regular_stage_num": 10,
+    "satisfy_rank": 2,
+
+    "start_stage": 0,
+
+    "stage_path": [
+      "stage01.json",
+      "stage02.json",
+      "stage03.json",
+      "stage04.json",
+      "stage05.json",
+      "stage06.json",
+      "stage07.json",
+      "stage08.json",
+      "stage09.json",
+      "stage10.json",
+      "stage11.json"
+    ],
+    
+    "stage": {
+      "build_speed": 1,
+      "collapse_speed": 1,
+      "auto_collapse": 5,
+
+      "build_ease": "EaseOutQuad",
+      "build_duration": 1.5,
+      "build_y": [ 10, 15 ],
+      
+      "collapse_ease": "EaseInQuad",
+      "collapse_duration": 1.5,
+      "collapse_y": [ -10, -15 ],
+
+      "open_ease" : "EaseOutQuad",
+      "open_duration": 0.5,
+      "open_delay": 2.5,
+
+      "move_ease" : "EaseOutQuad",
+      "move_duration": 0.25,
+      "move_delay": 0.1,
+
+      "build_start_ease": "EaseNone",
+      "build_start_duration": 3.0,
+      "build_start_rate": 0.25
+    },
+
+    "pickable": {
+      "entry_pos": [ 3, 1 ],
+      "entry_start_delay": 2,
+      "entry_next_delay": 0,
+      
+      "entry_ease": "EaseOutCubic",
+      "entry_duration": 2.0,
+      "entry_y": [ 15, 18 ],
+
+      "padding_size": 0.1,
+      
+      "color": [ 1, 1, 1 ],
+
+      "rotate_ease": "EaseNone",
+      "rotate_ease_end": "EaseInSine",
+      "rotate_duration": 0.5,
+      "rotate_power": 0.4,
+      "rotate_remap": [ 0.35, 1.0 ],
+      "rotate_speed_max": 10,
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10,
+
+      "idle_ease": "EasePingPongOutQuad",
+      "idle_duration": 0.5,
+      "idle_angle": 15,
+      "idle_delay": [ 2, 5 ],
+
+      "picking_color": [ 0.1, 0.1, 1 ],
+      "picking_start": {
+        "ease": "EaseOutExpo",
+        "duration": 0.2
+      },
+      "picking_end": {
+        "ease": "EaseOutQuad",
+        "duration": 0.5
+      },
+
+      "sleeping_color": [ 0.2, 0.2, 0.2 ],
+      "sleeping_start": {
+        "ease": "EaseNone",
+        "duration": 0.1
+      },
+      "sleeping_end": {
+        "ease": "EaseOutQuad",
+        "duration": 0.5
+      },
+
+      "pressed_ease": "EaseInQuad",
+      "pressed_duration": 0.05,
+      "pressed_scale": 0.07,
+
+      "rise_ease": "EaseInQuart",
+      "rise_duration": 2.5,
+      "rise_height": [ 15, 20 ],
+
+      "move_sounds": [
+        "pickable-1",
+        "pickable-2",
+        "pickable-3",
+        "pickable-4",
+        "pickable-5",
+        "pickable-6",
+        "pickable-7",
+        "pickable-8",
+        "pickable-9",
+        "pickable-10",
+        "pickable-11",
+        "pickable-12",
+        "pickable-13",
+        "pickable-14",
+        "pickable-15",
+        "pickable-16",
+        "pickable-17",
+        "pickable-18"
+      ]
+    },
+    
+    "moving": {
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "color": [ 0.1, 0.1, 0.1 ],
+      
+      "rotate_ease": "EaseInSine",
+      "rotate_duration": 0.5,
+      "rotate_speed_rate": [ 1, 0.8, 0.6, 0.4, 0.2 ],
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
+    },
+    
+    "falling": {
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "color": [ 0.1, 0.1, 0.1 ],
+
+      "up_ease": "EaseInQuart",
+      "up_duration": 1.5,
+      "up_y": 10,
+
+      "down_ease": "EaseInQuart",
+      "down_duration": 1.5,
+      
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10,
+
+      "quake_duration": 2
+    },
+
+    "item": {
+      "color": [ 60, 0.5, 1 ],
+
+      "rotation_speed": [ 0.8, 1.1, -1.2 ],
+
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "entry_rotate_speed": {
+        "type": "EaseNone",
+        "start": 0,
+        "end": 1,
+        "duration": 0.3,
+        "delay": 1.25
+      },
+
+      "idle_tween": [
+        {
+          "target": "position",
+          "type": "EaseInOutQuad",
+          "end": [ 0, 0.5, 0 ],
+          "duration": 1,
+          "delay": 0.5,
+          "loop": true,
+          "ping-pong": true
+        },
+        {
+          "target": "color",
+          "type": "EaseNone",
+          "end": [ 420, 0.5, 1 ],
+          "duration": 1.5,
+          "delay": 0.5,
+          "loop": true,
+          "ping-pong": false
+        }
+      ],
+      
+      "pickup_tween": [
+        {
+          "target": "position",
+          "type": "EaseOutQuad",
+          "end": [ 0, 2, 0 ],
+          "duration": 0.25,
+          "delay": 0.1
+        },
+        {
+          "target": "scale",
+          "type": "EaseInBack",
+          "end": [ 0, 0, 0 ],
+          "duration": 0.3,
+          "delay": 0.5
+        },
+        {
+          "target": "rotation_speed",
+          "type": "EaseNone",
+          "end": 10,
+          "duration": 0.5
+        },
+        {
+          "target": "rotation_speed",
+          "type": "EaseNone",
+          "end": 0,
+          "duration": 0.1
+        }
+      ],
+
+      "pickup_delay": 0.2,
+      "pickup_duration": 0.8,
+      
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10,
+
+      "shadow_ease": "EaseNone",
+      "shadow_duration": 0.15
+    },
+
+    "switch": {
+      "color": [0.15, 0.15, 0.15],
+      
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10,
+
+      "rotate_speed": 2.5
+    },
+
+    "oneway": {
+      "color": [0.1, 0.1, 0.1],
+      
+      "entry_ease": "EaseOutQuad",
+      "entry_duration": 1.5,
+      "entry_y": [ 15, 18 ],
+
+      "fall_ease": "EaseInQuad",
+      "fall_duration": 1.5,
+      "fall_y": -10
+    },
+
+    "bg": {
+      "cube_density":     0.3,
+      "cube_density_low": 0.2,
+      
+      "cube_speed": [ 0.05, 1.2 ],
+      "cube_lifetime": [ 10, 15 ],
+      
+      "bbox_min": [ -25, -16,  -3 ],
+      "bbox_max": [  25,  -4,  34 ],
+
+      "revise_duration": 0.25,
+
+      "color_range": [ 0.05, 0.65 ],
+      
+      "tween": {
+        "in_box": [
+          {
+            "target": "scale",
+            "type": "EaseInOutQuad",
+            "duration": 0.25,
+            "start": [ 0, 0, 0 ],
+            "end": [ 1, 1, 1 ]
+          }
+        ],
+        
+        "out_box": [
+          {
+            "target": "scale",
+            "type": "EaseInOutQuad",
+            "duration": 0.25,
+            "start": [ 1, 1, 1 ],
+            "end": [ 0, 0, 0 ]
+          }
+        ]
+      }
+    },
+    
+    "score": {
+      "clear_time_score": 500,
+      "clear_time_score_rate": 0.015,
+      
+      "item_score": 1000,
+      "item_perfect_score": 1000,
+      
+      "stage_collect": 0.1,
+      "rank_rate_table": [ 97, 93, 86, 76, 61, 41 ],
+
+      "move_step": 100
+    },
+
+    "records": "records.data",
+    
+    "progress_start_delay": 1.0,
+    "progress_continue_delay": 3.0,
+
+    "continued_start_delay": 4.5
+  },
+
+  
+  "intro": {
+    "jingle-se": "intro",
+    
+    "tween_in_delay": 0.5,
+    "tween_out_delay": 4,
+    "tween_out_delay_rate": [ 2, 5 ],
+    "event_delay": 1.25,
+    "deactive_delay": 0.3
+  },
+  
+  "title": {
+    "jingle-full":  "title",
+    "jingle-short": "title-jingle",
+    "jingle-mini":  "menu-jingle",
+    
+    "active_delay": 1.0,
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.8
+  },
+
+  "records": {
+    "jingle-se": "menu-jingle",
+    
+    "active_delay": 0.8,
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.5,
+    "sns_delay": 0.2,
+    "sns_text": "records"
+  },
+
+  "settings": {
+    "jingle-se": "menu-jingle",
+    
+    "active_delay": 0.8,
+    "tween_delay": 0.6,
+    "event_delay": 0.7,
+    "deactive_delay": 0.3
+  },
+
+  "credits": {
+    "jingle-se": "menu-jingle",
+    
+    "active_delay": 1.7,
+    "tween_delay": 0.6,
+    "event_delay": 0.9,
+    "deactive_delay": 0.8
+  },
+
+  "progress": {
+    "active_delay": 0.5,
+    "tween_delay": 0.6,
+    "event_delay": 0.2,
+    "deactive_delay": 0.8,
+    "deactivate_view_delay": 1
+  },
+
+  "pause": {
+    "active_delay": 0.5,
+    "tween_delay": 0.6,
+    "event_delay": 0.2,
+    "deactive_delay": 1.0
+  },
+
+  "gameover": {
+    "jingle-se": "gameover",
+
+    "active_delay": 2.7,
+    "tween_delay": 0.6,
+    "event_delay": 1.5,
+    "deactive_delay": 0.1,
+    "sns_delay": 0.2,
+    "sns_text": "gameover"
+  },
+
+  "stageclear": {
+    "jingle-se": "stageclear",
+    
+    "active_delay": 2.7,
+    "tween_delay": 0.6,
+    "event_delay": 1.0,
+    "deactive_delay": 0.5,
+    "sns_delay": 0.2,
+
+    "countup_ease_name": "EaseOutCubic",
+    "countup_ease_duration": 1.2,
+
+    "clear_time_delay": 0.2,
+    "item_rate_delay": 0.3,
+    "score_delay": 1.0,
+    
+    "rank": [ "S", "A", "B", "C", "D", "E", "F" ],
+    "sns_text": "stageclear"
+  },
+
+  "regular_stageclear": {
+    "jingle-se": "regular-stageclear",
+
+    "message": "regular-stage-clear-out",
+    "event_delay": 0.25,
+    "collapse_delay": 3,
+    "tween_in_delay": 5,
+    "tween_out_delay": 0.6,
+    "titleback_delay": 1,
+    "deactive_delay": 1,
+    
+    "sns_delay": 0.2,
+    "sns_text": "regular_stageclear"
+  },
+
+  "all_stageclear": {
+    "jingle-se": "all-stageclear",
+
+    "message": "all-stage-clear-out",
+    "event_delay": 1.5,
+    "collapse_delay": 0.25,
+    "tween_in_delay": 4,
+    "tween_out_delay": 0.6,
+    "titleback_delay": 1,
+    "deactive_delay": 1,
+    
+    "sns_delay": 0.2,
+    "sns_text": "all_stageclear"
+  },
+
+  "easing": {
+    "ease_in_elastic_a": 1.25,
+    "ease_in_elastic_b": 0.35,
+
+    "ease_out_elastic_a": 1.25,
+    "ease_out_elastic_b": 0.35,
+    
+    "ease_inout_elastic_a": 1.25,
+    "ease_inout_elastic_b": 0.35,
+
+    "ease_outin_elastic_a": 1.25,
+    "ease_outin_elastic_b": 0.35
+  },
+
+  
+  "sounds": [
+    {
+      "name": "pickable-1",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-1.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-2",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-2.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-3",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-4.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-4",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-4.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-5",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-5.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-6",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-6.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-7",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-7.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-8",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-8.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-9",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-9.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-10",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-10.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-11",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-11.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-12",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-12.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-13",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-13.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-14",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-14.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-15",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-15.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-16",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-16.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-17",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-17.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pickable-18",
+      "type": "buffer",
+      "poly-category": [ "pickable-1", "pickable-2", "pickable-3" ],
+      "path": "pickable-18.m4a",
+      "gain": 1,
+      "loop": false
+    },
+
+    {
+      "name": "moving-up",
+      "type": "buffer",
+      "category": "moving",
+      "poly": 3,
+      "path": "moving-up.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "moving-down",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-down.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "moving-left",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-left.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "moving-right",
+      "type": "buffer",
+      "category": "moving",
+      "path": "moving-right.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "falling",
+      "type": "buffer",
+      "category": "falling",
+      "path": "falling.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "item-pickup",
+      "type": "buffer",
+      "category": "item",
+      "path": "item-pickup.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "switch",
+      "type": "buffer",
+      "category": "switch",
+      "path": "switch.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "oneway",
+      "type": "buffer",
+      "category": "oneway",
+      "path": "oneway.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "start",
+      "type": "buffer",
+      "category": "start",
+      "path": "start.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "build-start",
+      "type": "buffer",
+      "category": "build-start",
+      "path": "build-start.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "stage-collapse",
+      "type": "buffer",
+      "category": "stage-collapse",
+      "path": "stage-collapse.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "all-stage-collapse",
+      "type": "buffer",
+      "category": "all-stage-collapse",
+      "path": "all-stage-collapse.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "menu-jingle",
+      "type": "file",
+      "category": "jingle",
+      "path": "menu-jingle.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "title-jingle",
+      "type": "file",
+      "category": "jingle",
+      "path": "title-jingle.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "agree",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "agree.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "select",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "select.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "pause",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "pause.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "toggle-bgm",
+      "type": "file",
+      "category": "ui-bgm",
+      "path": "toggle-se.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "toggle-se",
+      "type": "buffer",
+      "category": "ui-se",
+      "path": "toggle-se.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    
+    {
+      "name": "intro",
+      "type": "file",
+      "category": "jingle",
+      "path": "intro.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "title",
+      "type": "file",
+      "category": "jingle",
+      "path": "title.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "gameover",
+      "type": "file",
+      "category": "jingle",
+      "path": "gameover.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "stageclear",
+      "type": "file",
+      "category": "jingle",
+      "path": "stageclear.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "regular-stageclear",
+      "type": "file",
+      "category": "jingle",
+      "path": "regular-stageclear.m4a",
+      "gain": 1,
+      "loop": false
+    },
+    {
+      "name": "all-stageclear",
+      "type": "file",
+      "category": "jingle",
+      "path": "all-stageclear.m4a",
+      "gain": 1,
+      "loop": false
+    }
+  ]
+}

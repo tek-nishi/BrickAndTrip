@@ -42,9 +42,14 @@ public:
   std::unique_ptr<UIView> create(const std::string& path) noexcept {
     // ちょくちょくAutolayoutのお掃除 
     autolayout_.eraseInvalid();
-
+#if defined (OBFUSCATION_PARAMS)
+    auto param = Params::load(path);
+#else
+    auto param = Json::readFromFile(path);
+#endif
+      
     return std::unique_ptr<UIView>(new UIView(params_,
-                                              Json::readFromFile(path),
+                                              param,
                                               timeline_,
                                               camera_, autolayout_, event_, touch_event_));
   }
