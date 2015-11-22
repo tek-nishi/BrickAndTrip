@@ -264,8 +264,8 @@ public:
     auto device = ci::audio::Device::getDefaultOutput();
     size_t frames_per_block = dm->getFramesPerBlock(device);
 
-    // FIXME:とりあえず初期値の２倍
-    dm->setFramesPerBlock(device, frames_per_block * 2);
+    // FIXME:とりあえず初期値の半分
+    dm->setFramesPerBlock(device, frames_per_block / 2);
 
     DOUT << "Sound::FramesPerBlock:"
          << dm->getFramesPerBlock(device)
