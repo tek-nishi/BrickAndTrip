@@ -115,7 +115,7 @@ class BrickTripApp : public AppNative,
     // Windowが表示された後の設定はここで処理
     // OpenGLのコンテキストも使える
     AudioSession::begin();
-    Sound::setupFramesPerBlock();
+    // Sound::setupFramesPerBlock();
 
     Rand::randomize();
 

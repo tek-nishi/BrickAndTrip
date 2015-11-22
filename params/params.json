@@ -450,8 +450,8 @@
     },
     
     "move_begin_time": 0.3,
-    "move_begin_threshold": 0.65,
-    "move_threshold": 0.5,
+    "move_begin_threshold": 0.4,
+    "move_threshold": 0.35,
     "move_speed_rate": 0.27,
     "move_swipe_speed": 10,
     "distance_revise": 2.0,

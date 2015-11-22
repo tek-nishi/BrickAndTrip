@@ -278,8 +278,8 @@ public:
     
     float duration = rotate_duration_ * speed_rate;
 
-    size_t index = ci::randInt(4) + move_step_;
-    index = std::min(index, move_sounds_.size() - 1);
+    size_t index = ci::randInt(4) + std::min(move_step_,
+                                             int(move_sounds_.size() - 4));
     const auto& move_sound = move_sounds_[index];
 
     move_step_  += 1;
