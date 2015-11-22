@@ -62,12 +62,12 @@ class BrickTripApp : public AppNative,
   
   void prepareSettings(Settings* settings) noexcept override {
     // アプリ起動時の設定はここで処理する
-#if defined (OBFUSCATION_PARAMS) && defined (DEBUG)
+#if defined (OBFUSCATION_PARAMS) && defined (DEBUG) && defined (CONVERT_JSON)
     Params::convert("params.json");
 #endif
     params_ = Params::load("params.json");
 
-#if defined (OBFUSCATION_STAGES) && defined (DEBUG)
+#if defined (OBFUSCATION_STAGES) && defined (DEBUG) && defined (CONVERT_JSON)
     StageData::convert(params_);
 #endif
 

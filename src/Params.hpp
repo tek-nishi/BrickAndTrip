@@ -14,16 +14,16 @@ namespace ngs { namespace Params {
 
 ci::JsonTree load(const std::string& path) noexcept {
 #if defined (OBFUSCATION_PARAMS)
+  auto file_path = replaceFilenameExt(path, "data");
 #if defined (DEBUG) && defined (CINDER_MAC)
   // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
-  boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + path);
+  boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + file_path);
 #else
-  auto full_path = ci::app::getAssetPath(path);
+  auto full_path = ci::app::getAssetPath(file_path);
 #endif
-  auto load_path = replaceFilenameExt(full_path.string(), "data");
-  DOUT << "Params path:" << load_path << std::endl;
-
-  return ci::JsonTree(TextCodec::load(load_path));
+  DOUT << "Params::load:" << full_path << std::endl;
+  
+  return ci::JsonTree(TextCodec::load(full_path.string()));
 #else
   return Json::readFromFile(path);
 #endif

@@ -860,7 +860,6 @@ private:
 
   
   StageInfo addCubeStage(const std::string& path) noexcept {
-    // auto stage = Json::readFromFile(path);
     auto stage = StageData::load(path);
     int current_z = stage_.getTopZ();
 
@@ -1240,8 +1239,7 @@ private:
   }
 
   int getStageItemNum(const int stage_index) noexcept {
-    auto path  = getStagePath(stage_index);
-    auto stage = Json::readFromFile(path);
+    auto stage = StageData::load(getStagePath(stage_index));
 
     if (!stage.hasChild("items")) return 0;
           
@@ -1257,7 +1255,7 @@ private:
   }
   
   static int getPickableCubeEntryNum(const std::string& path) noexcept {
-    auto stage = Json::readFromFile(path);
+    auto stage = StageData::load(path);
     return Json::getValue(stage, "pickable", 0);
   }
 
