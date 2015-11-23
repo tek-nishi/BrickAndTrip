@@ -559,14 +559,6 @@ void VboMesh::unbindBuffers()
 	glBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
 
-
-#if 0
-void VboMesh::bufferIndices( const std::vector<uint16_t> &indices )
-{
-	mObj->mBuffers[INDEX_BUFFER].bufferData( sizeof(uint16_t) * indices.size(), &(indices[0]), (mObj->mLayout.hasStaticIndices()) ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW );
-}
-#endif
-
 void VboMesh::bufferPositions( const std::vector<Vec3f> &positions )
 {
 	bufferPositions( &positions[0], positions.size() );

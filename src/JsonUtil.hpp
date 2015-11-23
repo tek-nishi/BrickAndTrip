@@ -40,13 +40,6 @@ ci::Vec4<T> getVec4(const ci::JsonTree& json) noexcept {
   return ci::Vec4<T>(json[0].getValue<T>(), json[1].getValue<T>(), json[2].getValue<T>(), json[3].getValue<T>());
 }
 
-#if 0
-template<typename T>
-ci::Quaternion<T> getQuaternion(const ci::JsonTree& json) noexcept {
-  return ci::Quaternion<T>(getVec3<T>(json[0]), ci::toRadians(json[1].getValue<T>()));
-}
-#endif
-
 template<typename T>
 ci::ColorT<T> getColor(const ci::JsonTree& json) noexcept {
   return ci::ColorT<T>(json[0].getValue<T>(), json[1].getValue<T>(), json[2].getValue<T>());

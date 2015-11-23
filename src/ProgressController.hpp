@@ -131,13 +131,6 @@ public:
                                      deactivateView();
                                    });
 
-#if 0
-    connections_ += event_.connect("pressed-pickable",
-                                  [this](const Connection&, EventParam& param) noexcept {
-                                     deactivateView();
-                                   });
-#endif
-
     connections_ += event_.connect("update-record",
                                    [this](const Connection&, EventParam& param) noexcept {
                                      auto play_time = boost::any_cast<double>(param["play-time"]);

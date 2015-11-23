@@ -271,13 +271,6 @@ public:
     decideEachPickableCubeMoving();
     setAdjoinOtherPickableCube();
 
-#if 0
-    // 全PickableCubeの落下判定は、毎フレーム判定を避けている
-    if (did_fall && !isPickableCubeOnStage()) {
-      event_.signal("fall-all-pickable", EventParam());
-    }
-#endif
-
     switch (mode_) {
     case START:
     case FINISH:
@@ -1130,22 +1123,6 @@ private:
 
     return top_z;
   }
-
-#if 0
-  // stageの生成速度を調整
-  void controlStageBuildSpeed() noexcept {
-    int active_top_z = stage_.getActiveTopZ();
-    int pickable_top_z = getPickableCubeTopZ();
-    
-    float speed_rate = std::min((active_top_z - pickable_top_z) * collapse_speed_rate_, 1.0f);
-    speed_rate = std::max(speed_rate, collapse_speed_rate_min_);
-
-    DOUT << speed_rate << std::endl;
-    
-    stage_.setBuildSpeedRate(speed_rate);
-  }
-#endif
-
 
   void startSwitchTargets(const std::vector<ci::Vec3i>& targets) noexcept {
     for (const auto& target : targets) {

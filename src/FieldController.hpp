@@ -86,21 +86,6 @@ public:
     connections_ += event_.connect("pickable-on-stage",
                                    [this](const Connection&, EventParam& param) noexcept {
                                    });
-
-#if 0
-    // pickablecubeの1つがstartlineを越えたらcollapse開始
-    connections_ += event_.connect("first-pickable-started",
-                                   [this](const Connection&, EventParam& param) noexcept {
-                                     DOUT << "first-pickable-started" << std::endl;
-                                     // const auto& color = boost::any_cast<const ci::Color&>(param["bg_color"]);
-                                     // view_.setStageBgColor(color);
-                                     
-                                     // const auto& light_tween = boost::any_cast<const std::string&>(param["light_tween"]);
-                                     // view_.setStageLightTween(light_tween);
-
-                                     // entity_.startStageCollapse();
-                                   });
-#endif
     
     connections_ += event_.connect("all-pickable-started",
                                    [this](const Connection&, EventParam& param) noexcept {
@@ -182,13 +167,6 @@ public:
                                      entity_.entryStageObjects(active_top_z);
                                    });
 
-#if 0
-    connections_ += event_.connect("collapse-one-line",
-                                   [this](const Connection&, EventParam& param) noexcept {
-                                     DOUT << "collapse-one-line" << std::endl;
-                                   });
-#endif
-
     connections_ += event_.connect("build-finish-line",
                                    [this](const Connection&, EventParam& param) noexcept {
                                      DOUT << "build-finish-line" << std::endl;
@@ -218,16 +196,6 @@ public:
                                      DOUT << "first-out-pickable" << std::endl;
                                      beginGameover(param);
                                    });
-
-#if 0
-    connections_ += event_.connect("fall-all-pickable",
-                                   [this](const Connection&, EventParam& param) noexcept {
-                                     DOUT << "fall-all-pickable" << std::endl;
-                                     entity_.cancelPickPickableCubes();
-                                     view_.enableTouchInput(false);
-                                     entity_.gameover();
-                                   });
-#endif
 
     connections_ += event_.connect("pickable-start-idle",
                                    [this](const Connection&, EventParam& param) noexcept {

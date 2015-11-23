@@ -532,31 +532,6 @@ private:
     record.score = std::max(record.score, new_record.score);
     record.rank  = std::min(record.rank,  new_record.rank);
   }
-
-#if 0
-  void checkAllItemCompleted() noexcept {
-    if (all_item_completed_) return;
-    
-    for (size_t i = 0; i < total_stage_num_; ++i) {
-      auto& record = stage_records_[i];
-      if (!record.all_item_get) return;
-    }
-
-    // 全stageの記録でall_item_getならtrue
-    all_item_completed_ = true;
-  }
-
-  void checkAllRankSatisfied() noexcept {
-    if (all_rank_satisfy_) return;
-    
-    for (size_t i = 0; i < total_stage_num_; ++i) {
-      auto& record = stage_records_[i];
-      if (record.rank > rank_satisfy_) return;
-    }
-
-    all_rank_satisfy_ = true;
-  }
-#endif
   
 };
 
