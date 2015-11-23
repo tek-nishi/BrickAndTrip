@@ -70,6 +70,9 @@ public:
           auto path = param["path"].getValue<std::string>();
           auto source = ci::audio::load(ci::app::loadAsset(path));
           DOUT << "source:" << path << " ch:" << source->getNumChannels() << std::endl;
+
+          // TIPS:初期値より増やしておかないと、処理負荷で音が切れる
+          source->setMaxFramesPerRead(8192);
           
           source_.insert({ param["name"].getValue<std::string>(), source });
 
@@ -252,24 +255,6 @@ public:
 
       disconnectInactiveNode();
     }
-  }
-
-
-  static void setupFramesPerBlock() noexcept {
-    // フレームあたりの処理数を増やす(標準は512)
-    ci::audio::DeviceManager* dm = ci::audio::Context::deviceManager();
-
-    auto device = ci::audio::Device::getDefaultOutput();
-    size_t frames_per_block = dm->getFramesPerBlock(device);
-
-    // FIXME:とりあえず初期値の倍
-    dm->setFramesPerBlock(device, frames_per_block * 2);
-
-    DOUT << "Sound::FramesPerBlock:"
-         << dm->getFramesPerBlock(device)
-         << " old:"
-         << frames_per_block
-         << std::endl;
   }
   
 

@@ -573,7 +573,7 @@
     "regular_stage_num": 10,
     "satisfy_rank": 1,
 
-    "start_stage": 9,
+    "start_stage": 0,
 
     "stage_path": [
       "stage01.json",
