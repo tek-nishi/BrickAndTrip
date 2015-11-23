@@ -123,6 +123,11 @@ class FieldEntity : private boost::noncopyable {
     std::string camera;
   };
   
+
+  // 各ステージのPickableの数
+  // 最初のステージの添え字:1
+  std::vector<int> stage_pickable_num_;
+
   
 public:
   FieldEntity(ci::JsonTree& params,
@@ -1178,6 +1183,12 @@ private:
                           params["game.score.move_step"].getValue<int>(),
                           Json::getArray<int>(params["game.score.rank_rate_table"]));
 
+    {
+      // 各ステージのPickableの登場数も調べる
+      auto stage = StageData::load("startline.json");
+      stage_pickable_num_.push_back(getPickableCubeEntryNum(stage));
+    }
+    
     int regular_item_num = 0;
     int all_item_num     = 0;
     {
@@ -1185,7 +1196,9 @@ private:
       {
         int stage_num = params["game.regular_stage_num"].getValue<int>();
         for (; i < stage_num; ++i) {
-          regular_item_num += getStageItemNum(i);
+          auto stage = StageData::load(getStagePath(i));
+          regular_item_num += getStageItemNum(stage);
+          stage_pickable_num_.push_back(getPickableCubeEntryNum(stage));
         }
       }
 
@@ -1193,7 +1206,9 @@ private:
         int stage_num = params["game.total_stage_num"].getValue<int>();
         // 全ステージの合計を求めるために、regular以降のステージの合計を求めている
         for (; i < stage_num; ++i) {
-          all_item_num += getStageItemNum(i);
+          auto stage = StageData::load(getStagePath(i));
+          all_item_num += getStageItemNum(stage);
+          stage_pickable_num_.push_back(getPickableCubeEntryNum(stage));
         }
         all_item_num += regular_item_num;
       }
@@ -1219,26 +1234,22 @@ private:
     return params_["game.stage_path"][stage_num].getValue<std::string>();
   }
 
-  int getStageItemNum(const int stage_index) noexcept {
-    auto stage = StageData::load(getStagePath(stage_index));
-
+  static int getStageItemNum(const ci::JsonTree& stage) noexcept {
     if (!stage.hasChild("items")) return 0;
           
     return int(stage["items"].getNumChildren());
   }
-
-  // TODO:処理が重いので事前に計算しておく
-  int calcEntryPickableCube(const int stage_num) noexcept {
-    int entry_num = getPickableCubeEntryNum("startline.json");
-    for (int i = 0; i < stage_num; ++i) {
-      entry_num += getPickableCubeEntryNum(getStagePath(i));
-    }
-    return entry_num;
+  
+  static int getPickableCubeEntryNum(const ci::JsonTree& stage) noexcept {
+    return Json::getValue(stage, "pickable", 0);
   }
   
-  static int getPickableCubeEntryNum(const std::string& path) noexcept {
-    auto stage = StageData::load(path);
-    return Json::getValue(stage, "pickable", 0);
+  int calcEntryPickableCube(const int stage_num) noexcept {
+    int entry_num = 0;
+    for (int i = 0; i <= stage_num; ++i) {
+      entry_num += stage_pickable_num_[i];
+    }
+    return entry_num;
   }
 
 
