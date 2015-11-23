@@ -424,7 +424,7 @@ public:
   }
 
   void changeCameraParams(const std::string& name) noexcept {
-    auto params    = params_["game_view.camera." + name];
+    auto params = params_["game_view.camera." + name];
 
     auto ease_func     = getEaseFunc(params_["game_view.camera.ease_name"].getValue<std::string>());
     auto ease_duration = params_["game_view.camera.ease_duration"].getValue<float>();

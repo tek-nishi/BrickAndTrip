@@ -253,8 +253,9 @@ public:
         mode_ = NONE;
 
         EventParam params = {
-          { "all_cleard",   all_cleard_ },
-          { "game_aborted", game_aborted_ },
+          { "all_cleard",     all_cleard_ },
+          { "game_aborted",   game_aborted_ },
+          { "game_continued", is_continued_ },
         };
         event_.signal("stage-all-collapsed", params);
       }
@@ -342,7 +343,9 @@ public:
     }
     // entry時に登録されるので、再開用の位置は一旦初期化
     start_pickable_entry_.clear();
-    
+
+    // startlineのカメラを設定
+    //   コンティニュー時は設定しない
     if (!is_continued_) {
       EventParam params = {
         { "name", stage_info.camera },
@@ -350,7 +353,7 @@ public:
       event_.signal("camera-change", params);
     }
 
-    records_.prepareGameRecord();
+    records_.prepareGameRecord(is_continued_);
   }
 
   // Stageの全Buildを始める
@@ -423,6 +426,7 @@ public:
     requestSound(event_, "build-start");
     
     DOUT << "Continue game:" << is_continued_ << std::endl;
+    is_continued_ = false;
   }
 
   // StageのFinishLineまでの崩壊を始める
@@ -512,6 +516,8 @@ public:
     records_.storeGameOverRecords();
     records_.write(params_["game.records"].getValue<std::string>());
 
+    DOUT << "did continued:" << records_.isContinuedGame() << std::endl;
+    
     {
       const auto& current_game  = records_.currentGame();
 
@@ -775,7 +781,7 @@ public:
   }
 
   bool isContinuedGame() const noexcept {
-    return records_.isContinuedGame();
+    return is_continued_;
   }
 
   int getStageTopZ() const noexcept {
@@ -1245,7 +1251,8 @@ private:
           
     return int(stage["items"].getNumChildren());
   }
-  
+
+  // TODO:処理が重いので事前に計算しておく
   int calcEntryPickableCube(const int stage_num) noexcept {
     int entry_num = getPickableCubeEntryNum("startline.json");
     for (int i = 0; i < stage_num; ++i) {

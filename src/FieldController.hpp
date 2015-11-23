@@ -267,21 +267,18 @@ public:
                                      entity_.restart();
                                      setup();
 
-                                     // 中断、全クリの時はタイトル起動
-                                     bool all_cleard = boost::any_cast<bool>(param.at("all_cleard"));
-                                     bool aborted = boost::any_cast<bool>(param.at("game_aborted"));
-                                     if (all_cleard || aborted) {
+                                     bool game_continued = boost::any_cast<bool>(param.at("game_continued"));
+                                     if (!game_continued) {
+                                       // ステージの崩壊を待ってTitle起動
+                                       bool all_cleard = boost::any_cast<bool>(param.at("all_cleard"));
+                                       bool aborted    = boost::any_cast<bool>(param.at("game_aborted"));
                                        EventParam params = {
                                          { "title-startup", all_cleard },
+                                         { "game-aborted",  aborted },
                                        };
                                        event_.signal("begin-title", params);
                                      }
                                    });
-
-    connections_ += event.connect("title-started",
-                                  [this](const Connection&, EventParam& param) noexcept {
-                                    view_.enableTouchInput();
-                                  });
 
     connections_ += event_.connect("continue-game",
                                    [this](const Connection&, EventParam& param) noexcept {
@@ -299,6 +296,7 @@ public:
 
     connections_ += event_.connect("game-continue",
                                    [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "game-continue" << std::endl;
                                      view_.enableTouchInput();
                                      paused_ = false;
                                    });
@@ -332,6 +330,7 @@ public:
     
     connections_ += event_.connect("field-input-stop",
                                    [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "field-input-stop" << std::endl;
                                      entity_.cancelPickPickableCubes();
                                      entity_.enablePickableCubeMovedEvent(false);
                                      view_.enableTouchInput(false);
@@ -339,6 +338,7 @@ public:
 
     connections_ += event_.connect("field-input-start",
                                    [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "field-input-start" << std::endl;
                                      entity_.enablePickableCubeMovedEvent();
                                      view_.enableTouchInput();
                                    });
@@ -355,6 +355,7 @@ public:
     
     connections_ += event_.connect("camera-change",
                                    [this](const Connection&, EventParam& param) noexcept {
+                                     DOUT << "camera-change" << std::endl;
                                      const auto& name = boost::any_cast<const std::string&>(param["name"]);
                                      view_.changeCameraParams(name);
                                    });

@@ -252,10 +252,6 @@ private:
   void startTitle(const EventParam& exec_params) noexcept {
     addController<TitleController>(params_, timeline_, event_, exec_params, records_,
                                    view_creator_.create("ui_title.json"));
-
-    // Title画面は時間差で起動する
-    // それまではゲームを開始できないようにする必要がある
-    event_.signal("title-started", EventParam());
   }
 
   

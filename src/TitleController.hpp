@@ -169,6 +169,7 @@ public:
 
     {
       std::string jingle_name = "title.jingle-short";
+      
       if (startup)        jingle_name = "title.jingle-full";
       else if (from_menu) jingle_name = "title.jingle-mini";
       
@@ -176,7 +177,6 @@ public:
     }
     
     event_.signal("field-input-start", EventParam());
-    event_.signal("sound-title-start", EventParam());
 
     if (params.hasChild("title.active_delay")) {
       view_->setActive(false);

@@ -218,8 +218,9 @@ public:
 
   
   // ゲーム開始時の初期化
-  void prepareGameRecord() noexcept {
+  void prepareGameRecord(const bool continued) noexcept {
     current_game_ = CurrentGame();
+    current_game_.continued = continued;
   }
 
   // ステージ開始時の初期化
@@ -244,6 +245,7 @@ public:
          << "     item_num:" << item_num << std::endl;
   }
 
+  // 「全ステージをノーコンティニューでプレイ中」を見分ける
   bool isContinuedGame() const noexcept {
     return current_game_.continued;
   }

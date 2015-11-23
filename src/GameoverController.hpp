@@ -66,7 +66,6 @@ public:
 
                                         event_timeline_->add([this]() noexcept {
                                             event_.signal("check-after-gameover", EventParam());
-                                            event_.signal("begin-title", EventParam());
                                             
                                             event_timeline_->add([this]() noexcept {
                                                 active_ = false;
