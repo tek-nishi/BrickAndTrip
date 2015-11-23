@@ -222,7 +222,6 @@ public:
 
     case FINISH:
       // 全PickableCubeのfinish判定
-      // FIXME:event処理で判定できる
       if (isAllPickableCubesFinished()) {
         controlFinishedPickableCubes();
         
@@ -799,7 +798,7 @@ public:
 
 
 private:
-  // TODO:参照の無効値をあらわすためにboost::optionalを利用
+  // 参照の無効値をあらわすためにboost::optionalを利用
   boost::optional<PickableCubePtr&> findPickableCube(const u_int id) noexcept {
     auto it = std::find_if(std::begin(pickable_cubes_), std::end(pickable_cubes_),
                            [id](const PickableCubePtr& obj) {
@@ -1076,30 +1075,6 @@ private:
     }
     return pos;
   }
-  
-#if 0
-  // すべてのPickableCubeがStartしたか判定
-  bool isAllPickableCubesStarted() noexcept {
-    if (pickable_cubes_.empty()) return false;
-
-    bool started = true;
-    for (const auto& cube : pickable_cubes_) {
-      if (!cube->canPick()) {
-        // FIXME:操作できないPickableCubeがあったらfalse
-        started = false;
-        break;
-      }
-
-      if (cube->blockPosition().z < start_line_z_) {
-        // StartできていないPickableCubeが1つでもあればfalse
-        started = false;
-        break;
-      }
-    }
-    
-    return started;
-  }
-#endif
 
   // すべてのPickableCubeがFinishしたか判定
   bool isAllPickableCubesFinished() noexcept {

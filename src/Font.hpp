@@ -184,7 +184,7 @@ public:
       return surface_dst;
     }
     else {
-      // FIXME:リサイズはCinder任せ
+      // リサイズはCinder任せ
       return ci::ip::resizeCopy(surface, ci::Area(0, 0, pen_x, size_), ci::Vec2i(size_, size_));
     }
   }

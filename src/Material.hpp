@@ -2,7 +2,6 @@
 
 //
 // モデルのマテリアル定義
-// TODO:copy禁止
 //
 
 #include <boost/noncopyable.hpp>

@@ -2,7 +2,7 @@
 
 //
 // 解像度に依存しないCameraでのAutolayout
-// FIXME:カメラはまっすぐZ軸方向を向いている事
+//   カメラはまっすぐZ軸方向を向いている事
 //
 
 #include <utility>

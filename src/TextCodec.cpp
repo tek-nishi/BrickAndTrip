@@ -73,7 +73,7 @@ std::string decode(const std::string& input) noexcept {
 	while (1) {
 		int status = inflate(&z, Z_NO_FLUSH);
     if ((status == Z_STREAM_ERROR) || (status == Z_DATA_ERROR)) {
-      // FIXME:エラーが起こった場合は空の文字列を返す
+      // エラーが起こった場合は空の文字列を返す
       DOUT << "decode error!!" << std::endl;
       
       inflateEnd(&z);

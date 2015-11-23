@@ -239,7 +239,7 @@ public:
                const int x_offset,
                const std::vector<ci::Color>& cube_color,
                const ci::Color& line_color) noexcept {
-    // FIXME:finishlineにはデータが入っていてはいけない
+    // finishlineにはデータが入っていてはいけない
     build_speed_    = Json::getValue<float>(stage_data, "build_speed", build_speed_);
     collapse_speed_ = Json::getValue<float>(stage_data, "collapse_speed", collapse_speed_);
     auto_collapse_  = Json::getValue<float>(stage_data, "auto_collapse", auto_collapse_);
@@ -427,7 +427,7 @@ private:
   }
 
   StageCube* const getStageCube(const ci::Vec3i& block_pos) noexcept {
-    // FIXME:constなし版のための苦肉の策
+    // TIPS:constなし版のための策
     return const_cast<StageCube*>(static_cast<const Stage*>(this)->getStageCube(block_pos));
   }
   

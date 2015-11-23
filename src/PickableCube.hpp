@@ -93,7 +93,6 @@ private:
 
   ci::Color picking_color_;
 
-  // FIXME:paramから直接読んでもいいんじゃね??
   std::string picking_start_ease_;
   float       picking_start_duration_;
   std::string picking_end_ease_;
@@ -388,7 +387,6 @@ public:
 
     options.finishFn([this]() noexcept {
         // 移動後に正確な位置を設定
-        // FIXME:回転も正規化
         position_ = ci::Vec3f(block_position_);
         position_().y += 1.0f;
 

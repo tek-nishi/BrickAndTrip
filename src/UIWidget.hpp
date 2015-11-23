@@ -19,7 +19,7 @@
 namespace ngs {
 
 class UIWidget : private boost::noncopyable {
-  // FIXME:大元のデータが破棄されるので、コピーを保持している
+  // 大元のデータが破棄されるので、コピーを保持している
   const ci::JsonTree params_;
 
   std::string name_;

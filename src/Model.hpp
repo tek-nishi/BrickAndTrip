@@ -36,11 +36,6 @@ public:
       const auto& coords   = mesh.getTexCoords();
       const auto& indices  = mesh.getIndices();
 
-      // FIXME:Cheetah3Dの出力する.objは
-      // 法線もUVも書き出すので手抜き
-      // bool has_normals = !normals.empty();
-      // bool has_coords  = !coords.empty();
-
       for (const auto index : indices) {
         mesh_new.appendVertex(vertices[index]);
         mesh_new.appendNormal(normals[index]);

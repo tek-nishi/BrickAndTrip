@@ -11,7 +11,7 @@
 namespace ngs {
 namespace AntiAliasingType {
 
-// FIXME:iOSとPCでAAの有効値が違うので、別名を定義
+// iOSとPCでAAの有効値が違うので、別名を定義
 #if defined(CINDER_COCOA_TOUCH)
 
 enum { AA_TYPE_ALIAS = ci::app::RendererGl::AA_MSAA_4 };

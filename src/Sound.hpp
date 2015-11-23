@@ -2,8 +2,6 @@
 
 //
 // BGM処理
-// TODO:fade in/out
-// TODO:Pan
 //
 
 #include "cinder/audio/Context.h"

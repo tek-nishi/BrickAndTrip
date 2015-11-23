@@ -72,7 +72,6 @@ public:
     }
   }
   
-  // FIXME:nullptrでデータの有無を判定
   const std::vector<ci::Vec3i>* const startSwitch(const ci::Vec3i& block_pos) noexcept {
     for (auto& s : switches_) {
       if (s->checkStart(block_pos)) {

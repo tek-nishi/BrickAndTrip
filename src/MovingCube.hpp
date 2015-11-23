@@ -245,7 +245,6 @@ public:
     
     options.finishFn([this]() noexcept {
         // 移動後に正確な位置を設定
-        // FIXME:回転も正規化
         position_ = ci::Vec3f(block_position_);
         position_().y += 1.0f;
         move_start_rotation_ = rotation_;

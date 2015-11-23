@@ -193,8 +193,8 @@ public:
 
   ci::Quatf rotation() const noexcept {
     // オイラー角からクオータニオンを生成
-    // FIXME:cinderの実装が間違っている
-    // SOURCE: http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q60
+    //   cinderの実装が間違っている
+    //   SOURCE: http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q60
     const float fSinPitch(std::sin(rotation_.x * 0.5f));
     const float fCosPitch(std::cos(rotation_.x * 0.5f));
     const float fSinYaw(std::sin(rotation_.y * 0.5f));

@@ -126,15 +126,10 @@ VboMesh::VboMesh( const TriMesh &triMesh, Layout layout )
 	mObj->mNumIndices = triMesh.getNumIndices();
 	mObj->mNumVertices = triMesh.getNumVertices();
 
-
-  // TODO:VAO
-  // GLuint vao;
-  // glGenVertexArraysOES(1, &vao);
-  
 	initializeBuffers( false );
 
 	// upload the indices
-  // FIXME:OpenGL ES はindexはshort型
+  // OpenGL ES はindexはshort型
   std::vector<uint16_t> indices;
   for (const auto index : triMesh.getIndices()) {
     indices.push_back(index);
@@ -489,21 +484,6 @@ void VboMesh::enableClientStates() const
 			glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		}
 	}	
-
-#if 0
-  // FIXME:ES2.0向けの設定なのでスキップ
-	for( size_t a = 0; a < mObj->mCustomStaticLocations.size(); ++a ) {
-		if( mObj->mCustomStaticLocations[a] < 0 )
-			throw;
-		glEnableVertexAttribArray( mObj->mCustomStaticLocations[a] );
-	}
-
-	for( size_t a = 0; a < mObj->mCustomDynamicLocations.size(); ++a ) {
-		if( mObj->mCustomDynamicLocations[a] < 0 )
-			throw;
-		glEnableVertexAttribArray( mObj->mCustomDynamicLocations[a] );
-	}
-#endif
 }
 
 void VboMesh::disableClientStates() const
@@ -529,21 +509,6 @@ void VboMesh::disableClientStates() const
 			glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 		}
 	}	
-	
-#if 0
-  // FIXME:ES2.0向けの設定なのでスキップ
-	for( size_t a = 0; a < mObj->mCustomStaticLocations.size(); ++a ) {
-		if( mObj->mCustomStaticLocations[a] < 0 )
-			throw;
-		glDisableVertexAttribArray( mObj->mCustomStaticLocations[a] );
-	}
-
-	for( size_t a = 0; a < mObj->mCustomDynamicLocations.size(); ++a ) {
-		if( mObj->mCustomDynamicLocations[a] < 0 )
-			throw;
-		glDisableVertexAttribArray( mObj->mCustomDynamicLocations[a] );
-	}
-#endif
 }
 
 void VboMesh::bindAllData() const
@@ -581,27 +546,6 @@ void VboMesh::bindAllData() const
 		if( ( buffer == STATIC_BUFFER ) ? mObj->mLayout.hasStaticPositions() : mObj->mLayout.hasDynamicPositions() )
 			glVertexPointer( 3, GL_FLOAT, stride, (const GLvoid*)mObj->mPositionOffset );
 	}
-
-#if 0
-  // FIXME:ES2.0向けの設定なのでスキップ
-	for( int buffer = STATIC_BUFFER; buffer <= DYNAMIC_BUFFER; ++buffer ) {
-		if( ! mObj->mBuffers[buffer] ) continue;
-
-		const vector<pair<VboMesh::Layout::CustomAttr,size_t> > &attributes( ( buffer == DYNAMIC_BUFFER ) ? mObj->mLayout.mCustomDynamic : mObj->mLayout.mCustomStatic );
-		const vector<GLint> &locations( ( buffer == DYNAMIC_BUFFER ) ? mObj->mCustomDynamicLocations : mObj->mCustomStaticLocations );
-		size_t stride = ( ( buffer == DYNAMIC_BUFFER ) ? mObj->mDynamicStride : mObj->mStaticStride );
-	
-		if( attributes.empty() )
-			continue;
-		
-		mObj->mBuffers[buffer].bind();
-
-		for( size_t a = 0; a < attributes.size(); ++a ) {
-			const GLvoid *offset = reinterpret_cast<const GLvoid*>( attributes[a].second );
-			glVertexAttribPointer( locations[a], Layout::sCustomAttrNumComponents[attributes[a].first], Layout::sCustomAttrTypes[attributes[a].first], GL_FALSE, (GLsizei)stride, offset );
-		}
-	}
-#endif
 }
 
 void VboMesh::bindIndexBuffer() const

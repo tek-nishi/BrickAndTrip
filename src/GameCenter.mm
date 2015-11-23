@@ -219,7 +219,6 @@ static void loadAchievement() noexcept {
         resubmitCachedAchievement();
       }
       else {
-        // FIXME:ローカルとGameCenterでのつじつま合わせ
 				NSLOG(@"loadAchievementGameCenter::Achievements: Error:%@", [error localizedDescription]);
       }
     }];
