@@ -60,6 +60,7 @@ public:
     file_silent_(false)
   {
     auto* ctx = ci::audio::Context::master();
+    ctx->getOutput()->enableClipDetection(false);
     ctx->enable();
     
     // TIPS:文字列による処理の分岐をstd::mapとラムダ式で実装
