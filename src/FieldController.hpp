@@ -21,6 +21,7 @@ class FieldController : public ControllerBase {
   Event<EventParam>& event_;
 
   ci::TimelineRef timeline_;
+  ci::TimelineRef event_timeline_;
   bool paused_;
 
   ConnectionHolder connections_;
@@ -49,6 +50,7 @@ public:
     touch_event_(touch_event),
     event_(event),
     timeline_(ci::Timeline::create()),
+    event_timeline_(ci::Timeline::create()),
     paused_(false),
     active_(true),
     view_(params, timeline_, event_, touch_event),
@@ -272,6 +274,7 @@ public:
     connections_ += event_.connect("game-abort",
                                    [this](const Connection&, EventParam& param) noexcept {
                                      DOUT << "game-abort" << std::endl;
+                                     event_timeline_->clear();
                                      view_.enableFollowCamera(false);
                                      paused_ = false;
                                      entity_.abortGame();
@@ -374,6 +377,10 @@ public:
                                    });
 #endif
 
+    auto current_time = timeline_->getCurrentTime();
+    event_timeline_->setStartTime(current_time);
+    timeline_->apply(event_timeline_);
+
     setup();
   }
 
@@ -381,7 +388,7 @@ public:
     DOUT << "~FieldController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く
-    timeline_->removeSelf();
+    event_timeline_->removeSelf();
   }
 
 
@@ -415,20 +422,20 @@ private:
 
     if (entity_.isContinuedGame()) {
       // Continue時はゲーム開始時にProgressを表示
-      timeline_->add([this]() noexcept {
+      event_timeline_->add([this]() noexcept {
           event_.signal("begin-progress", EventParam());
         },
-        timeline_->getCurrentTime() + progress_continue_delay_);
+        event_timeline_->getCurrentTime() + progress_continue_delay_);
 
       // Stageは一定時間後に生成開始
-      timeline_->add([this]() noexcept {
+      event_timeline_->add([this]() noexcept {
           entity_.startStageBuild();
           
           // このタイミングで光源設定を変更
           view_.setStageBgColor(entity_.bgColor());
           view_.setStageLightTween(entity_.lightTween());
         },
-        timeline_->getCurrentTime() + continued_start_delay_);
+        event_timeline_->getCurrentTime() + continued_start_delay_);
     }
     else {
       disposable_connections_ += event_.connect("pickable-moved",
@@ -440,10 +447,10 @@ private:
                                                   view_.setStageLightTween(entity_.lightTween());
 
                                                   // 最初から始めた時はPickableを動かしたらProgressを表示
-                                                  timeline_->add([this]() {
+                                                  event_timeline_->add([this]() {
                                                       event_.signal("begin-progress", EventParam());
                                                     },
-                                                    timeline_->getCurrentTime() + progress_start_delay_);
+                                                    event_timeline_->getCurrentTime() + progress_start_delay_);
 
                                                   GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.FIRST_TRIP");
                                                   
