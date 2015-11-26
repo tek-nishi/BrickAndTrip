@@ -344,7 +344,7 @@ class BrickTripApp : public AppNative,
   }
 
 
-  void updateApp() {
+  void updateApp() noexcept {
     double elapsed_seconds = getElapsedSeconds();
 
     // 経過時間が大きな値になりすぎないよう調整
@@ -363,19 +363,11 @@ class BrickTripApp : public AppNative,
     
     elapsed_seconds_ = elapsed_seconds;
   }
-
-  
-#if !defined(CINDER_MSW)
-  // FIXME:更新処理をここでおこなうとWindowsでフレームレートが安定しない
-	void update() noexcept override {
-    updateApp();
-  }
-#endif
   
 	void draw() noexcept override {
-#if defined(CINDER_MSW)
+    // FIXME:更新処理をupdateおこなうと、
+    //       Windowsでフレームレートが安定しない
     updateApp();
-#endif
     controller_->draw(*fonts_, *models_);
   }
 
