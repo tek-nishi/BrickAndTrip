@@ -49,9 +49,6 @@ void glFogi(T1 pname, T2 param) { glFogx(pname, param); }
 // stageの難読化
 #define OBFUSCATION_STAGES
 
-// JSONファイルを変換
-// #define CONVERT_JSON
-
 
 namespace ngs {
 

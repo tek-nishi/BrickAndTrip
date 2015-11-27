@@ -25,20 +25,16 @@
 #include "StageData.hpp"
 
 
-using namespace ci;
-using namespace ci::app;
-
-
 namespace ngs {
 
-class BrickTripApp : public AppNative,
+class BrickTripApp : public ci::app::AppNative,
                      private boost::noncopyable {
-  JsonTree params_;
+  ci::JsonTree params_;
 
   double fast_speed_;
   double slow_speed_;
   
-  TimelineRef timeline_;
+  ci::TimelineRef timeline_;
 
   double elapsed_seconds_;
   double max_elapsed_seconds_;
@@ -53,8 +49,8 @@ class BrickTripApp : public AppNative,
   std::unique_ptr<FontHolder> fonts_;
   std::unique_ptr<ModelHolder> models_;
   
-  Vec2f mouse_pos_;
-  Vec2f mouse_prev_pos_;
+  ci::Vec2f mouse_pos_;
+  ci::Vec2f mouse_prev_pos_;
   Event<std::vector<ngs::Touch> > touch_event_;
   
   std::unique_ptr<ControllerBase> controller_;
@@ -62,24 +58,7 @@ class BrickTripApp : public AppNative,
   
   void prepareSettings(Settings* settings) noexcept override {
     // アプリ起動時の設定はここで処理する
-#if defined (OBFUSCATION_PARAMS) && defined (DEBUG) && defined (CONVERT_JSON)
-    Params::convert("params.json");
-#endif
-    params_ = Params::load("params.json");
-
-#if defined (OBFUSCATION_STAGES) && defined (DEBUG) && defined (CONVERT_JSON)
-    StageData::convert(params_);
-#endif
-
-    // 低性能環境を調べて設定に追加
-    params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device",
-                                                        ngs::LowEfficiencyDevice::determine());
-#ifdef DEBUG
-    // 強制的に低性能環境
-    if (params_["app.force_low_efficiency"].getValue<bool>()) {
-      params_["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device", true);
-    }
-#endif
+    params_ = readParams();
 
     auto size = Json::getVec2<int>(params_["app.size"]);
     settings->setWindowSize(size);
@@ -116,7 +95,7 @@ class BrickTripApp : public AppNative,
     // OpenGLのコンテキストも使える
     AudioSession::begin();
 
-    Rand::randomize();
+    ci::Rand::randomize();
 
 #if !defined(CINDER_COCOA_TOUCH)
     // OpenGLの機能を使っているので、setup内で処理
@@ -148,7 +127,7 @@ class BrickTripApp : public AppNative,
       });
 #endif
 
-    timeline_ = Timeline::create();
+    timeline_ = ci::Timeline::create();
     forward_speed_        = 1.0;
     forward_speed_change_ = false;
     pause_ = false;
@@ -160,19 +139,19 @@ class BrickTripApp : public AppNative,
 
     // 以下OpenGL設定
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    gl::disableAlphaTest();
+    ci::gl::disableAlphaTest();
 
-    gl::enable(GL_CULL_FACE);
+    ci::gl::enable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    gl::enable(GL_NORMALIZE);
+    ci::gl::enable(GL_NORMALIZE);
 
 #if !defined(CINDER_COCOA_TOUCH)
     // OpenGL ESは未対応
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 #endif
     // TIPS: ambientとdiffuseをci::gl::colorで決める
-    gl::enable(GL_COLOR_MATERIAL);
+    ci::gl::enable(GL_COLOR_MATERIAL);
 
 #if defined(CINDER_COCOA_TOUCH) && defined(DEBUG)
     // キーボード表示
@@ -213,7 +192,7 @@ class BrickTripApp : public AppNative,
 
   
   // FIXME:Windowsではtouchイベントとmouseイベントが同時に呼ばれる
-	void mouseDown(MouseEvent event) noexcept override {
+	void mouseDown(ci::app::MouseEvent event) noexcept override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -222,7 +201,7 @@ class BrickTripApp : public AppNative,
     touch_event_.signal("touches-began", touches);
   }
   
-	void mouseDrag(MouseEvent event) noexcept override {
+	void mouseDrag(ci::app::MouseEvent event) noexcept override {
     if (!event.isLeftDown()) return;
 
     mouse_pos_ = event.getPos();
@@ -231,7 +210,7 @@ class BrickTripApp : public AppNative,
     touch_event_.signal("touches-moved", touches);
   }
   
-	void mouseUp(MouseEvent event) noexcept override {
+	void mouseUp(ci::app::MouseEvent event) noexcept override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -241,24 +220,24 @@ class BrickTripApp : public AppNative,
   }
 
 
-  void touchesBegan(TouchEvent event) noexcept override {
+  void touchesBegan(ci::app::TouchEvent event) noexcept override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-began", touches);
   }
   
-  void touchesMoved(TouchEvent event) noexcept override {
+  void touchesMoved(ci::app::TouchEvent event) noexcept override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-moved", touches);
   }
   
-  void touchesEnded(TouchEvent event) noexcept override {
+  void touchesEnded(ci::app::TouchEvent event) noexcept override {
     auto touches = createTouchInfo(event);
     touch_event_.signal("touches-ended", touches);
   }
 
 
 #ifdef DEBUG
-  void keyDown(KeyEvent event) noexcept override {
+  void keyDown(ci::app::KeyEvent event) noexcept override {
     char chara = event.getChar();
     int  code  = event.getCode();
 
@@ -267,11 +246,8 @@ class BrickTripApp : public AppNative,
       // TIPS:先にresetを実行。Controllerが二重に確保されるのを避ける
       controller_.reset();
       timeline_->clear();
-
-#if defined (OBFUSCATION_PARAMS) && defined (DEBUG) && defined (CONVERT_JSON)
-      Params::convert("params.json");
-#endif
-      params_ = Params::load("params.json");
+      
+      params_ = readParams();
 
       controller_ = std::unique_ptr<ControllerBase>(new RootController(params_, timeline_, touch_event_));
       // すぐさまresizeを呼んでCameraの調整
@@ -280,17 +256,17 @@ class BrickTripApp : public AppNative,
       return;
     }
     
-    if (code == KeyEvent::KEY_LCTRL) {
+    if (code == ci::app::KeyEvent::KEY_LCTRL) {
       // 倍速モード
       forward_speed_change_ = true;
       forward_speed_        = fast_speed_;
     }
-    else if (code == KeyEvent::KEY_LALT) {
+    else if (code == ci::app::KeyEvent::KEY_LALT) {
       // 低速モード
       forward_speed_change_ = true;
       forward_speed_        = slow_speed_;
     }
-    else if (code == KeyEvent::KEY_ESCAPE) {
+    else if (code == ci::app::KeyEvent::KEY_ESCAPE) {
       // 強制PAUSE
       pause_ = !pause_;
     }
@@ -302,7 +278,7 @@ class BrickTripApp : public AppNative,
         setWindowSize(size);
 
         // 位置は画面中央に
-        DisplayRef display = Display::getMainDisplay();
+        ci::DisplayRef display = ci::Display::getMainDisplay();
         auto display_size = display->getSize();
         setWindowPos((display_size - size) / 2);
       }
@@ -327,11 +303,11 @@ class BrickTripApp : public AppNative,
     }
   }
   
-  void keyUp(KeyEvent event) noexcept override {
+  void keyUp(ci::app::KeyEvent event) noexcept override {
     char chara = event.getChar();
     int  code  = event.getCode();
 
-    if ((code == KeyEvent::KEY_LCTRL) || (code == KeyEvent::KEY_LALT)) {
+    if ((code == ci::app::KeyEvent::KEY_LCTRL) || (code == ci::app::KeyEvent::KEY_LALT)) {
       // 低・倍速モード解除
       forward_speed_change_ = false;
     }
@@ -388,10 +364,10 @@ class BrickTripApp : public AppNative,
     for(const auto& p : fonts_params) {
       const auto& name = p["name"].getValue<std::string>();
       const auto& path = p["path"].getValue<std::string>();
-      int size = p["size"].getValue<int>();
+      int size         = p["size"].getValue<int>();
       ci::Vec3f scale  = Json::getVec3<float>(p["scale"]);
       ci::Vec3f offset = Json::getVec3<float>(p["offset"]);
-      bool mipmap = p["mipmap"].getValue<bool>() && do_mipmap;
+      bool mipmap      = p["mipmap"].getValue<bool>() && do_mipmap;
       
       auto& font = fonts_->addFont(name, path, size, scale, offset, mipmap);
 
@@ -417,13 +393,13 @@ class BrickTripApp : public AppNative,
     // 低性能環境はポリゴン数の少ないモデルを使う
     auto model_path = params_["app.low_efficiency_device"].getValue<bool>() ? "path_low"
                                                                             : "path";
-    
+
     for(const auto& p : params_["app.models"]) {
       const auto& name = p["name"].getValue<std::string>();
       const auto& path = p.hasChild(model_path) ? p[model_path].getValue<std::string>()
                                                 : p["path"].getValue<std::string>();
       bool has_normals = p["normals"].getValue<bool>();
-      bool has_uvs = p["uvs"].getValue<bool>();
+      bool has_uvs     = p["uvs"].getValue<bool>();
       bool has_indices = p["indices"].getValue<bool>();
       
       models_->add(name, path, has_normals, has_uvs, has_indices);
@@ -431,7 +407,7 @@ class BrickTripApp : public AppNative,
   }
 
   
-  std::vector<ngs::Touch> createTouchInfo(const MouseEvent& event) noexcept {
+  std::vector<ngs::Touch> createTouchInfo(const ci::app::MouseEvent& event) noexcept {
     // TouchEvent同様、直前の位置も取れるように
     mouse_prev_pos_ = mouse_pos_;
     mouse_pos_ = event.getPos();
@@ -446,7 +422,7 @@ class BrickTripApp : public AppNative,
     return t;
   }
   
-  static std::vector<ngs::Touch> createTouchInfo(const TouchEvent& event) noexcept {
+  static std::vector<ngs::Touch> createTouchInfo(const ci::app::TouchEvent& event) noexcept {
     std::vector<ngs::Touch> touches;
     
     const auto& event_touches = event.getTouches();
@@ -463,7 +439,23 @@ class BrickTripApp : public AppNative,
     return touches;
   }
 
-  static void setEasingParams(const JsonTree& params) noexcept {
+  static ci::JsonTree readParams() noexcept {
+    auto params = Params::load("params.json");
+    
+    // 低性能環境を調べて設定に追加
+    params["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device",
+                                                       ngs::LowEfficiencyDevice::determine());
+#ifdef DEBUG
+    // 強制的に低性能環境
+    if (params["app.force_low_efficiency"].getValue<bool>()) {
+      params["app.low_efficiency_device"] = ci::JsonTree("low_efficiency_device", true);
+    }
+#endif
+
+    return params;
+  }
+
+  static void setEasingParams(const ci::JsonTree& params) noexcept {
     ease_in_elastic_a = params["easing.ease_in_elastic_a"].getValue<float>();
     ease_in_elastic_b = params["easing.ease_in_elastic_b"].getValue<float>();
 
@@ -482,7 +474,7 @@ class BrickTripApp : public AppNative,
   void setupFrameRate() noexcept {
     // 垂直同期が有効なら、FrameRateを無効にした方が表示が安定する
     // ※DEBUG用途でframerate_limitを用意した
-    if (!params_["app.framerate_limit"].getValue<bool>() && gl::isVerticalSyncEnabled()) {
+    if (!params_["app.framerate_limit"].getValue<bool>() && ci::gl::isVerticalSyncEnabled()) {
       DOUT << "Disable Framerate." << std::endl;
       disableFrameRate();
     }
@@ -497,4 +489,4 @@ class BrickTripApp : public AppNative,
 
 }
 
-CINDER_APP_NATIVE(ngs::BrickTripApp, RendererGl(ngs::AntiAliasingType::get()))
+CINDER_APP_NATIVE(ngs::BrickTripApp, ci::app::RendererGl(ngs::AntiAliasingType::get()))

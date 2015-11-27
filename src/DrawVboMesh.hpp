@@ -6,16 +6,13 @@
 
 #if defined( CINDER_GLES )
 
-
 #include "cinder/gl/Vbo.h"
 
 
-namespace cinder {
-namespace gl {
+namespace cinder { namespace gl {
 
-void draw(const VboMesh &vbo) noexcept;
+void draw(const VboMesh& vbo) noexcept;
 
-}
-}
+} }
 
 #endif
