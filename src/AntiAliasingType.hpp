@@ -8,8 +8,7 @@
 #include "cinder/app/Renderer.h"
 
 
-namespace ngs {
-namespace AntiAliasingType {
+namespace ngs { namespace AntiAliasingType {
 
 // iOSとPCでAAの有効値が違うので、別名を定義
 #if defined(CINDER_COCOA_TOUCH)
@@ -29,5 +28,4 @@ int get() noexcept {
   return low_Lowefficiency ? ci::app::RendererGl::AA_NONE : AA_TYPE_ALIAS;
 }
 
-}
-}
+} }

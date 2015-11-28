@@ -32,10 +32,10 @@ void drawCubeAndText(ci::gl::TextureRef texture,
   
 #if defined(CINDER_GLES)
   glDrawElements(mesh.getPrimitiveType(),
-                 base_vtx_num, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(uint16_t) * 0));
+                 base_vtx_num, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof (uint16_t) * 0));
 #else
   glDrawElements(mesh.getPrimitiveType(),
-                 base_vtx_num, GL_UNSIGNED_INT, (GLvoid*)(sizeof(uint32_t) * 0));
+                 base_vtx_num, GL_UNSIGNED_INT, (GLvoid*)(sizeof (uint32_t) * 0));
 #endif
   
   ci::gl::color(text_color);
@@ -52,10 +52,10 @@ void drawCubeAndText(ci::gl::TextureRef texture,
 
 #if defined(CINDER_GLES)
   glDrawElements(mesh.getPrimitiveType(),
-                 text_vtx_num, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(uint16_t) * (base_vtx_num)));
+                 text_vtx_num, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof (uint16_t) * (base_vtx_num)));
 #else
   glDrawElements(mesh.getPrimitiveType(),
-                 text_vtx_num, GL_UNSIGNED_INT, (GLvoid*)(sizeof(uint32_t) * (base_vtx_num)));
+                 text_vtx_num, GL_UNSIGNED_INT, (GLvoid*)(sizeof (uint32_t) * (base_vtx_num)));
 #endif
   
   texture->unbind();
