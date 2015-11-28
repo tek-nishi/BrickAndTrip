@@ -118,7 +118,7 @@ class BrickTripApp : public ci::app::AppNative,
     
 #if defined(CINDER_COCOA_TOUCH)
     // 縦横画面両対応
-    getSignalSupportedOrientations().connect([]() { return InterfaceOrientation::All; });
+    getSignalSupportedOrientations().connect([]() { return ci::app::InterfaceOrientation::All; });
 
     // 画面回転時に更新(Share時の処理負荷軽減)
     getSignalWillRotate().connect([this]() noexcept {
