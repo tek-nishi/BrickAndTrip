@@ -6,13 +6,13 @@
 namespace ngs {
 namespace Share {
 
-bool canPost() {
+bool canPost() noexcept {
   bool has_class = NSClassFromString(@"UIActivityViewController") ? true : false;
   return has_class;
 }
 
 void post(const std::string& text, UIImage* image,
-          std::function<void()> complete_callback) {
+          std::function<void()> complete_callback) noexcept {
 
   NSString* str = [[[NSString alloc] initWithCString:text.c_str() encoding:NSUTF8StringEncoding]
                       autorelease];

@@ -42,7 +42,7 @@ float ease_outin_elastic_b = 1;
 
 
 ci::EaseFn getEaseFunc(const std::string& name) noexcept {
-  static std::map<std::string, ci::EaseFn> tbl = {
+  static const std::map<std::string, ci::EaseFn> tbl = {
     { "EaseInQuad", ci::EaseInQuad() },
     { "EaseOutQuad", ci::EaseOutQuad() },
     { "EaseInOutQuad", ci::EaseInOutQuad() },
@@ -163,7 +163,7 @@ ci::EaseFn getEaseFunc(const std::string& name) noexcept {
                                                                      ease_outin_elastic_b) },
   };
 
-  return tbl[name];
+  return tbl.at(name);
 }
 
 }
