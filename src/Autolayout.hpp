@@ -92,121 +92,52 @@ public:
     void doLayout(const ViewRect& view_rect) noexcept {
       auto world_rect = createWorldRect(view_rect, pos_.z);
 
-      ci::Vec3f pos = pos_;
-      switch (layout_) {
-      case Type::TOP_LEFT:
-        pos.x += world_rect.first.x;
-        pos.y += world_rect.first.y;
-        break;
-
-      case Type::TOP_CENTER:
-        pos.x += (world_rect.first.x + world_rect.second.x) / 2.0f;
-        pos.y += world_rect.first.y;
-        break;
+      struct Layout {
+        ci::Vec3f first;
+        ci::Vec3f second;
+      };
+      static const Layout layout_tbl[] = {
+        { { 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } },    // Type::TOP_LEFT
+        { { 0.5f, 1.0f, 0.0f }, { 0.5f, 0.0f, 0.0f } },    // Type::TOP_CENTER
+        { { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } },    // Type::TOP_RIGHT
         
-      case Type::TOP_RIGHT:
-        pos.x += world_rect.second.x;
-        pos.y += world_rect.first.y;
-        break;
+        { { 1.0f, 0.5f, 0.0f }, { 0.0f, 0.5f, 0.0f } },    // Type::CENTER_LEFT
+        { { 0.5f, 0.5f, 0.0f }, { 0.5f, 0.5f, 0.0f } },    // Type::CENTER
+        { { 0.0f, 0.5f, 0.0f }, { 1.0f, 0.5f, 0.0f } },    // Type::CENTER_RIGHT
 
-      case Type::CENTER_LEFT:
-        pos.x += world_rect.first.x;
-        pos.y += (world_rect.first.y + world_rect.second.y) / 2.0f;
-        break;
+        { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f } },    // Type::BOTTOM_LEFT
+        { { 0.5f, 0.0f, 0.0f }, { 0.5f, 1.0f, 0.0f } },    // Type::BOTTOM_CENTER
+        { { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 0.0f } },    // Type::BOTTOM_RIGHT
 
-      case Type::CENTER:
-        pos.x += (world_rect.first.x + world_rect.second.x) / 2.0f;
-        pos.y += (world_rect.first.y + world_rect.second.y) / 2.0f;
-        break;
+        { { 1.0f, 0.75f, 0.0f }, { 0.0f, 0.25f, 0.0f } },  // Type::TOP_MID_LEFT
+        { { 0.5f, 0.75f, 0.0f }, { 0.5f, 0.25f, 0.0f } },  // Type::TOP_MID_CENTER
+        { { 0.0f, 0.75f, 0.0f }, { 1.0f, 0.25f, 0.0f } },  // Type::TOP_MID_RIGHT
+      };
 
-      case Type::CENTER_RIGHT:
-        pos.x += world_rect.second.x;
-        pos.y += (world_rect.first.y + world_rect.second.y) / 2.0f;
-        break;
-
-      case Type::BOTTOM_LEFT:
-        pos.x += world_rect.first.x;
-        pos.y += world_rect.second.y;
-        break;
-
-      case Type::BOTTOM_CENTER:
-        pos.x += (world_rect.first.x + world_rect.second.x) / 2.0f;
-        pos.y += world_rect.second.y;
-        break;
-          
-      case Type::BOTTOM_RIGHT:
-        pos.x += world_rect.second.x;
-        pos.y += world_rect.second.y;
-        break;
-
-        
-      case Type::TOP_MID_LEFT:
-        pos.x += world_rect.first.x;
-        pos.y += world_rect.first.y * 0.75f + world_rect.second.y * 0.25f;
-        break;
-
-      case Type::TOP_MID_CENTER:
-        pos.x += (world_rect.first.x + world_rect.second.x) / 2.0f;
-        pos.y += world_rect.first.y * 0.75f + world_rect.second.y * 0.25f;
-        break;
-        
-      case Type::TOP_MID_RIGHT:
-        pos.x += world_rect.second.x;
-        pos.y += world_rect.first.y * 0.75f + world_rect.second.y * 0.25f;
-        break;
-      }
-
+      const auto& layout = layout_tbl[layout_];
+      ci::Vec3f pos = pos_ + world_rect.first  * layout.first
+                           + world_rect.second * layout.second;
       layout_pos_ = pos;
+
+      static const ci::Vec3f origin_tbl[] = {
+        {  0.0f, -1.0f, 0.0f },    // Type::TOP_LEFT
+        { -0.5f, -1.0f, 0.0f },    // Type::TOP_CENTER
+        { -1.0f, -1.0f, 0.0f },    // Type::TOP_RIGHT
         
-      switch (origin_) {
-      case Type::TOP_LEFT:
-        pos.y -= size_.y;
-        break;
+        {  0.0f, -0.5f, 0.0f },    // Type::CENTER_LEFT
+        { -0.5f, -0.5f, 0.0f },    // Type::CENTER
+        { -1.0f, -0.5f, 0.0f },    // Type::CENTER_RIGHT
 
-      case Type::TOP_CENTER:
-        pos.x -= size_.x / 2.0f;
-        pos.y -= size_.y;
-        break;
-        
-      case Type::TOP_RIGHT:
-        pos.x -= size_.x;
-        pos.y -= size_.y;
-        break;
+        {  0.0f, 0.0f, 0.0f },     // Type::BOTTOM_LEFT
+        { -0.5f, 0.0f, 0.0f },     // Type::BOTTOM_CENTER
+        { -1.0f, 0.0f, 0.0f },     // Type::BOTTOM_RIGHT
 
-      case Type::CENTER_LEFT:
-        pos.y -= size_.y / 2.0f;
-        break;
-
-      case Type::CENTER:
-        pos.x -= size_.x / 2.0f;
-        pos.y -= size_.y / 2.0f;
-        break;
-
-      case Type::CENTER_RIGHT:
-        pos.x -= size_.x;
-        pos.y -= size_.y / 2.0f;
-        break;
-
-      case Type::BOTTOM_LEFT:
-        // do nothing.
-        break;
-
-      case Type::BOTTOM_CENTER:
-        pos.x -= size_.x / 2.0f;
-        break;
-          
-      case Type::BOTTOM_RIGHT:
-        pos.x -= size_.x;
-        break;
-
-        
-      case Type::TOP_MID_LEFT:
-      case Type::TOP_MID_CENTER:
-      case Type::TOP_MID_RIGHT:
-        assert(0);
-        break;
-      }
-
+        { 0.0f, 0.0f, 0.0f },      // Type::TOP_MID_LEFT
+        { 0.0f, 0.0f, 0.0f },      // Type::TOP_MID_CENTER
+        { 0.0f, 0.0f, 0.0f },      // Type::TOP_MID_RIGHT
+      };
+      
+      pos += size_ * origin_tbl[origin_];
       layouted_pos_ = pos;
     }
 
@@ -214,55 +145,25 @@ public:
       size_ = size;
       auto pos = layout_pos_;
 
-      switch (origin_) {
-      case Type::TOP_LEFT:
-        pos.y -= size_.y;
-        break;
-
-      case Type::TOP_CENTER:
-        pos.x -= size_.x / 2.0f;
-        pos.y -= size_.y;
-        break;
+      static const ci::Vec3f origin_tbl[] = {
+        {  0.0f, -1.0f, 0.0f },    // Type::TOP_LEFT
+        { -0.5f, -1.0f, 0.0f },    // Type::TOP_CENTER
+        { -1.0f, -1.0f, 0.0f },    // Type::TOP_RIGHT
         
-      case Type::TOP_RIGHT:
-        pos.x -= size_.x;
-        pos.y -= size_.y;
-        break;
+        {  0.0f, -0.5f, 0.0f },    // Type::CENTER_LEFT
+        { -0.5f, -0.5f, 0.0f },    // Type::CENTER
+        { -1.0f, -0.5f, 0.0f },    // Type::CENTER_RIGHT
 
-      case Type::CENTER_LEFT:
-        pos.y -= size_.y / 2.0f;
-        break;
+        {  0.0f, 0.0f, 0.0f },     // Type::BOTTOM_LEFT
+        { -0.5f, 0.0f, 0.0f },     // Type::BOTTOM_CENTER
+        { -1.0f, 0.0f, 0.0f },     // Type::BOTTOM_RIGHT
 
-      case Type::CENTER:
-        pos.x -= size_.x / 2.0f;
-        pos.y -= size_.y / 2.0f;
-        break;
+        { 0.0f, 0.0f, 0.0f },      // Type::TOP_MID_LEFT
+        { 0.0f, 0.0f, 0.0f },      // Type::TOP_MID_CENTER
+        { 0.0f, 0.0f, 0.0f },      // Type::TOP_MID_RIGHT
+      };
 
-      case Type::CENTER_RIGHT:
-        pos.x -= size_.x;
-        pos.y -= size_.y / 2.0f;
-        break;
-
-      case Type::BOTTOM_LEFT:
-        // do nothing.
-        break;
-
-      case Type::BOTTOM_CENTER:
-        pos.x -= size_.x / 2.0f;
-        break;
-          
-      case Type::BOTTOM_RIGHT:
-        pos.x -= size_.x;
-        break;
-
-        
-      case Type::TOP_MID_LEFT:
-      case Type::TOP_MID_CENTER:
-      case Type::TOP_MID_RIGHT:
-        assert(0);
-        break;
-      }
-      
+      pos += size_ * origin_tbl[origin_];
       layouted_pos_ = pos;
     }
   };
