@@ -128,45 +128,17 @@ public:
     bbox_max_ = bbox_max_orig_ + ci::Vec3f(pos);
   }
 
-
   void update(const double progressing_seconds) noexcept {
     for (auto& cube : cubes_) {
       if (cube.is_tween) continue;
 
-      bool revised = false;
       cube.position += cube.speed * progressing_seconds;
-
-      // FIXME:コピペ甚だしい
-      auto pos = cube.position;
-      if (pos.x > bbox_max_.x) {
-        pos.x = bbox_min_.x + (pos.x - bbox_max_.x);
-        revised = true;
-      }
-      else if (pos.x < bbox_min_.x) {
-        pos.x = bbox_max_.x + (pos.x - bbox_min_.x);
-        revised = true;
-      }
-      
-      if (pos.y > bbox_max_.y) {
-        pos.y = bbox_min_.y + (pos.y - bbox_max_.y);
-        revised = true;
-      }
-      else if (pos.y < bbox_min_.y) {
-        pos.y = bbox_max_.y + (pos.y - bbox_min_.y);
-        revised = true;
-      }
-      
-      if (pos.z > bbox_max_.z) {
-        pos.z = bbox_min_.z + (pos.z - bbox_max_.z);
-        revised = true;
-      }
-      else if (pos.z < bbox_min_.z) {
-        pos.z = bbox_max_.z + (pos.z - bbox_min_.z);
-        revised = true;
-      }
-
+      bool revised = !checkInBbox(cube.position, bbox_min_, bbox_max_);
       if (revised) {
-        cube.revised_pos = pos;
+        cube.revised_pos.x = repeatValue(cube.position.x, bbox_min_.x, bbox_max_.x);
+        cube.revised_pos.y = repeatValue(cube.position.y, bbox_min_.y, bbox_max_.y);
+        cube.revised_pos.z = repeatValue(cube.position.z, bbox_min_.z, bbox_max_.z);
+        
         startTween("out_box", cube);
         cube.is_tween = true;
 
@@ -210,6 +182,24 @@ private:
       const auto& target = params["target"].getValue<std::string>();
       tween_setup[target](cube, params, isFirstApply(target, applyed_targets));
     }
+  }
+
+  static bool checkInBbox(const ci::Vec3f& pos,
+                          const ci::Vec3f& bbox_min, const ci::Vec3f& bbox_max) noexcept {
+    return pos.x >= bbox_min.x
+        && pos.x <= bbox_max.x
+        && pos.y >= bbox_min.y
+        && pos.y <= bbox_max.y
+        && pos.z >= bbox_min.z
+        && pos.z <= bbox_max.z;
+  }
+  
+  static float repeatValue(const float value,
+                           const float min_value, const float max_value) noexcept {
+    float d = value - min_value;
+    float between_value = max_value - min_value;
+    return (d >= 0.0f) ? std::fmod(d, between_value) + min_value
+                       : d + max_value;
   }
   
 };
