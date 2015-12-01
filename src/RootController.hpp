@@ -45,7 +45,8 @@ class RootController : public ControllerBase {
   Autolayout autolayout_;
   UIViewCreator view_creator_;
 
-  SoundPlayer sound_;
+  Sound       sound_;
+  SoundPlayer player_;
   
   ci::Color background_;
 
@@ -72,6 +73,7 @@ public:
     touch_event_(touch_event),
     view_creator_(params, timeline, ui_camera_, autolayout_, event_, touch_event),
     sound_(params["sounds"]),
+    player_(sound_),
     background_(Json::getColor<float>(params["app.background"])),
     records_(params["version"].getValue<float>())
   {
@@ -164,19 +166,19 @@ public:
     event_.connect("sound-play",
                    [this](const Connection&, EventParam& param) noexcept {
                      auto& name = boost::any_cast<const std::string&>(param.at("sound"));
-                     sound_.play(name);
+                     player_.play(name);
                      // DOUT << "sound:" << name << std::endl;
                    });
 
     
     event_.connect("se-silent",
                    [this](const Connection&, EventParam& param) noexcept {
-                     sound_.get().setBufferSilent(boost::any_cast<bool>(param["silent"]));
+                     sound_.setBufferSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
     event_.connect("bgm-silent",
                    [this](const Connection&, EventParam& param) noexcept {
-                     sound_.get().setFileSilent(boost::any_cast<bool>(param["silent"]));
+                     sound_.setFileSilent(boost::any_cast<bool>(param["silent"]));
                    });
 
     
@@ -217,8 +219,8 @@ public:
 
     records_.load(params["game.records"].getValue<std::string>());
     
-    sound_.get().setBufferSilent(!records_.isSeOn());
-    sound_.get().setFileSilent(!records_.isBgmOn());
+    sound_.setBufferSilent(!records_.isSeOn());
+    sound_.setFileSilent(!records_.isBgmOn());
       
     addController<FieldController>(params, touch_event_, event_, records_);
 
@@ -299,7 +301,7 @@ private:
                            });
 
     // 予約されたサウンドを再生
-    sound_.update();
+    player_.update();
   }
   
   void draw(FontHolder& fonts, ModelHolder& models) noexcept override {

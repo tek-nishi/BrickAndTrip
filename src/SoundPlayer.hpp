@@ -5,28 +5,24 @@
 // 同じタイミングで同じ音が発声しないよう管理
 //
 
-#include "Sound.hpp"
 #include <map>
+#include "Sound.hpp"
 
 
 namespace ngs {
 
 class SoundPlayer : private boost::noncopyable {
-  Sound sound_;
+  Sound& sound_;
 
   std::map<std::string, float> reserved_;
   
 
 public:
-  SoundPlayer(const ci::JsonTree& params) noexcept :
-    sound_(params)
+  SoundPlayer(Sound& sound) noexcept :
+    sound_(sound)
   {
     DOUT << "SoundPlayer()" << std::endl;
   }
-
-
-  // FIXME:せっかく隠蔽しているのを...
-  Sound& get() noexcept { return sound_; }
   
 
   void play(const std::string& name, const float gain = 1.0f) noexcept {
