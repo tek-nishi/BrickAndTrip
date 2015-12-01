@@ -4,7 +4,7 @@
 // File関連の雑多な処理
 //
 
-#include "cinder/app/App.h"
+#include <cinder/app/App.h>
 
 
 namespace ngs {

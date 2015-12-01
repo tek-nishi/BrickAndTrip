@@ -10,12 +10,12 @@
 // この場合、path指定にascii以外が入ると正しく処理されなくなる:D
 //
 
+#include <boost/noncopyable.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include "cinder/Surface.h"
-#include "cinder/ip/Fill.h"
-#include "cinder/ip/Resize.h"
-#include <boost/noncopyable.hpp>
+#include <cinder/Surface.h>
+#include <cinder/ip/Fill.h>
+#include <cinder/ip/Resize.h>
 #include "Utility.hpp"
 
 

@@ -5,7 +5,7 @@
 //
 
 #include <boost/noncopyable.hpp>
-#include "cinder/gl/Material.h"
+#include <cinder/gl/Material.h>
 #include "JsonUtil.hpp"
 
 

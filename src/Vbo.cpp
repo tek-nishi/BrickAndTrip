@@ -20,8 +20,8 @@
  POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "cinder/gl/Vbo.h"
 #include <sstream>
+#include <cinder/gl/Vbo.h>
 
 using namespace std;
 

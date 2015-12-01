@@ -4,15 +4,15 @@
 // 立方体文字列表示
 //
 
-#include "cinder/Text.h"
-#include "cinder/gl/gl.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/Surface.h"
-#include "cinder/Tween.h"
+#include <map>
+#include <cinder/Text.h>
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+#include <cinder/Surface.h>
+#include <cinder/Tween.h>
 #include "CubeText.hpp"
 #include "TextureFont.hpp"
 #include "Model.hpp"
-#include <map>
 
 
 namespace ngs {

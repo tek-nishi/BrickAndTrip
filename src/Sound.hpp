@@ -4,10 +4,10 @@
 // BGM処理
 //
 
-#include "cinder/audio/Context.h"
-#include "cinder/audio/SamplePlayerNode.h"
-#include "cinder/audio/NodeEffects.h"
 #include <boost/noncopyable.hpp>
+#include <cinder/audio/Context.h>
+#include <cinder/audio/SamplePlayerNode.h>
+#include <cinder/audio/NodeEffects.h>
 
 
 namespace ngs {

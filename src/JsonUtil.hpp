@@ -5,8 +5,8 @@
 // 配列から色々生成する
 //
 
-#include "cinder/Vector.h"
 #include <sstream>
+#include <cinder/Vector.h>
 
 
 namespace ngs {

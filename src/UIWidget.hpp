@@ -4,7 +4,9 @@
 // UI部品
 //
 
-#include "cinder/Timeline.h"
+#include <set>
+#include <boost/noncopyable.hpp>
+#include <cinder/Timeline.h>
 #include "CubeText.hpp"
 #include "Autolayout.hpp"
 #include "JsonUtil.hpp"
@@ -12,8 +14,6 @@
 #include "EasingUtil.hpp"
 #include "TweenUtil.hpp"
 #include "FontHolder.hpp"
-#include <set>
-#include <boost/noncopyable.hpp>
 
 
 namespace ngs {

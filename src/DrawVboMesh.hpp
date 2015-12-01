@@ -6,7 +6,7 @@
 
 #if defined( CINDER_GLES )
 
-#include "cinder/gl/Vbo.h"
+#include <cinder/gl/Vbo.h>
 
 
 namespace cinder { namespace gl {

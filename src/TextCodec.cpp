@@ -3,12 +3,12 @@
 // 
 
 #include "Defines.hpp"
-#include "TextCodec.hpp"
 #include <iostream>
 #include <fstream>
 #include <cassert>
 #include <zlib.h>
-#include "cinder/app/App.h"
+#include <cinder/app/App.h>
+#include "TextCodec.hpp"
 
 
 namespace ngs { namespace TextCodec {

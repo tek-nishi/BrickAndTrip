@@ -6,10 +6,10 @@
 
 #include <string>
 #include <functional>
-#include "Utility.hpp"
-#include "cinder/Easing.h"
-#include "cinder/AxisAlignedBox.h"
+#include <cinder/Easing.h>
+#include <cinder/AxisAlignedBox.h>
 #include <boost/noncopyable.hpp>
+#include "Utility.hpp"
 
 
 namespace ngs {

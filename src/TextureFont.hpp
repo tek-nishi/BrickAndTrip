@@ -7,7 +7,7 @@
 
 #include <map>
 #include <boost/noncopyable.hpp>
-#include "cinder/gl/Texture.h"
+#include <cinder/gl/Texture.h>
 #include "Font.hpp"
 
 

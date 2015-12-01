@@ -4,14 +4,14 @@
 // UI View
 //
 
-#include "cinder/Json.h"
+#include <map>
+#include <vector>
+#include <boost/noncopyable.hpp>
+#include <cinder/Json.h>
 #include "Autolayout.hpp"
 #include "CubeTextDrawer.hpp"
 #include "JsonUtil.hpp"
 #include "Touch.hpp"
-#include <map>
-#include <vector>
-#include <boost/noncopyable.hpp>
 #include "UIWidget.hpp"
 #include "Event.hpp"
 #include "EventParam.hpp"

@@ -3,8 +3,8 @@
 // SOURCE:http://qiita.com/nasu_st/items/561d8946966015abd448
 //
 
-#include "cinder/app/Window.h"
-#include "cinder/ip/Flip.h"
+#include <cinder/app/Window.h>
+#include <cinder/ip/Flip.h>
 #include "Capture.h"
 
 

@@ -4,16 +4,16 @@
 // ゲーム舞台のView
 //
 
-#include "cinder/Camera.h"
-#include "cinder/gl/Light.h"
-#include "cinder/gl/gl.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/ImageIo.h"
-#include "cinder/Frustum.h"
+#include <numeric>
 #include <boost/range/algorithm_ext/erase.hpp>
 #include <boost/algorithm/clamp.hpp>
 #include <boost/noncopyable.hpp>
-#include <numeric>
+#include <cinder/Camera.h>
+#include <cinder/gl/Light.h>
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+#include <cinder/ImageIo.h>
+#include <cinder/Frustum.h>
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
 #include "EventParam.hpp"

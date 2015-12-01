@@ -4,8 +4,8 @@
 // Stageを構成するCube
 //
 
-#include "cinder/Tween.h"
 #include <boost/noncopyable.hpp>
+#include <cinder/Tween.h>
 
 
 namespace ngs {

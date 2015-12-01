@@ -5,7 +5,7 @@
 #import <GameKit/GameKit.h>
 #include <sstream>
 #include <iomanip>
-#include "cinder/Json.h"
+#include <cinder/Json.h>
 #include "GameCenter.h"
 #include "FileUtil.hpp"
 #include "TextCodec.hpp"

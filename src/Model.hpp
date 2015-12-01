@@ -5,9 +5,9 @@
 //
 
 #include <boost/noncopyable.hpp>
-#include "cinder/TriMesh.h"
-#include "cinder/ObjLoader.h"
-#include "cinder/gl/Vbo.h"
+#include <cinder/TriMesh.h>
+#include <cinder/ObjLoader.h>
+#include <cinder/gl/Vbo.h>
 
 
 namespace ngs {

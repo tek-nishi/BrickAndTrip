@@ -5,8 +5,8 @@
 //
 
 #include <vector>
-#include "Event.hpp"
 #include <boost/noncopyable.hpp>
+#include "Event.hpp"
 
 
 namespace ngs {

@@ -6,7 +6,7 @@
 
 #include <map>
 #include <string>
-#include "cinder/Easing.h"
+#include <cinder/Easing.h>
 
 
 namespace ngs {

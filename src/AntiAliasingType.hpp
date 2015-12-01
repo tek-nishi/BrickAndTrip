@@ -5,7 +5,7 @@
 //
 
 #include "LowEfficiencyDevice.hpp"
-#include "cinder/app/Renderer.h"
+#include <cinder/app/Renderer.h>
 
 
 namespace ngs { namespace AntiAliasingType {

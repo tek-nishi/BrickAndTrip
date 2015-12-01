@@ -5,8 +5,8 @@
 //
 
 #include <boost/noncopyable.hpp>
-#include "cinder/Timeline.h"
-#include "cinder/Rand.h"
+#include <cinder/Timeline.h>
+#include <cinder/Rand.h>
 #include "EasingUtil.hpp"
 #include "Utility.hpp"
 
