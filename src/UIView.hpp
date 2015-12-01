@@ -67,8 +67,7 @@ public:
 
     float padding = params["ui_view.widget.padding"].getValue<float>();
     for (const auto p : widget_params) {
-      auto widget = std::unique_ptr<UIWidget>(new UIWidget(p, timeline, autolayout, padding));
-      widgets_.push_back(std::move(widget));
+      widgets_.emplace_back(new UIWidget(p, timeline, autolayout, padding));
     }
 
     // Touch Eventを登録

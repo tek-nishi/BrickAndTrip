@@ -427,13 +427,11 @@ class BrickTripApp : public ci::app::AppNative,
     
     const auto& event_touches = event.getTouches();
     for (const auto& touch : event_touches) {
-      ngs::Touch t = {
-        false,
-        touch.getTime(),
-        touch.getId(),
-        touch.getPos(), touch.getPrevPos()
-      };
-      touches.push_back(std::move(t));
+      touches.emplace_back(false,
+                           touch.getTime(),
+                           touch.getId(),
+                           touch.getPos(),
+                           touch.getPrevPos());
     }
     
     return touches;

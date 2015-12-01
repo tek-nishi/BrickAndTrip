@@ -317,8 +317,7 @@ private:
 
   template<typename T, typename... Args>
   void addController(Args&&... args) noexcept {
-    auto controller = std::unique_ptr<ControllerBase>(new T(std::forward<Args>(args)...));
-    children_.push_back(std::move(controller));
+    children_.emplace_back(new T(std::forward<Args>(args)...));
   }
 
 

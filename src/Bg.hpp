@@ -20,6 +20,20 @@ public:
     ci::Vec3f speed;
     ci::Vec3f revised_pos;
     bool is_tween;
+
+    Cube(const ci::Vec3f& position_,
+         const ci::Anim<ci::Vec3f>& size_,
+         const ci::Color& color_,
+         const ci::Vec3f& speed_,
+         const ci::Vec3f& revised_pos_,
+         const bool is_tween_) noexcept :
+      position(position_),
+      size(size_),
+      color(color_),
+      speed(speed_),
+      revised_pos(revised_pos_),
+      is_tween(is_tween_)
+    {}
   };
 
 
@@ -75,18 +89,14 @@ public:
           float speed = ci::randFloat(cube_speed.x, cube_speed.y);
           // 確率1/2で向きを逆に
           if (ci::randInt(100) < 50) speed = -speed;
-
           float v = ci::randFloat(color_range.x, color_range.y);
-          
-          Cube cube = {
-            ci::Vec3f(ix, iy, ci::randInt(bbox_min_.z, bbox_max_.z)),
-            ci::Vec3f::one(),
-            ci::Color(v, v, v),
-            ci::Vec3f(0, 0, speed),
-            ci::Vec3f::zero(),
-            false,
-          };
-          cubes_.push_back(std::move(cube));
+
+          cubes_.emplace_back(ci::Vec3f(ix, iy, ci::randInt(bbox_min_.z, bbox_max_.z)),
+                              ci::Vec3f::one(),
+                              ci::Color(v, v, v),
+                              ci::Vec3f(0, 0, speed),
+                              ci::Vec3f::zero(),
+                              false);
         }
       }
       else {
@@ -97,18 +107,14 @@ public:
 
           float speed = ci::randFloat(cube_speed.x, cube_speed.y);
           if (ci::randInt(100) < 50) speed = -speed;
-
           float v = ci::randFloat(color_range.x, color_range.y);
 
-          Cube cube = {
-            ci::Vec3f(ci::randInt(bbox_min_.x, bbox_max_.x), iy, iz),
-            ci::Vec3f::one(),
-            ci::Color(v, v, v),
-            ci::Vec3f(speed, 0, 0),
-            ci::Vec3f::zero(),
-            false,
-          };
-          cubes_.push_back(std::move(cube));
+          cubes_.emplace_back(ci::Vec3f(ci::randInt(bbox_min_.x, bbox_max_.x), iy, iz),
+                              ci::Vec3f::one(),
+                              ci::Color(v, v, v),
+                              ci::Vec3f(speed, 0, 0),
+                              ci::Vec3f::zero(),
+                              false);
         }
       }
     }

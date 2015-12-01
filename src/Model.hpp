@@ -62,6 +62,7 @@ public:
          << " g:" << groups.size()
          << std::endl;
 
+    group_face_.reserve(groups.size());
     for (const auto& g : groups) {
       group_face_.push_back(int(g.mFaces.size()));
       DOUT << "face:"

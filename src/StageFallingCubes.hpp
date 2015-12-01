@@ -89,10 +89,10 @@ public:
   void entryCube(const int current_z) noexcept {
     for (const auto& entry : entry_cubes_) {
       if (entry.position.z == current_z) {
-        auto cube = FallingCubePtr(new FallingCube(params_, timeline_, event_,
-                                                   entry.position,
-                                                   entry.interval, entry.delay));
-        cubes_.push_back(std::move(cube));
+        cubes_.emplace_back(new FallingCube(params_,
+                                            timeline_, event_,
+                                            entry.position,
+                                            entry.interval, entry.delay));
       }
     }
   }

@@ -19,6 +19,15 @@ struct Touch {
   ci::Vec2f pos;
   ci::Vec2f prev_pos;
 
+  Touch(const bool handled_, const double timestamp_, const u_int id_,
+        const ci::Vec2f& pos_, const ci::Vec2f& prev_pos_) noexcept :
+    handled(handled_),
+    timestamp(timestamp_),
+    id(id_),
+    pos(pos_),
+    prev_pos(prev_pos_)
+  { }
+  
 
   // std::findを利用するための定義
   bool operator== (const Touch& rhs) const noexcept {

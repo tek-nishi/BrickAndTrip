@@ -825,12 +825,11 @@ private:
             auto pos = ci::Vec3i(x, 0, entry_y);
             if (isPickableCube(pos)) continue;
           
-            auto cube = PickableCubePtr(new PickableCube(params_, timeline_, event_, pos,
-                                                         (mode_ == CLEAR) ? false : sleep));
-            pickable_cubes_.push_back(std::move(cube));
+            pickable_cubes_.emplace_back(new PickableCube(params_, timeline_, event_, pos,
+                                                          (mode_ == CLEAR) ? false : sleep));
 
             // 再開用の位置を保存
-            start_pickable_entry_.push_back(ci::Vec2i(pos.x, pos.z - offset_z));
+            start_pickable_entry_.emplace_back(pos.x, pos.z - offset_z);
             return;
           }
           entry_y += 1;
@@ -857,7 +856,7 @@ private:
       if (!cube->isOnStage()) continue;
       
       const auto& pos = cube->blockPosition();
-      start_pickable_entry_.push_back(ci::Vec2i(pos.x, pos.z - offset_z));
+      start_pickable_entry_.emplace_back(pos.x, pos.z - offset_z);
     }
   }
 

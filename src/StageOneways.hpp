@@ -58,10 +58,8 @@ public:
     if (!entry_params.hasChild("oneways")) return;
 
     for (const auto& p : entry_params["oneways"]) {
-      auto obj = std::unique_ptr<Oneway>(new Oneway(params, p,
-                                                    timeline_, event_,
-                                                    offset_x, bottom_z));
-      objects_.push_back(std::move(obj));
+      objects_.emplace_back(new Oneway(params, p,
+                                       timeline_, event_,offset_x, bottom_z));
     }
   }
 

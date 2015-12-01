@@ -131,6 +131,7 @@ VboMesh::VboMesh( const TriMesh &triMesh, Layout layout )
 	// upload the indices
   // OpenGL ES はindexはshort型
   std::vector<uint16_t> indices;
+  indices.reserve(triMesh.getNumIndices());
   for (const auto index : triMesh.getIndices()) {
     indices.push_back(index);
   }
@@ -205,6 +206,7 @@ VboMesh::VboMesh( const TriMesh2d &triMesh, Layout layout )
 			
 	// upload the indices
   std::vector<uint16_t> indices;
+  indices.reserve(triMesh.getNumIndices());
   for (const auto index : triMesh.getIndices()) {
     indices.push_back(index);
   }

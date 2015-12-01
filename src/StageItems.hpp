@@ -83,8 +83,7 @@ public:
   void entryItemCube(const int current_z) noexcept {
     for (const auto& entry : entry_items_) {
       if (entry.z == current_z) {
-        auto cube = ItemCubePtr(new ItemCube(params_, timeline_, event_, entry));
-        items_.push_back(std::move(cube));
+        items_.emplace_back(new ItemCube(params_, timeline_, event_, entry));
       }
     }
   }

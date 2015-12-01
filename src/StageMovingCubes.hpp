@@ -87,8 +87,9 @@ public:
   void entryCube(const int current_z) noexcept {
     for (const auto& entry : entry_cubes_) {
       if (entry.pos.z == current_z) {
-        auto cube = MovingCubePtr(new MovingCube(params_, timeline_, event_, entry.pos, entry.move_pattern));
-        cubes_.push_back(std::move(cube));
+        cubes_.emplace_back(new MovingCube(params_,
+                                           timeline_, event_,
+                                           entry.pos, entry.move_pattern));
       }
     }
   }
