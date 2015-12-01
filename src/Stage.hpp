@@ -256,6 +256,8 @@ public:
     int iz = 0;
     for (const auto& row : body) {
       std::vector<StageCube> cube_row;
+      cube_row.reserve(16);
+      
       int x = x_offset;
       int z = iz + top_z_;
 

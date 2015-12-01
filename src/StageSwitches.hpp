@@ -57,10 +57,9 @@ public:
     if (!entry_params.hasChild("switches")) return;
 
     for (const auto& p : entry_params["switches"]) {
-      auto obj = std::unique_ptr<Switch>(new Switch(params, p,
-                                                    timeline_, event_,
-                                                    offset_x, bottom_z));
-      switches_.push_back(std::move(obj));
+      switches_.emplace_back(new Switch(params, p,
+                                        timeline_, event_,
+                                        offset_x, bottom_z));
     }
   }
 

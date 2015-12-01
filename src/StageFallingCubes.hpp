@@ -18,6 +18,13 @@ class StageFallingCubes : private boost::noncopyable {
     ci::Vec3i position;
     float interval;
     float delay;
+
+    Entry(const ci::Vec3i& position_,
+          const float interval_, const float delay_) noexcept :
+      position(position_),
+      interval(interval_),
+      delay(delay_)
+    {}
   };
   
   std::vector<Entry> entry_cubes_;
@@ -73,16 +80,10 @@ public:
 
     for (const auto& p : params["falling"]) {
       auto entry_pos = Json::getVec3<int>(p["entry"]) + start_pos;
-      auto interval = p["interval"].getValue<float>();
-      auto delay    = p["delay"].getValue<float>();
+      auto interval  = p["interval"].getValue<float>();
+      auto delay     = p["delay"].getValue<float>();
 
-      Entry entry = {
-        entry_pos,
-        interval,
-        delay
-      };
-      
-      entry_cubes_.push_back(std::move(entry));
+      entry_cubes_.emplace_back(entry_pos, interval, delay);
     }
   }
 

@@ -17,6 +17,11 @@ class StageMovingCubes : private boost::noncopyable {
   struct Entry {
     ci::Vec3i pos;
     std::vector<int> move_pattern;
+
+    Entry(const ci::Vec3i& pos_, const std::vector<int>& move_pattern_) noexcept :
+      pos(pos_),
+      move_pattern(move_pattern_)
+    {}
   };
   std::vector<Entry> entry_cubes_;
 
@@ -72,15 +77,8 @@ public:
     ci::Vec3i start_pos(x_offset, 0, start_z);
 
     for (const auto& p : params["moving"]) {
-      Entry entry = {
-        Json::getVec3<int>(p["entry"]) + start_pos,
-      };
-      
-      for (auto& value : p["pattern"]) {
-        entry.move_pattern.push_back(value.getValue<int>());
-      }
-      
-      entry_cubes_.push_back(std::move(entry));
+      entry_cubes_.emplace_back(Json::getVec3<int>(p["entry"]) + start_pos,
+                                Json::getArray<int>(p["pattern"]));
     }
   }
 
