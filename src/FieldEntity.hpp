@@ -169,6 +169,7 @@ public:
     event_timeline_(ci::Timeline::create())
   {
     const auto& colors = params["game.cube_stage_color"];
+    cube_stage_color_.reserve(colors.getNumChildren());
     for (const auto& color : colors) {
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
@@ -1063,6 +1064,9 @@ private:
 
   std::vector<ci::Vec3i> gatherPickableCubePosition() const noexcept {
     std::vector<ci::Vec3i> pos;
+    if (pickable_cubes_.empty()) return pos;
+    
+    pos.reserve(pickable_cubes_.size() * 2);
     
     for (const auto& cube : pickable_cubes_) {
       pos.push_back(cube->blockPosition());

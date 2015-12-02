@@ -280,11 +280,11 @@ public:
             true, true
           };
 
-          cube_row.push_back(std::move(cube));
+          cube_row.push_back(cube);
         }
         x += 1;
       }
-      cubes_.push_back(std::move(cube_row));
+      cubes_.push_back(cube_row);
 
       // stageのxの最大値を保持
       if (x > stage_width_.y) stage_width_.y = x;
@@ -446,7 +446,7 @@ private:
   void buildOneLine() {
     auto row = cubes_.front();
     cubes_.pop_front();
-    active_cubes_.push_back(std::move(row));
+    active_cubes_.push_back(row);
     active_top_z_ += 1;
   }
 

@@ -97,7 +97,7 @@ public:
       light.l.setAmbient(light.ambient());
       light.l.setSpecular(light.specular());
 
-      lights_.push_back(std::move(light));
+      lights_.push_back(light);
       
       ++id;
     }

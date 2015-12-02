@@ -16,7 +16,10 @@ class ConnectionHolder : private boost::noncopyable {
 
 
 public:
-  ConnectionHolder() = default;
+  ConnectionHolder() {
+    // TIPS:vectorの再確保を減らす
+    connections_.reserve(64);
+  }
 
   ~ConnectionHolder() {
     for (auto& connection : connections_) {

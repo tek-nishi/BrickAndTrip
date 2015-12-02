@@ -16,9 +16,11 @@ template<typename T>
 std::vector<T> getArray(const ci::JsonTree& json) noexcept {
   size_t num = json.getNumChildren();
 
-  std::vector<T> array(num);
+  std::vector<T> array;
+  array.reserve(num);
+
   for (size_t i = 0; i < num; ++i) {
-    array[i] = json[i].getValue<T>();
+    array.push_back(json[i].getValue<T>());
   }
 
   return array;

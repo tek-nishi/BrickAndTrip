@@ -77,6 +77,15 @@ class FieldView : private boost::noncopyable {
     ci::Vec3f            position;
     ci::Quatf            rotation;
     ci::AxisAlignedBox3f bbox;
+
+    TouchCube(const u_int id_,
+              const ci::Vec3f& position_, const ci::Quatf& rotation_,
+              const ci::AxisAlignedBox3f& bbox_) noexcept :
+      id(id_),
+      position(position_),
+      rotation(rotation_),
+      bbox(bbox_)
+    {}
   };
 
   std::vector<TouchCube> touch_cubes_;
@@ -87,6 +96,16 @@ class FieldView : private boost::noncopyable {
     double    timestamp;
     u_int     cube_id;
     bool      began_move;
+
+    Pick(const u_int touch_id_,
+         const ci::Vec2f& touch_begin_pos_, const double timestamp_,
+         const u_int cube_id_, const bool began_move_) :
+      touch_id(touch_id_),
+      touch_begin_pos(touch_begin_pos_),
+      timestamp(timestamp_),
+      cube_id(cube_id_),
+      began_move(began_move_)
+    {}
   };
   std::vector<Pick> pickings_;
 
@@ -504,14 +523,10 @@ private:
       if (picked) {
         assert(picked_cube);
           
-        Pick pick = {
-          touch.id,
-          touch.pos,
-          touch.timestamp,
-          picked_cube->id,
-          false,
-        };
-        pickings_.push_back(std::move(pick));
+        pickings_.emplace_back(touch.id,
+                               touch.pos, touch.timestamp,
+                               picked_cube->id,
+                               false);
 
         EventParam params = {
           { "cube_id", picked_cube->id },
@@ -756,14 +771,9 @@ private:
         half_size += ci::Vec3f(padding_size, padding_size, padding_size);
       }
       
-      TouchCube touch_cube = {
-        cube->id(),
-        pos,
-        cube->rotation(),
-        { pos - half_size, pos + half_size }
-      };
-      
-      touch_cubes_.push_back(std::move(touch_cube));
+      touch_cubes_.emplace_back(cube->id(),
+                                pos, cube->rotation(),
+                                ci::AxisAlignedBox3f(pos - half_size, pos + half_size));
     }
 
     // Pick中なのに含まれないCubeを削除

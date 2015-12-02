@@ -391,7 +391,7 @@ public:
         s.score        = Json::getValue(sr, "score", 0);
         s.rank         = Json::getValue(sr, "rank", int(RANK_DUMMY));
 
-        stage_records_.push_back(std::move(s));
+        stage_records_.push_back(s);
       }
     }
 

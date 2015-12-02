@@ -177,12 +177,13 @@ private:
 public:
   using WidgetRef = std::shared_ptr<Widget>;
 
-
-  Autolayout() = default;
   
   explicit Autolayout(ci::Camera& camera) noexcept :
     view_rect_(createViewRect(camera))
-  { }
+  {
+    // TIPS:vectorの再確保を減らす作戦
+    widgets_.reserve(64);
+  }
 
 
   // Widget生成
