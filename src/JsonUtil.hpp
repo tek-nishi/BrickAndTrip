@@ -17,7 +17,7 @@ std::vector<T> getArray(const ci::JsonTree& json) noexcept {
   size_t num = json.getNumChildren();
 
   std::vector<T> array;
-  array.reserve(num);
+  if (array.capacity() < num) array.reserve(num);
 
   for (size_t i = 0; i < num; ++i) {
     array.push_back(json[i].getValue<T>());

@@ -169,7 +169,8 @@ public:
     event_timeline_(ci::Timeline::create())
   {
     const auto& colors = params["game.cube_stage_color"];
-    cube_stage_color_.reserve(colors.getNumChildren());
+    size_t num = colors.getNumChildren();
+    if (cube_stage_color_.capacity() < num) cube_stage_color_.reserve(num);
     for (const auto& color : colors) {
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
@@ -613,10 +614,9 @@ public:
       cube->cancelRotationMove();
       return;
     }
-
     
     // 移動可能かStageを調べる
-    static ci::Vec3i move_vec[] = {
+    static const ci::Vec3i move_vec[] = {
       {  0, 0,  1 },
       {  0, 0, -1 },
       {  1, 0,  0 },
@@ -647,7 +647,7 @@ public:
 
     auto oneway = oneways_.startOneway(block_pos);
     if (oneway.first != Oneway::NONE) {
-      static std::map<int, int> direction = {
+      static const std::map<int, int> direction = {
         { Oneway::UP,    PickableCube::MOVE_UP },
         { Oneway::DOWN,  PickableCube::MOVE_DOWN },
         { Oneway::LEFT,  PickableCube::MOVE_LEFT },
@@ -721,14 +721,16 @@ public:
     auto& cube = *it;
     const ci::Vec3i block_pos = cube->blockPosition();
 
-    std::vector<int> directions;
-
-    static ci::Vec3i move_vec[] = {
+    static const ci::Vec3i move_vec[] = {
       {  0, 0,  1 },
       {  0, 0, -1 },
       {  1, 0,  0 },
       { -1, 0,  0 },
     };
+    std::vector<int> directions;
+    if (directions.capacity() < elemsof(move_vec)) {
+      directions.reserve(elemsof(move_vec));
+    }
     
     for (u_int i = 0; i < elemsof(move_vec); ++i) {
       if (!isPickableCube(block_pos + move_vec[i])) {
@@ -913,7 +915,7 @@ private:
   // PickableCubeが隣接するか判定
   void setAdjoinOtherPickableCube() noexcept {
     for (auto& cube : pickable_cubes_) {
-      static ci::Vec3i offset_table[] = {
+      static const ci::Vec3i offset_table[] = {
         {  1, 0,  0 },
         { -1, 0,  0 },
         {  0, 0,  1 },
@@ -1065,8 +1067,10 @@ private:
   std::vector<ci::Vec3i> gatherPickableCubePosition() const noexcept {
     std::vector<ci::Vec3i> pos;
     if (pickable_cubes_.empty()) return pos;
-    
-    pos.reserve(pickable_cubes_.size() * 2);
+
+    if (pos.capacity() < pickable_cubes_.size() * 2) {
+      pos.reserve(pickable_cubes_.size() * 2);
+    }
     
     for (const auto& cube : pickable_cubes_) {
       pos.push_back(cube->blockPosition());
@@ -1152,6 +1156,10 @@ private:
 
   
   void setupRecords(const ci::JsonTree& params) noexcept {
+    if (stage_pickable_num_.capacity() < 32) {
+      stage_pickable_num_.reserve(32);
+    }
+        
     records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
                          params["game.total_stage_num"].getValue<size_t>());
     

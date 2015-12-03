@@ -50,6 +50,8 @@ public:
       { "point",       ci::gl::Light::POINT },
       { "directional", ci::gl::Light::DIRECTIONAL },
     };
+
+    if (lights_.capacity() < 4) lights_.reserve(4);
     
     for (const auto& param : params["game_view.lights"]) {
       // 低性能環境では使わない光源の判定

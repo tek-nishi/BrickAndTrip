@@ -703,7 +703,6 @@
       
       "rotate_ease": "EaseInSine",
       "rotate_duration": 0.5,
-      "rotate_speed_rate": [ 1, 0.8, 0.6, 0.4, 0.2 ],
 
       "fall_ease": "EaseInQuad",
       "fall_duration": 1.5,

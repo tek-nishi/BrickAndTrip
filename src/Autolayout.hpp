@@ -182,7 +182,7 @@ public:
     view_rect_(createViewRect(camera))
   {
     // TIPS:vectorの再確保を減らす作戦
-    widgets_.reserve(64);
+    if (widgets_.capacity() < 64) widgets_.reserve(64);
   }
 
 

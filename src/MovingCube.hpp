@@ -51,13 +51,11 @@ class MovingCube : private boost::noncopyable {
   
   int       move_direction_;
   ci::Vec3i move_vector_;
-  int       move_speed_;
 
   float stop_time_;
   
   std::string rotate_ease_;
   float rotate_duration_;
-  std::vector<float> rotate_speed_rate_;
   ci::Anim<ci::Quatf> move_rotation_;
   ci::Quatf move_start_rotation_;
 
@@ -94,7 +92,6 @@ public:
     can_move_(false),
     move_direction_(MOVE_NONE),
     move_vector_(ci::Vec3i::zero()),
-    move_speed_(1),
     stop_time_(0.0),
     rotate_ease_(params["game.moving.rotate_ease"].getValue<std::string>()),
     rotate_duration_(params["game.moving.rotate_duration"].getValue<float>()),
@@ -117,12 +114,8 @@ public:
     // block_positionが同じ高さなら、StageCubeの上に乗るように位置を調整
     position_().y += 1.0f;
 
-    for (const auto& param : params["game.moving.rotate_speed_rate"]) {
-      rotate_speed_rate_.push_back(param.getValue<float>());
-    }
-
     // 移動パターンを2468方式から変換
-    std::map<int, int> move_table = {
+    static const std::map<int, int> move_table = {
       { 8, MOVE_UP },
       { 2, MOVE_DOWN },
       { 4, MOVE_LEFT },
@@ -217,13 +210,13 @@ public:
       { ci::Vec3f(0, 0, 1),  angle },
     };
 
-    float duration = rotate_duration_ * rotate_speed_rate_[std::min(move_speed_, int(rotate_speed_rate_.size())) - 1];
+    float duration = rotate_duration_;
     
     auto options = animation_timeline_->apply(&move_rotation_,
                                               ci::Quatf::identity(), rotation_table[move_direction_],
                                               duration,
                                               getEaseFunc(rotate_ease_));
-    ci::Vec3f pivot_table[] = {
+    static const ci::Vec3f pivot_table[] = {
       ci::Vec3f(        0, -1.0f / 2,  1.0f / 2),
       ci::Vec3f(        0, -1.0f / 2, -1.0f / 2),
       ci::Vec3f( 1.0f / 2, -1.0f / 2,         0),
@@ -315,7 +308,6 @@ public:
   bool isOnStage() const noexcept { return on_stage_; }
   bool isMoving() const noexcept { return moving_; }
 
-  int moveSpeed() const noexcept { return move_speed_; }
   const ci::Vec3i& moveVector() const noexcept { return move_vector_; }
   
   const ci::Vec3f& position() const noexcept { return position_(); }
