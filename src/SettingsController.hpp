@@ -61,6 +61,7 @@ public:
                                       { "silent", !active },
                                     };
                                     event_.signal("se-silent", p);
+                                    records_.write(params_["game.records"].getValue<std::string>());
                                   });
 
     connections_ += event.connect("bgm-change",
@@ -72,12 +73,12 @@ public:
                                       { "silent", !active },
                                     };
                                     event_.signal("bgm-silent", p);
+                                    records_.write(params_["game.records"].getValue<std::string>());
                                   });
 
     connections_ += event.connect("settings-agree",
                                   [this](const Connection&, EventParam& param) noexcept {
                                     view_->setActive(false);
-                                    records_.write(params_["game.records"].getValue<std::string>());
 
                                     event_timeline_->add([this]() noexcept {
                                         view_->startWidgetTween("tween-out");
