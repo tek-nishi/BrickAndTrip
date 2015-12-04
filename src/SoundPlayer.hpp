@@ -17,7 +17,6 @@ class SoundPlayer : private boost::noncopyable {
 
 public:
   SoundPlayer()  = default;
-  ~SoundPlayer() = default;
   
 
   void play(const std::string& name) noexcept {

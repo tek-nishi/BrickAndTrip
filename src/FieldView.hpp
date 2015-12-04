@@ -710,9 +710,10 @@ private:
 
   
   void removePick(const Touch& touch) noexcept {
+    u_int id = touch.id;
     boost::remove_erase_if(pickings_,
-                           [touch](const Pick& pick) {
-                             return pick.touch_id == touch.id;
+                           [id](const Pick& pick) {
+                             return pick.touch_id == id;
                            });
   }
 
