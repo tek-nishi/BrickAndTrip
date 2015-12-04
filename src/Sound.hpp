@@ -27,20 +27,12 @@ class Sound : private boost::noncopyable {
 
   
   // 効果音用の定義
-  struct BufferNode {
-    ci::audio::BufferPlayerNodeRef node;
-  };
-
   std::map<std::string, ci::audio::BufferRef> buffer_;
-  std::map<std::string, BufferNode> buffer_node_;
+  std::map<std::string, ci::audio::BufferPlayerNodeRef> buffer_node_;
 
   // ストリーミング再生用の定義
-  struct FileNode {
-    ci::audio::FilePlayerNodeRef node;
-  };
-  
   std::map<std::string, ci::audio::SourceFileRef> source_;
-  std::map<std::string, FileNode> file_node_;
+  std::map<std::string, ci::audio::FilePlayerNodeRef> file_node_;
 
   
   // 停止用
@@ -78,13 +70,10 @@ public:
             // TIPS:SPECIFIEDにしないと、STEREOの音源を直接MONO出力できない
             ci::audio::Node::Format format;
             format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
-            
-            FileNode node = {
-              ctx->makeNode(new ci::audio::FilePlayerNode(format)),
-            };
-            
+
+            auto node = ctx->makeNode(new ci::audio::FilePlayerNode(format));
             file_node_.insert({ category, node });
-            category_node_.insert({ category, node.node });
+            category_node_.insert({ category, node });
           }
         }
       },
@@ -157,16 +146,16 @@ public:
           auto& source = source_.at(name);
           auto& node   = file_node_.at(object.category);
           
-          if (node.node->isEnabled()) {
-            node.node->stop();
+          if (node->isEnabled()) {
+            node->stop();
           }
           auto* ctx = ci::audio::Context::master();
 
-          node.node->setSourceFile(source);
-          node.node->setLoopEnabled(object.loop);
+          node->setSourceFile(source);
+          node->setLoopEnabled(object.loop);
 
-          node.node >> ctx->getOutput();
-          node.node->start();
+          node >> ctx->getOutput();
+          node->start();
         }
       },
 
@@ -177,17 +166,17 @@ public:
           auto& buffer = buffer_.at(name);
           auto& node   = buffer_node_.at(getCategory(object));
 
-          if (node.node->isEnabled()) {
-            node.node->stop();
+          if (node->isEnabled()) {
+            node->stop();
           }
           
           auto* ctx = ci::audio::Context::master();
 
-          node.node->setBuffer(buffer);
-          node.node->setLoopEnabled(object.loop);
+          node->setBuffer(buffer);
+          node->setLoopEnabled(object.loop);
           
-          node.node >> ctx->getOutput();
-          node.node->start();
+          node >> ctx->getOutput();
+          node->start();
         }
       }
     };
@@ -224,8 +213,8 @@ public:
     // 無音モードになった瞬間から音を止める
     if (value) {
       for (auto& it : buffer_node_) {
-        if (it.second.node->isEnabled()) {
-          it.second.node->stop();
+        if (it.second->isEnabled()) {
+          it.second->stop();
         }
       }
 
@@ -239,8 +228,8 @@ public:
     // 無音モードになった瞬間から音を止める
     if (value) {
       for (auto& it : file_node_) {
-        if (it.second.node->isEnabled()) {
-          it.second.node->stop();
+        if (it.second->isEnabled()) {
+          it.second->stop();
         }
       }
 
@@ -256,12 +245,9 @@ private:
       ci::audio::Node::Format format;
       format.channelMode(ci::audio::Node::ChannelMode::SPECIFIED);
 
-      BufferNode node = {
-        ctx->makeNode(new ci::audio::BufferPlayerNode(format)),
-      };
-            
+      auto node = ctx->makeNode(new ci::audio::BufferPlayerNode(format));
       buffer_node_.insert({ category, node });
-      category_node_.insert({ category, node.node });
+      category_node_.insert({ category, node });
     }
   }
 
