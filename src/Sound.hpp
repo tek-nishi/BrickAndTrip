@@ -13,7 +13,7 @@ namespace ngs {
 
 class Sound : private boost::noncopyable {
   // 各音源情報
-  struct Object {
+  struct Object : private boost::noncopyable {
     std::string type;
     std::string category;
     
@@ -21,6 +21,20 @@ class Sound : private boost::noncopyable {
     size_t category_index;
 
     bool loop;
+
+    // TIPS:std::map::emplaceを使って構築したいので
+    //      コンストラクタを定義している
+    Object(std::string type_,
+           std::string category_,
+           std::vector<std::string> poly_category_,
+           const size_t category_index_,
+           const bool loop_) noexcept :
+      type(std::move(type_)),
+      category(std::move(category_)),
+      poly_category(std::move(poly_category_)),
+      category_index(category_index_),
+      loop(loop_)
+    {}
   };
 
   std::map<std::string, Object> objects_;
@@ -110,19 +124,18 @@ public:
       else {
         category = it["category"].getValue<std::string>();
       }
-      
-      Object object = {
-        it["type"].getValue<std::string>(),
-        category,
-        poly_category,
-        0,
-        it["loop"].getValue<bool>(),
-      };
 
       const auto& name = it["name"].getValue<std::string>();
-      objects_.insert({ name, object });
+      const auto& type = it["type"].getValue<std::string>();
+      objects_.emplace(std::piecewise_construct,
+                       std::forward_as_tuple(name),
+                       std::forward_as_tuple(type,
+                                             category,
+                                             poly_category,
+                                             0,
+                                             it["loop"].getValue<bool>()));
 
-      creator[object.type](ctx, it);
+      creator[type](ctx, it);
     }
   }
 
@@ -181,7 +194,7 @@ public:
       }
     };
 
-    auto& object = objects_[name];
+    auto& object = objects_.at(name);
     assign[object.type](name, object);
   }
 
