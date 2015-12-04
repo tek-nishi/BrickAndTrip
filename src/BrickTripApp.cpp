@@ -339,11 +339,21 @@ class BrickTripApp : public ci::app::AppNative,
     
     elapsed_seconds_ = elapsed_seconds;
   }
+
+  
+#if !defined(CINDER_MSW)
+  // FIXME:更新処理をここでおこなうとWindowsでフレームレートが安定しない
+	void update() noexcept override {
+    updateApp();
+  }
+#endif
   
 	void draw() noexcept override {
+#if defined(CINDER_MSW)
     // FIXME:更新処理をupdateおこなうと、
     //       Windowsでフレームレートが安定しない
     updateApp();
+#endif
     controller_->draw(*fonts_, *models_);
   }
 
