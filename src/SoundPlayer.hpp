@@ -5,42 +5,30 @@
 // 同じタイミングで同じ音が発声しないよう管理
 //
 
-#include <map>
+#include <set>
 #include "Sound.hpp"
 
 
 namespace ngs {
 
 class SoundPlayer : private boost::noncopyable {
-  Sound& sound_;
-
-  std::map<std::string, float> reserved_;
+  std::set<std::string> reserved_;
   
 
 public:
-  SoundPlayer(Sound& sound) noexcept :
-    sound_(sound)
-  {
-    DOUT << "SoundPlayer()" << std::endl;
-  }
+  SoundPlayer()  = default;
+  ~SoundPlayer() = default;
   
 
-  void play(const std::string& name, const float gain = 1.0f) noexcept {
-    auto it = reserved_.find(name);
-    if (it == std::end(reserved_)) {
-      reserved_.insert({ name, gain });
-    }
-    else {
-      // 先約がある場合、gainの大きいのを選択
-      it->second = std::max(it->second, gain);
-    }
+  void play(const std::string& name) noexcept {
+    reserved_.insert(name);
   }  
   
-  void update() noexcept {
+  void update(Sound& sound) noexcept {
     if (reserved_.empty()) return;
 
-    for (auto& p : reserved_) {
-      sound_.play(p.first, p.second);
+    for (const auto& name : reserved_) {
+      sound.play(name);
     }
 
     reserved_.clear();

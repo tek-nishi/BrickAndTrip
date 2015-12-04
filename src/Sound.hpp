@@ -7,7 +7,6 @@
 #include <boost/noncopyable.hpp>
 #include <cinder/audio/Context.h>
 #include <cinder/audio/SamplePlayerNode.h>
-#include <cinder/audio/NodeEffects.h>
 
 
 namespace ngs {
@@ -22,7 +21,6 @@ class Sound : private boost::noncopyable {
     size_t category_index;
 
     bool loop;
-    float gain;
   };
 
   std::map<std::string, Object> objects_;
@@ -31,7 +29,6 @@ class Sound : private boost::noncopyable {
   // 効果音用の定義
   struct BufferNode {
     ci::audio::BufferPlayerNodeRef node;
-    ci::audio::GainNodeRef gain;
   };
 
   std::map<std::string, ci::audio::BufferRef> buffer_;
@@ -40,7 +37,6 @@ class Sound : private boost::noncopyable {
   // ストリーミング再生用の定義
   struct FileNode {
     ci::audio::FilePlayerNodeRef node;
-    ci::audio::GainNodeRef gain;
   };
   
   std::map<std::string, ci::audio::SourceFileRef> source_;
@@ -85,7 +81,6 @@ public:
             
             FileNode node = {
               ctx->makeNode(new ci::audio::FilePlayerNode(format)),
-              ctx->makeNode(new ci::audio::GainNode(1.0f)),
             };
             
             file_node_.insert({ category, node });
@@ -133,7 +128,6 @@ public:
         poly_category,
         0,
         it["loop"].getValue<bool>(),
-        it["gain"].getValue<float>()
       };
 
       const auto& name = it["name"].getValue<std::string>();
@@ -150,14 +144,14 @@ public:
   }
   
 
-  void play(const std::string& name, const float gain = 1.0f) noexcept {
+  void play(const std::string& name) noexcept {
     disconnectInactiveNode();
     
     // TIPS:文字列による分岐をstd::mapとラムダ式で実装
     std::map<std::string,
-             std::function<void (const std::string&, Object&, const float)> > assign = {
+             std::function<void (const std::string&, Object&)> > assign = {
       { "file",
-        [this](const std::string& name, Object& object, const float gain) {
+        [this](const std::string& name, Object& object) {
           if (file_silent_) return;
           
           auto& source = source_.at(name);
@@ -167,11 +161,9 @@ public:
             node.node->stop();
           }
           auto* ctx = ci::audio::Context::master();
-          // node.node->disconnect(ctx->getOutput());
 
           node.node->setSourceFile(source);
           node.node->setLoopEnabled(object.loop);
-          // node.gain->setValue(object.gain * gain);
 
           node.node >> ctx->getOutput();
           node.node->start();
@@ -179,7 +171,7 @@ public:
       },
 
       { "buffer",
-        [this](const std::string& name, Object& object, const float gain) {
+        [this](const std::string& name, Object& object) {
           if (buffer_silent_) return;
 
           auto& buffer = buffer_.at(name);
@@ -190,11 +182,9 @@ public:
           }
           
           auto* ctx = ci::audio::Context::master();
-          // node.node->disconnect(ctx->getOutput());
 
           node.node->setBuffer(buffer);
           node.node->setLoopEnabled(object.loop);
-          // node.gain->setValue(object.gain * gain);
           
           node.node >> ctx->getOutput();
           node.node->start();
@@ -203,7 +193,7 @@ public:
     };
 
     auto& object = objects_[name];
-    assign[object.type](name, object, gain);
+    assign[object.type](name, object);
   }
 
   void stop(const std::string& category) noexcept {
@@ -268,7 +258,6 @@ private:
 
       BufferNode node = {
         ctx->makeNode(new ci::audio::BufferPlayerNode(format)),
-        ctx->makeNode(new ci::audio::GainNode(1.0f)),
       };
             
       buffer_node_.insert({ category, node });

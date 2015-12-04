@@ -73,7 +73,6 @@ public:
     touch_event_(touch_event),
     view_creator_(params, timeline, ui_camera_, autolayout_, event_, touch_event),
     sound_(params["sounds"]),
-    player_(sound_),
     background_(Json::getColor<float>(params["app.background"])),
     records_(params["version"].getValue<float>())
   {
@@ -301,7 +300,7 @@ private:
                            });
 
     // 予約されたサウンドを再生
-    player_.update();
+    player_.update(sound_);
   }
   
   void draw(FontHolder& fonts, ModelHolder& models) noexcept override {
