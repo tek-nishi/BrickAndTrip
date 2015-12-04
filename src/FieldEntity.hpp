@@ -170,7 +170,7 @@ public:
   {
     const auto& colors = params["game.cube_stage_color"];
     size_t num = colors.getNumChildren();
-    if (cube_stage_color_.capacity() < num) cube_stage_color_.reserve(num);
+    cube_stage_color_.reserve(num);
     for (const auto& color : colors) {
       cube_stage_color_.push_back(Json::getColor<float>(color));
     }
@@ -728,9 +728,7 @@ public:
       { -1, 0,  0 },
     };
     std::vector<int> directions;
-    if (directions.capacity() < elemsof(move_vec)) {
-      directions.reserve(elemsof(move_vec));
-    }
+    directions.reserve(elemsof(move_vec));
     
     for (u_int i = 0; i < elemsof(move_vec); ++i) {
       if (!isPickableCube(block_pos + move_vec[i])) {
@@ -1068,9 +1066,7 @@ private:
     std::vector<ci::Vec3i> pos;
     if (pickable_cubes_.empty()) return pos;
 
-    if (pos.capacity() < pickable_cubes_.size() * 2) {
-      pos.reserve(pickable_cubes_.size() * 2);
-    }
+    pos.reserve(pickable_cubes_.size() * 2);
     
     for (const auto& cube : pickable_cubes_) {
       pos.push_back(cube->blockPosition());
@@ -1156,9 +1152,7 @@ private:
 
   
   void setupRecords(const ci::JsonTree& params) noexcept {
-    if (stage_pickable_num_.capacity() < 32) {
-      stage_pickable_num_.reserve(32);
-    }
+    stage_pickable_num_.reserve(32);
         
     records_.setStageNum(params["game.regular_stage_num"].getValue<size_t>(),
                          params["game.total_stage_num"].getValue<size_t>());

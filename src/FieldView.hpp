@@ -819,8 +819,7 @@ private:
 
   std::vector<ci::Vec3f> searchAliveCube(const std::vector<std::unique_ptr<PickableCube> >& cubes) noexcept {
     std::vector<ci::Vec3f> cube_pos;
-
-    if (cube_pos.capacity() < 4) cube_pos.reserve(4);
+    cube_pos.reserve(4);
     
     for (const auto& cube : cubes) {
       if (!cube->isActive() || !cube->isOnStage() || cube->isSleep()) continue;
