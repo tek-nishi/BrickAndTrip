@@ -415,7 +415,7 @@ class BrickTripApp : public ci::app::AppNative,
     std::vector<ngs::Touch> t = {
       { false,
         getElapsedSeconds(),
-        ngs::Touch::MOUSE_EVENT_ID,
+        static_cast<u_int>(ngs::Touch::MOUSE_EVENT_ID),
         mouse_pos_, mouse_prev_pos_ }
     };
 
