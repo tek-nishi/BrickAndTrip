@@ -47,6 +47,8 @@ rm ../assets/ui_title.json
 ./filedz startline.json ../assets/startline.data
 ./filedz finishline.json ../assets/finishline.data
 
+#./filedz sandbox.json ../assets/sandbox.data
+
 
 ./filedz ui_allstageclear.json ../assets/ui_allstageclear.data
 ./filedz ui_credits.json ../assets/ui_credits.data

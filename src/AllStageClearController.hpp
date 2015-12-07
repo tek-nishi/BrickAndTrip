@@ -147,8 +147,8 @@ private:
     // SNS投稿で使うのでここで定義
     int item_rate = 0;
     {
-      auto item_num = boost::any_cast<int>(result.at("item_num"));
-      auto item_total_num = boost::any_cast<int>(result.at("item_total_num"));
+      auto item_num = boost::any_cast<int>(result.at("play_item_num"));
+      auto item_total_num = boost::any_cast<int>(result.at("play_item_total_num"));
 
       if (item_total_num > 0) {
         item_rate = item_num * 100 / item_total_num;
@@ -164,7 +164,7 @@ private:
     auto total_items = boost::any_cast<int>(result.at("total_items"));
     GameCenter::submitScore(game_score, total_items);
 
-    if (boost::any_cast<bool>(result.at("highest_score"))) {
+    if (boost::any_cast<bool>(result.at("highest_total_score"))) {
       view_->startWidgetTween("tween-hi-score");
     }
     

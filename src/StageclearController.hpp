@@ -30,16 +30,10 @@ class StageclearController : public ControllerBase {
   bool all_cleard_;
   bool regular_stage_;
   bool all_stage_;
-
-  // FIXME:全ステージクリア時の情報を保持している
-  int total_score_;
-  int total_items_;
-  bool highest_score_;
-  int item_num_;
-  int item_total_num_;
-  bool highest_item_num_;
   int current_stage_;
 
+  EventParam game_result_;
+  
   std::string sns_text_;
 
   ci::Anim<double> clear_time_;
@@ -69,13 +63,8 @@ public:
     all_cleard_(boost::any_cast<bool>(result.at("all_cleared"))),
     regular_stage_(boost::any_cast<bool>(result.at("regular_stage"))),
     all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
-    total_score_(boost::any_cast<int>(result.at("total_score"))),
-    total_items_(boost::any_cast<int>(result.at("total_items"))),
-    highest_score_(boost::any_cast<bool>(result.at("highest_total_score"))),
-    item_num_(boost::any_cast<int>(result.at("play_item_num"))),
-    item_total_num_(boost::any_cast<int>(result.at("play_item_total_num"))),
-    highest_item_num_(boost::any_cast<bool>(result.at("highest_item_num"))),
     current_stage_(boost::any_cast<int>(result.at("current_stage"))),
+    game_result_(result),
     clear_time_(0.0),
     item_rate_(0),
     score_(0),
@@ -106,17 +95,7 @@ public:
                                               else if (all_stage_) msg = "begin-all-stageclear";
                                             }
 
-                                            EventParam params = {
-                                              { "total_score",       total_score_ },
-                                              { "total_items",       total_items_ },
-                                              { "highest_score",     highest_score_ },
-                                              { "item_num",          item_num_ },
-                                              { "item_total_num",    item_total_num_ },
-                                              { "highest_item_num",  highest_item_num_ },
-                                              { "current_stage",     current_stage_ },
-                                            };
-                                            
-                                            event_.signal(msg, params);
+                                            event_.signal(msg, game_result_);
 
                                             event_timeline_->add([this]() noexcept {
                                                 active_ = false;
