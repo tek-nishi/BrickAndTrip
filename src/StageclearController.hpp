@@ -35,6 +35,7 @@ class StageclearController : public ControllerBase {
   EventParam game_result_;
   
   std::string sns_text_;
+  std::string sns_url_;
 
   ci::Anim<double> clear_time_;
   ci::Anim<int> item_rate_;
@@ -65,6 +66,7 @@ public:
     all_stage_(boost::any_cast<bool>(result.at("all_stage"))),
     current_stage_(boost::any_cast<int>(result.at("current_stage"))),
     game_result_(result),
+    sns_url_(Localize::get(params["stageclear.sns_url"].getValue<std::string>())),
     clear_time_(0.0),
     item_rate_(0),
     score_(0),
@@ -268,6 +270,7 @@ private:
       replaceString(sns_text_, "%2", game_rank);
       replaceString(sns_text_, "%3", std::to_string(item_rate));
       replaceString(sns_text_, "%4", std::to_string(current_stage_));
+      replaceString(sns_text_, "%5", sns_url_);
     }
   }
 

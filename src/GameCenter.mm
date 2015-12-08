@@ -104,7 +104,8 @@ void submitScore(const int score, const int total_items) noexcept {
 
 
 static GKAchievement* getAchievementForIdentifier(const std::string& identifier) noexcept {
-  GKAchievement* achievement = [[[GKAchievement alloc] initWithIdentifier:createString(identifier)] autorelease];
+  GKAchievement* achievement = [[[GKAchievement alloc] initWithIdentifier:createString(identifier)]
+                                   autorelease];
   return achievement;
 }
 

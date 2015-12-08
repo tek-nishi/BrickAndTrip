@@ -31,6 +31,7 @@ class AllStageClearController : public ControllerBase {
   std::string jingle_se_;
   
   std::string sns_text_;
+  std::string sns_url_;
   
   std::unique_ptr<UIView> view_;
   
@@ -57,6 +58,7 @@ public:
     deactive_delay_(params["deactive_delay"].getValue<float>()),
     sns_delay_(params["sns_delay"].getValue<float>()),
     jingle_se_(params["jingle-se"].getValue<std::string>()),
+    sns_url_(Localize::get(params["sns_url"].getValue<std::string>())),
     view_(std::move(view)),
     active_(true),
     event_timeline_(ci::Timeline::create())
@@ -181,13 +183,14 @@ private:
     {
       // SNSへの投稿テキストはローカライズされたものを使う
       auto text = params["sns_text"].getValue<std::string>();
-      
       sns_text_ = Localize::get(text);
+      
       replaceString(sns_text_, "%1", std::to_string(game_score));
       replaceString(sns_text_, "%3", std::to_string(item_rate));
 
       auto stage_num = boost::any_cast<int>(result.at("current_stage"));
       replaceString(sns_text_, "%4", std::to_string(stage_num));
+      replaceString(sns_text_, "%5", sns_url_);
     }
   }
 

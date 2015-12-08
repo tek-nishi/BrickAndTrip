@@ -29,6 +29,7 @@ class GameoverController : public ControllerBase {
   bool active_;
 
   std::string sns_text_;
+  std::string sns_url_;
 
   ConnectionHolder connections_;
 
@@ -49,6 +50,7 @@ public:
     sns_delay_(params["gameover.sns_delay"].getValue<float>()),
     view_(std::move(view)),
     active_(true),
+    sns_url_(Localize::get(params["gameover.sns_url"].getValue<std::string>())),
     event_timeline_(ci::Timeline::create())
   {
     DOUT << "GameoverController()" << std::endl;
@@ -167,6 +169,7 @@ public:
       
       sns_text_ = Localize::get(text);
       replaceString(sns_text_, "%1", std::to_string(game_score));
+      replaceString(sns_text_, "%5", sns_url_);
     }
   }
 

@@ -922,7 +922,8 @@
     "event_delay": 0.7,
     "deactive_delay": 0.5,
     "sns_delay": 0.2,
-    "sns_text": "records"
+    "sns_text": "records",
+    "sns_url": "sns_url"
   },
 
   "settings": {
@@ -966,7 +967,8 @@
     "event_delay": 1.5,
     "deactive_delay": 0.1,
     "sns_delay": 0.2,
-    "sns_text": "gameover"
+    "sns_text": "gameover",
+    "sns_url": "sns_url"
   },
 
   "stageclear": {
@@ -986,7 +988,8 @@
     "score_delay": 1.0,
     
     "rank": [ "S", "A", "B", "C", "D", "E", "F" ],
-    "sns_text": "stageclear"
+    "sns_text": "stageclear",
+    "sns_url": "sns_url"
   },
 
   "regular_stageclear": {
@@ -1001,7 +1004,8 @@
     "deactive_delay": 1,
     
     "sns_delay": 0.2,
-    "sns_text": "regular_stageclear"
+    "sns_text": "regular_stageclear",
+    "sns_url": "sns_url"
   },
 
   "all_stageclear": {
@@ -1016,7 +1020,8 @@
     "deactive_delay": 1,
     
     "sns_delay": 0.2,
-    "sns_text": "all_stageclear"
+    "sns_text": "all_stageclear",
+    "sns_url": "sns_url"
   },
 
   "easing": {

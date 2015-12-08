@@ -35,7 +35,7 @@ static void popupUIAlertView(std::function<void()> finish_callback) noexcept {
 
 // UIAlertViewでの表示(iOS8以降)
 static void popupUIAlertController(std::function<void()> finish_callback) noexcept {
-  UIAlertController *alertController = [UIAlertController
+  UIAlertController* alertController = [UIAlertController
                                            alertControllerWithTitle: NSLocalizedString(@"rate_title", nil)
                                            message: NSLocalizedString(@"rate_text", nil)
                                            preferredStyle: UIAlertControllerStyleAlert];
