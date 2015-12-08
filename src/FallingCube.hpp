@@ -114,7 +114,7 @@ public:
       });
   }
     
-  ~FallingCube() {
+  ~FallingCube() noexcept {
     DOUT << "~FallingCube()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

@@ -14,7 +14,7 @@
 namespace ngs {
 
 struct ControllerBase : private boost::noncopyable {
-  virtual ~ControllerBase() {}
+  virtual ~ControllerBase() = default;
 
   virtual bool isActive() const = 0;
 

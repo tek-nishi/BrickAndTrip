@@ -135,7 +135,7 @@ public:
     setup(params, result);
   }
 
-  ~AllStageClearController() {
+  ~AllStageClearController() noexcept {
     DOUT << "~AllStageClearController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

@@ -384,7 +384,7 @@ public:
     setup();
   }
 
-  ~FieldController() {
+  ~FieldController() noexcept {
     DOUT << "~FieldController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

@@ -116,7 +116,7 @@ public:
                   rotation_speed_rate_, params["game.item.entry_rotate_speed"], true);
   }
 
-  ~ItemCube() {
+  ~ItemCube() noexcept {
     DOUT << "~ItemCube()" << std::endl;
     animation_timeline_->removeSelf();
   }

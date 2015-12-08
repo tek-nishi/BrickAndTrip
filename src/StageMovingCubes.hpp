@@ -40,11 +40,7 @@ public:
     params_(params),
     event_(event),
     timeline_(timeline)
-  {
-  }
-
-  ~StageMovingCubes() {
-  }
+  {}
 
   
   void update(const double progressing_seconds,

@@ -20,9 +20,6 @@ class FontHolder : private boost::noncopyable {
 
 
 public:
-  FontHolder() = default;
-
-  
   TextureFont& getFont(const std::string& name) noexcept {
     auto it = fonts_.find(name);
     if (it == std::end(fonts_)) {

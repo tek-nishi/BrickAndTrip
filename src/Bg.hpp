@@ -122,7 +122,7 @@ public:
     DOUT << "bg num:" << cubes_.size() << std::endl;
   }
 
-  ~Bg() {
+  ~Bg() noexcept {
     // 再生途中のものもあるので、手動で取り除く
     animation_timeline_->removeSelf();
   }

@@ -23,7 +23,7 @@ public:
               params["shininess"].getValue<float>(),
               Json::getColorA<float>(params["emission"]),
               GL_FRONT_AND_BACK)
-  { }
+  {}
 
   
   void apply() const noexcept { material_.apply(); }

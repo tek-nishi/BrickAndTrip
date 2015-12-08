@@ -55,7 +55,7 @@ class BrickTripApp : public ci::app::AppNative,
   
   std::unique_ptr<ControllerBase> controller_;
 
-  
+
   void prepareSettings(Settings* settings) noexcept override {
     // アプリ起動時の設定はここで処理する
     params_ = readParams();

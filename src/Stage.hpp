@@ -110,7 +110,7 @@ public:
     timeline->apply(animation_timeline_);
   }
 
-  ~Stage() {
+  ~Stage() noexcept {
     // 再生途中のものもあるので、手動で取り除く
     event_timeline_->removeSelf();
     animation_timeline_->removeSelf();

@@ -101,7 +101,7 @@ public:
     }
   }
 
-  ~PauseController() {
+  ~PauseController() noexcept {
     DOUT << "~PauseController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

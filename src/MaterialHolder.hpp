@@ -16,9 +16,6 @@ class MaterialHolder : private boost::noncopyable {
   
 
 public:
-  MaterialHolder() = default;
-
-
   void add(const std::string& name, const ci::JsonTree& params) noexcept {
     materials_.emplace(std::piecewise_construct,
                        std::forward_as_tuple(name),

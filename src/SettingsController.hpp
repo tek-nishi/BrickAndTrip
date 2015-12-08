@@ -118,7 +118,7 @@ public:
     GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.VIEWED_SETTINGS");
   }
 
-  ~SettingsController() {
+  ~SettingsController() noexcept {
     DOUT << "~SettingsController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

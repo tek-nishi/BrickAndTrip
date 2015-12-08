@@ -84,7 +84,7 @@ public:
       size_(size),
       layout_pos_(pos_),
       layouted_pos_(pos_)
-    { }
+    {}
 
 
     const ci::Vec3f& getPos() const noexcept { return layouted_pos_; }

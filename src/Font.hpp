@@ -46,7 +46,7 @@ public:
     }
   }
 
-  ~FontCreator() {
+  ~FontCreator() noexcept {
     DOUT << "~FontCreator()" << std::endl;
 
     FT_Done_FreeType(library_);
@@ -84,7 +84,7 @@ public:
     }
   }
 
-  ~Font() {
+  ~Font() noexcept {
     DOUT << "~Font()" << std::endl;
 
     FT_Done_Face(face_);

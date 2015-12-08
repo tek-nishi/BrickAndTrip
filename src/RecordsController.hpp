@@ -119,7 +119,7 @@ public:
     GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.VIEWED_RECORDS");
   }
 
-  ~RecordsController() {
+  ~RecordsController() noexcept {
     DOUT << "~RecordsController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

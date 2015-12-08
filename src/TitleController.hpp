@@ -189,7 +189,7 @@ public:
     }
   }
 
-  ~TitleController() {
+  ~TitleController() noexcept {
     DOUT << "~TitleController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

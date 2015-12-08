@@ -32,7 +32,7 @@ public:
     timeline->apply(event_timeline_);
   }
 
-  ~StageOneways() {
+  ~StageOneways() noexcept {
     event_timeline_->removeSelf();
   }
   

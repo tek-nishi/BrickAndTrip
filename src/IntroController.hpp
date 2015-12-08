@@ -80,7 +80,7 @@ public:
     view_->setDisp(false);
   }
 
-  ~IntroController() {
+  ~IntroController() noexcept {
     DOUT << "~IntroController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

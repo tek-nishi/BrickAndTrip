@@ -134,7 +134,7 @@ public:
     se_on_(true),
     bgm_on_(true),
     version_(version)
-  { }
+  {}
 
 
   void setStageNum(const size_t regular_stage_num,

@@ -15,8 +15,7 @@
 #include "Model.hpp"
 
 
-namespace ngs {
-namespace CubeTextDrawer {
+namespace ngs { namespace CubeTextDrawer {
 
 void drawCubeAndText(ci::gl::TextureRef texture,
                      const Model& model,
@@ -120,5 +119,4 @@ void draw(const CubeText& cube_text,
 	mesh.disableClientStates();
 }
 
-}
-}
+} }

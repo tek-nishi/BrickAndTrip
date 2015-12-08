@@ -27,7 +27,7 @@ class CubeText : private boost::noncopyable {
   
 
 public:
-  CubeText() = default;
+//  CubeText() = default;
   
   CubeText(const std::string& text,
            const float size, const float spacing,

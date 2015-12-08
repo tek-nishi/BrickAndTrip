@@ -33,6 +33,7 @@ class GameScore {
   
 
 public:
+  // FIXME:Records側の都合で、デフォルトコンストラクタを要求
   GameScore() = default;
   
   GameScore(const int clear_time_score, const float clear_time_score_rate,
