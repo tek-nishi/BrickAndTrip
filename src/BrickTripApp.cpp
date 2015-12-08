@@ -391,7 +391,7 @@ class BrickTripApp : public ci::app::AppNative,
         auto text = p["pre_render_text"].getValue<std::string>();
         auto text_length = strlen(text);
         for (size_t it = 0; it < text_length; ++it) {
-          font.getTextureFromString(substr(text, 1));
+          font.getTextureFromString(substr(text, it, 1));
         }
       }
     }

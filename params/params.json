@@ -8,7 +8,7 @@
     "framerate_low": 30,
 
     "max_elapsed_seconds": [ 20, 15 ],
-    "startup_frame": 0.1,
+    "startup_frame": 0.25,
     
     "fixed_size": [
       [  960, 640 ],
@@ -35,7 +35,7 @@
         "mipmap": true,
         
         "pre_render": true,
-        "pre_render_text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "pre_render_text": " ABCDEFGHIJKLMNOPQRSTUVWXYZ."
       },
       {
         "name": "icon",
