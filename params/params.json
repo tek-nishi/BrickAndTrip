@@ -8,7 +8,7 @@
     "framerate_low": 30,
 
     "max_elapsed_seconds": [ 20, 15 ],
-    "startup_frame": 0.25,
+    "startup_frame": 0.1,
     
     "fixed_size": [
       [  960, 640 ],
