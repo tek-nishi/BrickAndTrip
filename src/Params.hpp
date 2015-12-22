@@ -15,34 +15,23 @@ namespace ngs { namespace Params {
 ci::JsonTree load(const std::string& path) noexcept {
 #if defined (OBFUSCATION_PARAMS)
   auto file_path = replaceFilenameExt(path, "data");
-#if defined (DEBUG) && defined (CINDER_MAC)
-  // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
-  boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + file_path);
+  return ci::JsonTree(TextCodec::load(Asset::fullPath(file_path)));
 #else
-  auto full_path = ci::app::getAssetPath(file_path);
-#endif
-  DOUT << "Params::load:" << full_path << std::endl;
-  
-  return ci::JsonTree(TextCodec::load(full_path.string()));
-#else
-  return Json::readFromFile(path);
+  return ci::JsonTree(Asset::load(path));
 #endif
 }
 
 #ifdef DEBUG
 
 void write(const std::string& path, const ci::JsonTree& params) noexcept {
-#if defined (CINDER_MAC)
-  boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + path);
-#else
-  auto full_path = ci::app::getAssetPath(path);
+#if !defined (CINDER_COCOA_TOUCH)
+  TextCodec::write(Asset::fullPath(path), params.serialize());
 #endif
-  TextCodec::write(full_path.string(), params.serialize());
 }
 
 void convert(const std::string& path) noexcept {
 #if !defined (CINDER_COCOA_TOUCH)
-  auto params = Json::readFromFile(path);
+  ci::JsonTree params(Asset::load(path));
 
   auto write_path = replaceFilenameExt(path, "data");
   write(write_path, params);

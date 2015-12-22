@@ -7,10 +7,10 @@
 
 #include <sstream>
 #include <cinder/Vector.h>
+#include "Asset.hpp"
 
 
-namespace ngs {
-namespace Json {
+namespace ngs { namespace Json {
 
 template<typename T>
 std::vector<T> getArray(const ci::JsonTree& json) noexcept {
@@ -69,17 +69,4 @@ ci::Quaternion<T> getQuaternion(const ci::JsonTree& json) noexcept {
   return ci::Quaternion<T>(ci::Vec3<T>::zAxis(), getVec3<T>(json));
 }
 
-
-ci::JsonTree readFromFile(const std::string& path) noexcept {
-#if defined (DEBUG) && defined (CINDER_MAC)
-  // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
-  std::ostringstream full_path;
-  full_path << PREPRO_TO_STR(SRCROOT) << "../assets/" << path;
-  return ci::JsonTree(ci::DataSourcePath::create(full_path.str()));
-#else
-  return ci::JsonTree(ci::app::loadAsset(path));
-#endif
-}
-
-}
-}
+} }

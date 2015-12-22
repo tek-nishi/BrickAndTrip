@@ -14,6 +14,7 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/ImageIo.h>
 #include <cinder/Frustum.h>
+#include "Asset.hpp"
 #include "Field.hpp"
 #include "ConnectionHolder.hpp"
 #include "EventParam.hpp"
@@ -183,7 +184,7 @@ public:
     touch_input_(true),
     animation_timeline_(ci::Timeline::create()),
     progressing_seconds_(0.0),
-    bg_texture_(ci::loadImage(ci::app::loadAsset("bg.png"))),
+    bg_texture_(ci::loadImage(Asset::load("bg.png"))),
     bg_tween_type_(params["game_view.bg_tween_type"].getValue<std::string>()),
     bg_tween_duration_(params["game_view.bg_tween_duration"].getValue<float>()),
     fog_color_rate_(Json::getColorA<float>(params["game_view.fog_color"])),

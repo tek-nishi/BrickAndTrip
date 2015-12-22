@@ -36,17 +36,15 @@ public:
     autolayout_(autolayout),
     event_(event),
     touch_event_(touch_event)
-  {  }
+  {}
 
 
   std::unique_ptr<UIView> create(const std::string& path) noexcept {
     // ちょくちょくAutolayoutのお掃除 
     autolayout_.eraseInvalid();
-#if defined (OBFUSCATION_PARAMS)
+
+    // 難読化のためにparam.jsonと同じ実装を利用
     auto param = Params::load(path);
-#else
-    auto param = Json::readFromFile(path);
-#endif
       
     return std::unique_ptr<UIView>(new UIView(params_,
                                               param,

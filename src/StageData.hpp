@@ -12,17 +12,9 @@ namespace ngs { namespace StageData {
 ci::JsonTree load(const std::string& path) noexcept {
 #if defined (OBFUSCATION_STAGES)
   auto file_path = replaceFilenameExt(path, "data");
-#if defined (DEBUG) && defined (CINDER_MAC)
-  // DEBUG時、OSXはプロジェクトの場所からfileを読み込む
-  boost::filesystem::path full_path(std::string(PREPRO_TO_STR(SRCROOT) "../assets/") + file_path);
+  return ci::JsonTree(TextCodec::load(Asset::fullPath(file_path)));
 #else
-  auto full_path = ci::app::getAssetPath(file_path);
-#endif
-  DOUT << "StageData::load:" << full_path << std::endl;
-  
-  return ci::JsonTree(TextCodec::load(full_path.string()));
-#else
-  return Json::readFromFile(path);
+  return ci::JsonTree(Asset::load(path));
 #endif
 }
 
@@ -32,18 +24,18 @@ void convert(const ci::JsonTree& params) noexcept {
 #if !defined (CINDER_COCOA_TOUCH)
   const auto& stages = Json::getArray<std::string>(params["game.stage_path"]);
   for (const auto& path : stages) {
-    auto data = Json::readFromFile(path);
+    ci::JsonTree data(Asset::load(path));
 
     auto write_path = replaceFilenameExt(path, "data");
     Params::write(write_path, data);
   }
   
   {
-    auto data = Json::readFromFile("startline.json");
+    ci::JsonTree data(Asset::load("startline.json"));
     Params::write("startline.data", data);
   }
   {
-    auto data = Json::readFromFile("finishline.json");
+    ci::JsonTree data(Asset::load("finishline.json"));
     Params::write("finishline.data", data);
   }
 #endif

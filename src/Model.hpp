@@ -8,6 +8,7 @@
 #include <cinder/TriMesh.h>
 #include <cinder/ObjLoader.h>
 #include <cinder/gl/Vbo.h>
+#include "Asset.hpp"
 
 
 namespace ngs {
@@ -22,7 +23,7 @@ public:
   Model(const std::string& path,
         const bool has_normals = true, const bool has_uv = true,
         const bool has_indics = true) noexcept {
-    ci::ObjLoader loader(ci::app::loadAsset(path));
+    ci::ObjLoader loader(Asset::load(path));
 
     ci::TriMesh mesh;
     loader.load(&mesh);

@@ -7,6 +7,7 @@
 #include <boost/noncopyable.hpp>
 #include <cinder/audio/Context.h>
 #include <cinder/audio/SamplePlayerNode.h>
+#include "Asset.hpp"
 
 
 namespace ngs {
@@ -71,7 +72,7 @@ public:
       { "file", 
         [this](ci::audio::Context* ctx, const ci::JsonTree& param) {
           auto path = param["path"].getValue<std::string>();
-          auto source = ci::audio::load(ci::app::loadAsset(path));
+          auto source = ci::audio::load(Asset::load(path));
           DOUT << "source:" << path << " ch:" << source->getNumChannels() << std::endl;
 
           // TIPS:初期値より増やしておかないと、処理負荷で音が切れる
@@ -95,7 +96,7 @@ public:
       { "buffer",
         [this](ci::audio::Context* ctx, const ci::JsonTree& param) {
           auto path = param["path"].getValue<std::string>();
-          auto source = ci::audio::load(ci::app::loadAsset(path));
+          auto source = ci::audio::load(Asset::load(path));
           DOUT << "source:" << path << " ch:" << source->getNumChannels() << std::endl;
 
           buffer_.insert({ param["name"].getValue<std::string>(), source->loadBuffer() });
