@@ -358,6 +358,17 @@ class BrickTripApp : public ci::app::AppNative,
   }
 
 
+  void prerenderFont(TextureFont& font, const ci::JsonTree& params) noexcept {
+    if (!Json::getValue(params, "pre_render", false)) return;
+      
+    auto text = params["pre_render_text"].getValue<std::string>();
+    auto text_length = strlen(text);
+    
+    for (size_t it = 0; it < text_length; ++it) {
+      font.getTextureFromString(substr(text, it, 1));
+    }
+  }
+  
   void setupFonts() noexcept {
     fonts_ = std::unique_ptr<FontHolder>(new FontHolder);
 
@@ -387,13 +398,7 @@ class BrickTripApp : public ci::app::AppNative,
 
       // アプリ起動時に事前に文字をレンダリングしてキャッシュに入れておく
       // iOS:処理の引っ掛かりを減らす
-      if (Json::getValue(p, "pre_render", false)) {
-        auto text = p["pre_render_text"].getValue<std::string>();
-        auto text_length = strlen(text);
-        for (size_t it = 0; it < text_length; ++it) {
-          font.getTextureFromString(substr(text, it, 1));
-        }
-      }
+      prerenderFont(font, p);
     }
   }
 
@@ -463,6 +468,8 @@ class BrickTripApp : public ci::app::AppNative,
     return params;
   }
 
+  // FIXME:Easing elastic系は動きを決めるパラメーターが２つあり
+  //       それを渋々外部パラメータで決めている
   static void setEasingParams(const ci::JsonTree& params) noexcept {
     ease_in_elastic_a = params["easing.ease_in_elastic_a"].getValue<float>();
     ease_in_elastic_b = params["easing.ease_in_elastic_b"].getValue<float>();
