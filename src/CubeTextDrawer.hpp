@@ -80,8 +80,8 @@ void draw(const CubeText& cube_text,
   const auto& text = cube_text.text();
 
   const auto& mesh = text_model.mesh();
-	mesh.enableClientStates();
-	mesh.bindAllData();
+  mesh.enableClientStates();
+  mesh.bindAllData();
   
   for (size_t i = 0; i < text.size(); ++i) {
     const auto& t = text[i];
@@ -116,7 +116,7 @@ void draw(const CubeText& cube_text,
   }
   
   ci::gl::VboMesh::unbindBuffers();
-	mesh.disableClientStates();
+  mesh.disableClientStates();
 }
 
 } }

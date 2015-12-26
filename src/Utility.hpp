@@ -39,11 +39,11 @@ char32_t getCharactor(const std::string& s, const size_t pos) noexcept {
 
 // キーワード置換
 void replaceString(std::string& text, const std::string& src, const std::string& dst) noexcept {
-	std::string::size_type pos = 0;
-	while ((pos = text.find(src, pos)) != std::string::npos) {
-		text.replace(pos, src.length(), dst);
-		pos += dst.length();
-	}
+  std::string::size_type pos = 0;
+  while ((pos = text.find(src, pos)) != std::string::npos) {
+    text.replace(pos, src.length(), dst);
+    pos += dst.length();
+  }
 }
 
 // 重複しないidを生成
@@ -105,10 +105,10 @@ std::string toFormatedString(const int value, const int digits) noexcept {
 
 // パスの有効判定
 bool isValidPath(const std::string& path) noexcept {
-	struct stat info;
-	int result = stat(path.c_str(), &info);
-	return (result == 0);
-	// TODO: ディレクトリかどうかも判定
+  struct stat info;
+  int result = stat(path.c_str(), &info);
+  return (result == 0);
+  // TODO: ディレクトリかどうかも判定
 }
 
 std::string createUniquePath() noexcept {
@@ -131,7 +131,7 @@ std::string createUniquePath() noexcept {
 // 拡張子を変更する
 // ex) hoge/fuga/piyo.txt -> hoge/fuga/piyo.data
 std::string replaceFilenameExt(const std::string& path, const std::string& ext) noexcept {
-	std::string::size_type pos(path.rfind('.'));
+  std::string::size_type pos(path.rfind('.'));
   return (pos != std::string::npos) ? path.substr(0, path.rfind('.') + 1) + ext : path + "." + ext;
 }
 

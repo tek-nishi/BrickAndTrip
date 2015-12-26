@@ -205,7 +205,7 @@ static void loadAchievement() noexcept {
   
   [GKAchievement loadAchievementsWithCompletionHandler:^(NSArray* achievements, NSError* error) {
       if (error == nil) {
-				NSLOG(@"GameCenter::loadAchievement: done.");
+        NSLOG(@"GameCenter::loadAchievement: done.");
 
         for (GKAchievement* achievement in achievements) {
 
@@ -220,7 +220,7 @@ static void loadAchievement() noexcept {
         resubmitCachedAchievement();
       }
       else {
-				NSLOG(@"loadAchievementGameCenter::Achievements: Error:%@", [error localizedDescription]);
+        NSLOG(@"loadAchievementGameCenter::Achievements: Error:%@", [error localizedDescription]);
       }
     }];
 }

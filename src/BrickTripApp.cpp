@@ -90,7 +90,7 @@ class BrickTripApp : public ci::app::AppNative,
   }
   
 
-	void setup() noexcept override {
+  void setup() noexcept override {
     // Windowが表示された後の設定はここで処理
     // OpenGLのコンテキストも使える
     AudioSession::begin();
@@ -192,7 +192,7 @@ class BrickTripApp : public ci::app::AppNative,
 
   
   // FIXME:Windowsではtouchイベントとmouseイベントが同時に呼ばれる
-	void mouseDown(ci::app::MouseEvent event) noexcept override {
+  void mouseDown(ci::app::MouseEvent event) noexcept override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -201,7 +201,7 @@ class BrickTripApp : public ci::app::AppNative,
     touch_event_.signal("touches-began", touches);
   }
   
-	void mouseDrag(ci::app::MouseEvent event) noexcept override {
+  void mouseDrag(ci::app::MouseEvent event) noexcept override {
     if (!event.isLeftDown()) return;
 
     mouse_pos_ = event.getPos();
@@ -210,7 +210,7 @@ class BrickTripApp : public ci::app::AppNative,
     touch_event_.signal("touches-moved", touches);
   }
   
-	void mouseUp(ci::app::MouseEvent event) noexcept override {
+  void mouseUp(ci::app::MouseEvent event) noexcept override {
     if (!event.isLeft()) return;
 
     mouse_pos_ = event.getPos();
@@ -343,12 +343,12 @@ class BrickTripApp : public ci::app::AppNative,
   
 #if !defined(CINDER_MSW)
   // FIXME:更新処理をここでおこなうとWindowsでフレームレートが安定しない
-	void update() noexcept override {
+  void update() noexcept override {
     updateApp();
   }
 #endif
   
-	void draw() noexcept override {
+  void draw() noexcept override {
 #if defined(CINDER_MSW)
     // FIXME:更新処理をupdateおこなうと、
     //       Windowsでフレームレートが安定しない
