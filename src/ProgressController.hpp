@@ -151,7 +151,7 @@ public:
     }
   }
 
-  ~ProgressController() noexcept {
+  ~ProgressController() {
     DOUT << "~ProgressController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

@@ -144,7 +144,7 @@ public:
     }
   }
 
-  ~StageclearController() noexcept {
+  ~StageclearController() {
     DOUT << "~StageclearController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

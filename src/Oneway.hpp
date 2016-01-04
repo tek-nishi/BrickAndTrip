@@ -96,7 +96,7 @@ public:
     rotation_ = rotation.at(direction_);
   }
 
-  ~Oneway() noexcept {
+  ~Oneway() {
     DOUT << "~Oneway()" << std::endl;
     animation_timeline_->removeSelf();
   }

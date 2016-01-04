@@ -40,7 +40,7 @@ public:
     timeline->apply(event_timeline_);
   }
 
-  ~StageItems() noexcept {
+  ~StageItems() {
     event_timeline_->removeSelf();
   }
 

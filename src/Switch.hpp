@@ -72,7 +72,7 @@ public:
     position_().y += 1.0f;
   }
 
-  ~Switch() noexcept {
+  ~Switch() {
     DOUT << "~Switch()" << std::endl;
     animation_timeline_->removeSelf();
   }

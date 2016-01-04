@@ -21,7 +21,7 @@ public:
     connections_.reserve(64);
   }
 
-  ~ConnectionHolder() noexcept {
+  ~ConnectionHolder() {
     for (auto& connection : connections_) {
       connection.disconnect();
     }

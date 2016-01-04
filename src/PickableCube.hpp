@@ -209,7 +209,7 @@ public:
     if (sleep) startSleepingColor();
   }
 
-  ~PickableCube() noexcept {
+  ~PickableCube() {
     // 再生途中のものもあるので、手動で取り除く
     animation_timeline_->removeSelf();
   }

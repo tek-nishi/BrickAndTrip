@@ -105,7 +105,7 @@ public:
     }
   }
 
-  ~FieldLights() noexcept {
+  ~FieldLights() {
     // 再生途中のものもあるので、手動で取り除く
     animation_timeline_->removeSelf();
   }

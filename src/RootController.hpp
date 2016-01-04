@@ -241,7 +241,7 @@ public:
       });
   }
 
-  ~RootController() noexcept {
+  ~RootController() {
     DOUT << "~RootController()" << std::endl;
 
     timeline_->clear();

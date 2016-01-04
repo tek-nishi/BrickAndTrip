@@ -173,7 +173,7 @@ public:
     }
   }
 
-  ~GameoverController() noexcept {
+  ~GameoverController() {
     DOUT << "~GameoverController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

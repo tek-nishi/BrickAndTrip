@@ -88,7 +88,7 @@ public:
     GameCenter::submitAchievement("BRICKTRIP.ACHIEVEMENT.VIEWED_CREDITS");
   }
 
-  ~CreditsController() noexcept {
+  ~CreditsController() {
     DOUT << "~CreditsController()" << std::endl;
 
     // 再生途中のものもあるので、手動で取り除く

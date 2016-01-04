@@ -25,7 +25,7 @@ public:
     target_(nullptr)
   {}
 
-  ~Quake() noexcept {
+  ~Quake() {
     if (tween_) tween_->removeSelf();
   }
   

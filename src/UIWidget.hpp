@@ -121,7 +121,7 @@ public:
     timeline->apply(timeline_);
   }
 
-  ~UIWidget() noexcept {
+  ~UIWidget() {
     // 再生途中のものもあるので、自分で取り除く
     timeline_->removeSelf();
   }

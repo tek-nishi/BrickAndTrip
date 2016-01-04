@@ -140,7 +140,7 @@ public:
     }
   }
 
-  ~Sound() noexcept {
+  ~Sound() {
     auto* ctx = ci::audio::Context::master();
     ctx->disable();
     ctx->disconnectAllNodes();
