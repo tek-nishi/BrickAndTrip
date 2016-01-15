@@ -27,7 +27,7 @@ BRICK&TRIPは、[Cinder](http://libcinder.org)を使って開発をおこない�
 
 1. Windows版で必要な修正
 
-   1. プロジェクトのプロパティ内、Debug構成での構成プロパティ→C/C++→プリプロセッサ→プリプロセッサの定義にて「_ITERATOR_DEBUG_LEVEL」の定義を削除
+   1. プロジェクトのプロパティ内、Debug構成での「構成プロパティ→C/C++→プリプロセッサ→プリプロセッサの定義」にて「_ITERATOR_DEBUG_LEVEL」の定義を削除
 
       ![プリプロセッサ](settings_2.jpg)
 
@@ -37,14 +37,20 @@ BRICK&TRIPは、[Cinder](http://libcinder.org)を使って開発をおこない�
 
 1. Let's enjoy!!
 
-### 注意:Windows版
-**VisualStudio2013** 必須。それ以外のバージョンではビルドできません。
+### 注意
++ Windows版
 
-### 注意:OSX、iOS版
-**Xcode7以降** 必須。それより前のバージョンではビルドできません。
+  **VisualStudio2013** 必須。それ以外のバージョンではビルドできません。
 
-### 注意:iOS版
-公式サイトで配布されているソースに少し手を加えた為、そのままではビルドが通りません。いい感じに修正してください:D
++ OSX
+
+  **Xcode7以降** 必須。それより前のバージョンではビルドできません。
+
++ iOS版
+
+  **Xcode7以降** 必須。それより前のバージョンではビルドできません。
+
+  公式サイトで配布されているソースに少し手を加えた為、そのままではビルドが通りません。いい感じに修正してください:D
 
 ## Liense
 License All source code files are licensed under the MPLv2.0 license
