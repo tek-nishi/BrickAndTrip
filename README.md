@@ -22,11 +22,26 @@ BRICK&TRIPは、[Cinder](http://libcinder.org)を使って開発をおこない�
 
    1. **OSX,iOS:** Build Settingsの一番下で環境変数CINDER_PATHを定義しています
    1. **Windows:** プロパティシート内ユーザーマクロでCINDER_PATHを定義しています
+   
+	  ![プロパティシート](settings_1.png)
+
+1. Windows版で必要な修正
+
+   1. プロジェクトのプロパティ内、Debug構成での構成プロパティ→C/C++→プリプロセッサ→プリプロセッサの定義にて「_ITERATOR_DEBUG_LEVEL」の定義を削除
+
+      ![プリプロセッサ](settings_2.png)
+
+   1. 同じく「構成プロパティ→リンカー→入力→特定の既定のライブラリの無視」にlibcmtを追加
+
+      ![リンカーの設定](settings_3.png)
 
 1. Let's enjoy!!
 
 ### 注意:Windows版
 **VisualStudio2013** 必須。それ以外のバージョンではビルドできません。
+
+### 注意:OSX、iOS版
+**Xcode7以降** 必須。それより前のバージョンではビルドできません。
 
 ### 注意:iOS版
 公式サイトで配布されているソースに少し手を加えた為、そのままではビルドが通りません。いい感じに修正してください:D
