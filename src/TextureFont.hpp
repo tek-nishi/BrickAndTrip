@@ -61,7 +61,7 @@ public:
       texture->setMagFilter(GL_LINEAR);
     }
     
-    auto inserted = texture_cache_.emplace(str, std::move(texture));
+    auto inserted = texture_cache_.emplace(std::move(str), std::move(texture));
 
     return inserted.first->second;
   }
