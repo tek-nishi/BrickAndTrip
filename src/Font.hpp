@@ -22,7 +22,7 @@
 // VS:FreeType2のライブラリのリンク指定
 #if defined(CINDER_MSW)
 #ifdef DEBUG
-#pragma comment (lib, "freetype_d.lib")
+#pragma comment (lib, "freetyped.lib")
 #else
 #pragma comment (lib, "freetype.lib")
 #endif
@@ -36,7 +36,7 @@ class FontCreator : private boost::noncopyable {
 
 
 public:
-  FontCreator() noexcept {
+  FontCreator() {
     DOUT << "FontCreator()" << std::endl;
     
     auto error = FT_Init_FreeType(&library_);
@@ -71,7 +71,7 @@ class Font : private boost::noncopyable {
 
 
 public:
-  Font(const std::string& path, FontCreator& creator) noexcept {
+  Font(const std::string& path, FontCreator& creator) {
     DOUT << "Font()" << std::endl;
     
     auto error = FT_New_Face(creator.handle(),

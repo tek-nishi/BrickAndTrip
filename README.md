@@ -12,7 +12,7 @@ BRICK&TRIPは、[Cinder](http://libcinder.org)を使って開発をおこない�
 ## How To Build
 1. Cinderライブラリ(0.8.6)を[公式サイト](http://libcinder.org)からダウンロード。ライブラリが格納されているフォルダをプロジェクトと同じ場所に置く
 
-1. FreeTypeライブラリ(2.6.2)のソースファイルを[公式サイト](http://www.freetype.org)からダウンロードしてビルド。includeファイルとライブラリファイルを、Cinderライブラリのinclude、libへそれぞれコピー
+1. FreeTypeライブラリ(2.6.3)のソースファイルを[公式サイト](http://www.freetype.org)からダウンロードしてビルド。includeファイルとライブラリファイルを、Cinderライブラリのinclude、libへそれぞれコピー
 
 1. paramsフォルダ内の.jsonファイルをすべてassetsフォルダへコピー
 
@@ -40,7 +40,7 @@ BRICK&TRIPは、[Cinder](http://libcinder.org)を使って開発をおこない�
 ### 注意
 + Windows版
 
-  **VisualStudio2013** 必須。それ以外のバージョンではビルドできません。
+  **VisualStudio2015** 必須。それ以外のバージョンではビルドできません。
 
 + OSX
 

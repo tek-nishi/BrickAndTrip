@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -14,20 +14,20 @@
     <ProjectGuid>{0610B2F7-2091-435E-903F-3B9E4A98EEBF}</ProjectGuid>
     <RootNamespace>ColoColoParade</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>BrickTrip</ProjectName>
+    <ProjectName>BrickAndTrip</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -53,8 +53,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(CINDER_PATH)\include;$(CINDER_PATH)\boost;$(CINDER_PATH)\include\msw\zlib;$(CINDER_PATH)\include\freetype2</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;_WIN32_WINNT=0x0502;PRODUCT_NAME=$(ProjectName);DEBUG;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(CINDER_PATH)\include;$(CINDER_PATH)\boost;$(CINDER_PATH)\include\msw\zlib</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;_WIN32_WINNT=0x0502;PRODUCT_NAME=$(ProjectName);DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
@@ -62,6 +62,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>"$(CINDER_PATH)\include";..\include</AdditionalIncludeDirectories>
@@ -79,7 +80,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(CINDER_PATH)\include;$(CINDER_PATH)\boost;$(CINDER_PATH)\include\msw\zlib;$(CINDER_PATH)\include\freetype2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CINDER_PATH)\include;$(CINDER_PATH)\boost;$(CINDER_PATH)\include\msw\zlib</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;_WIN32_WINNT=0x0502;PRODUCT_NAME=$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -87,6 +88,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ProjectReference />
     <ResourceCompile>
@@ -108,6 +110,82 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
+    <ClInclude Include="..\src\Achievment.hpp" />
+    <ClInclude Include="..\src\AllStageClearController.hpp" />
+    <ClInclude Include="..\src\AntiAliasingType.hpp" />
+    <ClInclude Include="..\src\AppSupport.hpp" />
+    <ClInclude Include="..\src\Asset.hpp" />
+    <ClInclude Include="..\src\AudioSession.h" />
+    <ClInclude Include="..\src\Autolayout.hpp" />
+    <ClInclude Include="..\src\Bg.hpp" />
+    <ClInclude Include="..\src\Capture.h" />
+    <ClInclude Include="..\src\ConnectionHolder.hpp" />
+    <ClInclude Include="..\src\ControllerBase.hpp" />
+    <ClInclude Include="..\src\CreditsController.hpp" />
+    <ClInclude Include="..\src\CubeText.hpp" />
+    <ClInclude Include="..\src\CubeTextDrawer.hpp" />
+    <ClInclude Include="..\src\DecideHard.hpp" />
+    <ClInclude Include="..\src\Defines.hpp" />
+    <ClInclude Include="..\src\DrawVboMesh.hpp" />
+    <ClInclude Include="..\src\EasingUtil.hpp" />
+    <ClInclude Include="..\src\Event.hpp" />
+    <ClInclude Include="..\src\EventParam.hpp" />
+    <ClInclude Include="..\src\FallingCube.hpp" />
+    <ClInclude Include="..\src\Field.hpp" />
+    <ClInclude Include="..\src\FieldController.hpp" />
+    <ClInclude Include="..\src\FieldEntity.hpp" />
+    <ClInclude Include="..\src\FieldLights.hpp" />
+    <ClInclude Include="..\src\FieldView.hpp" />
+    <ClInclude Include="..\src\FileUtil.hpp" />
+    <ClInclude Include="..\src\Font.hpp" />
+    <ClInclude Include="..\src\FontHolder.hpp" />
+    <ClInclude Include="..\src\GameCenter.h" />
+    <ClInclude Include="..\src\GameoverController.hpp" />
+    <ClInclude Include="..\src\GameScore.hpp" />
+    <ClInclude Include="..\src\IntroController.hpp" />
+    <ClInclude Include="..\src\ItemCube.hpp" />
+    <ClInclude Include="..\src\JsonUtil.hpp" />
+    <ClInclude Include="..\src\Localize.h" />
+    <ClInclude Include="..\src\LowEfficiencyDevice.hpp" />
+    <ClInclude Include="..\src\Material.hpp" />
+    <ClInclude Include="..\src\MaterialHolder.hpp" />
+    <ClInclude Include="..\src\Model.hpp" />
+    <ClInclude Include="..\src\ModelHolder.hpp" />
+    <ClInclude Include="..\src\MovingCube.hpp" />
+    <ClInclude Include="..\src\Oneway.hpp" />
+    <ClInclude Include="..\src\Params.hpp" />
+    <ClInclude Include="..\src\PauseController.hpp" />
+    <ClInclude Include="..\src\PickableCube.hpp" />
+    <ClInclude Include="..\src\ProgressController.hpp" />
+    <ClInclude Include="..\src\Quake.hpp" />
+    <ClInclude Include="..\src\Rating.h" />
+    <ClInclude Include="..\src\Records.hpp" />
+    <ClInclude Include="..\src\RecordsController.hpp" />
+    <ClInclude Include="..\src\RootController.hpp" />
+    <ClInclude Include="..\src\SettingsController.hpp" />
+    <ClInclude Include="..\src\Share.h" />
+    <ClInclude Include="..\src\Sound.hpp" />
+    <ClInclude Include="..\src\SoundPlayer.hpp" />
+    <ClInclude Include="..\src\SoundRequest.hpp" />
+    <ClInclude Include="..\src\Stage.hpp" />
+    <ClInclude Include="..\src\StageclearController.hpp" />
+    <ClInclude Include="..\src\StageCube.hpp" />
+    <ClInclude Include="..\src\StageData.hpp" />
+    <ClInclude Include="..\src\StageFallingCubes.hpp" />
+    <ClInclude Include="..\src\StageItems.hpp" />
+    <ClInclude Include="..\src\StageMovingCubes.hpp" />
+    <ClInclude Include="..\src\StageOneways.hpp" />
+    <ClInclude Include="..\src\StageSwitches.hpp" />
+    <ClInclude Include="..\src\Switch.hpp" />
+    <ClInclude Include="..\src\TextCodec.hpp" />
+    <ClInclude Include="..\src\TextureFont.hpp" />
+    <ClInclude Include="..\src\TitleController.hpp" />
+    <ClInclude Include="..\src\Touch.hpp" />
+    <ClInclude Include="..\src\TweenUtil.hpp" />
+    <ClInclude Include="..\src\UIView.hpp" />
+    <ClInclude Include="..\src\UIViewCreator.hpp" />
+    <ClInclude Include="..\src\UIWidget.hpp" />
+    <ClInclude Include="..\src\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\BrickTripApp.cpp" />

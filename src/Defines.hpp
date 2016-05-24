@@ -64,7 +64,10 @@ using u_long  = unsigned long;
 #if defined(_MSC_VER)
 #include <xkeycheck.h>
 
+#if (_MSC_VER < 1900)
 // VS2013では未実装...
 #undef noexcept
 #define noexcept
+#endif
+
 #endif

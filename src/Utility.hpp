@@ -12,16 +12,23 @@
 
 namespace ngs {
 
+#if _MSC_VER == 1900
+// VS2015だとライブラリに実装がない
+using chara_type = int16_t;
+#else
+using chara_type = char32_t; 
+#endif
+
 // utf8文字列の文字数をカウント
 size_t strlen(const std::string& s) noexcept {
-  std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+  std::wstring_convert<std::codecvt_utf8<chara_type>, chara_type> conv;
   return conv.from_bytes(s).size();
 }
 
 // utf8文字列から部分文字列を取り出す
 std::string substr(const std::string& s,
                    const size_t pos = 0, const size_t len = std::string::npos) noexcept {
-    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+    std::wstring_convert<std::codecvt_utf8<chara_type>, chara_type> conv;
 
     auto u32string = conv.from_bytes(s);            // UTF8 -> UTF32
     auto sub = u32string.substr(pos, len);          // 部分取得
@@ -31,7 +38,7 @@ std::string substr(const std::string& s,
 
 // utf8文字列から1文字列を取り出す
 char32_t getCharactor(const std::string& s, const size_t pos) noexcept {
-  std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+  std::wstring_convert<std::codecvt_utf8<chara_type>, chara_type> conv;
 
   auto u32string = conv.from_bytes(s);            // UTF8 -> UTF32
   return u32string[pos];
