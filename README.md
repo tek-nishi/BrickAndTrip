@@ -52,7 +52,7 @@ BRICK&TRIPは、[Cinder](http://libcinder.org)を使って開発をおこない�
 
   公式サイトで配布されているソースに少し手を加えた為、そのままではビルドが通りません。いい感じに修正してください:D
 
-## Liense
+## License
 License All source code files are licensed under the MPLv2.0 license
 
 [MPLv2.0](https://www.mozilla.org/MPL/2.0/)
